@@ -10,14 +10,22 @@ Pod::Spec.new do |s|
 
   s.prefix_header_file = 'CommonUtils/Classes/Lib-Prefix.pch'
 
-  s.requires_arc = true
+  non_arc_files  = 'CommonUtils/Classes/Categories/NSString/GTMNSString+HTML.m',
+                   'CommonUtils/Classes/Categories/NSString/NSString+HTML.m'
 
-  s.subspec 'src' do |ss|
-    ss.source_files = 'CommonUtils/Classes/*.{h,m}'
+  s.subspec 'arc' do |ss|
+    s.source_files = 'CommonUtils/Classes/**/*.{h,m}'
+    s.requires_arc = true
+  end
+
+  s.exclude_files = non_arc_files
+
+  s.subspec 'no-arc' do |ss|
+    ss.requires_arc = false
+    ss.source_files = non_arc_files
   end
 
   s.dependency 'AFNetworking', '~> 1.3.3'
-  
-  s.resource_bundle = { 'CommonUtils' => 'CommonUtils/Resources/*.*' }
 
+  s.resource_bundle = { 'CommonUtils' => 'CommonUtils/Resources/*.*' }
 end

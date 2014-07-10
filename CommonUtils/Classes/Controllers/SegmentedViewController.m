@@ -76,10 +76,12 @@
         [self.contentView addSubview:self.lblMessage];
         
         CGFloat defaultHeight = 40;
-        CGSize sizeToFit = [self.lblMessage.text sizeWithFont:[UIFont boldSystemFontOfSize:(iPad) ? 20 : 14]
-                                       constrainedToSize:CGSizeMake(220.0f, CGFLOAT_MAX)
-                                           lineBreakMode:NSLineBreakByWordWrapping];
-        CGFloat maxHeight = fmaxf(defaultHeight, sizeToFit.height + 45.0f);
+        CGSize maximumLabelSize = CGSizeMake(220.0f, CGFLOAT_MAX);
+        CGRect rect = [self.lblMessage.text boundingRectWithSize:maximumLabelSize
+                                                         options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading)
+                                                      attributes:@{NSFontAttributeName : [UIFont boldSystemFontOfSize:(iPad) ? 20 : 14]}
+                                                         context:nil];
+        CGFloat maxHeight = fmaxf(defaultHeight, rect.size.height + 45.0f);
 
         [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[_contentView]|"
                                                                           options:0
@@ -205,9 +207,11 @@
         }
         self.segmentedControl = [[UISegmentedControl alloc] initWithItems:titles];
         self.segmentedControl.translatesAutoresizingMaskIntoConstraints = NO;
+        /* //not used
         if (SYSTEM_VERSION_LESS_THAN(@"7.0")) {
             self.segmentedControl.segmentedControlStyle = UISegmentedControlStyleBar;
         }
+        //*/
         ////[self.segmentedControl sizeToFit];
 
         if (self.useToolBar) {
