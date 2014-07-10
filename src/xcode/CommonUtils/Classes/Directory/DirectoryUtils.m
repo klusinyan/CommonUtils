@@ -1,0 +1,96 @@
+//  Created by Karen Lusinyan on 07/05/14.
+
+#import "DirectoryUtils.h"
+#import "UIImage+Resize.h"
+
+@implementation DirectoryUtils
+
++ (NSString *)moduleCacheDirectoryPath:(NSString *)moduleName
+{
+    NSString *cacheDir = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+    if (moduleName) {
+        NSString *moduleCacheDirPath = [cacheDir stringByAppendingPathComponent:moduleName];
+        [self createDirectoryIfNotExistsWithPath:moduleCacheDirPath];
+    }
+    return (moduleName) ? [cacheDir stringByAppendingPathComponent:moduleName] : cacheDir;
+}
+
++ (NSString *)moduleDocumentDirectoryPath:(NSString *)moduleName
+{
+    NSString *documentDir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+    if (moduleName) {
+        NSString *moduleDocumentDirPath = [documentDir stringByAppendingPathComponent:moduleName];
+        [self createDirectoryIfNotExistsWithPath:moduleDocumentDirPath];
+    }
+    
+    return (moduleName) ? [documentDir stringByAppendingPathComponent:moduleName] : documentDir;
+}
+
++ (void)createDirectoryIfNotExistsWithPath:(NSString *)path
+{
+    BOOL isDir = YES;
+    if (![[NSFileManager defaultManager] fileExistsAtPath:path isDirectory:&isDir]) {
+        NSError *error = nil;
+        [[NSFileManager defaultManager] createDirectoryAtPath:path
+                                  withIntermediateDirectories:YES
+                                                   attributes:nil
+                                                        error:&error];
+        if (error) DebugLog(@"error %@", [error localizedDescription]);
+    }
+}
+
+//only here MD5Hash(imageName) applied
++ (NSString *)imagePathWithName:(NSString *)imageName moduleName:(NSString *)moduleName
+{
+    if (!imageName) return nil;
+    return [[self moduleCacheDirectoryPath:moduleName] stringByAppendingPathComponent:MD5Hash(imageName)];
+}
+
++ (UIImage *)imageExistsWithName:(NSString *)imageName moduleName:(NSString *)moduleName
+{
+    if (!imageName) return nil;
+    return [UIImage imageWithContentsOfFile:[self imagePathWithName:imageName moduleName:moduleName]];
+}
+
++ (UIImage *)saveThumbnailImage:(UIImage *)image withSize:(NSUInteger)size toFilePath:(NSString *)filePath imageRepresentation:(UIImageRepresentation)imageRepresentation
+{
+    if (!image) return nil;
+    UIImage *thumbnail = [image thumbnailImage:size
+                             transparentBorder:0
+                                  cornerRadius:0
+                          interpolationQuality:kCGInterpolationDefault];
+    return [self saveImage:thumbnail toFilePath:filePath imageRepresentation:imageRepresentation];
+}
+
++ (UIImage *)saveImage:(UIImage *)image toFilePath:(NSString *)filePath imageRepresentation:(UIImageRepresentation)imageRepresentation
+{
+    if (!image) return nil;
+    if (imageRepresentation == UIImageRepresentationPNG) {
+        [self saveImageData:[NSData dataWithData:UIImagePNGRepresentation(image)] toFilePath:filePath];
+    }
+    else if (imageRepresentation == UIImageRepresentationJPEG) {
+        [self saveImageData:[NSData dataWithData:UIImageJPEGRepresentation(image, 1.0f)] toFilePath:filePath];
+    }
+    return image;
+}
+
++ (void)saveImageData:(NSData *)imageData toFilePath:(NSString *)filePath
+{
+    if (!imageData) return;
+    [imageData writeToFile:filePath atomically:YES];
+}
+
++ (BOOL)deleteImageAtPath:(NSString *)filePath error:(NSError *__autoreleasing *)error
+{
+    if ([[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
+        return [[NSFileManager defaultManager] removeItemAtPath:filePath error:error];
+    }
+    return YES;
+}
+
++ (UIImage *)placeholderImage
+{
+    return kCommonImagePNGWithName(@"placeholder");
+}
+
+@end
