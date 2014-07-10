@@ -94,7 +94,7 @@
 		9CD70241193388790066FFC0 /* UIImage+Resize.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CD70235193388600066FFC0 /* UIImage+Resize.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9CD70242193388790066FFC0 /* UIImage+RoundedCorner.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CD70237193388600066FFC0 /* UIImage+RoundedCorner.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9CD8FA4E19616903002D7CC1 /* segmented.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9CD8FA4D19616903002D7CC1 /* segmented.xcassets */; };
-		9CD9F75D196E876000EBBD85 /* CommonUtils-Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = 9CD9F75C196E876000EBBD85 /* CommonUtils-Prefix.pch */; };
+		9CD9F75D196E876000EBBD85 /* Lib-Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = 9CD9F75C196E876000EBBD85 /* Lib-Prefix.pch */; };
 		9CD9F75F196E886C00EBBD85 /* CommonUtils.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 9CD9F75E196E886C00EBBD85 /* CommonUtils.bundle */; };
 		9CDD79B41965387300581CC4 /* ViewPagerController.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CDD79B21965387300581CC4 /* ViewPagerController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9CDD79B51965387300581CC4 /* ViewPagerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CDD79B31965387300581CC4 /* ViewPagerController.m */; };
@@ -244,7 +244,7 @@
 		9CD70237193388600066FFC0 /* UIImage+RoundedCorner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+RoundedCorner.h"; sourceTree = "<group>"; };
 		9CD70238193388600066FFC0 /* UIImage+RoundedCorner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+RoundedCorner.m"; sourceTree = "<group>"; };
 		9CD8FA4D19616903002D7CC1 /* segmented.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = segmented.xcassets; sourceTree = "<group>"; };
-		9CD9F75C196E876000EBBD85 /* CommonUtils-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CommonUtils-Prefix.pch"; sourceTree = "<group>"; };
+		9CD9F75C196E876000EBBD85 /* Lib-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Lib-Prefix.pch"; sourceTree = "<group>"; };
 		9CD9F75E196E886C00EBBD85 /* CommonUtils.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = CommonUtils.bundle; sourceTree = SOURCE_ROOT; };
 		9CDD79B21965387300581CC4 /* ViewPagerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewPagerController.h; sourceTree = "<group>"; };
 		9CDD79B31965387300581CC4 /* ViewPagerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewPagerController.m; sourceTree = "<group>"; };
@@ -636,7 +636,7 @@
 		9CB81FD718FD375300C918FB /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				9CD9F75C196E876000EBBD85 /* CommonUtils-Prefix.pch */,
+				9CD9F75C196E876000EBBD85 /* Lib-Prefix.pch */,
 				9C96B093193F089B0014AC23 /* SplitViewController */,
 				9C0747F81936280D000B28F6 /* CusomViews */,
 				9CE7A89819541A5000E699E4 /* Directory */,
@@ -811,7 +811,7 @@
 				9C34F7D0192CAFF9001B8D6D /* ProgressView.h in Headers */,
 				9CF9663318FD39CB00E265A1 /* SegmentedViewController.h in Headers */,
 				9CCF0D6D1921196E00489B74 /* BarcodeReader.h in Headers */,
-				9CD9F75D196E876000EBBD85 /* CommonUtils-Prefix.pch in Headers */,
+				9CD9F75D196E876000EBBD85 /* Lib-Prefix.pch in Headers */,
 				9C90FF6119374DD3004CE056 /* UITableView+Utils.h in Headers */,
 				9CE7A8B719542F9D00E699E4 /* ImageDownloader.h in Headers */,
 				9CAAA55B194CA422006D89F0 /* BlurView.h in Headers */,
@@ -1165,7 +1165,7 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				DSTROOT = /tmp/Common.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "CommonUtils/Classes/CommonUtils-Prefix.pch";
+				GCC_PREFIX_HEADER = "CommonUtils/Classes/Lib-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -1191,7 +1191,7 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				DSTROOT = /tmp/Common.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "CommonUtils/Classes/CommonUtils-Prefix.pch";
+				GCC_PREFIX_HEADER = "CommonUtils/Classes/Lib-Prefix.pch";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
