@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = 'CommonUtils'
-  s.version      = '1.0.0-beta1'
+  s.version      = '1.0.0-beta2'
   s.summary      = 'Common Utilities.'
   s.homepage     = 'https://git.sftc.it/softec-ios/libcommonutils'
   s.license      = { :type => 'MIT', :file => 'LICENSE' }
@@ -13,7 +13,7 @@ Pod::Spec.new do |s|
   non_arc_files  = 'CommonUtils/Classes/Categories/NSString/GTMNSString+HTML.m',
                    'CommonUtils/Classes/Categories/NSString/NSString+HTML.m'
 
-  s.subspec 'arc' do |ss|
+  s.subspec 'src' do |ss|
     s.source_files = 'CommonUtils/Classes/**/*.{h,m}'
     s.requires_arc = true
   end
