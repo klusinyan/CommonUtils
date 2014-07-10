@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7831F722D4C6425DAB6AABEB /* libPods-CommonUtils.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E5D4A8D95D94380B1A8220C /* libPods-CommonUtils.a */; };
 		9C20BE5B1949EF830077C6E8 /* ADVAnimationController.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C20BE561949EF830077C6E8 /* ADVAnimationController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9C20BE5C1949EF830077C6E8 /* DropAnimationController.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C20BE571949EF830077C6E8 /* DropAnimationController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9C20BE5D1949EF830077C6E8 /* DropAnimationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C20BE581949EF830077C6E8 /* DropAnimationController.m */; };
@@ -137,6 +138,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0E5D4A8D95D94380B1A8220C /* libPods-CommonUtils.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-CommonUtils.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		8FBA516C94CB471998B99D76 /* Pods-CommonUtils.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CommonUtils.xcconfig"; path = "Pods/Pods-CommonUtils.xcconfig"; sourceTree = "<group>"; };
 		9C20BE561949EF830077C6E8 /* ADVAnimationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ADVAnimationController.h; sourceTree = "<group>"; };
 		9C20BE571949EF830077C6E8 /* DropAnimationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DropAnimationController.h; sourceTree = "<group>"; };
 		9C20BE581949EF830077C6E8 /* DropAnimationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DropAnimationController.m; sourceTree = "<group>"; };
@@ -281,6 +284,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7831F722D4C6425DAB6AABEB /* libPods-CommonUtils.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -559,6 +563,7 @@
 				9CB81FC018FD363400C918FB /* CommonTest */,
 				9CB81F0A18FD2BDC00C918FB /* Frameworks */,
 				9CB81F0918FD2BDC00C918FB /* Products */,
+				8FBA516C94CB471998B99D76 /* Pods-CommonUtils.xcconfig */,
 			);
 			sourceTree = "<group>";
 		};
@@ -583,6 +588,7 @@
 				9CB81F0D18FD2BDC00C918FB /* CoreGraphics.framework */,
 				9CB81F0F18FD2BDC00C918FB /* UIKit.framework */,
 				9CB81F8718FD2EFB00C918FB /* CoreFoundation.framework */,
+				0E5D4A8D95D94380B1A8220C /* libPods-CommonUtils.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -842,9 +848,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 9CB81F6318FD2C9D00C918FB /* Build configuration list for PBXNativeTarget "CommonUtils" */;
 			buildPhases = (
+				A28BC08A8E3A4FB6A382E499 /* Check Pods Manifest.lock */,
 				9CB81F4318FD2C9C00C918FB /* Sources */,
 				9CB81F4418FD2C9C00C918FB /* Frameworks */,
 				9CB81F8018FD2EC200C918FB /* Headers */,
+				DB95AD6DE6624C3D90328C52 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -933,6 +941,39 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		A28BC08A8E3A4FB6A382E499 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		DB95AD6DE6624C3D90328C52 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Pods-CommonUtils-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		9CB81F0418FD2BDC00C918FB /* Sources */ = {
@@ -1124,7 +1165,10 @@
 					"$PROJECT_DIR/../../target/xcode-deps/libs/$BUILD_STYLE/**",
 					"/Users/karen/Desktop/iOS/Maven/Libs/LibCommon/target/xcode-deps/libs/Debug/it.softecspa.ios/AFNetworking",
 				);
-				OTHER_LDFLAGS = "-ObjC";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+				);
 				PRODUCT_NAME = CommonUtilsTest;
 				WRAPPER_EXTENSION = app;
 			};
@@ -1147,7 +1191,10 @@
 					"$PROJECT_DIR/../../target/xcode-deps/libs/$BUILD_STYLE/**",
 					"/Users/karen/Desktop/iOS/Maven/Libs/LibCommon/target/xcode-deps/libs/Debug/it.softecspa.ios/AFNetworking",
 				);
-				OTHER_LDFLAGS = "-ObjC";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+				);
 				PRODUCT_NAME = CommonUtilsTest;
 				WRAPPER_EXTENSION = app;
 			};
@@ -1155,6 +1202,7 @@
 		};
 		9CB81F6418FD2C9D00C918FB /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8FBA516C94CB471998B99D76 /* Pods-CommonUtils.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
 				DSTROOT = /tmp/Common.dst;
@@ -1181,6 +1229,7 @@
 		};
 		9CB81F6518FD2C9D00C918FB /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8FBA516C94CB471998B99D76 /* Pods-CommonUtils.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
 				DSTROOT = /tmp/Common.dst;

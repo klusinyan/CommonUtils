@@ -1,8 +1,8 @@
 platform :ios, '7.0'
 
-xcodeproj 'CoreDataUtils.xcodeproj'
+xcodeproj 'CommonUtils.xcodeproj'
 
-target 'CoreDataUtils' do
+target 'CommonUtils' do
   pod 'AFNetworking', '~> 1.3.3'
 end
 
