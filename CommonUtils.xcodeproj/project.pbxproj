@@ -67,7 +67,6 @@
 		9CB81F0C18FD2BDC00C918FB /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9CB81F0B18FD2BDC00C918FB /* Foundation.framework */; };
 		9CB81F0E18FD2BDC00C918FB /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9CB81F0D18FD2BDC00C918FB /* CoreGraphics.framework */; };
 		9CB81F1018FD2BDC00C918FB /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9CB81F0F18FD2BDC00C918FB /* UIKit.framework */; };
-		9CB81FA418FD333100C918FB /* libCommonUtils.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9CB81F4718FD2C9C00C918FB /* libCommonUtils.a */; };
 		9CB81FA518FD338F00C918FB /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9CB81F8718FD2EFB00C918FB /* CoreFoundation.framework */; };
 		9CB81FCD18FD363400C918FB /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CB81FC318FD363400C918FB /* AppDelegate.m */; };
 		9CB81FCE18FD363400C918FB /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CB81FC418FD363400C918FB /* main.m */; };
@@ -105,7 +104,6 @@
 		9CE7A8AC19542D0F00E699E4 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9CE7A8AB19542D0F00E699E4 /* MobileCoreServices.framework */; };
 		9CE7A8B719542F9D00E699E4 /* ImageDownloader.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CE7A8B519542F9D00E699E4 /* ImageDownloader.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9CE7A8B819542F9D00E699E4 /* ImageDownloader.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CE7A8B619542F9D00E699E4 /* ImageDownloader.m */; };
-		9CE7A8BC19548C1A00E699E4 /* libAFNetworking.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9CE7A8A319542B3E00E699E4 /* libAFNetworking.a */; };
 		9CF9663318FD39CB00E265A1 /* SegmentedViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CF9663118FD39CB00E265A1 /* SegmentedViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9CF9663418FD39CB00E265A1 /* SegmentedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CF9663218FD39CB00E265A1 /* SegmentedViewController.m */; };
 		9CF9663818FD3ADC00E265A1 /* CallBackProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CF9663618FD3ADC00E265A1 /* CallBackProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -269,8 +267,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9CE7A8BC19548C1A00E699E4 /* libAFNetworking.a in Frameworks */,
-				9CB81FA418FD333100C918FB /* libCommonUtils.a in Frameworks */,
 				9CE7A8AC19542D0F00E699E4 /* MobileCoreServices.framework in Frameworks */,
 				9CE7A8AA19542D0800E699E4 /* SystemConfiguration.framework in Frameworks */,
 				9CB0210D19220AB70011110C /* AVFoundation.framework in Frameworks */,
