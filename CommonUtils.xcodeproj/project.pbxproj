@@ -617,7 +617,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 0510;
-				ORGANIZATIONNAME = KL;
+				ORGANIZATIONNAME = "Karen Lusinyan";
 			};
 			buildConfigurationList = 9CB81F0318FD2BDC00C918FB /* Build configuration list for PBXProject "CommonUtils" */;
 			compatibilityVersion = "Xcode 3.2";
