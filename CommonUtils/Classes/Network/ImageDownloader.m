@@ -1,11 +1,6 @@
 //  Created by Karen Lusinyan on 20/06/14.
 
 #import "ImageDownloader.h"
-#import "DirectoryUtils.h"
-
-//AFNetworking
-#import <AFNetworkActivityIndicatorManager.h>
-#import <UIImageView+AFNetworking.h>
 
 static BOOL IDLogging = NO;
 

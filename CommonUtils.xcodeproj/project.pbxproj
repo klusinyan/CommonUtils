@@ -833,7 +833,7 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
-					"${PROJECT_DIR}/../../target/headers/Release-iphoneos/**",
+					"./Pods/Headers/**",
 				);
 				LIBRARY_SEARCH_PATHS = "$PROJECT_DIR/../../target/xcode-deps/libs/$BUILD_STYLE/**";
 				ONLY_ACTIVE_ARCH = NO;
@@ -855,7 +855,7 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
-					"${PROJECT_DIR}/../../target/headers/Release-iphoneos/**",
+					"./Pods/Headers/**",
 				);
 				LIBRARY_SEARCH_PATHS = "$PROJECT_DIR/../../target/xcode-deps/libs/$BUILD_STYLE/**";
 				OTHER_LDFLAGS = "-ObjC";
@@ -878,6 +878,10 @@
 					"DEBUG=1",
 					"$(inherited)",
 				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+				);
 				INFOPLIST_FILE = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
@@ -899,6 +903,10 @@
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "Common/Supporting Files/Common-Prefix.pch";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+				);
 				INFOPLIST_FILE = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
