@@ -11,6 +11,10 @@
 //////////////////////////////////////////////////////
 + (NSCache *)sharedImageCache;
 
+//handle cancelling all image request operaitons
+//uses AFNetworking cancelImageRequestOperations method
++ (void)cancelAllImageRequestOperations;
+
 + (UIImage *)imageWithUrl:(NSString *)url
                moduleName:(NSString *)moduleName
             downloadImage:(UIImageView *)imageView
