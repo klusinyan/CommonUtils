@@ -43,30 +43,6 @@ static BOOL IDLogging = NO;
     return sharedImageCache;
 }
 
-+ (NSMutableArray *)requestedImageViews
-{
-    static NSMutableArray *requestedImageViews = nil;
-    static dispatch_once_t oncePredicate;
-    dispatch_once(&oncePredicate, ^{
-        requestedImageViews = [[NSMutableArray alloc] init];
-        [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidReceiveMemoryWarningNotification
-                                                          object:nil queue:[NSOperationQueue mainQueue]
-                                                      usingBlock:^(NSNotification * __unused notification) {
-                                                          [requestedImageViews removeAllObjects];
-                                                      }];
-    });
-    
-    return requestedImageViews;
-}
-
-+ (void)cancelAllImageRequestOperations
-{
-    for (UIImageView *imageView in [self requestedImageViews]) {
-        [imageView cancelImageRequestOperation];
-    }
-    [[self requestedImageViews] removeAllObjects];
-}
-
 + (UIImage *)imageWithUrl:(NSString *)url
                moduleName:(NSString *)moduleName
             downloadImage:(UIImageView *)imageView
@@ -116,8 +92,6 @@ static BOOL IDLogging = NO;
     if (downloadIfNeeded) {
         if ([self logging]) DebugLog(@"Downloading image [%@]", url);
         NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
-        __block UIImageView *blockImageView = [imageView copy];
-        [[self requestedImageViews] addObject:blockImageView];
         [imageView setImageWithURLRequest:request
                          placeholderImage:placeholder
                                   success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
@@ -138,8 +112,6 @@ static BOOL IDLogging = NO;
                                           }
                                           //put image in cache
                                           [[self sharedImageCache] setObject:savedImage forKey:MD5Hash(url)];
-                                          //remove imageView from cache
-                                          [[self requestedImageViews] removeObject:blockImageView];
                                           //return saved image to invocker
                                           if (completion) completion([[self sharedImageCache] objectForKey:MD5Hash(url)]);
                                       }
@@ -148,8 +120,6 @@ static BOOL IDLogging = NO;
                                       
                                   } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
                                       if ([self logging]) DebugLog(@"Error %@  occured in [%@]", error, NSStringFromSelector(_cmd));
-                                      //remove imageView from cache
-                                      [[self requestedImageViews] removeObject:blockImageView];
                                       //if there is no image then send completion(nil)
                                       //if (completion) completion(nil);
                                   }];
