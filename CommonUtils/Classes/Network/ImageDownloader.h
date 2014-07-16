@@ -6,6 +6,7 @@
 #import <AFNetworkActivityIndicatorManager.h>
 #import <UIImageView+AFNetworking.h>
 
+
 @interface ImageDownloader : NSObject
 
 + (void)setLogging:(BOOL)logging;
