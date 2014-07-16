@@ -24,4 +24,6 @@ Pod::Spec.new do |s|
   s.dependency 'AFNetworking', '~> 1.3.3'
 
   s.resource_bundle = { 'CommonUtils' => 'CommonUtils/Resources/*.*' }
+  #s.resources = 'CommonUtils/Resources/xib/*.{xib}'
+
 end
