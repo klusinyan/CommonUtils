@@ -6,6 +6,7 @@ static BOOL IDLogging = NO;
 
 @implementation ImageDownloader
 
+
 + (void)setLogging:(BOOL)logging
 {
     IDLogging = logging;
