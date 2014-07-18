@@ -2,16 +2,7 @@
 //  Copyright (c) 2012 Home. All rights reserved.
 
 #pragma mark - v1.0.0
-
-@protocol SegmentedControllerDelegate <NSObject>
-
-@optional
-//called when controller did select
-- (void)segmentedControllerDidSelect;
-//called when controller did select, by passing SELF as a param "sender"
-- (void)segmentedControllerDidSelect:(id)sender;
-
-@end
+@protocol SegmentedControllerDelegate;
 
 @interface SegmentedViewController : UIViewController
 
@@ -42,5 +33,18 @@
 
 //call containter explicity to load descired controller
 - (void)loadViewControllerWithIndex:(NSInteger)index;
+
+//override
+- (void)viewControllerDidLoad:(id<SegmentedControllerDelegate>)viewController atIndex:(NSInteger)index;
+
+@end
+
+@protocol SegmentedControllerDelegate <NSObject>
+
+@optional
+//called when controller did select
+- (void)segmentedControllerDidSelect;
+//called when controller did select, by passing SELF as a param "sender"
+- (void)segmentedControllerDidSelect:(id)sender;
 
 @end

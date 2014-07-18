@@ -317,6 +317,7 @@
         [self.contentView addSubview:vc.view];
         
         self.selectedViewController = vc;
+        self.selectedIndex = self.segmentedControl.selectedSegmentIndex;
         
         NSDictionary *binding = @{@"subview" : vc.view};
         
@@ -337,6 +338,9 @@
     if ([delegate respondsToSelector:@selector(segmentedControllerDidSelect:)]) {
         [delegate segmentedControllerDidSelect:self];
     }
+    
+    //calls for subclasses to override by implementing additional features
+    [self viewControllerDidLoad:delegate atIndex:self.selectedIndex];
 }
 
 - (void)loadViewControllerWithIndex:(NSInteger)index
@@ -348,6 +352,12 @@
     }
 }
 
+//override
+- (void)viewControllerDidLoad:(id<SegmentedControllerDelegate>)viewController atIndex:(NSInteger)index
+{
+    
+}
+
 #pragma mark -
 #pragma mark IBActions
 
@@ -355,9 +365,6 @@
 {
     self.delegate = [self.viewControllers objectAtIndex:self.segmentedControl.selectedSegmentIndex];
     [self loadViewController:self.delegate];
-    
-    //memorize current selectedIndex
-    self.selectedIndex = self.segmentedControl.selectedSegmentIndex;
 }
 
 #pragma mark -
