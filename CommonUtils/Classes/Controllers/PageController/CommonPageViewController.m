@@ -6,7 +6,8 @@
 
 @property (readwrite, nonatomic, strong) UIPageViewController *pageController;
 @property (readwrite, nonatomic, strong) NSMutableArray *viewControllers;
-@property (readwrite, nonatomic, assign) NSInteger index;
+@property (readwrite, nonatomic, assign) BOOL jumping;
+@property (readwrite, nonatomic, assign) NSInteger indexToJump;
 
 @end
 
@@ -69,6 +70,20 @@
 - (void)reloadPages
 {
     [self setupViewContollers];
+}
+
+- (void)jumpToPageAtIndex:(NSInteger)index animated:(BOOL)animated completion:(void (^)(BOOL finished))completion
+{
+    self.jumping = YES;
+    self.indexToJump = index;
+    
+    UIViewController *contentToJump = [self.viewControllers objectAtIndex:index];
+    [self.pageController setViewControllers:@[contentToJump]
+                                  direction:UIPageViewControllerNavigationDirectionForward
+                                   animated:animated completion:^(BOOL finished) {
+                                       DebugLog(@"finished [%@]", finished ? @"Y" : @"N");
+                                       if (completion) completion(finished);
+                                   }];
 }
 
 #pragma mark -
@@ -165,6 +180,11 @@
 
 - (NSInteger)presentationIndexForPageViewController:(UIPageViewController *)pageViewController
 {
+    if (self.jumping) {
+        self.jumping = NO;
+        return self.indexToJump;
+    }
+
     NSInteger index = 0;
     if (self.delegate && [self.delegate respondsToSelector:@selector(indexOfPresentedPage)]) {
         index = [self.delegate indexOfPresentedPage];
