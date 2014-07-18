@@ -355,7 +355,7 @@
 //override
 - (void)viewControllerDidLoad:(id<SegmentedControllerDelegate>)viewController atIndex:(NSInteger)index
 {
-    
+    //do nothing
 }
 
 #pragma mark -
