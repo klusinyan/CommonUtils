@@ -76,7 +76,7 @@
     [self.pageController setViewControllers:@[contentToJump]
                                   direction:UIPageViewControllerNavigationDirectionForward
                                    animated:animated completion:^(BOOL finished) {
-                                       DebugLog(@"finished [%@]", finished ? @"Y" : @"N");
+                                       //do something
                                        if (completion) completion(finished);
                                    }];
 }
