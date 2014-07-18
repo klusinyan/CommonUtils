@@ -30,7 +30,7 @@ typedef NS_ENUM(NSInteger, PresentationStyle) {
 //calls pageContentAtIndex which loads content controllers
 - (void)reloadPages;
 
-//TODO::
+//jump to indicating index
 - (void)jumpToPageAtIndex:(NSInteger)index animated:(BOOL)animated completion:(void (^)(BOOL finished))completion;
 
 @end
