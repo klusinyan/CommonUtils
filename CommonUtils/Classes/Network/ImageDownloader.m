@@ -41,13 +41,15 @@ static BOOL IDLogging = NO;
 + (UIImage *)imageWithUrl:(NSString *)url
                moduleName:(NSString *)moduleName
             downloadImage:(UIImageView *)imageView
+             forIndexPath:(NSIndexPath *)indexPath
       imageRepresentation:(UIImageRepresentation)imageRepresentation
               placeholder:(UIImage *)placeholder
-               completion:(void (^)(UIImage *image))completion
+               completion:(void (^)(UIImage *image, NSIndexPath *indexPath))completion
 {
     return [self imageWithUrl:url
                    moduleName:moduleName
                 downloadImage:imageView
+                 forIndexPath:(NSIndexPath *)indexPath
           imageRepresentation:(UIImageRepresentation)imageRepresentation
                 thumbnailSize:0
                   placeholder:placeholder
@@ -57,11 +59,15 @@ static BOOL IDLogging = NO;
 + (UIImage *)imageWithUrl:(NSString *)url
                moduleName:(NSString *)moduleName
             downloadImage:(UIImageView *)imageView
+             forIndexPath:(NSIndexPath *)indexPath
       imageRepresentation:(UIImageRepresentation)imageRepresentation
             thumbnailSize:(CGFloat)thubnailSize
               placeholder:(UIImage *)placeholder
-               completion:(void (^)(UIImage *image))completion
+               completion:(void (^)(UIImage *image, NSIndexPath *indexPath))completion
 {
+    //TODO::
+    __block NSIndexPath *indexPathCopy = [indexPath copy];
+    
     BOOL downloadIfNeeded = YES;
     if (!url) {
         url = @"placeholder_image";
@@ -101,14 +107,14 @@ static BOOL IDLogging = NO;
                                                                           imageRepresentation:imageRepresentation];
                                           }
                                           else {
-                                             savedImage = [DirectoryUtils saveImage:image
-                                                                         toFilePath:filePath
-                                                                imageRepresentation:imageRepresentation];
+                                              savedImage = [DirectoryUtils saveImage:image
+                                                                          toFilePath:filePath
+                                                                 imageRepresentation:imageRepresentation];
                                           }
                                           //put image in cache
                                           [[self sharedImageCache] setObject:savedImage forKey:MD5Hash(url)];
                                           //return saved image to invocker
-                                          if (completion) completion([[self sharedImageCache] objectForKey:MD5Hash(url)]);
+                                          if (completion) completion([[self sharedImageCache] objectForKey:MD5Hash(url)], indexPathCopy);
                                       }
                                       //if there is no image then send completion(nil)
                                       //else if (completion) completion(nil);

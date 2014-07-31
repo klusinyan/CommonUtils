@@ -18,17 +18,19 @@
 + (UIImage *)imageWithUrl:(NSString *)url
                moduleName:(NSString *)moduleName
             downloadImage:(UIImageView *)imageView
+             forIndexPath:(NSIndexPath *)indexPath
       imageRepresentation:(UIImageRepresentation)imageRepresentation
               placeholder:(UIImage *)placeholder
-               completion:(void (^)(UIImage *image))completion;
+               completion:(void (^)(UIImage *image, NSIndexPath *indexPath))completion;
 
 + (UIImage *)imageWithUrl:(NSString *)url
                moduleName:(NSString *)moduleName
             downloadImage:(UIImageView *)imageView
+             forIndexPath:(NSIndexPath *)indexPath
       imageRepresentation:(UIImageRepresentation)imageRepresentation
             thumbnailSize:(CGFloat)thubnailSize
               placeholder:(UIImage *)placeholder
-               completion:(void (^)(UIImage *image))completion;
+               completion:(void (^)(UIImage *image, NSIndexPath *indexPath))completion;
 //////////////////////////////////////////////////////
 
 @end
