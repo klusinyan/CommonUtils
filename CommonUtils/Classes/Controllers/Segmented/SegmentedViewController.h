@@ -19,10 +19,10 @@
 
 @property (readwrite, nonatomic, assign) BOOL versioneTest;                      //default NO
 
+@property (readwrite, nonatomic, assign) NSInteger selectedIndex;                //defualt is 0
+
 //readonly
 @property (readonly, nonatomic, strong) UIView *toolBar;                         //defualt is UIToolbar
-
-@property (readonly, nonatomic, assign) NSInteger selectedIndex;                 //ref to last selectedIndex
 
 @property (readonly, nonatomic, strong) NSArray *viewControllers;                //ref to viewController's stack
 

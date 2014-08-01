@@ -9,7 +9,6 @@
 
 @property (readwrite, nonatomic, strong) UIView *toolbar;
 @property (readwrite, nonatomic, strong) UISegmentedControl *segmentedControl;
-@property (readwrite, nonatomic, assign) NSInteger selectedIndex;
 @property (readwrite, nonatomic, strong) UIView *contentView;
 @property (readwrite, nonatomic, strong) UILabel *lblMessage;
 @property (readwrite, nonatomic, strong) NSArray *viewControllers;
@@ -280,7 +279,7 @@
     }
     //se ci sono piu' di un controller
     else if ([self.viewControllers count] > 1) {
-        self.segmentedControl.selectedSegmentIndex = 0;
+        self.segmentedControl.selectedSegmentIndex = self.selectedIndex;
         [self segmentedControlDidChange:nil];
     }
     
