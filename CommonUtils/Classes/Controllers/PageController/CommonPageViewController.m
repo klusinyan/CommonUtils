@@ -6,6 +6,8 @@
 
 @property (readwrite, nonatomic, strong) UIPageViewController *pageController;
 @property (readwrite, nonatomic, strong) NSMutableArray *viewControllers;
+@property (readwrite, nonatomic, strong) UIPageControl *pageControl;
+@property (readwrite, nonatomic, assign) NSInteger currentPage;
 
 @end
 
@@ -59,10 +61,10 @@
 #pragma mark -
 #pragma mark public methods
 
-- (void)presentBookWithCompletion:(void (^)(BOOL finished))completion
+- (void)presentBookInsideOfContainer:(UIView *)container completion:(void (^)(BOOL finished))completion
 {
     [self setupViewContollers];
-    [self setupPageController:completion];
+    [self setupPageControllerInsideOfContainer:container completion:completion];
 }
 
 - (void)reloadPages
@@ -73,12 +75,52 @@
 - (void)jumpToPageAtIndex:(NSInteger)index animated:(BOOL)animated completion:(void (^)(BOOL finished))completion
 {
     UIViewController *contentToJump = [self.viewControllers objectAtIndex:index];
+    UIPageViewControllerNavigationDirection direction = (index > self.currentPage)
+    ? UIPageViewControllerNavigationDirectionForward
+    : UIPageViewControllerNavigationDirectionReverse;
+    self.currentPage = index;
     [self.pageController setViewControllers:@[contentToJump]
-                                  direction:UIPageViewControllerNavigationDirectionForward
-                                   animated:animated completion:^(BOOL finished) {
-                                       //do something
-                                       if (completion) completion(finished);
-                                   }];
+                                  direction:direction
+                                   animated:animated
+                                 completion:^(BOOL finished) {
+                                     //do something
+                                     if (completion) completion(finished);
+                                 }];
+}
+
+- (void)setupCustomPageControlWithTarget:(id)target
+                                  action:(SEL)action
+                              completion:(void (^)(UIPageControl *pageControl))completion;
+{
+    if (!self.pageControl) {
+        self.pageControl = [[UIPageControl alloc] init];
+        self.pageControl.translatesAutoresizingMaskIntoConstraints = NO;
+        self.pageControl.numberOfPages = [self.viewControllers count];
+        [self.pageControl addTarget:target
+                             action:action
+                   forControlEvents:UIControlEventValueChanged];
+        [self.view addSubview:self.pageControl];
+        
+        NSLayoutConstraint *centerX =
+        [NSLayoutConstraint constraintWithItem:self.pageControl
+                                     attribute:NSLayoutAttributeCenterX
+                                     relatedBy:NSLayoutRelationEqual
+                                        toItem:self.view
+                                     attribute:NSLayoutAttributeCenterX
+                                    multiplier:1
+                                      constant:0];
+        NSLayoutConstraint *centerY =
+        [NSLayoutConstraint constraintWithItem:self.pageControl
+                                     attribute:NSLayoutAttributeCenterX
+                                     relatedBy:NSLayoutRelationEqual
+                                        toItem:self.view
+                                     attribute:NSLayoutAttributeCenterX
+                                    multiplier:1
+                                      constant:0];
+        
+        [self.view addConstraints:@[centerX, centerY]];
+        if (completion) completion(self.pageControl);
+    }
 }
 
 #pragma mark -
@@ -97,40 +139,33 @@
     }
 }
 
-- (void)setupPageController:(void (^)(BOOL finished))completion
+- (void)setupPageControllerInsideOfContainer:(UIView *)container completion:(void (^)(BOOL finished))completion
 {
     self.pageController = [[UIPageViewController alloc] initWithTransitionStyle:self.transitionStyle
                                                           navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal
                                                                         options:nil];
     self.pageController.delegate = self;
     self.pageController.dataSource = self;
-
+    
     NSInteger index = 0;
     if (self.delegate && [self.delegate respondsToSelector:@selector(indexOfPresentedPage)]) {
         index = [self.delegate indexOfPresentedPage];
     }
-
+    
     UIViewController *initialVC = [self.viewControllers objectAtIndex:index];
     [self.pageController setViewControllers:@[initialVC]
                                   direction:UIPageViewControllerNavigationDirectionForward
                                    animated:NO completion:nil];
     
+    self.view.frame = container.bounds;
+    [container addSubview:self.view];
+    
     [self addChildViewController:self.pageController];
+    self.pageController.view.frame = self.view.bounds;
     [self.view addSubview:self.pageController.view];
     [self.pageController didMoveToParentViewController:self];
-
-    BOOL finished = (self.presentationStyle == PresentationStyleCustom);
-    if (self.presentationStyle == PresentationStyleFullScreen) {
-        if (self.delegate && [self.delegate isKindOfClass:[UIViewController class]]) {
-            UIViewController *presentingViewController = (UIViewController *)self.delegate;
-            [presentingViewController addChildViewController:self];
-            [presentingViewController.view addSubview:self.view];
-            [self didMoveToParentViewController:presentingViewController];
-            
-            finished = YES;
-        }
-    }
-    if (completion) completion(finished);
+    
+    if (completion) completion(YES);
 }
 
 #pragma mark -
@@ -161,6 +196,18 @@
     return [self.viewControllers objectAtIndex:index];
 }
 
+- (void)pageViewController:(UIPageViewController *)pageViewController didFinishAnimating:(BOOL)finished previousViewControllers:(NSArray *)previousViewControllers transitionCompleted:(BOOL)completed
+{
+    NSUInteger index = [self.viewControllers indexOfObject:pageViewController.viewControllers[0]];
+    if (index == NSNotFound) {
+        return;
+    }
+    self.currentPage = index;
+    if (self.pageControl && [self.pageControl respondsToSelector:@selector(setCurrentPage:)]) {
+        self.pageControl.currentPage = self.currentPage;
+    }
+}
+
 #pragma mark -
 #pragma mark PageViewControllerDelegate protocol
 
@@ -175,6 +222,9 @@
 
 - (NSInteger)presentationIndexForPageViewController:(UIPageViewController *)pageViewController
 {
+    if (self.pageControl) {
+        return -1;
+    }
     NSInteger index = 0;
     if (self.delegate && [self.delegate respondsToSelector:@selector(indexOfPresentedPage)]) {
         index = [self.delegate indexOfPresentedPage];

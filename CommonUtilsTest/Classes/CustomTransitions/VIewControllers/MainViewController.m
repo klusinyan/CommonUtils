@@ -178,9 +178,10 @@ static NSString *CustomCellIdentifier = @"CustomCellIdentifier";
     cell.imageView.image = [ImageDownloader imageWithUrl:url
                                               moduleName:@"my_images"
                                            downloadImage:cell.imageView
+                                            forIndexPath:(NSIndexPath *)indexPath
                                      imageRepresentation:UIImageRepresentationJPEG
                                              placeholder:[UIImage imageNamed:@"placeholder"]
-                                              completion:^(UIImage *image) {
+                                              completion:^(UIImage *image, NSIndexPath *indexPath) {
                                                   cell.imageView.image = image;
                                                   cell.imageView.layer.transform = CATransform3DMakeScale(0, 0, 0);
                                                   [UIView animateWithDuration:0.25

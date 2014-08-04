@@ -24,7 +24,7 @@ typedef NS_ENUM(NSInteger, PresentationStyle) {
 //presents book
 //defualt presentationStyle is PresentationStyleFullScreen it implicity adds SELF childViewController to your viewController
 //if you specify presentationStyle as PresentationStyleCustom, is to you add SELF explicity to your view
-- (void)presentBookWithCompletion:(void (^)(BOOL finished))completion;
+- (void)presentBookInsideOfContainer:(UIView *)container completion:(void (^)(BOOL finished))completion;
 
 //reload pages
 //calls pageContentAtIndex which loads content controllers
@@ -33,12 +33,19 @@ typedef NS_ENUM(NSInteger, PresentationStyle) {
 //jump to indicating index
 - (void)jumpToPageAtIndex:(NSInteger)index animated:(BOOL)animated completion:(void (^)(BOOL finished))completion;
 
+//setup custom page control
+- (void)setupCustomPageControlWithTarget:(id)target
+                                  action:(SEL)action
+                              completion:(void (^)(UIPageControl *pageControl))completion;
+
 @end
 
 @protocol CommonPageViewControllerDelegate <NSObject>
 
+@required
 - (NSInteger)numberOfPages;
 
+@optional
 - (NSInteger)indexOfPresentedPage;
 
 @end

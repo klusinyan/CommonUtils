@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9C1E3931198E42F600EA933D /* UIAlertView+Blocks.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C1E392F198E42F600EA933D /* UIAlertView+Blocks.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9C1E3932198E42F600EA933D /* UIAlertView+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C1E3930198E42F600EA933D /* UIAlertView+Blocks.m */; };
 		9C20BE5B1949EF830077C6E8 /* ADVAnimationController.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C20BE561949EF830077C6E8 /* ADVAnimationController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9C20BE5C1949EF830077C6E8 /* DropAnimationController.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C20BE571949EF830077C6E8 /* DropAnimationController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9C20BE5D1949EF830077C6E8 /* DropAnimationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C20BE581949EF830077C6E8 /* DropAnimationController.m */; };
@@ -96,6 +98,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		9C1E392F198E42F600EA933D /* UIAlertView+Blocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIAlertView+Blocks.h"; sourceTree = "<group>"; };
+		9C1E3930198E42F600EA933D /* UIAlertView+Blocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertView+Blocks.m"; sourceTree = "<group>"; };
 		9C20BE561949EF830077C6E8 /* ADVAnimationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ADVAnimationController.h; sourceTree = "<group>"; };
 		9C20BE571949EF830077C6E8 /* DropAnimationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DropAnimationController.h; sourceTree = "<group>"; };
 		9C20BE581949EF830077C6E8 /* DropAnimationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DropAnimationController.m; sourceTree = "<group>"; };
@@ -202,6 +206,15 @@
 				9CAAA55A194CA422006D89F0 /* BlurView.m */,
 			);
 			path = CusomViews;
+			sourceTree = "<group>";
+		};
+		9C1E392E198E42F600EA933D /* UIAlertView */ = {
+			isa = PBXGroup;
+			children = (
+				9C1E392F198E42F600EA933D /* UIAlertView+Blocks.h */,
+				9C1E3930198E42F600EA933D /* UIAlertView+Blocks.m */,
+			);
+			path = UIAlertView;
 			sourceTree = "<group>";
 		};
 		9C20BE551949EF830077C6E8 /* Others */ = {
@@ -555,6 +568,7 @@
 		9CF9663718FD3ADC00E265A1 /* Categories */ = {
 			isa = PBXGroup;
 			children = (
+				9C1E392E198E42F600EA933D /* UIAlertView */,
 				9CA2B4BB19584ACC00E29A8B /* UICollectionView */,
 				9CB4800619558E5900A5AC1B /* UIColor */,
 				9CA10B5E1953521400DC3C5B /* NSIndexPath */,
@@ -583,6 +597,7 @@
 				9C90FF7919377EBB004CE056 /* NSDictionary+Utils.h in Headers */,
 				9CE7A8A719542CCF00E699E4 /* DirectoryUtils.h in Headers */,
 				9C90FF6619377D33004CE056 /* NSFileManager-Utilities.h in Headers */,
+				9C1E3931198E42F600EA933D /* UIAlertView+Blocks.h in Headers */,
 				9CA4F69D19790E7D000BCFCC /* ViewPagerController.h in Headers */,
 				9CA10B611953521400DC3C5B /* NSIndexPath+Utils.h in Headers */,
 				9CD7023F193388790066FFC0 /* UIImage+FixOrientation.h in Headers */,
@@ -746,6 +761,7 @@
 				9C90FF6C19377DEC004CE056 /* NSDate+Utils.m in Sources */,
 				9C34F7D1192CAFF9001B8D6D /* ProgressView.m in Sources */,
 				9CB4800E19558E8400A5AC1B /* UIColor+Utils.m in Sources */,
+				9C1E3932198E42F600EA933D /* UIAlertView+Blocks.m in Sources */,
 				9CD702221933572A0066FFC0 /* ALEListViewController.m in Sources */,
 				9CD702261933572A0066FFC0 /* ALEWebViewController.m in Sources */,
 				9C90FF7A19377EBB004CE056 /* NSDictionary+Utils.m in Sources */,
