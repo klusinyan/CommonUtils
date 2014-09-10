@@ -15,6 +15,8 @@
 //////////////////////////////////////////////////////
 + (NSCache *)sharedImageCache;
 
++ (void)cancelAllDownloads;
+
 + (UIImage *)imageWithUrl:(NSString *)url
                moduleName:(NSString *)moduleName
             downloadImage:(UIImageView *)imageView
@@ -31,6 +33,10 @@
             thumbnailSize:(CGFloat)thubnailSize
               placeholder:(UIImage *)placeholder
                completion:(void (^)(UIImage *image, NSIndexPath *indexPath))completion;
+
++ (UIImage *)offlineImageWithUrl:(NSString *)url
+                      moduleName:(NSString *)moduleName
+                     placeholder:(UIImage *)placeholder;
 //////////////////////////////////////////////////////
 
 @end

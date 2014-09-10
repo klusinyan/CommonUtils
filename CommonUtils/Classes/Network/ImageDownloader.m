@@ -38,6 +38,29 @@ static BOOL IDLogging = NO;
     return sharedImageCache;
 }
 
++ (NSMutableArray *)downloadingImages
+{
+    static NSMutableArray *downloadingImages = nil;
+    static dispatch_once_t oncePredicate;
+    dispatch_once(&oncePredicate, ^{
+        downloadingImages = [[NSMutableArray alloc] init];
+        [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidReceiveMemoryWarningNotification
+                                                          object:nil queue:[NSOperationQueue mainQueue]
+                                                      usingBlock:^(NSNotification * __unused notification) {
+                                                          [downloadingImages removeAllObjects];
+                                                      }];
+    });
+    
+    return downloadingImages;
+}
+
++ (void)cancelAllDownloads
+{
+    for (UIImageView *downloadingImage in [self downloadingImages]) {
+        [downloadingImage cancelImageRequestOperation];
+    }
+}
+
 + (UIImage *)imageWithUrl:(NSString *)url
                moduleName:(NSString *)moduleName
             downloadImage:(UIImageView *)imageView
@@ -65,9 +88,6 @@ static BOOL IDLogging = NO;
               placeholder:(UIImage *)placeholder
                completion:(void (^)(UIImage *image, NSIndexPath *indexPath))completion
 {
-    //TODO::
-    __block NSIndexPath *indexPathCopy = [indexPath copy];
-    
     BOOL downloadIfNeeded = YES;
     if (!url) {
         url = @"placeholder_image";
@@ -93,13 +113,14 @@ static BOOL IDLogging = NO;
     if (downloadIfNeeded) {
         if ([self logging]) DebugLog(@"Downloading image [%@]", url);
         NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
+        __weak UIImageView *blockImageView = imageView;
         [imageView setImageWithURLRequest:request
                          placeholderImage:placeholder
                                   success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
                                       if (image) {
                                           UIImage *savedImage = nil;
                                           NSString *filePath = [DirectoryUtils imagePathWithName:url moduleName:moduleName];
-                                          DebugLog(@"filePath %@", filePath);
+                                          if ([self logging]) DebugLog(@"filePath %@", filePath);
                                           if (thubnailSize != 0) {
                                               savedImage = [DirectoryUtils saveThumbnailImage:image
                                                                                      withSize:thubnailSize
@@ -113,17 +134,23 @@ static BOOL IDLogging = NO;
                                           }
                                           //put image in cache
                                           [[self sharedImageCache] setObject:savedImage forKey:MD5Hash(url)];
+                                          //remove from downalods
+                                          [[self downloadingImages] removeObject:blockImageView];
                                           //return saved image to invocker
-                                          if (completion) completion([[self sharedImageCache] objectForKey:MD5Hash(url)], indexPathCopy);
+                                          if (completion)
+                                              completion([[self sharedImageCache] objectForKey:MD5Hash(url)], indexPath);
                                       }
                                       //if there is no image then send completion(nil)
                                       //else if (completion) completion(nil);
                                       
                                   } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
                                       if ([self logging]) DebugLog(@"Error %@  occured in [%@]", error, NSStringFromSelector(_cmd));
-                                      //if there is no image then send completion(nil)
-                                      //if (completion) completion(nil);
+                                      //remove from downalods
+                                      [[self downloadingImages] removeObject:blockImageView];
+                                      if (completion) completion(placeholder, indexPath);
                                   }];
+        
+        [[self downloadingImages] addObject:imageView];
     }
     else {
         if (placeholder) {
@@ -133,6 +160,34 @@ static BOOL IDLogging = NO;
     
     return placeholder;
 }
+
++ (UIImage *)offlineImageWithUrl:(NSString *)url
+                      moduleName:(NSString *)moduleName
+                     placeholder:(UIImage *)placeholder
+{
+    if (!url) {
+        url = @"placeholder_image";
+    }
+    
+    //if immage in cache the return it
+    UIImage *image = [[self sharedImageCache] objectForKey:MD5Hash(url)];
+    if (image) {
+        if ([self logging]) DebugLog(@"Taking image [%@] from cache", url);
+        return image;
+    }
+    
+    //if image in file system then put it in cache and return it
+    image = [DirectoryUtils imageExistsWithName:url moduleName:moduleName];
+    if (image) {
+        if ([self logging]) DebugLog(@"Taking image [%@] from fileSystem", url);
+        [[self sharedImageCache] setObject:image forKey:MD5Hash(url)];
+        return image;
+    }
+    
+    //if there is no image then return placeholder
+    return placeholder;
+}
+
 //////////////////////////////////////////////////////
 
 @end
