@@ -69,7 +69,15 @@
 
 - (void)reloadPages
 {
-    [self setupViewContollers];
+    NSInteger numberOfPages = 0;
+    if (self.dataSource && [self.dataSource respondsToSelector:@selector(numberOfPages)]) {
+        numberOfPages = [self.dataSource numberOfPages];
+    }
+    for (int i = 0; i < numberOfPages; i++) {
+        if (self.dataSource && [self.dataSource respondsToSelector:@selector(pageContentAtIndex:)]) {
+            [self.dataSource pageContentAtIndex:i];
+        }
+    }
 }
 
 - (void)jumpToPageAtIndex:(NSInteger)index animated:(BOOL)animated completion:(void (^)(BOOL finished))completion
@@ -129,12 +137,26 @@
 - (void)setupViewContollers
 {
     NSInteger numberOfPages = 0;
-    if (self.delegate && [self.delegate respondsToSelector:@selector(numberOfPages)]) {
-        numberOfPages = [self.delegate numberOfPages];
+    if (self.dataSource && [self.dataSource respondsToSelector:@selector(numberOfPages)]) {
+        numberOfPages = [self.dataSource numberOfPages];
     }
     for (int i = 0; i < numberOfPages; i++) {
         if (self.dataSource && [self.dataSource respondsToSelector:@selector(pageContentAtIndex:)]) {
             [self.viewControllers addObject:[self.dataSource pageContentAtIndex:i]];
+            
+            //TODO:: implementare
+            /*
+             UIViewController *contentController = [self.dataSource pageContentAtIndex:i];
+             if (self.dataSource && [self.dataSource respondsToSelector:@selector(pageContentShouldRecognizerTapAtIndex:)]) {
+             if ([self.dataSource pageContentShouldRecognizerTapAtIndex:i]) {
+             UITapGestureRecognizer* tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self.delegate
+             action:@selector(pageContentDidSelectAtIndex:)];
+             tapGesture.numberOfTapsRequired = 1;
+             tapGesture.numberOfTouchesRequired = 1;
+             [contentController.view addGestureRecognizer:tapGesture];
+             }
+             }
+             //*/
         }
     }
 }
@@ -148,8 +170,8 @@
     self.pageController.dataSource = self;
     
     NSInteger index = 0;
-    if (self.delegate && [self.delegate respondsToSelector:@selector(indexOfPresentedPage)]) {
-        index = [self.delegate indexOfPresentedPage];
+    if (self.dataSource && [self.dataSource respondsToSelector:@selector(indexOfPresentedPage)]) {
+        index = [self.dataSource indexOfPresentedPage];
     }
     
     UIViewController *initialVC = [self.viewControllers objectAtIndex:index];
@@ -214,8 +236,8 @@
 - (NSInteger)presentationCountForPageViewController:(UIPageViewController *)pageViewController
 {
     NSInteger index = 0;
-    if (self.delegate && [self.delegate respondsToSelector:@selector(numberOfPages)]) {
-        index = [self.delegate numberOfPages];
+    if (self.dataSource && [self.dataSource respondsToSelector:@selector(numberOfPages)]) {
+        index = [self.dataSource numberOfPages];
     }
     return index;
 }
@@ -226,8 +248,8 @@
         return -1;
     }
     NSInteger index = 0;
-    if (self.delegate && [self.delegate respondsToSelector:@selector(indexOfPresentedPage)]) {
-        index = [self.delegate indexOfPresentedPage];
+    if (self.dataSource && [self.dataSource respondsToSelector:@selector(indexOfPresentedPage)]) {
+        index = [self.dataSource indexOfPresentedPage];
     }
     return index;
 }

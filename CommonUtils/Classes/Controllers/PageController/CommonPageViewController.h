@@ -42,16 +42,23 @@ typedef NS_ENUM(NSInteger, PresentationStyle) {
 
 @protocol CommonPageViewControllerDelegate <NSObject>
 
-@required
-- (NSInteger)numberOfPages;
-
-@optional
-- (NSInteger)indexOfPresentedPage;
+//TODO:: implementare tap gesture reconizer
+//@optional
+//- (void)pageContentDidSelectAtIndex:(NSInteger)index;
 
 @end
 
 @protocol CommonPageViewControllerDataSource <NSObject>
 
+@required
+- (NSInteger)numberOfPages;
+
 - (UIViewController *)pageContentAtIndex:(NSInteger)index;
+
+@optional
+- (NSInteger)indexOfPresentedPage;
+
+//TODO:: implementare tap gesture reconizer
+//- (BOOL)pageContentShouldRecognizerTapAtIndex:(NSInteger)index;
 
 @end
