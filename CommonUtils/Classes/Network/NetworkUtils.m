@@ -41,15 +41,20 @@ static CUReachability *reachability = nil;
                                                object:nil];
     
     reachability = [CUReachability reachabilityForInternetConnection];
-    currentNetworkStatus = [reachability currentReachabilityStatus];
     [reachability startNotifier];
+}
+
++ (NetworkStatus)currentNetworkStatus
+{
+    reachability = [CUReachability reachabilityForInternetConnection];
+    return [reachability currentReachabilityStatus];
 }
 
 //private method
 + (void)networkStatusDidChange:(NSNotification *)notification
 {
     CUReachability *curReach = [notification object];
-    currentNetworkStatus = [curReach currentReachabilityStatus];
+    NetworkStatus currentNetworkStatus = [curReach currentReachabilityStatus];
     
     switch (currentNetworkStatus) {
         case NotReachable: {

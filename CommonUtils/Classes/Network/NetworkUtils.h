@@ -11,11 +11,10 @@ typedef NS_OPTIONS(NSInteger, NetworkStatusMask) {
 //notification of network reachbility status
 extern NSString * const NetworkStatusChangedNotification;
 
-//holds current reashability status
-static NetworkStatus currentNetworkStatus;
-
 @interface NetworkUtils : NSObject
 
 + (void)setupConnectionObserver;
+
++ (NetworkStatus)currentNetworkStatus;
 
 @end

@@ -13,9 +13,9 @@
 #import <netinet/in.h>
 
 typedef enum {
-	NotReachable = 0,
-	ReachableViaWiFi,
-	ReachableViaWWAN
+	NotReachable     =  1 << 0,
+	ReachableViaWiFi =  1 << 1,
+	ReachableViaWWAN =  1 << 2
 } NetworkStatus;
 #define kReachabilityChangedNotification @"kNetworkReachabilityChangedNotification"
 

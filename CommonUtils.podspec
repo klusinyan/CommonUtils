@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = 'CommonUtils'
-  s.version      = '1.0.3-beta1'
+  s.version      = '1.0.3-beta2'
   s.summary      = 'Common Utilities.'
   s.homepage     = 'https://git.sftc.it/softec-ios/libcommonutils'
   s.license      = { :type => 'MIT', :file => 'LICENSE' }
