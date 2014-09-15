@@ -3,17 +3,16 @@
 
 #import "CUReachability.h"
 
+//per avere la notifica della connessione iscriversi alla notifica "kReachabilityChangedNotification"
+
 typedef NS_OPTIONS(NSInteger, NetworkStatusMask) {
     NetworkStatusMaskNotReachable=NotReachable,
     NetworkStatusMaskReachable=ReachableViaWWAN | ReachableViaWiFi
 };
 
-//notification of network reachbility status
-extern NSString * const NetworkStatusChangedNotification;
-
 @interface NetworkUtils : NSObject
 
-+ (void)setupConnectionObserver;
++ (instancetype)initSharedInstanceWithConnectionObserver;
 
 + (NetworkStatus)currentNetworkStatus;
 

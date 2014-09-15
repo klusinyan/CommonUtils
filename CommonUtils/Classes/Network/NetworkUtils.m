@@ -3,8 +3,6 @@
 
 #import "NetworkUtils.h"
 
-NSString * const NetworkStatusChangedNotification = @"NetworkStatusChangedNotification";
-
 static CUReachability *reachability = nil;
 
 @implementation NetworkUtils
@@ -15,16 +13,20 @@ static CUReachability *reachability = nil;
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-//not used
 + (instancetype)sharedInstance
 {
     static dispatch_once_t pred = 0;
     __strong static id _sharedObject = nil;
     dispatch_once(&pred, ^{
         _sharedObject = [[self alloc] init];
-        
+        [_sharedObject setupConnectionObserver];
     });
     return _sharedObject;
+}
+
++ (instancetype)initSharedInstanceWithConnectionObserver
+{
+    return [self sharedInstance];
 }
 
 #pragma mark -
@@ -33,7 +35,7 @@ static CUReachability *reachability = nil;
 //public method
 //setup connection observer to observe network reachability status
 //should be called in init of coordinator
-+ (void)setupConnectionObserver
+- (void)setupConnectionObserver
 {
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(networkStatusDidChange:)
@@ -46,12 +48,11 @@ static CUReachability *reachability = nil;
 
 + (NetworkStatus)currentNetworkStatus
 {
-    reachability = [CUReachability reachabilityForInternetConnection];
     return [reachability currentReachabilityStatus];
 }
 
 //private method
-+ (void)networkStatusDidChange:(NSNotification *)notification
+- (void)networkStatusDidChange:(NSNotification *)notification
 {
     CUReachability *curReach = [notification object];
     NetworkStatus currentNetworkStatus = [curReach currentReachabilityStatus];
@@ -72,9 +73,6 @@ static CUReachability *reachability = nil;
         default:
             break;
     }
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:NetworkStatusChangedNotification
-                                                        object:@(currentNetworkStatus)];
 }
 
 @end
