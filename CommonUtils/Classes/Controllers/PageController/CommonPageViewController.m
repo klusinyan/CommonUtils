@@ -33,6 +33,7 @@
         //defaults
         self.transitionStyle = UIPageViewControllerTransitionStyleScroll;
         self.presentationStyle = PresentationStyleFullScreen;
+        self.presented = NO;
     }
     return self;
 }
@@ -72,10 +73,30 @@
     NSInteger numberOfPages = 0;
     if (self.dataSource && [self.dataSource respondsToSelector:@selector(numberOfPages)]) {
         numberOfPages = [self.dataSource numberOfPages];
-    }
-    for (int i = 0; i < numberOfPages; i++) {
-        if (self.dataSource && [self.dataSource respondsToSelector:@selector(pageContentAtIndex:)]) {
-            [self.dataSource pageContentAtIndex:i];
+        
+        if (numberOfPages > 0) {
+            
+            //ask dataSource for current presenting page
+            NSInteger index = 0;
+            if (self.dataSource && [self.dataSource respondsToSelector:@selector(indexOfPresentedPage)]) {
+                index = [self.dataSource indexOfPresentedPage];
+            }
+            
+            //tell to pageController to set viewContollers
+            UIViewController *initialVC = [self.viewControllers objectAtIndex:index];
+            [self.pageController setViewControllers:@[initialVC]
+                                          direction:UIPageViewControllerNavigationDirectionForward
+                                           animated:NO completion:nil];
+            
+            //tell the pageControl (if there is a custom one) to point to the same page as \"indexOfPresentedPag\"
+            if (self.pageControl) self.pageControl.currentPage = index;
+            
+            //ask to dataSource to reload pages
+            for (int i = 0; i < numberOfPages; i++) {
+                if (self.dataSource && [self.dataSource respondsToSelector:@selector(pageContentAtIndex:)]) {
+                    [self.dataSource pageContentAtIndex:i];
+                }
+            }
         }
     }
 }
@@ -143,19 +164,19 @@
     for (int i = 0; i < numberOfPages; i++) {
         if (self.dataSource && [self.dataSource respondsToSelector:@selector(pageContentAtIndex:)]) {
             [self.viewControllers addObject:[self.dataSource pageContentAtIndex:i]];
-            
+
             //TODO:: implementare
             /*
-             UIViewController *contentController = [self.dataSource pageContentAtIndex:i];
-             if (self.dataSource && [self.dataSource respondsToSelector:@selector(pageContentShouldRecognizerTapAtIndex:)]) {
-             if ([self.dataSource pageContentShouldRecognizerTapAtIndex:i]) {
-             UITapGestureRecognizer* tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self.delegate
-             action:@selector(pageContentDidSelectAtIndex:)];
-             tapGesture.numberOfTapsRequired = 1;
-             tapGesture.numberOfTouchesRequired = 1;
-             [contentController.view addGestureRecognizer:tapGesture];
-             }
-             }
+            UIViewController *contentController = [self.dataSource pageContentAtIndex:i];
+            if (self.dataSource && [self.dataSource respondsToSelector:@selector(pageContentShouldRecognizerTapAtIndex:)]) {
+                if ([self.dataSource pageContentShouldRecognizerTapAtIndex:i]) {
+                    UITapGestureRecognizer* tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self.delegate
+                                                                                                 action:@selector(pageContentDidSelectAtIndex:)];
+                    tapGesture.numberOfTapsRequired = 1;
+                    tapGesture.numberOfTouchesRequired = 1;
+                    [contentController.view addGestureRecognizer:tapGesture];
+                }
+            }
              //*/
         }
     }
@@ -186,6 +207,8 @@
     self.pageController.view.frame = self.view.bounds;
     [self.view addSubview:self.pageController.view];
     [self.pageController didMoveToParentViewController:self];
+    
+    self.presented = YES;
     
     if (completion) completion(YES);
 }
