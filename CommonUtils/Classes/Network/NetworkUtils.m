@@ -5,7 +5,7 @@
 
 NSString * const NetworkStatusChangedNotification = @"NetworkStatusChangedNotification";
 
-static Reachability *reachability = nil;
+static CUReachability *reachability = nil;
 
 @implementation NetworkUtils
 
@@ -40,7 +40,7 @@ static Reachability *reachability = nil;
                                                  name:kReachabilityChangedNotification
                                                object:nil];
     
-    reachability = [Reachability reachabilityForInternetConnection];
+    reachability = [CUReachability reachabilityForInternetConnection];
     currentNetworkStatus = [reachability currentReachabilityStatus];
     [reachability startNotifier];
 }
@@ -48,7 +48,7 @@ static Reachability *reachability = nil;
 //private method
 + (void)networkStatusDidChange:(NSNotification *)notification
 {
-    Reachability *curReach = [notification object];
+    CUReachability *curReach = [notification object];
     currentNetworkStatus = [curReach currentReachabilityStatus];
     
     switch (currentNetworkStatus) {
