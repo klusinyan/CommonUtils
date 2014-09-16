@@ -682,6 +682,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "CommonUtilsTest/CommonUtilsTest-Prefix.pch";
+				HEADER_SEARCH_PATHS = "\"${PODS_ROOT}/Headers\"/**";
 				INFOPLIST_FILE = "CommonUtilsTest/CommonUtilsTest-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
@@ -696,6 +697,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "CommonUtilsTest/CommonUtilsTest-Prefix.pch";
+				HEADER_SEARCH_PATHS = "\"${PODS_ROOT}/Headers\"/**";
 				INFOPLIST_FILE = "CommonUtilsTest/CommonUtilsTest-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;

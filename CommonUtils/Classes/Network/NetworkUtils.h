@@ -12,7 +12,7 @@ typedef NS_OPTIONS(NSInteger, NetworkStatusMask) {
 
 @interface NetworkUtils : NSObject
 
-+ (instancetype)initSharedInstanceWithConnectionObserver;
++ (void)setupConnectionObserver;
 
 + (NetworkStatus)currentNetworkStatus;
 

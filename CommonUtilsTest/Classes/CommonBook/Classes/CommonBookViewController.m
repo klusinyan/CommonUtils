@@ -12,7 +12,7 @@
 @property (readwrite, nonatomic, strong) CommonPageViewController *commonBook;
 @property (readwrite, nonatomic, assign) NSInteger numPages;
 @property (readwrite, nonatomic, assign) NSInteger index;
-@property (readwrite, nonatomic, strong) NSArray *items;
+@property (readwrite, nonatomic, strong) NSMutableArray *items;
 
 @end
 
@@ -52,6 +52,12 @@
 {
     [super viewDidLoad];
     
+    self.items = [NSMutableArray array];
+    for (int i = 0; i < 1000; i++) {
+        [self.items addObject:[self fabriqueContentController]];
+    }
+    
+    /*
     self.items = @[
                    [self fabriqueContentController],
                    [self fabriqueContentController],
@@ -61,16 +67,23 @@
                    [self fabriqueContentController],
                    [self fabriqueContentController]
                    ];
-    
+    //*/
+     
     if ([self respondsToSelector:@selector(setEdgesForExtendedLayout:)]) {
         self.edgesForExtendedLayout = UIRectEdgeNone;
     }
     
+    //used only for custom page control
+    /*
     UIColor *pageIndicatorTintColor = [UIColor colorWithRed:161/255.0 green:161/255.0 blue:161/255.0 alpha:1];
     UIColor *currentPageIndicatorTintColor = [UIColor colorWithRed:224/255.0 green:0/255.0 blue:21/255.0 alpha:1];
     
     self.commonBook = [CommonPageViewController commonBookWithPageIndicatorTintColor:pageIndicatorTintColor
                                                     andCurrentPageIndicatorTintColor:currentPageIndicatorTintColor];
+     
+    //*/
+    self.commonBook = [CommonPageViewController commonBook];
+    
     self.commonBook.delegate = self;
     self.commonBook.dataSource = self;
     [self.commonBook presentBookInsideOfContainer:self.view completion:^(BOOL finished) {
@@ -111,14 +124,16 @@
 
 - (NSInteger)numberOfPages
 {
-    return self.numPages;
+    return [self.items count];
 }
 
+/*
 - (NSInteger)indexOfPresentedPage
 {
     return self.index;
 }
-
+//*/
+ 
 - (BOOL)pageContentShouldRecognizeTapAtIndex:(NSInteger)index
 {
     return (index == 0);
@@ -129,7 +144,7 @@
     CommonBookContentViewController *pageContent = [self.items objectAtIndex:index];
     
     NSString *prefix = (iPhone) ? @"iPhone" : @"iPad";
-    NSString *imageName = [prefix stringByAppendingFormat:@"_%@", @(index)];
+    NSString *imageName = [prefix stringByAppendingFormat:@"_%@", @(arc4random_uniform(index % 6))];
     pageContent.image = [UIImage imageNamed:imageName];
     DebugLog(@"imageName %@", imageName);
     
