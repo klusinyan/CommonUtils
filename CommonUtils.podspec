@@ -2,11 +2,11 @@ Pod::Spec.new do |s|
   s.name         = 'CommonUtils'
   s.version      = '1.0.2'
   s.summary      = 'Common Utilities.'
-  s.homepage     = 'https://git.sftc.it/softec-ios/libcommonutils'
+  s.homepage     = 'https://bitbucket.org/mrklteam/commonutils'
   s.license      = { :type => 'MIT', :file => 'LICENSE' }
   s.author       = { 'Karen Lusinyan' => 'karen.lusinyan@softecspa.it' }
   s.platform     = :ios, '7.0'
-  s.source       = { :git => 'git@git.sftc.it:softec-ios/libcommonutils.git', :tag => s.version.to_s }
+  s.source       = { :git => 'https://mrcararia@bitbucket.org/mrklteam/commonutils.git', :tag => s.version.to_s }
 
   s.prefix_header_file = 'CommonUtils/Classes/Lib-Prefix.pch'
 
