@@ -2,7 +2,7 @@
 
 #import "CommonPageViewController.h"
 
-@interface CommonPageViewController () <UIPageViewControllerDelegate, UIPageViewControllerDataSource>
+@interface CommonPageViewController () <UIPageViewControllerDelegate, UIPageViewControllerDataSource, UIGestureRecognizerDelegate>
 
 @property (readwrite, nonatomic, strong) UIPageViewController *pageController;
 @property (readwrite, nonatomic, strong) NSMutableArray *viewControllers;
@@ -94,7 +94,14 @@
             //ask to dataSource to reload pages
             for (int i = 0; i < numberOfPages; i++) {
                 if (self.dataSource && [self.dataSource respondsToSelector:@selector(pageContentAtIndex:)]) {
-                    [self.dataSource pageContentAtIndex:i];
+                    UIViewController *pageContent = [self.dataSource pageContentAtIndex:i];
+
+                    //ask to dataSourcento activate or not tap gesture recognizer
+                    if (self.dataSource && [self.dataSource respondsToSelector:@selector(pageContentShouldRecognizeTapAtIndex:)]) {
+                        if ([self.dataSource pageContentShouldRecognizeTapAtIndex:i]) {
+                            [self addTapGestureRecognizerToPageContent:pageContent];
+                        }
+                    }
                 }
             }
         }
@@ -152,6 +159,22 @@
     }
 }
 
+- (void)pageContentDidTap
+{
+    if (self.delegate && [self.delegate respondsToSelector:@selector(pageContentDidSelectAtIndex:)]) {
+        [self.delegate pageContentDidSelectAtIndex:self.currentPage];
+    }
+}
+
+- (void)addTapGestureRecognizerToPageContent:(UIViewController *)pageContent
+{
+    UITapGestureRecognizer* tapGesture = [[UITapGestureRecognizer alloc] init];
+    [tapGesture addTarget:self action:@selector(pageContentDidTap)];
+    tapGesture.numberOfTapsRequired = 1;
+    tapGesture.numberOfTouchesRequired = 1;
+    [pageContent.view addGestureRecognizer:tapGesture];
+}
+
 #pragma mark -
 #pragma mark private methods
 
@@ -163,21 +186,14 @@
     }
     for (int i = 0; i < numberOfPages; i++) {
         if (self.dataSource && [self.dataSource respondsToSelector:@selector(pageContentAtIndex:)]) {
-            [self.viewControllers addObject:[self.dataSource pageContentAtIndex:i]];
+            UIViewController *pageContent = [self.dataSource pageContentAtIndex:i];
+            [self.viewControllers addObject:pageContent];
 
-            //TODO:: implementare
-            /*
-            UIViewController *contentController = [self.dataSource pageContentAtIndex:i];
-            if (self.dataSource && [self.dataSource respondsToSelector:@selector(pageContentShouldRecognizerTapAtIndex:)]) {
-                if ([self.dataSource pageContentShouldRecognizerTapAtIndex:i]) {
-                    UITapGestureRecognizer* tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self.delegate
-                                                                                                 action:@selector(pageContentDidSelectAtIndex:)];
-                    tapGesture.numberOfTapsRequired = 1;
-                    tapGesture.numberOfTouchesRequired = 1;
-                    [contentController.view addGestureRecognizer:tapGesture];
+            if (self.dataSource && [self.dataSource respondsToSelector:@selector(pageContentShouldRecognizeTapAtIndex:)]) {
+                if ([self.dataSource pageContentShouldRecognizeTapAtIndex:i]) {
+                    [self addTapGestureRecognizerToPageContent:pageContent];
                 }
             }
-             //*/
         }
     }
 }

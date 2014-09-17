@@ -10,6 +10,7 @@
 #import "GDOBarcodeReader.h"
 #import "ProgressViewController.h"
 #import "CustomSplitController.h"
+#import "CommonBookViewController.h"
 #import "UIImage+Utils.h"
 
 typedef NS_ENUM(NSInteger, RowType) {
@@ -17,6 +18,7 @@ typedef NS_ENUM(NSInteger, RowType) {
     RowTypeBarcodeReader,
     RowTypeProgressView,
     RowTypeSplitController,
+    RowTypeCommonBook,
     RowCount,
 };
 
@@ -85,6 +87,9 @@ typedef NS_ENUM(NSInteger, RowType) {
             break;
         case RowTypeSplitController:
             cell.textLabel.text = @"SplitController";
+            break;
+        case RowTypeCommonBook:
+            cell.textLabel.text = @"CommonBook";
             break;
         default:
             break;
@@ -186,7 +191,13 @@ typedef NS_ENUM(NSInteger, RowType) {
             
             break;
         }
-        default:
+        case RowTypeCommonBook: {
+            CommonBookViewController *vc = [[CommonBookViewController alloc] init];
+            [self.navigationController pushViewController:vc animated:YES];
+            
+            break;
+        }
+    default:
             break;
     }
 }
