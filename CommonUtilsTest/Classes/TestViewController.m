@@ -11,6 +11,7 @@
 #import "ProgressViewController.h"
 #import "CustomSplitController.h"
 #import "CommonBookViewController.h"
+#import "PickerViewController.h"
 #import "UIImage+Utils.h"
 
 typedef NS_ENUM(NSInteger, RowType) {
@@ -19,6 +20,7 @@ typedef NS_ENUM(NSInteger, RowType) {
     RowTypeProgressView,
     RowTypeSplitController,
     RowTypeCommonBook,
+    RowTypePicker,
     RowCount,
 };
 
@@ -43,7 +45,7 @@ typedef NS_ENUM(NSInteger, RowType) {
     self.title = @"Common Test";
     self.navigationController.navigationBar.translucent = NO;
 
-    self.tableView.rowHeight = 100;
+    self.tableView.rowHeight = 60;
 }
 
 - (void)didReceiveMemoryWarning
@@ -90,6 +92,9 @@ typedef NS_ENUM(NSInteger, RowType) {
             break;
         case RowTypeCommonBook:
             cell.textLabel.text = @"CommonBook";
+            break;
+        case RowTypePicker:
+            cell.textLabel.text = @"Picker";
             break;
         default:
             break;
@@ -193,6 +198,13 @@ typedef NS_ENUM(NSInteger, RowType) {
         }
         case RowTypeCommonBook: {
             CommonBookViewController *vc = [[CommonBookViewController alloc] init];
+            [self.navigationController pushViewController:vc animated:YES];
+            
+            break;
+        }
+        case RowTypePicker: {
+            PickerViewController *vc =
+            [[PickerViewController alloc] initWithNibName:NSStringFromClass([PickerViewController class]) bundle:nil];
             [self.navigationController pushViewController:vc animated:YES];
             
             break;
