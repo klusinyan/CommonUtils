@@ -31,7 +31,6 @@ UIPopoverControllerDelegate
 @property (readwrite, nonatomic, strong) UIPickerView *picker;
 @property (readwrite, nonatomic, strong) NSString *selectedItem;
 @property (readwrite, nonatomic, assign) NSInteger selectedIndex;
-@property (readwrite, nonatomic, assign) BOOL showWhenOrientationDidChange;
 @property (readwrite, nonatomic, getter = isVisible) BOOL visible;
 
 @property (readwrite, nonatomic, copy) ShowCompletionHandler showCompetion;
@@ -65,7 +64,6 @@ UIPopoverControllerDelegate
         
         //defaults
         self.completionType = CompletionTypeUnknown;
-        self.showWhenOrientationDidChange = NO;
         self.selectedItem = ([self.items count] > 0) ? [self.items objectAtIndex:0] : nil;
         
         [self setupPicker];
@@ -293,33 +291,26 @@ UIPopoverControllerDelegate
     self.overlay = [[UIView alloc] init];
     self.overlay.translatesAutoresizingMaskIntoConstraints = NO;
     self.overlay.backgroundColor = [UIColor colorWithWhite:0.2f alpha:0.0f];
-    UIView *overlaySuperview = self.target.view;
-    //TODO::
-    //(self.target.navigationController.view) ? self.target.navigationController.view : self.target.view;
-    
-    [overlaySuperview addSubview:self.overlay];
+    [self.target.view addSubview:self.overlay];
     
     NSDictionary *bindings = @{@"overlay" : self.overlay};
     
-    [overlaySuperview addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[overlay]|"
+    [self.target.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[overlay]|"
                                                                              options:0
                                                                              metrics:nil
                                                                                views:bindings]];
     
-    [overlaySuperview addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[overlay]|"
+    [self.target.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[overlay]|"
                                                                              options:0
                                                                              metrics:nil
                                                                                views:bindings]];
     
-    ///*
     UITapGestureRecognizer* tapGesture =
     [[UITapGestureRecognizer alloc] initWithTarget:self
                                             action:@selector(slideDown)];
     tapGesture.numberOfTapsRequired = 1;
     tapGesture.numberOfTouchesRequired = 1;
-    tapGesture.cancelsTouchesInView = NO;
     [self.overlay addGestureRecognizer:tapGesture];
-    //*/
 }
 
 - (void)slideUp
@@ -327,7 +318,7 @@ UIPopoverControllerDelegate
     self.completionType = CompletionTypeUnknown;
     
     // check if our date picker is already on screen
-    if (self.pickerView.superview == nil) {
+    if (!self.isVisible && self.pickerView.superview == nil) {
         
         //add background overlay
         [self addOverlay];
@@ -372,12 +363,35 @@ UIPopoverControllerDelegate
     }
 }
 
+- (void)slideDown
+{
+    if (self.isVisible && self.pickerView.superview != nil) {
+        
+        CGRect screenRect = [[UIScreen mainScreen] applicationFrame];
+        CGRect endFrame = self.pickerView.frame;
+        endFrame.origin.y = screenRect.origin.y + screenRect.size.height;
+        
+        // start the slide down animation
+        [UIView beginAnimations:nil context:NULL];
+        [UIView setAnimationDuration:0.3];
+        
+        // we need to perform some post operations after the animation is complete
+        [UIView setAnimationDelegate:self];
+        [UIView setAnimationDidStopSelector:@selector(slideDownDidStop)];
+        
+        self.pickerView.frame = endFrame;
+        self.overlay.alpha = 0.0f;
+        
+        [UIView commitAnimations];
+    }
+}
+
 - (void)slideWillStartStop
 {
-    if (self.showCompetion) self.showCompetion();
-
     //set boolean
     self.visible = YES;
+
+    if (self.showCompetion) self.showCompetion();
 }
 
 - (void)slideDownDidStop
@@ -399,29 +413,6 @@ UIPopoverControllerDelegate
     }
     else {
         if (self.hideCompetion) self.hideCompetion();
-    }
-}
-
-- (void)slideDown
-{
-    if (self.pickerView.superview != nil) {
-        
-        CGRect screenRect = [[UIScreen mainScreen] applicationFrame];
-        CGRect endFrame = self.pickerView.frame;
-        endFrame.origin.y = screenRect.origin.y + screenRect.size.height;
-        
-        // start the slide down animation
-        [UIView beginAnimations:nil context:NULL];
-        [UIView setAnimationDuration:0.3];
-        
-        // we need to perform some post operations after the animation is complete
-        [UIView setAnimationDelegate:self];
-        [UIView setAnimationDidStopSelector:@selector(slideDownDidStop)];
-        
-        self.pickerView.frame = endFrame;
-        self.overlay.alpha = 0.0f;
-    
-        [UIView commitAnimations];
     }
 }
 
