@@ -25,6 +25,7 @@
 		9C72DFA719C71A90007E67A8 /* iPhone_4.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C72DF9919C71A90007E67A8 /* iPhone_4.png */; };
 		9C72DFA819C71A90007E67A8 /* iPhone_5.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C72DF9A19C71A90007E67A8 /* iPhone_5.png */; };
 		9C72DFA919C71A90007E67A8 /* iPhone_6.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C72DF9B19C71A90007E67A8 /* iPhone_6.png */; };
+		9C75FC0F19CB3F7B004FA3C9 /* apple.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C75FC0E19CB3F7B004FA3C9 /* apple.png */; };
 		9C83F86A19CAEAF000F150B4 /* CommonPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C83F86919CAEAF000F150B4 /* CommonPicker.m */; };
 		9C83F87619CB0E0400F150B4 /* PickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C83F87519CB0E0400F150B4 /* PickerViewController.m */; };
 		9C83F87819CB0E3E00F150B4 /* PickerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9C83F87719CB0E3E00F150B4 /* PickerViewController.xib */; };
@@ -90,6 +91,7 @@
 		9C72DF9919C71A90007E67A8 /* iPhone_4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = iPhone_4.png; sourceTree = "<group>"; };
 		9C72DF9A19C71A90007E67A8 /* iPhone_5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = iPhone_5.png; sourceTree = "<group>"; };
 		9C72DF9B19C71A90007E67A8 /* iPhone_6.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = iPhone_6.png; sourceTree = "<group>"; };
+		9C75FC0E19CB3F7B004FA3C9 /* apple.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = apple.png; sourceTree = "<group>"; };
 		9C83F86819CAEAF000F150B4 /* CommonPicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonPicker.h; sourceTree = "<group>"; };
 		9C83F86919CAEAF000F150B4 /* CommonPicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonPicker.m; sourceTree = "<group>"; };
 		9C83F87419CB0E0400F150B4 /* PickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PickerViewController.h; sourceTree = "<group>"; };
@@ -407,6 +409,7 @@
 		9CD9F80B196EAA5500EBBD85 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				9C75FC0E19CB3F7B004FA3C9 /* apple.png */,
 				9CD9F80C196EAA5500EBBD85 /* InfoPlist.strings */,
 				9CD9F80E196EAA5500EBBD85 /* Images.xcassets */,
 				9CD9F80F196EAA5500EBBD85 /* placeholder.png */,
@@ -515,6 +518,7 @@
 				9CD9F813196EAA5500EBBD85 /* placeholder.png in Resources */,
 				9CD9F811196EAA5500EBBD85 /* InfoPlist.strings in Resources */,
 				9C72DFA519C71A90007E67A8 /* iPhone_2.png in Resources */,
+				9C75FC0F19CB3F7B004FA3C9 /* apple.png in Resources */,
 				9C72DFA819C71A90007E67A8 /* iPhone_5.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -13,8 +13,23 @@
         <view contentMode="scaleToFill" id="iN0-l3-epB">
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-            <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+            <subviews>
+                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="apple.png" translatesAutoresizingMaskIntoConstraints="NO" id="gf7-7U-GO9">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                </imageView>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="gf7-7U-GO9" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="8Lh-A9-ohZ"/>
+                <constraint firstAttribute="trailing" secondItem="gf7-7U-GO9" secondAttribute="trailing" id="Fx0-Tf-mls"/>
+                <constraint firstItem="gf7-7U-GO9" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="VYm-qA-cZG"/>
+                <constraint firstAttribute="bottom" secondItem="gf7-7U-GO9" secondAttribute="bottom" id="qiQ-Ni-M2U"/>
+            </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
         </view>
     </objects>
+    <resources>
+        <image name="apple.png" width="1024" height="1024"/>
+    </resources>
 </document>

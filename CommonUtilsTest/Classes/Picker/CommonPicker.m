@@ -2,6 +2,7 @@
 //  Copyright (c) 2012 Home. All rights reserved.
 
 #import "CommonPicker.h"
+#import "BlurView.h"
 
 typedef NS_ENUM(NSInteger, CompletionType) {
     CompletionTypeUnknown=-1,
@@ -22,7 +23,7 @@ UIPopoverControllerDelegate
 @property (readwrite, nonatomic, assign) UIViewController *target;
 @property (readwrite, nonatomic, assign) id sender;
 @property (readwrite, nonatomic, strong) UIView *overlay;
-@property (readwrite, nonatomic, retain) UIView *pickerView;
+@property (readwrite, nonatomic, retain) BlurView *pickerView;
 @property (readwrite, nonatomic, retain) UIToolbar *toolbar;
 @property (readwrite, nonatomic, retain) NSString *title;
 @property (readwrite, nonatomic, retain) NSArray *items;
@@ -137,12 +138,12 @@ UIPopoverControllerDelegate
 
 - (void)setupPicker
 {
-    self.pickerView = [[UIView alloc] init];
+    self.pickerView = [[BlurView alloc] init];
     //self.pickerView.backgroundColor = [UIColor greenColor];
     
     self.toolbar = [[UIToolbar alloc] init];
     self.toolbar.translatesAutoresizingMaskIntoConstraints = NO;
-    //self.toolbar.barTintColor = [UIColor yellowColor];
+    self.toolbar.barTintColor = [UIColor whiteColor];
     [self.pickerView addSubview:self.toolbar];
     
     UIBarButtonItem *cancel = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
@@ -153,10 +154,14 @@ UIPopoverControllerDelegate
                                                                           target:nil
                                                                           action:NULL];
 
-    UIBarButtonItem *title = [[UIBarButtonItem alloc] initWithTitle:self.title
-                                                              style:UIBarButtonItemStylePlain
-                                                             target:nil
-                                                             action:NULL];
+    UILabel *label = [[UILabel alloc] init];
+    label.translatesAutoresizingMaskIntoConstraints = NO;
+    label.textColor = [self.toolbar tintColor];
+    label.textAlignment = NSTextAlignmentCenter;
+    label.text = ([self.title length] > 0) ? self.title : @"";
+    label.font = [UIFont systemFontOfSize:18.0f];
+    
+    UIBarButtonItem *title = [[UIBarButtonItem alloc] initWithCustomView:label];
 
     UIBarButtonItem *flex2 = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
                                                                           target:nil
@@ -220,13 +225,15 @@ UIPopoverControllerDelegate
 
 - (void)orientationDidChange:(NSNotification *)notification
 {
-    if (self.isVisible) {
-        [self hidePicker];
-
-        if (self.showWhenOrientationDidChange) {
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [self showPicker];
-            });
+    if (iPhone) {
+        if (self.isVisible) {
+            [self hidePicker];
+            
+            if (self.showWhenOrientationDidChange) {
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [self showPicker];
+                });
+            }
         }
     }
 }

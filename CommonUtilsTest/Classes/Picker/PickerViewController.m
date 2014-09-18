@@ -27,6 +27,16 @@
     return self;
 }
 
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    if ([self.picker isVisible]) {
+        [self.picker dismissPickerWithCompletion:^{
+            DebugLog(@"picker is hidden");
+        }];
+    }
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -38,13 +48,15 @@
 
     self.picker = [[CommonPicker alloc] initWithTarget:self
                                                 sender:showPicker
-                                             withTitle:@"Title"
+                                             withTitle:@"My Title"
                                                  items:@[@"Item1", @"Item2", @"Item3", @"Item4"]
                                       cancelCompletion:^{
                                           DebugLog(@"cancelComepletion");
                                       } doneCompletion:^(NSString *selectedItem, NSInteger selectedIndex) {
                                           DebugLog(@"doneComepletion witb item = %@ at index %@", selectedItem, @(selectedIndex));
                                       }];
+    
+    self.picker.showWhenOrientationDidChange = YES;
 }
 
 - (void)showPicker:(id)sender
