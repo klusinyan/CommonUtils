@@ -293,4 +293,15 @@
     return index;
 }
 
+#pragma mark -
+#pragma mark getter/setter
+
+- (void)setCurrentPage:(NSInteger)currentPage
+{
+    _currentPage = currentPage;
+    if (self.delegate && [self.delegate respondsToSelector:@selector(pageContentDidPresentAtIndex:)]) {
+        [self.delegate pageContentDidPresentAtIndex:_currentPage];
+    }
+}
+
 @end

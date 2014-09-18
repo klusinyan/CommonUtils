@@ -53,7 +53,7 @@
     [super viewDidLoad];
     
     self.items = [NSMutableArray array];
-    for (int i = 0; i < 1000; i++) {
+    for (int i = 0; i < 10; i++) {
         [self.items addObject:[self fabriqueContentController]];
     }
     
@@ -74,7 +74,7 @@
     }
     
     //used only for custom page control
-    /*
+    ///*
     UIColor *pageIndicatorTintColor = [UIColor colorWithRed:161/255.0 green:161/255.0 blue:161/255.0 alpha:1];
     UIColor *currentPageIndicatorTintColor = [UIColor colorWithRed:224/255.0 green:0/255.0 blue:21/255.0 alpha:1];
     
@@ -82,7 +82,7 @@
                                                     andCurrentPageIndicatorTintColor:currentPageIndicatorTintColor];
      
     //*/
-    self.commonBook = [CommonPageViewController commonBook];
+    //self.commonBook = [CommonPageViewController commonBook];
     
     self.commonBook.delegate = self;
     self.commonBook.dataSource = self;
@@ -153,6 +153,11 @@
 
 #pragma mark -
 #pragma mark PageViewControllerDelegate protocol
+
+- (void)pageContentDidPresentAtIndex:(NSInteger)index
+{
+    DebugLog(@"currentPage %@", @(index));
+}
 
 - (void)pageContentDidSelectAtIndex:(NSInteger)index
 {

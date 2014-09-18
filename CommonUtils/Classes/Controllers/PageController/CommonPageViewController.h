@@ -58,6 +58,7 @@ typedef NS_ENUM(NSInteger, PresentationStyle) {
 @protocol CommonPageViewControllerDelegate <NSObject>
 
 @optional
+- (void)pageContentDidPresentAtIndex:(NSInteger)index;
 - (void)pageContentDidSelectAtIndex:(NSInteger)index;
 
 @end

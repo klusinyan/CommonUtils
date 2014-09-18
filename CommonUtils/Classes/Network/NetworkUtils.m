@@ -24,12 +24,16 @@ static CUReachability *reachability = nil;
         
         reachability = [CUReachability reachabilityForInternetConnection];
         [reachability startNotifier];
+        
+        [self printNetworkStatusWith:[reachability currentReachabilityStatus]];
     });
 }
 
 + (NetworkStatus)currentNetworkStatus
 {
-    return [reachability currentReachabilityStatus];
+    NetworkStatus currentNetworkStatus = [reachability currentReachabilityStatus];
+    [self printNetworkStatusWith:currentNetworkStatus];
+    return currentNetworkStatus;
 }
 
 //private method (only debug)
@@ -37,8 +41,12 @@ static CUReachability *reachability = nil;
 {
     CUReachability *curReach = [notification object];
     NetworkStatus currentNetworkStatus = [curReach currentReachabilityStatus];
-    
-    switch (currentNetworkStatus) {
+    [self printNetworkStatusWith:currentNetworkStatus];
+}
+
++ (void)printNetworkStatusWith:(NetworkStatus)networkStatus
+{
+    switch (networkStatus) {
         case NotReachable: {
             DebugLog(@"Nessuna rete");
             break;
