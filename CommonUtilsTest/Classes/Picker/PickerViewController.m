@@ -8,6 +8,9 @@
 
 @property (readwrite, nonatomic, strong) CommonPicker *picker;
 @property (readwrite, nonatomic, strong) UIPopoverController *myPopoverController;
+@property (readwrite, nonatomic, strong) IBOutlet UIButton *button;
+
+- (IBAction)showPicker:(id)sender;
 
 @end
 
@@ -25,6 +28,16 @@
         // Custom initialization
     }
     return self;
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    if ([self.picker isVisible]) {
+        [self.picker dismissPickerWithCompletion:^{
+            DebugLog(@"picker is hidden");
+        }];
+    }
 }
 
 - (void)viewDidDisappear:(BOOL)animated
@@ -45,9 +58,16 @@
                                                                                 target:self
                                                                                 action:@selector(showPicker:)];
     self.navigationItem.rightBarButtonItems = @[showPicker];
+}
 
+- (IBAction)showPicker:(id)sender
+{
+    if ([self.picker isVisible]) {
+        return;
+    }
+    
     self.picker = [[CommonPicker alloc] initWithTarget:self
-                                                sender:showPicker
+                                                sender:sender
                                              withTitle:@"My Title"
                                                  items:@[@"Item1", @"Item2", @"Item3", @"Item4"]
                                       cancelCompletion:^{
@@ -56,21 +76,9 @@
                                           DebugLog(@"doneComepletion witb item = %@ at index %@", selectedItem, @(selectedIndex));
                                       }];
     
-    self.picker.showWhenOrientationDidChange = YES;
-}
-
-- (void)showPicker:(id)sender
-{
-    if ([self.picker isVisible]) {
-        [self.picker dismissPickerWithCompletion:^{
-            DebugLog(@"picker is hidden");
-        }];
-    }
-    else {
-        [self.picker showPickerWithCompletion:^{
-            DebugLog(@"picker is shown");
-        }];
-    }
+    [self.picker showPickerWithCompletion:^{
+        DebugLog(@"picker is shown");
+    }];
 }
 
 @end

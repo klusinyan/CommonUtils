@@ -22,17 +22,17 @@ UIPopoverControllerDelegate
 
 @property (readwrite, nonatomic, assign) UIViewController *target;
 @property (readwrite, nonatomic, assign) id sender;
+@property (readwrite, nonatomic, strong) UIPopoverController *myPopoverController;
 @property (readwrite, nonatomic, strong) UIView *overlay;
-@property (readwrite, nonatomic, retain) BlurView *pickerView;
-@property (readwrite, nonatomic, retain) UIToolbar *toolbar;
-@property (readwrite, nonatomic, retain) NSString *title;
-@property (readwrite, nonatomic, retain) NSArray *items;
-@property (readwrite, nonatomic, retain) UIPickerView *picker;
+@property (readwrite, nonatomic, strong) BlurView *pickerView;
+@property (readwrite, nonatomic, strong) UIToolbar *toolbar;
+@property (readwrite, nonatomic, strong) NSString *title;
+@property (readwrite, nonatomic, strong) NSArray *items;
+@property (readwrite, nonatomic, strong) UIPickerView *picker;
 @property (readwrite, nonatomic, strong) NSString *selectedItem;
 @property (readwrite, nonatomic, assign) NSInteger selectedIndex;
-@property (readwrite, nonatomic, getter=isVisible) BOOL visible;
-
-@property (readwrite, nonatomic, strong) UIPopoverController *myPopoverController;
+@property (readwrite, nonatomic, assign) BOOL showWhenOrientationDidChange;
+@property (readwrite, nonatomic, getter = isVisible) BOOL visible;
 
 @property (readwrite, nonatomic, copy) ShowCompletionHandler showCompetion;
 @property (readwrite, nonatomic, copy) HideCompletionHandler hideCompetion;
@@ -95,21 +95,16 @@ UIPopoverControllerDelegate
     return contentController;
 }
 
+
 - (void)showPickerWithCompletion:(void (^)(void))completion
 {
     self.showCompetion = completion;
+    
     if (iPhone) {
-        [self showPicker];
+        [self slideUp];
     }
     else {
-        CGSize size = CGSizeMake(320.0f, 260.0f);
-        self.myPopoverController =
-        [[UIPopoverController alloc] initWithContentViewController:[self contentViewControllerWithSize:size]];
-        self.myPopoverController.delegate = self;
-        [self.myPopoverController setPopoverContentSize:size animated:YES];
-        [self.myPopoverController presentPopoverFromBarButtonItem:self.sender
-                                         permittedArrowDirections:UIPopoverArrowDirectionAny
-                                                         animated:YES];
+        [self showPopover];
     }
 }
 
@@ -118,13 +113,10 @@ UIPopoverControllerDelegate
     self.hideCompetion = completion;
     
     if (iPhone) {
-        [self hidePicker];
+        [self slideDown];
     }
     else {
-        if (self.myPopoverController.popoverVisible) {
-            [self.myPopoverController dismissPopoverAnimated:YES];
-            if (self.hideCompetion) self.hideCompetion();
-        }
+        [self dismissPopover];
     }
 }
 
@@ -226,14 +218,72 @@ UIPopoverControllerDelegate
 - (void)orientationDidChange:(NSNotification *)notification
 {
     if (iPhone) {
-        if (self.isVisible) {
-            [self hidePicker];
-            
-            if (self.showWhenOrientationDidChange) {
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                    [self showPicker];
-                });
-            }
+        if (self.visible) {
+            [self dismissPickerWithCompletion:^{
+                DebugLog(@"picker is hidden");
+            }];
+        }
+    }
+    else if ([self.myPopoverController isPopoverVisible]) {
+        //present from UIBarButtonItem
+        if ([self.sender isKindOfClass:[UIBarButtonItem class]]) {
+            [self.myPopoverController presentPopoverFromBarButtonItem:self.sender
+                                             permittedArrowDirections:UIPopoverArrowDirectionAny
+                                                             animated:YES];
+        }
+        //present from any other view
+        else if ([self.sender isKindOfClass:[UIView class]]) {
+            UIView *view = (UIView *)self.sender;
+            CGRect myRect = [self.target.view convertRect:view.frame toView:self.target.view];
+            [self.myPopoverController presentPopoverFromRect:myRect
+                                                      inView:self.target.view
+                                    permittedArrowDirections:UIPopoverArrowDirectionAny
+                                                    animated:YES];
+        }
+    }
+}
+
+- (void)showPopover
+{
+    CGSize size = CGSizeMake(320.0f, 260.0f);
+    self.myPopoverController =
+    [[UIPopoverController alloc] initWithContentViewController:[self contentViewControllerWithSize:size]];
+    self.myPopoverController.delegate = self;
+    [self.myPopoverController setPopoverContentSize:size animated:YES];
+    
+    //layout picker view early
+    [self.pickerView layoutIfNeeded];
+    
+    //present from UIBarButtonItem
+    if ([self.sender isKindOfClass:[UIBarButtonItem class]]) {
+        [self.myPopoverController presentPopoverFromBarButtonItem:self.sender
+                                         permittedArrowDirections:UIPopoverArrowDirectionAny
+                                                         animated:YES];
+    }
+    //present from any other view
+    else if ([self.sender isKindOfClass:[UIView class]]) {
+        UIView *view = (UIView *)self.sender;
+        CGRect myRect = [self.target.view convertRect:view.frame toView:self.target.view];
+        [self.myPopoverController presentPopoverFromRect:myRect
+                                                  inView:self.target.view
+                                permittedArrowDirections:UIPopoverArrowDirectionAny
+                                                animated:YES];
+    }
+}
+
+- (void)dismissPopover
+{
+    if (self.myPopoverController.popoverVisible) {
+        [self.myPopoverController dismissPopoverAnimated:YES];
+        
+        if (self.completionType == CompletionTypeCancel) {
+            if (self.cancelCompletion) self.cancelCompletion();
+        }
+        else if (self.completionType == CompletionTypeDone) {
+            if (self.doneCompletion) self.doneCompletion(self.selectedItem, self.selectedIndex);
+        }
+        else {
+            if (self.hideCompetion) self.hideCompetion();
         }
     }
 }
@@ -261,16 +311,18 @@ UIPopoverControllerDelegate
                                                                              metrics:nil
                                                                                views:bindings]];
     
+    ///*
     UITapGestureRecognizer* tapGesture =
     [[UITapGestureRecognizer alloc] initWithTarget:self
-                                            action:@selector(hidePicker)];
+                                            action:@selector(slideDown)];
     tapGesture.numberOfTapsRequired = 1;
     tapGesture.numberOfTouchesRequired = 1;
     tapGesture.cancelsTouchesInView = NO;
     [self.overlay addGestureRecognizer:tapGesture];
+    //*/
 }
 
-- (void)showPicker
+- (void)slideUp
 {
     self.completionType = CompletionTypeUnknown;
     
@@ -307,7 +359,7 @@ UIPopoverControllerDelegate
                                        pickerViewContainerSize.height);
         // start the slide up animation
         [UIView beginAnimations:nil context:NULL];
-        [UIView setAnimationDidStopSelector:@selector(slideUpDidStop)];
+        [UIView setAnimationWillStartSelector:@selector(slideWillStartStop)];
         [UIView setAnimationDuration:0.3];
         
         // we need to perform some post operations after the animation is complete
@@ -320,31 +372,37 @@ UIPopoverControllerDelegate
     }
 }
 
-- (void)slideUpDidStop
+- (void)slideWillStartStop
 {
     if (self.showCompetion) self.showCompetion();
+
+    //set boolean
     self.visible = YES;
 }
 
 - (void)slideDownDidStop
 {
+    // the date picker has finished sliding downwards, so remove it
+	[self.pickerView removeFromSuperview];
+    
+    //remove overlay
+    [self.overlay removeFromSuperview];
+    
+    //set boolean
+    self.visible = NO;
+
     if (self.completionType == CompletionTypeCancel) {
         if (self.cancelCompletion) self.cancelCompletion();
     }
     else if (self.completionType == CompletionTypeDone) {
         if (self.doneCompletion) self.doneCompletion(self.selectedItem, self.selectedIndex);
     }
-    
-	// the date picker has finished sliding downwards, so remove it
-	[self.pickerView removeFromSuperview];
-    
-    if (self.hideCompetion) self.hideCompetion();
-    [self.overlay removeFromSuperview];
-    self.overlay = nil;
-    self.visible = NO;
+    else {
+        if (self.hideCompetion) self.hideCompetion();
+    }
 }
 
-- (void)hidePicker
+- (void)slideDown
 {
     if (self.pickerView.superview != nil) {
         
@@ -402,11 +460,11 @@ UIPopoverControllerDelegate
     self.completionType = CompletionTypeCancel;
     
     if (iPhone) {
-        [self hidePicker];
+        [self slideDown];
     }
     else if (self.myPopoverController.popoverVisible) {
         [self.myPopoverController dismissPopoverAnimated:YES];
-        if (self.cancelCompletion) self.cancelCompletion();
+        [self dismissPopover];
     }
 }
 
@@ -415,11 +473,11 @@ UIPopoverControllerDelegate
     self.completionType = CompletionTypeDone;
     
     if (iPhone) {
-        [self hidePicker];
+        [self slideDown];
     }
     else if (self.myPopoverController.popoverVisible) {
         [self.myPopoverController dismissPopoverAnimated:YES];
-        if (self.doneCompletion) self.doneCompletion(self.selectedItem, self.selectedIndex);
+        [self dismissPopover];
     }
 }
 

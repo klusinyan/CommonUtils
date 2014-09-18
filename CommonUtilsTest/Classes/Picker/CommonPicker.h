@@ -13,9 +13,7 @@ typedef void(^DoneCompletionHandler)(NSString *selectedItem, NSInteger selectedI
               cancelCompletion:(CancelCompletionHandler)cancelCompletion
                 doneCompletion:(DoneCompletionHandler)doneCompletion;
 
-@property (readonly, nonatomic, getter=isVisible) BOOL visible;
-
-@property (readwrite, nonatomic, assign) BOOL showWhenOrientationDidChange;
+@property (readonly, nonatomic, getter = isVisible) BOOL visible;
 
 - (void)showPickerWithCompletion:(void (^)(void))completion;
 
