@@ -17,8 +17,6 @@ typedef void(^DoneCompletionHandler)(NSString *selectedItem, NSInteger selectedI
 
 @property (readwrite, nonatomic, assign) BOOL showWhenOrientationDidChange;
 
-- (UIViewController *)contentViewControllerWithSize:(CGSize)size;
-
 - (void)showPickerWithCompletion:(void (^)(void))completion;
 
 - (void)dismissPickerWithCompletion:(void (^)(void))completion;
