@@ -57,6 +57,16 @@ CommonPickerDataSource
                                                                                 target:self
                                                                                 action:@selector(showPicker:)];
     self.navigationItem.rightBarButtonItems = @[showPicker];
+    
+    self.items = @[@"Item1", @"Item2", @"Item3"];
+    
+    self.pickerview = [[UIPickerView alloc] init];
+    self.pickerview.delegate = self;
+    self.pickerview.dataSource = self;
+    
+    //for test
+    self.datePicker = [[UIDatePicker alloc] init];
+    self.datePicker.datePickerMode = UIDatePickerModeDateAndTime;
 }
 
 - (IBAction)showPicker:(id)sender
@@ -66,14 +76,15 @@ CommonPickerDataSource
     }
     self.commonPicker = [[CommonPicker alloc] initWithTarget:self
                                                       sender:sender
-                                           relativeSuperview:sender
+                                           relativeSuperview:self.view
                                                    withTitle:nil];
     
     self.commonPicker.dataSource = self;
     self.commonPicker.delegate = self;
     
     if (iPhone) {
-        self.commonPicker.pickerHeight = self.view.bounds.size.height;
+        self.commonPicker.needsOverlay = YES;
+        //self.commonPicker.pickerHeight = self.view.bounds.size.height;
         //self.commonPicker.pickerCornerradius = 10.0f;
     }
     else {
