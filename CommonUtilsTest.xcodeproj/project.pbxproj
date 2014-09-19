@@ -706,6 +706,7 @@
 				GCC_PREFIX_HEADER = "CommonUtilsTest/CommonUtilsTest-Prefix.pch";
 				HEADER_SEARCH_PATHS = "\"${PODS_ROOT}/Headers\"/**";
 				INFOPLIST_FILE = "CommonUtilsTest/CommonUtilsTest-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -721,6 +722,7 @@
 				GCC_PREFIX_HEADER = "CommonUtilsTest/CommonUtilsTest-Prefix.pch";
 				HEADER_SEARCH_PATHS = "\"${PODS_ROOT}/Headers\"/**";
 				INFOPLIST_FILE = "CommonUtilsTest/CommonUtilsTest-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};

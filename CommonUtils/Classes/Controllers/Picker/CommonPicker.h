@@ -20,6 +20,8 @@
 
 @property (readonly, nonatomic, getter = isVisible) BOOL visible;
 
+@property (readwrite, nonatomic, assign) BOOL showToolbar;
+
 @property (readwrite, nonatomic, assign) BOOL needsOverlay;
 
 @property (readwrite, nonatomic, assign) BOOL shouldChangeOrientation;
@@ -29,6 +31,12 @@
 @property (readwrite, nonatomic, assign) CGFloat pickerHeight;
 
 @property (readwrite, nonatomic, assign) CGFloat pickerCornerradius;
+
+@property (readwrite, nonatomic, strong) UIColor *toolbarBarTintColor;
+
+@property (readwrite, nonatomic, strong) UIColor *toolbarTintColor;
+
+@property (readwrite, nonatomic, strong) UIColor *titleColor;
 
 @property (readwrite, nonatomic, assign) UIPopoverArrowDirection popoverArrowDirection;
 
@@ -40,12 +48,14 @@
 
 @protocol CommonPickerDataSource <NSObject>
 
+@required
 - (id)pickerContent;
 
 @end
 
 @protocol CommonPickerDelegate <NSObject>
 
+@optional
 - (void)pickerDidCancelShowing;
 
 - (void)pickerDidFinishShowing;

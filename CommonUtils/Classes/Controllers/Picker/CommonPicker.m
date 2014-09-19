@@ -23,7 +23,7 @@ UIPopoverControllerDelegate
 @property (readwrite, nonatomic, assign) id relativeSuperview;
 @property (readwrite, nonatomic, strong) UIPopoverController *myPopoverController;
 @property (readwrite, nonatomic, strong) UIView *overlay;
-@property (readwrite, nonatomic, strong) BlurView *pickerView;
+@property (readwrite, nonatomic, strong) UIView *pickerView;
 @property (readwrite, nonatomic, strong) UIToolbar *toolbar;
 @property (readwrite, nonatomic, strong) NSString *title;
 @property (readwrite, nonatomic, strong) UIView *picker;
@@ -54,11 +54,15 @@ UIPopoverControllerDelegate
         
         //defaults
         self.completionType = CompletionTypeUnknown;
+        self.showToolbar = YES;
         self.needsOverlay = NO;
         self.shouldChangeOrientation = NO;
         self.pickerWidth = (iPhone) ? self.target.view.frame.size.width : 320.0f;
         self.pickerHeight = 260.0f;
         self.pickerCornerradius = 0.0f;
+        self.toolbarBarTintColor = [UIColor whiteColor];
+        self.toolbarTintColor = [UIColor blueColor];
+        self.titleColor = self.toolbarTintColor;
         self.popoverArrowDirection = UIPopoverArrowDirectionAny;
     }
     return self;
@@ -100,14 +104,15 @@ UIPopoverControllerDelegate
 
 - (void)setupPicker
 {
-    self.pickerView = [[BlurView alloc] init];
+    self.pickerView = (iPad) ? [[UIView alloc] init] : [[BlurView alloc] init];
     self.pickerView.layer.cornerRadius = self.pickerCornerradius;
     //self.pickerView.backgroundColor = [UIColor greenColor];
     
     self.toolbar = [[UIToolbar alloc] init];
     self.toolbar.translatesAutoresizingMaskIntoConstraints = NO;
-    self.toolbar.barTintColor = [UIColor whiteColor];
-    [self.pickerView addSubview:self.toolbar];
+    self.toolbar.barTintColor = self.toolbarBarTintColor;
+    self.toolbar.tintColor = self.toolbarTintColor;
+    if (self.showToolbar) [self.pickerView addSubview:self.toolbar];
     
     UIBarButtonItem *cancel = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
                                                                             target:self
@@ -119,7 +124,7 @@ UIPopoverControllerDelegate
     
     UILabel *label = [[UILabel alloc] init];
     label.translatesAutoresizingMaskIntoConstraints = NO;
-    label.textColor = [self.toolbar tintColor];
+    label.textColor = self.titleColor;
     label.textAlignment = NSTextAlignmentCenter;
     label.text = ([self.title length] > 0) ? self.title : @"";
     label.font = [UIFont systemFontOfSize:18.0f];
@@ -147,20 +152,31 @@ UIPopoverControllerDelegate
     self.picker.translatesAutoresizingMaskIntoConstraints = NO;
     [self.pickerView addSubview:self.picker];
     
-    [self.pickerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[_toolbar]|"
-                                                                            options:0
-                                                                            metrics:nil
-                                                                              views:NSDictionaryOfVariableBindings(_toolbar)]];
+    if (self.showToolbar) {
+        [self.pickerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[_toolbar]|"
+                                                                                options:0
+                                                                                metrics:nil
+                                                                                  views:NSDictionaryOfVariableBindings(_toolbar)]];
+    }
     
     [self.pickerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[_picker]|"
                                                                             options:0
                                                                             metrics:nil
                                                                               views:NSDictionaryOfVariableBindings(_picker)]];
     
-    [self.pickerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[_toolbar(==44)][_picker]|"
-                                                                            options:0
-                                                                            metrics:nil
-                                                                              views:NSDictionaryOfVariableBindings(_toolbar, _picker)]];
+    if (self.showToolbar) {
+        [self.pickerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[_toolbar(==44)][_picker]|"
+                                                                                options:0
+                                                                                metrics:nil
+                                                                                  views:NSDictionaryOfVariableBindings(_toolbar, _picker)]];
+    }
+    else {
+        [self.pickerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[_picker]|"
+                                                                                options:0
+                                                                                metrics:nil
+                                                                                  views:NSDictionaryOfVariableBindings(_picker)]];
+    }
+    
     
     /*
      [self.pickerView addConstraint:[NSLayoutConstraint constraintWithItem:self.picker
@@ -208,6 +224,8 @@ UIPopoverControllerDelegate
                                                       inView:self.target.view
                                     permittedArrowDirections:self.popoverArrowDirection
                                                     animated:YES];
+            
+            if (self.showCompetion) self.showCompetion();
         }
     }
 }
@@ -262,6 +280,8 @@ UIPopoverControllerDelegate
                                 permittedArrowDirections:self.popoverArrowDirection
                                                 animated:YES];
     }
+    
+    if (self.showCompetion) self.showCompetion();
 }
 
 - (void)dismissPopover

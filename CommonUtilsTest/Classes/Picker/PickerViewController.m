@@ -12,6 +12,7 @@ CommonPickerDataSource
 >
 @property (readwrite, nonatomic, strong) UIPopoverController *myPopoverController;
 @property (readwrite, nonatomic, strong) IBOutlet UIButton *button;
+@property (readwrite, nonatomic, strong) IBOutlet UIImageView *imageView;
 
 @property (readwrite, nonatomic, strong) UIPickerView *pickerview;
 @property (readwrite, nonatomic, strong) UIDatePicker *datePicker;
@@ -76,11 +77,16 @@ CommonPickerDataSource
     }
     self.commonPicker = [[CommonPicker alloc] initWithTarget:self
                                                       sender:sender
-                                           relativeSuperview:self.view
+                                           relativeSuperview:self.imageView
                                                    withTitle:nil];
     
+    //setup delegate, datasource
     self.commonPicker.dataSource = self;
     self.commonPicker.delegate = self;
+    
+    //setup appearance
+    self.commonPicker.toolbarBarTintColor = [UIColor whiteColor];
+    self.commonPicker.toolbarTintColor = [UIColor colorWithRed:14/255.0 green:121/255.0 blue:255/255.0 alpha:1];
     
     if (iPhone) {
         self.commonPicker.needsOverlay = YES;
