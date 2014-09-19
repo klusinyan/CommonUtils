@@ -15,29 +15,23 @@ typedef void(^HideCompletionHandler)(void);
 
 @interface CommonPicker ()
 <
-UIPickerViewDelegate,
-UIPickerViewDataSource,
 UIPopoverControllerDelegate
 >
 
 @property (readwrite, nonatomic, assign) UIViewController *target;
 @property (readwrite, nonatomic, assign) id sender;
+@property (readwrite, nonatomic, assign) id relativeSuperview;
 @property (readwrite, nonatomic, strong) UIPopoverController *myPopoverController;
 @property (readwrite, nonatomic, strong) UIView *overlay;
 @property (readwrite, nonatomic, strong) BlurView *pickerView;
 @property (readwrite, nonatomic, strong) UIToolbar *toolbar;
 @property (readwrite, nonatomic, strong) NSString *title;
-@property (readwrite, nonatomic, strong) NSArray *items;
-@property (readwrite, nonatomic, strong) UIPickerView *picker;
-@property (readwrite, nonatomic, strong) NSString *selectedItem;
-@property (readwrite, nonatomic, assign) NSInteger selectedIndex;
+@property (readwrite, nonatomic, strong) UIView *picker;
 @property (readwrite, nonatomic, getter = isVisible) BOOL visible;
 
+@property (readwrite, nonatomic, assign) CompletionType completionType;
 @property (readwrite, nonatomic, copy) ShowCompletionHandler showCompetion;
 @property (readwrite, nonatomic, copy) HideCompletionHandler hideCompetion;
-@property (readwrite, nonatomic, copy) CancelCompletionHandler cancelCompletion;
-@property (readwrite, nonatomic, copy) DoneCompletionHandler doneCompletion;
-@property (readwrite, nonatomic, assign) CompletionType completionType;
 
 @end
 
@@ -48,54 +42,32 @@ UIPopoverControllerDelegate
 
 - (instancetype)initWithTarget:(id)target
                         sender:(id)sender
+             relativeSuperview:(id)relativeSuperview
                      withTitle:(NSString *)title
-                         items:(NSArray *)items
-              cancelCompletion:(CancelCompletionHandler)cancelCompletion
-                doneCompletion:(DoneCompletionHandler)doneCompletion
 {
     self = [super init];
     if (self) {
         self.target = (UIViewController *)target;
         self.sender = sender;
+        self.relativeSuperview = relativeSuperview;
         self.title = title;
-        self.items = items;
-        self.cancelCompletion = cancelCompletion;
-        self.doneCompletion = doneCompletion;
         
         //defaults
         self.completionType = CompletionTypeUnknown;
-        self.selectedItem = ([self.items count] > 0) ? [self.items objectAtIndex:0] : nil;
-        
-        [self setupPicker];
+        self.needsOverlay = NO;
+        self.shouldChangeOrientation = NO;
+        self.pickerWidth = (iPhone) ? self.target.view.frame.size.width : 320.0f;
+        self.pickerHeight = 260.0f;
+        self.pickerCornerradius = 0.0f;
+        self.popoverArrowDirection = UIPopoverArrowDirectionAny;
     }
     return self;
 }
 
-- (UIViewController *)contentViewControllerWithSize:(CGSize)size
-{
-    UIViewController *contentController = [[UIViewController alloc] init];
-    contentController.view.translatesAutoresizingMaskIntoConstraints = NO;
-    //contentController.view.backgroundColor = [UIColor redColor];
-    contentController.view.frame = CGRectMake(0, 0, size.width, size.height);
-    
-    self.pickerView.translatesAutoresizingMaskIntoConstraints = NO;
-    [contentController.view addSubview:self.pickerView];
-    
-    [contentController.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[_pickerView]|"
-                                                                                   options:0
-                                                                                   metrics:nil
-                                                                                     views:NSDictionaryOfVariableBindings(_pickerView)]];
-    
-    [contentController.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[_pickerView]|"
-                                                                                   options:0
-                                                                                   metrics:nil
-                                                                                     views:NSDictionaryOfVariableBindings(_pickerView)]];
-    return contentController;
-}
-
-
 - (void)showPickerWithCompletion:(void (^)(void))completion
 {
+    [self setupPicker];
+    
     self.showCompetion = completion;
     
     if (iPhone) {
@@ -129,6 +101,7 @@ UIPopoverControllerDelegate
 - (void)setupPicker
 {
     self.pickerView = [[BlurView alloc] init];
+    self.pickerView.layer.cornerRadius = self.pickerCornerradius;
     //self.pickerView.backgroundColor = [UIColor greenColor];
     
     self.toolbar = [[UIToolbar alloc] init];
@@ -141,9 +114,9 @@ UIPopoverControllerDelegate
                                                                             action:@selector(buttonCancelPressed:)];
     
     UIBarButtonItem *flex1 = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
-                                                                          target:nil
-                                                                          action:NULL];
-
+                                                                           target:nil
+                                                                           action:NULL];
+    
     UILabel *label = [[UILabel alloc] init];
     label.translatesAutoresizingMaskIntoConstraints = NO;
     label.textColor = [self.toolbar tintColor];
@@ -152,20 +125,24 @@ UIPopoverControllerDelegate
     label.font = [UIFont systemFontOfSize:18.0f];
     
     UIBarButtonItem *title = [[UIBarButtonItem alloc] initWithCustomView:label];
-
+    
     UIBarButtonItem *flex2 = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
-                                                                          target:nil
-                                                                          action:NULL];
-
+                                                                           target:nil
+                                                                           action:NULL];
+    
     UIBarButtonItem *done = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone
                                                                           target:self
                                                                           action:@selector(buttonDonePressed:)];
     
     self.toolbar.items = @[cancel, flex1, title, flex2, done];
     
-    self.picker = [[UIPickerView alloc] init];
-    self.picker.delegate = self;
-    self.picker.dataSource = self;
+    if (self.dataSource && [self.dataSource respondsToSelector:@selector(pickerContent)] && [self.dataSource pickerContent]) {
+        self.picker = [self.dataSource pickerContent];
+    }
+    else {
+        @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:[NSString stringWithFormat:@"%@ Failed to call pickerContent:, dataSource should provide a valid pickerContent.", NSStringFromClass([self class])] userInfo:nil];
+    }
+    
     //self.picker.backgroundColor = [UIColor redColor];
     self.picker.translatesAutoresizingMaskIntoConstraints = NO;
     [self.pickerView addSubview:self.picker];
@@ -174,7 +151,7 @@ UIPopoverControllerDelegate
                                                                             options:0
                                                                             metrics:nil
                                                                               views:NSDictionaryOfVariableBindings(_toolbar)]];
-
+    
     [self.pickerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[_picker]|"
                                                                             options:0
                                                                             metrics:nil
@@ -184,25 +161,25 @@ UIPopoverControllerDelegate
                                                                             options:0
                                                                             metrics:nil
                                                                               views:NSDictionaryOfVariableBindings(_toolbar, _picker)]];
-
+    
     /*
-    [self.pickerView addConstraint:[NSLayoutConstraint constraintWithItem:self.picker
-                                                                attribute:NSLayoutAttributeCenterX
-                                                                relatedBy:NSLayoutRelationEqual
-                                                                   toItem:self.pickerView
-                                                                attribute:NSLayoutAttributeCenterX
-                                                               multiplier:1
-                                                                 constant:0]];
-
-    [self.pickerView addConstraint:[NSLayoutConstraint constraintWithItem:self.picker
-                                                                attribute:NSLayoutAttributeCenterY
-                                                                relatedBy:NSLayoutRelationEqual
-                                                                   toItem:self.pickerView
-                                                                attribute:NSLayoutAttributeCenterY
-                                                               multiplier:1
-                                                                 constant:0]];
-     //*/
+     [self.pickerView addConstraint:[NSLayoutConstraint constraintWithItem:self.picker
+     attribute:NSLayoutAttributeCenterX
+     relatedBy:NSLayoutRelationEqual
+     toItem:self.pickerView
+     attribute:NSLayoutAttributeCenterX
+     multiplier:1
+     constant:0]];
      
+     [self.pickerView addConstraint:[NSLayoutConstraint constraintWithItem:self.picker
+     attribute:NSLayoutAttributeCenterY
+     relatedBy:NSLayoutRelationEqual
+     toItem:self.pickerView
+     attribute:NSLayoutAttributeCenterY
+     multiplier:1
+     constant:0]];
+     //*/
+    
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(orientationDidChange:)
@@ -215,35 +192,52 @@ UIPopoverControllerDelegate
 
 - (void)orientationDidChange:(NSNotification *)notification
 {
-    if (iPhone) {
-        if (self.visible) {
-            [self dismissPickerWithCompletion:^{
-                DebugLog(@"picker is hidden");
-            }];
-        }
-    }
-    else if ([self.myPopoverController isPopoverVisible]) {
+    if (iPad && [self.myPopoverController isPopoverVisible]) {
         //present from UIBarButtonItem
         if ([self.sender isKindOfClass:[UIBarButtonItem class]]) {
             [self.myPopoverController presentPopoverFromBarButtonItem:self.sender
-                                             permittedArrowDirections:UIPopoverArrowDirectionAny
+                                             permittedArrowDirections:self.popoverArrowDirection
                                                              animated:YES];
         }
         //present from any other view
         else if ([self.sender isKindOfClass:[UIView class]]) {
             UIView *view = (UIView *)self.sender;
-            CGRect myRect = [self.target.view convertRect:view.frame toView:self.target.view];
+            UIView *relativeSuperview = (UIView *)self.relativeSuperview;
+            CGRect myRect = [relativeSuperview convertRect:view.frame toView:self.target.view];
             [self.myPopoverController presentPopoverFromRect:myRect
                                                       inView:self.target.view
-                                    permittedArrowDirections:UIPopoverArrowDirectionAny
+                                    permittedArrowDirections:self.popoverArrowDirection
                                                     animated:YES];
         }
     }
 }
 
+- (UIViewController *)contentViewControllerWithSize:(CGSize)size
+{
+    UIViewController *contentController = [[UIViewController alloc] init];
+    //contentController.view.translatesAutoresizingMaskIntoConstraints = NO;
+    //contentController.view.backgroundColor = [UIColor redColor];
+    contentController.view.frame = CGRectMake(0, 0, size.width, size.height);
+    
+    self.pickerView.translatesAutoresizingMaskIntoConstraints = NO;
+    [contentController.view addSubview:self.pickerView];
+    
+    [contentController.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[_pickerView]|"
+                                                                                   options:0
+                                                                                   metrics:nil
+                                                                                     views:NSDictionaryOfVariableBindings(_pickerView)]];
+    
+    [contentController.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[_pickerView]|"
+                                                                                   options:0
+                                                                                   metrics:nil
+                                                                                     views:NSDictionaryOfVariableBindings(_pickerView)]];
+    return contentController;
+}
+
+
 - (void)showPopover
 {
-    CGSize size = CGSizeMake(320.0f, 260.0f);
+    CGSize size = CGSizeMake(self.pickerWidth, self.pickerHeight);
     self.myPopoverController =
     [[UIPopoverController alloc] initWithContentViewController:[self contentViewControllerWithSize:size]];
     self.myPopoverController.delegate = self;
@@ -255,16 +249,17 @@ UIPopoverControllerDelegate
     //present from UIBarButtonItem
     if ([self.sender isKindOfClass:[UIBarButtonItem class]]) {
         [self.myPopoverController presentPopoverFromBarButtonItem:self.sender
-                                         permittedArrowDirections:UIPopoverArrowDirectionAny
+                                         permittedArrowDirections:self.popoverArrowDirection
                                                          animated:YES];
     }
     //present from any other view
     else if ([self.sender isKindOfClass:[UIView class]]) {
         UIView *view = (UIView *)self.sender;
-        CGRect myRect = [self.target.view convertRect:view.frame toView:self.target.view];
+        UIView *relativeSuperview = (UIView *)self.relativeSuperview;
+        CGRect myRect = [relativeSuperview convertRect:view.frame toView:self.target.view];
         [self.myPopoverController presentPopoverFromRect:myRect
                                                   inView:self.target.view
-                                permittedArrowDirections:UIPopoverArrowDirectionAny
+                                permittedArrowDirections:self.popoverArrowDirection
                                                 animated:YES];
     }
 }
@@ -275,12 +270,16 @@ UIPopoverControllerDelegate
         [self.myPopoverController dismissPopoverAnimated:YES];
         
         if (self.completionType == CompletionTypeCancel) {
-            if (self.cancelCompletion) self.cancelCompletion();
+            if (self.delegate && [self.delegate respondsToSelector:@selector(pickerDidCancelShowing)]) {
+                [self.delegate pickerDidCancelShowing];
+            }
         }
         else if (self.completionType == CompletionTypeDone) {
-            if (self.doneCompletion) self.doneCompletion(self.selectedItem, self.selectedIndex);
+            if (self.delegate && [self.delegate respondsToSelector:@selector(pickerDidFinishShowing)]) {
+                [self.delegate pickerDidFinishShowing];
+            }
         }
-        else {
+        else if (self.completionType == CompletionTypeUnknown) {
             if (self.hideCompetion) self.hideCompetion();
         }
     }
@@ -288,6 +287,10 @@ UIPopoverControllerDelegate
 
 - (void)addOverlay
 {
+    if (!self.needsOverlay) {
+        return;
+    }
+    
     self.overlay = [[UIView alloc] init];
     self.overlay.translatesAutoresizingMaskIntoConstraints = NO;
     self.overlay.backgroundColor = [UIColor colorWithWhite:0.2f alpha:0.0f];
@@ -324,7 +327,7 @@ UIPopoverControllerDelegate
         [self addOverlay];
         
         //assign size to picker
-        self.pickerView.frame = CGRectMake(0,0,self.target.view.frame.size.width, 260.0f);
+        self.pickerView.frame = CGRectMake(0,0,self.pickerWidth, self.pickerHeight);
         
         //add to superview
         [self.target.view addSubview:self.pickerView];
@@ -390,7 +393,7 @@ UIPopoverControllerDelegate
 {
     //set boolean
     self.visible = YES;
-
+    
     if (self.showCompetion) self.showCompetion();
 }
 
@@ -404,43 +407,20 @@ UIPopoverControllerDelegate
     
     //set boolean
     self.visible = NO;
-
+    
     if (self.completionType == CompletionTypeCancel) {
-        if (self.cancelCompletion) self.cancelCompletion();
+        if (self.delegate && [self.delegate respondsToSelector:@selector(pickerDidCancelShowing)]) {
+            [self.delegate pickerDidCancelShowing];
+        }
     }
     else if (self.completionType == CompletionTypeDone) {
-        if (self.doneCompletion) self.doneCompletion(self.selectedItem, self.selectedIndex);
+        if (self.delegate && [self.delegate respondsToSelector:@selector(pickerDidFinishShowing)]) {
+            [self.delegate pickerDidFinishShowing];
+        }
     }
-    else {
+    else if (self.completionType == CompletionTypeUnknown) {
         if (self.hideCompetion) self.hideCompetion();
     }
-}
-
-#pragma mark -
-#pragma mark UIPickerViewDataSource protocol
-
-- (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
-{
-    return 1;
-}
-
-- (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
-{
-    return [self.items count];
-}
-
-- (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
-{
-    return [self.items objectAtIndex:row];
-}
-
-#pragma mark -
-#pragma mark UIPickerViewDelegate protocol
-
-- (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
-{
-    self.selectedItem = [self.items objectAtIndex:row];
-    self.selectedIndex = row;
 }
 
 #pragma mark -

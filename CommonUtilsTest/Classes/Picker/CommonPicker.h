@@ -1,22 +1,53 @@
 //  Created by Karen Lusinyan on 18/09/14.
 //  Copyright (c) 2014 Karen Lusinyan. All rights reserved.
 
-typedef void(^CancelCompletionHandler)(void);
-typedef void(^DoneCompletionHandler)(NSString *selectedItem, NSInteger selectedIndex);
+@protocol CommonPickerDataSource;
+@protocol CommonPickerDelegate;
 
 @interface CommonPicker : NSObject
 
+//sender and relativeSuperview needs only for iPad
+//to postion popoverController correctly
+//these values are not considered for iPhone
 - (instancetype)initWithTarget:(id)target
                         sender:(id)sender
-                     withTitle:(NSString *)title
-                         items:(NSArray *)items
-              cancelCompletion:(CancelCompletionHandler)cancelCompletion
-                doneCompletion:(DoneCompletionHandler)doneCompletion;
+             relativeSuperview:(id)relativeSuperview
+                     withTitle:(NSString *)title;
+
+@property (readwrite, nonatomic, assign) id<CommonPickerDataSource> dataSource;
+
+@property (readwrite, nonatomic, assign) id<CommonPickerDelegate> delegate;
 
 @property (readonly, nonatomic, getter = isVisible) BOOL visible;
+
+@property (readwrite, nonatomic, assign) BOOL needsOverlay;
+
+@property (readwrite, nonatomic, assign) BOOL shouldChangeOrientation;
+
+@property (readwrite, nonatomic, assign) CGFloat pickerWidth;
+
+@property (readwrite, nonatomic, assign) CGFloat pickerHeight;
+
+@property (readwrite, nonatomic, assign) CGFloat pickerCornerradius;
+
+@property (readwrite, nonatomic, assign) UIPopoverArrowDirection popoverArrowDirection;
 
 - (void)showPickerWithCompletion:(void (^)(void))completion;
 
 - (void)dismissPickerWithCompletion:(void (^)(void))completion;
+
+@end
+
+@protocol CommonPickerDataSource <NSObject>
+
+- (id)pickerContent;
+
+@end
+
+@protocol CommonPickerDelegate <NSObject>
+
+- (void)pickerDidCancelShowing;
+
+- (void)pickerDidFinishShowing;
 
 @end

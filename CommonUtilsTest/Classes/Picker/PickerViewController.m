@@ -4,11 +4,20 @@
 #import "PickerViewController.h"
 #import "CommonPicker.h"
 
-@interface PickerViewController () <UIPopoverControllerDelegate>
-
-@property (readwrite, nonatomic, strong) CommonPicker *picker;
+@interface PickerViewController ()
+<UIPickerViewDelegate,
+UIPickerViewDataSource,
+CommonPickerDelegate,
+CommonPickerDataSource
+>
 @property (readwrite, nonatomic, strong) UIPopoverController *myPopoverController;
 @property (readwrite, nonatomic, strong) IBOutlet UIButton *button;
+
+@property (readwrite, nonatomic, strong) UIPickerView *pickerview;
+@property (readwrite, nonatomic, strong) UIDatePicker *datePicker;
+@property (readwrite, nonatomic, strong) NSArray *items;
+@property (readwrite, nonatomic, strong) NSString *selectedItem;
+@property (readwrite, nonatomic, strong) IBOutlet CommonPicker *commonPicker;
 
 - (IBAction)showPicker:(id)sender;
 
@@ -33,18 +42,8 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    if ([self.picker isVisible]) {
-        [self.picker dismissPickerWithCompletion:^{
-            DebugLog(@"picker is hidden");
-        }];
-    }
-}
-
-- (void)viewDidDisappear:(BOOL)animated
-{
-    [super viewDidDisappear:animated];
-    if ([self.picker isVisible]) {
-        [self.picker dismissPickerWithCompletion:^{
+    if ([self.commonPicker isVisible]) {
+        [self.commonPicker dismissPickerWithCompletion:^{
             DebugLog(@"picker is hidden");
         }];
     }
@@ -62,23 +61,85 @@
 
 - (IBAction)showPicker:(id)sender
 {
-    if ([self.picker isVisible]) {
+    if ([self.commonPicker isVisible]) {
         return;
     }
+    self.commonPicker = [[CommonPicker alloc] initWithTarget:self
+                                                      sender:sender
+                                           relativeSuperview:sender
+                                                   withTitle:nil];
     
-    self.picker = [[CommonPicker alloc] initWithTarget:self
-                                                sender:sender
-                                             withTitle:@"My Title"
-                                                 items:@[@"Item1", @"Item2", @"Item3", @"Item4"]
-                                      cancelCompletion:^{
-                                          DebugLog(@"cancelComepletion");
-                                      } doneCompletion:^(NSString *selectedItem, NSInteger selectedIndex) {
-                                          DebugLog(@"doneComepletion witb item = %@ at index %@", selectedItem, @(selectedIndex));
-                                      }];
+    self.commonPicker.dataSource = self;
+    self.commonPicker.delegate = self;
     
-    [self.picker showPickerWithCompletion:^{
+    if (iPhone) {
+        self.commonPicker.pickerHeight = self.view.bounds.size.height;
+        //self.commonPicker.pickerCornerradius = 10.0f;
+    }
+    else {
+        //self.commonPicker.pickerWidth = self.box_argomento.frame.size.width;
+        self.commonPicker.popoverArrowDirection = UIPopoverArrowDirectionUp; //default any
+    }
+    
+    [self.commonPicker showPickerWithCompletion:^{
         DebugLog(@"picker is shown");
     }];
+}
+
+- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+{
+    if ([self.commonPicker isVisible]) {
+        [self.commonPicker dismissPickerWithCompletion:^{
+            DebugLog(@"picker is hidden");
+        }];
+    }
+}
+
+#pragma mark -
+#pragma mark CommonPickerDataSource protocol
+
+- (id)pickerContent
+{
+    return self.pickerview;
+}
+
+#pragma mark -
+#pragma mark CommonPickerDelegate protocol
+
+- (void)pickerDidCancelShowing
+{
+    DebugLog(@"pickerDidCancelShowing");
+}
+
+- (void)pickerDidFinishShowing
+{
+    DebugLog(@"pickerDidFinishShowing");
+}
+
+#pragma mark -
+#pragma mark UIPickerViewDataSource protocol
+
+- (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
+{
+    return 1;
+}
+
+- (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
+{
+    return [self.items count];
+}
+
+- (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
+{
+    return [self.items objectAtIndex:row];
+}
+
+#pragma mark -
+#pragma mark UIPickerViewDelegate protocol
+
+- (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
+{
+    self.selectedItem = [self.items objectAtIndex:row];
 }
 
 @end
