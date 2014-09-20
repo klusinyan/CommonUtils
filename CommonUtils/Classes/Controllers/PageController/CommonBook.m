@@ -1,8 +1,8 @@
 //  Created by Karen Lusinyan on 16/07/14.
 
-#import "CommonPageViewController.h"
+#import "CommonBook.h"
 
-@interface CommonPageViewController () <UIPageViewControllerDelegate, UIPageViewControllerDataSource, UIGestureRecognizerDelegate>
+@interface CommonBook () <UIPageViewControllerDelegate, UIPageViewControllerDataSource, UIGestureRecognizerDelegate>
 
 @property (readwrite, nonatomic, strong) UIPageViewController *pageController;
 @property (readwrite, nonatomic, strong) NSMutableArray *viewControllers;
@@ -11,7 +11,7 @@
 
 @end
 
-@implementation CommonPageViewController
+@implementation CommonBook
 
 - (void)dealloc
 {
@@ -95,7 +95,7 @@
             for (int i = 0; i < numberOfPages; i++) {
                 if (self.dataSource && [self.dataSource respondsToSelector:@selector(pageContentAtIndex:)]) {
                     UIViewController *pageContent = [self.dataSource pageContentAtIndex:i];
-
+                    
                     //ask to dataSourcento activate or not tap gesture recognizer
                     if (self.dataSource && [self.dataSource respondsToSelector:@selector(pageContentShouldRecognizeTapAtIndex:)]) {
                         if ([self.dataSource pageContentShouldRecognizeTapAtIndex:i]) {
@@ -161,8 +161,8 @@
 
 - (void)pageContentDidTap
 {
-    if (self.delegate && [self.delegate respondsToSelector:@selector(pageContentDidSelectAtIndex:)]) {
-        [self.delegate pageContentDidSelectAtIndex:self.currentPage];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(pageContent:didSelectAtIndex:)]) {
+        [self.delegate pageContent:[self.viewControllers objectAtIndex:self.currentPage] didSelectAtIndex:self.currentPage];
     }
 }
 
@@ -188,7 +188,7 @@
         if (self.dataSource && [self.dataSource respondsToSelector:@selector(pageContentAtIndex:)]) {
             UIViewController *pageContent = [self.dataSource pageContentAtIndex:i];
             [self.viewControllers addObject:pageContent];
-
+            
             if (self.dataSource && [self.dataSource respondsToSelector:@selector(pageContentShouldRecognizeTapAtIndex:)]) {
                 if ([self.dataSource pageContentShouldRecognizeTapAtIndex:i]) {
                     [self addTapGestureRecognizerToPageContent:pageContent];
@@ -226,7 +226,13 @@
     
     self.presented = YES;
     
+    //first call completion to customize "pageControl custom"
     if (completion) completion(YES);
+    
+    //call delegate to pass the initialVC
+    if (self.delegate && [self.delegate respondsToSelector:@selector(pageContent:didMovetToIndex:)]) {
+        [self.delegate pageContent:initialVC didMovetToIndex:index];
+    }
 }
 
 #pragma mark -
@@ -257,6 +263,17 @@
     return [self.viewControllers objectAtIndex:index];
 }
 
+- (void)pageViewController:(UIPageViewController *)pageViewController willTransitionToViewControllers:(NSArray *)pendingViewControllers
+{
+    NSUInteger index = [self.viewControllers indexOfObject:pageViewController.viewControllers[0]];
+    if (index == NSNotFound) {
+        return;
+    }
+    if (self.delegate && [self.delegate respondsToSelector:@selector(pageContent:willMoveFromIndex:)]) {
+        [self.delegate pageContent:[self.viewControllers objectAtIndex:index] willMoveFromIndex:index];
+    }
+}
+
 - (void)pageViewController:(UIPageViewController *)pageViewController didFinishAnimating:(BOOL)finished previousViewControllers:(NSArray *)previousViewControllers transitionCompleted:(BOOL)completed
 {
     NSUInteger index = [self.viewControllers indexOfObject:pageViewController.viewControllers[0]];
@@ -266,6 +283,9 @@
     self.currentPage = index;
     if (self.pageControl && [self.pageControl respondsToSelector:@selector(setCurrentPage:)]) {
         self.pageControl.currentPage = self.currentPage;
+    }
+    if (self.delegate && [self.delegate respondsToSelector:@selector(pageContent:didMovetToIndex:)]) {
+        [self.delegate pageContent:[self.viewControllers objectAtIndex:index] didMovetToIndex:index];
     }
 }
 
@@ -291,17 +311,6 @@
         index = [self.dataSource indexOfPresentedPage];
     }
     return index;
-}
-
-#pragma mark -
-#pragma mark getter/setter
-
-- (void)setCurrentPage:(NSInteger)currentPage
-{
-    _currentPage = currentPage;
-    if (self.delegate && [self.delegate respondsToSelector:@selector(pageContentDidPresentAtIndex:)]) {
-        [self.delegate pageContentDidPresentAtIndex:_currentPage];
-    }
 }
 
 @end

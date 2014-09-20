@@ -60,9 +60,6 @@ UIPopoverControllerDelegate
         self.pickerWidth = (iPhone) ? self.target.view.frame.size.width : 320.0f;
         self.pickerHeight = 260.0f;
         self.pickerCornerradius = 0.0f;
-        self.toolbarBarTintColor = [UIColor whiteColor];
-        self.toolbarTintColor = [UIColor blueColor];
-        self.titleColor = self.toolbarTintColor;
         self.popoverArrowDirection = UIPopoverArrowDirectionAny;
     }
     return self;
@@ -110,8 +107,6 @@ UIPopoverControllerDelegate
     
     self.toolbar = [[UIToolbar alloc] init];
     self.toolbar.translatesAutoresizingMaskIntoConstraints = NO;
-    self.toolbar.barTintColor = self.toolbarBarTintColor;
-    self.toolbar.tintColor = self.toolbarTintColor;
     if (self.showToolbar) [self.pickerView addSubview:self.toolbar];
     
     UIBarButtonItem *cancel = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
@@ -124,7 +119,7 @@ UIPopoverControllerDelegate
     
     UILabel *label = [[UILabel alloc] init];
     label.translatesAutoresizingMaskIntoConstraints = NO;
-    label.textColor = self.titleColor;
+    label.textColor = self.toolbar.tintColor;
     label.textAlignment = NSTextAlignmentCenter;
     label.text = ([self.title length] > 0) ? self.title : @"";
     label.font = [UIFont systemFontOfSize:18.0f];

@@ -32,12 +32,6 @@
 
 @property (readwrite, nonatomic, assign) CGFloat pickerCornerradius;
 
-@property (readwrite, nonatomic, strong) UIColor *toolbarBarTintColor;
-
-@property (readwrite, nonatomic, strong) UIColor *toolbarTintColor;
-
-@property (readwrite, nonatomic, strong) UIColor *titleColor;
-
 @property (readwrite, nonatomic, assign) UIPopoverArrowDirection popoverArrowDirection;
 
 - (void)showPickerWithCompletion:(void (^)(void))completion;

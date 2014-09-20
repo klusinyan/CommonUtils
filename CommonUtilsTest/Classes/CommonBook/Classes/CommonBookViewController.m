@@ -4,12 +4,12 @@
 #import "CommonBookContentViewController.h"
 
 //library
-#import "CommonPageViewController.h"
+#import "CommonBook.h"
 
 @interface CommonBookViewController () <CommonPageViewControllerDelegate, CommonPageViewControllerDataSource>
 
 @property (readwrite, nonatomic, strong) UIBarButtonItem *done;
-@property (readwrite, nonatomic, strong) CommonPageViewController *commonBook;
+@property (readwrite, nonatomic, strong) CommonBook *commonBook;
 @property (readwrite, nonatomic, assign) NSInteger numPages;
 @property (readwrite, nonatomic, assign) NSInteger index;
 @property (readwrite, nonatomic, strong) NSMutableArray *items;
@@ -78,7 +78,7 @@
     UIColor *pageIndicatorTintColor = [UIColor colorWithRed:161/255.0 green:161/255.0 blue:161/255.0 alpha:1];
     UIColor *currentPageIndicatorTintColor = [UIColor colorWithRed:224/255.0 green:0/255.0 blue:21/255.0 alpha:1];
     
-    self.commonBook = [CommonPageViewController commonBookWithPageIndicatorTintColor:pageIndicatorTintColor
+    self.commonBook = [CommonBook commonBookWithPageIndicatorTintColor:pageIndicatorTintColor
                                                     andCurrentPageIndicatorTintColor:currentPageIndicatorTintColor];
      
     //*/

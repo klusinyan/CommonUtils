@@ -8,7 +8,7 @@ typedef NS_ENUM(NSInteger, PresentationStyle) {
 @protocol CommonPageViewControllerDataSource;
 @protocol CommonPageViewControllerDelegate;
 
-@interface CommonPageViewController : UIViewController
+@interface CommonBook : UIViewController
 
 @property (readwrite, nonatomic, assign) id<CommonPageViewControllerDelegate> delegate;
 @property (readwrite, nonatomic, assign) id<CommonPageViewControllerDataSource> dataSource;
@@ -58,8 +58,11 @@ typedef NS_ENUM(NSInteger, PresentationStyle) {
 @protocol CommonPageViewControllerDelegate <NSObject>
 
 @optional
-- (void)pageContentDidPresentAtIndex:(NSInteger)index;
-- (void)pageContentDidSelectAtIndex:(NSInteger)index;
+- (void)pageContent:(id)pageContent willMoveFromIndex:(NSInteger)index;
+
+- (void)pageContent:(id)pageContent didMovetToIndex:(NSInteger)index;
+
+- (void)pageContent:(id)pageContent didSelectAtIndex:(NSInteger)index;
 
 @end
 

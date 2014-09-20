@@ -50,8 +50,8 @@
 		9CA10B621953521400DC3C5B /* NSIndexPath+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CA10B601953521400DC3C5B /* NSIndexPath+Utils.m */; };
 		9CA2B4BE19584AFA00E29A8B /* UICollectionView+Utils.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CA2B4BC19584AFA00E29A8B /* UICollectionView+Utils.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9CA2B4BF19584AFA00E29A8B /* UICollectionView+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CA2B4BD19584AFA00E29A8B /* UICollectionView+Utils.m */; };
-		9CA4F69819790BFC000BCFCC /* CommonPageViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CA4F69619790BFC000BCFCC /* CommonPageViewController.h */; };
-		9CA4F69919790BFC000BCFCC /* CommonPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CA4F69719790BFC000BCFCC /* CommonPageViewController.m */; };
+		9CA4F69819790BFC000BCFCC /* CommonBook.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CA4F69619790BFC000BCFCC /* CommonBook.h */; };
+		9CA4F69919790BFC000BCFCC /* CommonBook.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CA4F69719790BFC000BCFCC /* CommonBook.m */; };
 		9CA4F69D19790E7D000BCFCC /* ViewPagerController.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CA4F69B19790E7D000BCFCC /* ViewPagerController.h */; };
 		9CA4F69E19790E7D000BCFCC /* ViewPagerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CA4F69C19790E7D000BCFCC /* ViewPagerController.m */; };
 		9CAAA55B194CA422006D89F0 /* BlurView.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CAAA559194CA422006D89F0 /* BlurView.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -143,8 +143,8 @@
 		9CA10B601953521400DC3C5B /* NSIndexPath+Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSIndexPath+Utils.m"; sourceTree = "<group>"; };
 		9CA2B4BC19584AFA00E29A8B /* UICollectionView+Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UICollectionView+Utils.h"; sourceTree = "<group>"; };
 		9CA2B4BD19584AFA00E29A8B /* UICollectionView+Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UICollectionView+Utils.m"; sourceTree = "<group>"; };
-		9CA4F69619790BFC000BCFCC /* CommonPageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonPageViewController.h; sourceTree = "<group>"; };
-		9CA4F69719790BFC000BCFCC /* CommonPageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonPageViewController.m; sourceTree = "<group>"; };
+		9CA4F69619790BFC000BCFCC /* CommonBook.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonBook.h; sourceTree = "<group>"; };
+		9CA4F69719790BFC000BCFCC /* CommonBook.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonBook.m; sourceTree = "<group>"; };
 		9CA4F69B19790E7D000BCFCC /* ViewPagerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewPagerController.h; sourceTree = "<group>"; };
 		9CA4F69C19790E7D000BCFCC /* ViewPagerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewPagerController.m; sourceTree = "<group>"; };
 		9CAAA559194CA422006D89F0 /* BlurView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BlurView.h; sourceTree = "<group>"; };
@@ -389,8 +389,8 @@
 		9CA4F69519790BFC000BCFCC /* PageController */ = {
 			isa = PBXGroup;
 			children = (
-				9CA4F69619790BFC000BCFCC /* CommonPageViewController.h */,
-				9CA4F69719790BFC000BCFCC /* CommonPageViewController.m */,
+				9CA4F69619790BFC000BCFCC /* CommonBook.h */,
+				9CA4F69719790BFC000BCFCC /* CommonBook.m */,
 			);
 			path = PageController;
 			sourceTree = "<group>";
@@ -618,7 +618,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9CF9663818FD3ADC00E265A1 /* CallBackProtocol.h in Headers */,
-				9CA4F69819790BFC000BCFCC /* CommonPageViewController.h in Headers */,
+				9CA4F69819790BFC000BCFCC /* CommonBook.h in Headers */,
 				9CD7023E193388790066FFC0 /* UIImage+Alpha.h in Headers */,
 				9C90FF7919377EBB004CE056 /* NSDictionary+Utils.h in Headers */,
 				9CE7A8A719542CCF00E699E4 /* DirectoryUtils.h in Headers */,
@@ -778,7 +778,7 @@
 				9C8C0AFD1934A17C0033D2A9 /* UIImage+Alpha.m in Sources */,
 				9CA10B621953521400DC3C5B /* NSIndexPath+Utils.m in Sources */,
 				9C20BE5F1949EF830077C6E8 /* ZoomAnimationController.m in Sources */,
-				9CA4F69919790BFC000BCFCC /* CommonPageViewController.m in Sources */,
+				9CA4F69919790BFC000BCFCC /* CommonBook.m in Sources */,
 				9C46A59A19766A840018B109 /* ImageDownloader.m in Sources */,
 				9CB1FC9A19759B6A0080534F /* SelectedListController.m in Sources */,
 				9CA09777191133A000605020 /* TransitionManager.m in Sources */,
