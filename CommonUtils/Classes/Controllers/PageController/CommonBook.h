@@ -5,13 +5,13 @@ typedef NS_ENUM(NSInteger, PresentationStyle) {
     PresentationStyleCustom,
 };
 
-@protocol CommonPageViewControllerDataSource;
-@protocol CommonPageViewControllerDelegate;
+@protocol CommonBookDelegate;
+@protocol CommonBookDataSource;
 
 @interface CommonBook : UIViewController
 
-@property (readwrite, nonatomic, assign) id<CommonPageViewControllerDelegate> delegate;
-@property (readwrite, nonatomic, assign) id<CommonPageViewControllerDataSource> dataSource;
+@property (readwrite, nonatomic, assign) id<CommonBookDelegate> delegate;
+@property (readwrite, nonatomic, assign) id<CommonBookDataSource> dataSource;
 @property (readwrite, nonatomic, assign) UIPageViewControllerTransitionStyle transitionStyle;
 @property (readwrite, nonatomic, assign) PresentationStyle presentationStyle;
 @property (readwrite, nonatomic, getter = isPresented) BOOL presented;
@@ -41,7 +41,7 @@ typedef NS_ENUM(NSInteger, PresentationStyle) {
 
 @end
 
-@protocol CommonPageViewControllerDataSource <NSObject>
+@protocol CommonBookDataSource <NSObject>
 
 @required
 - (NSInteger)numberOfPages;
@@ -55,7 +55,7 @@ typedef NS_ENUM(NSInteger, PresentationStyle) {
 
 @end
 
-@protocol CommonPageViewControllerDelegate <NSObject>
+@protocol CommonBookDelegate <NSObject>
 
 @optional
 - (void)pageContent:(id)pageContent willMoveFromIndex:(NSInteger)index;
