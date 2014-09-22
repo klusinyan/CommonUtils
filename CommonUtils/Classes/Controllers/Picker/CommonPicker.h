@@ -11,8 +11,7 @@
 //these values are not considered for iPhone
 - (instancetype)initWithTarget:(id)target
                         sender:(id)sender
-             relativeSuperview:(id)relativeSuperview
-                     withTitle:(NSString *)title;
+             relativeSuperview:(id)relativeSuperview;
 
 @property (readwrite, nonatomic, assign) id<CommonPickerDataSource> dataSource;
 
@@ -20,7 +19,7 @@
 
 @property (readonly, nonatomic, getter = isVisible) BOOL visible;
 
-@property (readwrite, nonatomic, assign) BOOL showToolbar;
+@property (readwrite, nonatomic, assign) BOOL toolbarHidden;
 
 @property (readwrite, nonatomic, assign) BOOL needsOverlay;
 
@@ -38,6 +37,9 @@
 
 - (void)dismissPickerWithCompletion:(void (^)(void))completion;
 
+//only iPad: changes popover size dynamically
+- (void)reloadPickerWithCompletion:(void(^)(void))completion;
+
 @end
 
 @protocol CommonPickerDataSource <NSObject>
@@ -45,13 +47,23 @@
 @required
 - (id)pickerContent;
 
+@optional
+//if nil or not implemented: returns default toolbar
+- (id)pickerToolbar;
+
+//if toolbarHeight is specified with the value <= 0 then toolbar is not visualzied
+//this method has no effect if the default is shown
+- (CGFloat)toolbarHeight;
+
+- (NSString *)toolbarTitle;
+
 @end
 
 @protocol CommonPickerDelegate <NSObject>
 
 @optional
-- (void)pickerDidCancelShowing;
+- (void)cancelActionCallback:(id)sender;
 
-- (void)pickerDidFinishShowing;
+- (void)doneActionCallback:(id)sender;
 
 @end
