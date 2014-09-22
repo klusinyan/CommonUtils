@@ -85,8 +85,8 @@ CommonPickerDataSource
     self.commonPicker.delegate = self;
     
     //setup appearance
-    self.commonPicker.toolbarBarTintColor = [UIColor whiteColor];
-    self.commonPicker.toolbarTintColor = [UIColor colorWithRed:14/255.0 green:121/255.0 blue:255/255.0 alpha:1];
+    //self.commonPicker.toolbarBarTintColor = [UIColor whiteColor];
+    //self.commonPicker.toolbarTintColor = [UIColor colorWithRed:14/255.0 green:121/255.0 blue:255/255.0 alpha:1];
     
     if (iPhone) {
         self.commonPicker.needsOverlay = YES;

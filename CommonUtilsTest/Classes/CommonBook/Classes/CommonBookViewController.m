@@ -6,7 +6,7 @@
 //library
 #import "CommonBook.h"
 
-@interface CommonBookViewController () <CommonPageViewControllerDelegate, CommonPageViewControllerDataSource>
+@interface CommonBookViewController () <CommonBookDelegate, CommonBookDataSource>
 
 @property (readwrite, nonatomic, strong) UIBarButtonItem *done;
 @property (readwrite, nonatomic, strong) CommonBook *commonBook;
@@ -89,23 +89,26 @@
     [self.commonBook presentBookInsideOfContainer:self.view completion:^(BOOL finished) {
         DebugLog(@"finished [%@]", finished ? @"Y" : @"N");
         
-        /*//not used only test
+        ///*//not used only test
         //only when finished presneting book the customize page control
-        [self.commonBook setupCustomPageControlWithTarget:self
-                                                   action:@selector(pageControlValueDidChage:)
-                                               completion:^(UIPageControl *pageControl) {
-                                                   NSLayoutConstraint *c =
-                                                   [NSLayoutConstraint constraintWithItem:pageControl
-                                                                                attribute:NSLayoutAttributeBottom
-                                                                                relatedBy:NSLayoutRelationEqual
-                                                                                   toItem:pageControl.superview
-                                                                                attribute:NSLayoutAttributeBottom
-                                                                               multiplier:1
-                                                                                 constant:-10];
-                                                   [pageControl.superview addConstraint:c];
-                                               }];
+        [self.commonBook setupCustomPageControlWithCompletion:^(UIPageControl *pageControl) {
+            NSLayoutConstraint *c =
+            [NSLayoutConstraint constraintWithItem:pageControl
+                                         attribute:NSLayoutAttributeBottom
+                                         relatedBy:NSLayoutRelationEqual
+                                            toItem:pageControl.superview
+                                         attribute:NSLayoutAttributeBottom
+                                        multiplier:1
+                                          constant:0];
+            [pageControl.superview addConstraint:c];
+        }];
          //*/
     }];
+}
+
+- (void)pageControlValueDidChage:(id)sender
+{
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -133,10 +136,10 @@
     return self.index;
 }
 //*/
- 
+
 - (BOOL)pageContentShouldRecognizeTapAtIndex:(NSInteger)index
 {
-    return (index == 0);
+    return NO; //(index == 0);
 }
 
 - (UIViewController *)pageContentAtIndex:(NSInteger)index
@@ -154,12 +157,12 @@
 #pragma mark -
 #pragma mark PageViewControllerDelegate protocol
 
-- (void)pageContentDidPresentAtIndex:(NSInteger)index
+- (void)pageContent:(id)pageContent didPresentAtIndex:(NSInteger)index
 {
     DebugLog(@"currentPage %@", @(index));
 }
 
-- (void)pageContentDidSelectAtIndex:(NSInteger)index
+- (void)pageContent:(id)pageContent didSelectAtIndex:(NSInteger)index
 {
     DebugLog(@"pageContent tapped at index %@", @(index));
 }

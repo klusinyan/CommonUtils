@@ -38,6 +38,12 @@
     return self;
 }
 
+- (void)loadView
+{
+    self.view = [[UIView alloc] init];
+    self.view.translatesAutoresizingMaskIntoConstraints = NO;
+}
+
 #pragma mark -
 #pragma mark initializer
 
@@ -124,18 +130,21 @@
                                  }];
 }
 
-- (void)setupCustomPageControlWithTarget:(id)target
-                                  action:(SEL)action
-                              completion:(void (^)(UIPageControl *pageControl))completion;
+- (void)setupCustomPageControlWithCompletion:(void (^)(UIPageControl *pageControl))completion;
 {
     if (!self.pageControl) {
         self.pageControl = [[UIPageControl alloc] init];
         self.pageControl.translatesAutoresizingMaskIntoConstraints = NO;
-        self.pageControl.numberOfPages = [self.viewControllers count];
-        [self.pageControl addTarget:target
-                             action:action
-                   forControlEvents:UIControlEventValueChanged];
         [self.view addSubview:self.pageControl];
+        [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[_pageControl]|"
+                                                                          options:0
+                                                                          metrics:nil
+                                                                            views:NSDictionaryOfVariableBindings(_pageControl)]];
+
+        self.pageControl.numberOfPages = [self.viewControllers count];
+        [self.pageControl addTarget:self
+                             action:@selector(pageControlValueDidChange:)
+                   forControlEvents:UIControlEventValueChanged];
         
         NSLayoutConstraint *centerX =
         [NSLayoutConstraint constraintWithItem:self.pageControl
@@ -159,6 +168,17 @@
     }
 }
 
+- (void)pageControlValueDidChange:(id)sender
+{
+    [self jumpToPageAtIndex:self.pageControl.currentPage
+                   animated:YES
+                 completion:^(BOOL finished) {
+                     if (self.delegate && [self.delegate respondsToSelector:@selector(pageContent:didPresentAtIndex:)]) {
+                         [self.delegate pageContent:[self.viewControllers objectAtIndex:self.currentPage] didPresentAtIndex:self.currentPage];
+                     }
+                 }];
+}
+
 - (void)pageContentDidTap
 {
     if (self.delegate && [self.delegate respondsToSelector:@selector(pageContent:didSelectAtIndex:)]) {
@@ -169,10 +189,17 @@
 - (void)addTapGestureRecognizerToPageContent:(UIViewController *)pageContent
 {
     UITapGestureRecognizer* tapGesture = [[UITapGestureRecognizer alloc] init];
+    tapGesture.delegate = self;
     [tapGesture addTarget:self action:@selector(pageContentDidTap)];
     tapGesture.numberOfTapsRequired = 1;
     tapGesture.numberOfTouchesRequired = 1;
     [pageContent.view addGestureRecognizer:tapGesture];
+}
+
+//TODO::
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
+{
+    return (touch.view != self.pageControl);
 }
 
 #pragma mark -
@@ -216,8 +243,22 @@
                                   direction:UIPageViewControllerNavigationDirectionForward
                                    animated:NO completion:nil];
     
-    self.view.frame = container.bounds;
+    //self.view.translatesAutoresizingMaskIntoConstraints = NO performed in loadView
     [container addSubview:self.view];
+    
+    //create bidings dictionary
+    NSDictionary *bindings = @{@"view" : self.view};
+    
+    //assign contstrains to self.view
+    [container addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[view]|"
+                                                                      options:0
+                                                                      metrics:nil
+                                                                        views:bindings]];
+    
+    [container addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[view]|"
+                                                                      options:0
+                                                                      metrics:nil
+                                                                        views:bindings]];
     
     [self addChildViewController:self.pageController];
     self.pageController.view.frame = self.view.bounds;
@@ -230,8 +271,8 @@
     if (completion) completion(YES);
     
     //call delegate to pass the initialVC
-    if (self.delegate && [self.delegate respondsToSelector:@selector(pageContent:didMovetToIndex:)]) {
-        [self.delegate pageContent:initialVC didMovetToIndex:index];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(pageContent:didPresentAtIndex:)]) {
+        [self.delegate pageContent:initialVC didPresentAtIndex:index];
     }
 }
 
@@ -269,8 +310,8 @@
     if (index == NSNotFound) {
         return;
     }
-    if (self.delegate && [self.delegate respondsToSelector:@selector(pageContent:willMoveFromIndex:)]) {
-        [self.delegate pageContent:[self.viewControllers objectAtIndex:index] willMoveFromIndex:index];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(pageContent:willMoveAtIndex:)]) {
+        [self.delegate pageContent:[self.viewControllers objectAtIndex:index] willMoveAtIndex:index];
     }
 }
 
@@ -284,8 +325,8 @@
     if (self.pageControl && [self.pageControl respondsToSelector:@selector(setCurrentPage:)]) {
         self.pageControl.currentPage = self.currentPage;
     }
-    if (self.delegate && [self.delegate respondsToSelector:@selector(pageContent:didMovetToIndex:)]) {
-        [self.delegate pageContent:[self.viewControllers objectAtIndex:index] didMovetToIndex:index];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(pageContent:didPresentAtIndex:)]) {
+        [self.delegate pageContent:[self.viewControllers objectAtIndex:index] didPresentAtIndex:index];
     }
 }
 

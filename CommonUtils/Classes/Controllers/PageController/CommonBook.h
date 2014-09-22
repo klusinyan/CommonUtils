@@ -35,9 +35,7 @@ typedef NS_ENUM(NSInteger, PresentationStyle) {
 - (void)jumpToPageAtIndex:(NSInteger)index animated:(BOOL)animated completion:(void (^)(BOOL finished))completion;
 
 //setup custom page control
-- (void)setupCustomPageControlWithTarget:(id)target
-                                  action:(SEL)action
-                              completion:(void (^)(UIPageControl *pageControl))completion;
+- (void)setupCustomPageControlWithCompletion:(void (^)(UIPageControl *pageControl))completion;
 
 @end
 
@@ -58,11 +56,11 @@ typedef NS_ENUM(NSInteger, PresentationStyle) {
 @protocol CommonBookDelegate <NSObject>
 
 @optional
-- (void)pageContent:(id)pageContent willMoveFromIndex:(NSInteger)index;
+- (void)pageContent:(UIViewController *)pageContent willMoveAtIndex:(NSInteger)index;
 
-- (void)pageContent:(id)pageContent didMovetToIndex:(NSInteger)index;
+- (void)pageContent:(UIViewController *)pageContent didPresentAtIndex:(NSInteger)index;
 
-- (void)pageContent:(id)pageContent didSelectAtIndex:(NSInteger)index;
+- (void)pageContent:(UIViewController *)pageContent didSelectAtIndex:(NSInteger)index;
 
 @end
 
