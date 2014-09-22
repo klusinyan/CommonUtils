@@ -196,7 +196,6 @@
     [pageContent.view addGestureRecognizer:tapGesture];
 }
 
-//TODO::
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
 {
     return (touch.view != self.pageControl);
