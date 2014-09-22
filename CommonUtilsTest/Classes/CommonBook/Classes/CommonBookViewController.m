@@ -53,7 +53,7 @@
     [super viewDidLoad];
     
     self.items = [NSMutableArray array];
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 7; i++) {
         [self.items addObject:[self fabriqueContentController]];
     }
     
@@ -139,7 +139,7 @@
 
 - (BOOL)pageContentShouldRecognizeTapAtIndex:(NSInteger)index
 {
-    return NO; //(index == 0);
+    return (index == 0);
 }
 
 - (UIViewController *)pageContentAtIndex:(NSInteger)index
@@ -147,7 +147,7 @@
     CommonBookContentViewController *pageContent = [self.items objectAtIndex:index];
     
     NSString *prefix = (iPhone) ? @"iPhone" : @"iPad";
-    NSString *imageName = [prefix stringByAppendingFormat:@"_%@", @(arc4random_uniform(index % 6))];
+    NSString *imageName = [prefix stringByAppendingFormat:@"_%@", @(index)/*@(arc4random_uniform(index % 6))*/];
     pageContent.image = [UIImage imageNamed:imageName];
     DebugLog(@"imageName %@", imageName);
     
