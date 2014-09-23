@@ -120,6 +120,7 @@
 		9C72DF7D19C6FD10007E67A8 /* NetworkUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkUtils.h; sourceTree = "<group>"; };
 		9C72DF7E19C6FD10007E67A8 /* NetworkUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NetworkUtils.m; sourceTree = "<group>"; };
 		9C8A6AF019D16A09000062F7 /* CommonUtilsBeta.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CommonUtilsBeta.podspec; sourceTree = "<group>"; };
+		9C8A6AF219D17151000062F7 /* RELEASE_INFO.md */ = {isa = PBXFileReference; lastKnownFileType = text; path = RELEASE_INFO.md; sourceTree = "<group>"; };
 		9C90FF5F19374DD3004CE056 /* UITableView+Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableView+Utils.h"; sourceTree = "<group>"; };
 		9C90FF6019374DD3004CE056 /* UITableView+Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableView+Utils.m"; sourceTree = "<group>"; };
 		9C90FF6419377D33004CE056 /* NSFileManager-Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSFileManager-Utilities.h"; sourceTree = "<group>"; };
@@ -457,6 +458,7 @@
 			children = (
 				9CD9F762196E8AAF00EBBD85 /* CommonUtils.podspec */,
 				9C8A6AF019D16A09000062F7 /* CommonUtilsBeta.podspec */,
+				9C8A6AF219D17151000062F7 /* RELEASE_INFO.md */,
 				9CB81FD718FD375300C918FB /* Classes */,
 				9CB81FDC18FD378100C918FB /* Resources */,
 				9CB81F0918FD2BDC00C918FB /* Products */,
