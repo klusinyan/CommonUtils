@@ -77,8 +77,7 @@ CommonPickerDataSource
     }
     self.commonPicker = [[CommonPicker alloc] initWithTarget:self
                                                       sender:sender
-                                           relativeSuperview:self.imageView
-                                                   withTitle:nil];
+                                           relativeSuperview:self.imageView];
     
     //setup delegate, datasource
     self.commonPicker.dataSource = self;
