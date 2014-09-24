@@ -141,6 +141,10 @@ UIGestureRecognizerDelegate
 - (void)keyboardDidShow:(NSNotification *)notification
 {
     self.keyboardShown = YES;
+    
+    if (self.delegate && [self.delegate respondsToSelector:@selector(keyboardDidShowWithResponder:)]) {
+        [self.delegate keyboardDidShowWithResponder:[self firstResponder]];
+    }
 }
 
 - (void)keyboardWillHide:(NSNotification *)notification
@@ -151,6 +155,10 @@ UIGestureRecognizerDelegate
     self.scrollView.contentOffset = CGPointZero;
     
     self.keyboardShown = NO;
+    
+    if (self.delegate && [self.delegate respondsToSelector:@selector(keyboardWillHideWithResponder:)]) {
+        [self.delegate keyboardWillHideWithResponder:[self firstResponder]];
+    }
 }
 
 - (void)keyboardWillChangeFrame:(NSNotification *)notification
