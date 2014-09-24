@@ -1,9 +1,9 @@
 PODS:
   - AFNetworking (1.3.4)
-  - CommonUtilsBeta (1.0.10-beta1):
+  - CommonUtilsBeta (1.0.10-beta3):
     - AFNetworking (~> 1.3.3)
     - CommonUtilsBeta/no-arc
-  - CommonUtilsBeta/no-arc (1.0.10-beta1):
+  - CommonUtilsBeta/no-arc (1.0.10-beta3):
     - AFNetworking (~> 1.3.3)
 
 DEPENDENCIES:
@@ -16,6 +16,6 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   AFNetworking: 80c4e0652b08eb34e25b9c0ff3c82556fe5967b4
-  CommonUtilsBeta: 3465b714250f9d62f4415583c29834f7841d67d5
+  CommonUtilsBeta: 1b05512cc7265b1900e2fb7f52fd3bf1fea4fafc
 
 COCOAPODS: 0.33.1

@@ -119,4 +119,14 @@
 }
 //*/
 
+- (void)keyboardDidShowWithResponder:(id)responder
+{
+    DebugLog(@"responder %@", responder);
+}
+
+- (void)keyboardWillHideWithResponder:(id)responder
+{
+    DebugLog(@"responder %@", responder);
+}
+
 @end
