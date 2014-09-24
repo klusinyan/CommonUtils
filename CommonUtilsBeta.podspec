@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
-  s.name         = 'CommonUtils'
+  s.name         = 'CommonUtilsBeta'
   s.version      = '1.0.11'
-  s.summary      = 'Common Utilities.'
+  s.summary      = 'Common Utilities Beta Versions.'
   s.homepage     = 'https://bitbucket.org/mrklteam/commonutils'
   s.license      = { :type => 'MIT', :file => 'LICENSE' }
   s.author       = { 'Karen Lusinyan' => 'karen.lusinyan@softecspa.it' }

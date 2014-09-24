@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0562DFD0B35442A38D252468 /* libPods-CommonUtilsTest.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BA801513D4DF4D82AFF30164 /* libPods-CommonUtilsTest.a */; };
+		9C597DF319D1C71B000AE471 /* RDVKeyboardAvoidingScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C597DF219D1C71B000AE471 /* RDVKeyboardAvoidingScrollView.m */; };
 		9C72DF8919C719AB007E67A8 /* CommonBookContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C72DF8519C719AB007E67A8 /* CommonBookContentViewController.m */; };
 		9C72DF8A19C719AB007E67A8 /* CommonBookContentViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9C72DF8619C719AB007E67A8 /* CommonBookContentViewController.xib */; };
 		9C72DF8B19C719AB007E67A8 /* CommonBookViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C72DF8819C719AB007E67A8 /* CommonBookViewController.m */; };
@@ -25,6 +26,11 @@
 		9C72DFA719C71A90007E67A8 /* iPhone_4.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C72DF9919C71A90007E67A8 /* iPhone_4.png */; };
 		9C72DFA819C71A90007E67A8 /* iPhone_5.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C72DF9A19C71A90007E67A8 /* iPhone_5.png */; };
 		9C72DFA919C71A90007E67A8 /* iPhone_6.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C72DF9B19C71A90007E67A8 /* iPhone_6.png */; };
+		9C75FC0F19CB3F7B004FA3C9 /* apple.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C75FC0E19CB3F7B004FA3C9 /* apple.png */; };
+		9C83F87619CB0E0400F150B4 /* PickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C83F87519CB0E0400F150B4 /* PickerViewController.m */; };
+		9C83F87819CB0E3E00F150B4 /* PickerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9C83F87719CB0E3E00F150B4 /* PickerViewController.xib */; };
+		9C8A6AF919D17EE6000062F7 /* CommonKeyboardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C8A6AF819D17EE6000062F7 /* CommonKeyboardViewController.m */; };
+		9C8A6AFB19D17F01000062F7 /* CommonKeyboardViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9C8A6AFA19D17F01000062F7 /* CommonKeyboardViewController.xib */; };
 		9CD9F79B196EA78500EBBD85 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9CD9F79A196EA78500EBBD85 /* Foundation.framework */; };
 		9CD9F79D196EA78500EBBD85 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9CD9F79C196EA78500EBBD85 /* CoreGraphics.framework */; };
 		9CD9F79F196EA78500EBBD85 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9CD9F79E196EA78500EBBD85 /* UIKit.framework */; };
@@ -68,6 +74,8 @@
 
 /* Begin PBXFileReference section */
 		3D21A45B1DAB498AB809701F /* Pods-CommonUtilsTest.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CommonUtilsTest.xcconfig"; path = "Pods/Pods-CommonUtilsTest.xcconfig"; sourceTree = "<group>"; };
+		9C597DF119D1C71B000AE471 /* RDVKeyboardAvoidingScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDVKeyboardAvoidingScrollView.h; sourceTree = "<group>"; };
+		9C597DF219D1C71B000AE471 /* RDVKeyboardAvoidingScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDVKeyboardAvoidingScrollView.m; sourceTree = "<group>"; };
 		9C72DF8419C719AB007E67A8 /* CommonBookContentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonBookContentViewController.h; sourceTree = "<group>"; };
 		9C72DF8519C719AB007E67A8 /* CommonBookContentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonBookContentViewController.m; sourceTree = "<group>"; };
 		9C72DF8619C719AB007E67A8 /* CommonBookContentViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CommonBookContentViewController.xib; sourceTree = "<group>"; };
@@ -87,6 +95,13 @@
 		9C72DF9919C71A90007E67A8 /* iPhone_4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = iPhone_4.png; sourceTree = "<group>"; };
 		9C72DF9A19C71A90007E67A8 /* iPhone_5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = iPhone_5.png; sourceTree = "<group>"; };
 		9C72DF9B19C71A90007E67A8 /* iPhone_6.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = iPhone_6.png; sourceTree = "<group>"; };
+		9C75FC0E19CB3F7B004FA3C9 /* apple.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = apple.png; sourceTree = "<group>"; };
+		9C83F87419CB0E0400F150B4 /* PickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PickerViewController.h; sourceTree = "<group>"; };
+		9C83F87519CB0E0400F150B4 /* PickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PickerViewController.m; sourceTree = "<group>"; };
+		9C83F87719CB0E3E00F150B4 /* PickerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PickerViewController.xib; sourceTree = "<group>"; };
+		9C8A6AF719D17EE6000062F7 /* CommonKeyboardViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonKeyboardViewController.h; sourceTree = "<group>"; };
+		9C8A6AF819D17EE6000062F7 /* CommonKeyboardViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonKeyboardViewController.m; sourceTree = "<group>"; };
+		9C8A6AFA19D17F01000062F7 /* CommonKeyboardViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CommonKeyboardViewController.xib; sourceTree = "<group>"; };
 		9CD9F797196EA78500EBBD85 /* CommonUtilsTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CommonUtilsTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9CD9F79A196EA78500EBBD85 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		9CD9F79C196EA78500EBBD85 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -219,6 +234,28 @@
 			path = TouriPhone;
 			sourceTree = "<group>";
 		};
+		9C8A6AF319D1767D000062F7 /* CommonKeyboard */ = {
+			isa = PBXGroup;
+			children = (
+				9C8A6AF719D17EE6000062F7 /* CommonKeyboardViewController.h */,
+				9C8A6AF819D17EE6000062F7 /* CommonKeyboardViewController.m */,
+				9C8A6AFA19D17F01000062F7 /* CommonKeyboardViewController.xib */,
+				9C597DF119D1C71B000AE471 /* RDVKeyboardAvoidingScrollView.h */,
+				9C597DF219D1C71B000AE471 /* RDVKeyboardAvoidingScrollView.m */,
+			);
+			path = CommonKeyboard;
+			sourceTree = "<group>";
+		};
+		9C8C994619CADF5000A9E9B6 /* CommonPicker */ = {
+			isa = PBXGroup;
+			children = (
+				9C83F87419CB0E0400F150B4 /* PickerViewController.h */,
+				9C83F87519CB0E0400F150B4 /* PickerViewController.m */,
+				9C83F87719CB0E3E00F150B4 /* PickerViewController.xib */,
+			);
+			path = CommonPicker;
+			sourceTree = "<group>";
+		};
 		9CD9F78E196EA78500EBBD85 = {
 			isa = PBXGroup;
 			children = (
@@ -294,10 +331,12 @@
 			children = (
 				9CD9F7D3196EA7D400EBBD85 /* AppDelegate.h */,
 				9CD9F7D4196EA7D400EBBD85 /* AppDelegate.m */,
+				9CD9F7EB196EA7D400EBBD85 /* main.m */,
+				9C8A6AF319D1767D000062F7 /* CommonKeyboard */,
+				9C8C994619CADF5000A9E9B6 /* CommonPicker */,
 				9C72DF8119C7193E007E67A8 /* CommonBook */,
 				9CD9F7D5196EA7D400EBBD85 /* BarcodeReader */,
 				9CD9F7DA196EA7D400EBBD85 /* CustomTransitions */,
-				9CD9F7EB196EA7D400EBBD85 /* main.m */,
 				9CD9F7EC196EA7D400EBBD85 /* ProgressView */,
 				9CD9F7F0196EA7D400EBBD85 /* SegementedController */,
 				9CD9F7F3196EA7D400EBBD85 /* SplitViewController */,
@@ -386,6 +425,7 @@
 		9CD9F80B196EAA5500EBBD85 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				9C75FC0E19CB3F7B004FA3C9 /* apple.png */,
 				9CD9F80C196EAA5500EBBD85 /* InfoPlist.strings */,
 				9CD9F80E196EAA5500EBBD85 /* Images.xcassets */,
 				9CD9F80F196EAA5500EBBD85 /* placeholder.png */,
@@ -474,6 +514,7 @@
 			files = (
 				9CD9F800196EA7D400EBBD85 /* ModalViewController.xib in Resources */,
 				9C72DFA719C71A90007E67A8 /* iPhone_4.png in Resources */,
+				9C83F87819CB0E3E00F150B4 /* PickerViewController.xib in Resources */,
 				9C72DFA319C71A90007E67A8 /* iPhone_0.png in Resources */,
 				9C72DF9D19C71A90007E67A8 /* iPad_1.png in Resources */,
 				9CD9F7FE196EA7D400EBBD85 /* MainViewController.xib in Resources */,
@@ -489,10 +530,12 @@
 				9C72DFA419C71A90007E67A8 /* iPhone_1.png in Resources */,
 				9C72DFA919C71A90007E67A8 /* iPhone_6.png in Resources */,
 				9C72DFA219C71A90007E67A8 /* iPad_6.png in Resources */,
+				9C8A6AFB19D17F01000062F7 /* CommonKeyboardViewController.xib in Resources */,
 				9CD9F812196EAA5500EBBD85 /* Images.xcassets in Resources */,
 				9CD9F813196EAA5500EBBD85 /* placeholder.png in Resources */,
 				9CD9F811196EAA5500EBBD85 /* InfoPlist.strings in Resources */,
 				9C72DFA519C71A90007E67A8 /* iPhone_2.png in Resources */,
+				9C75FC0F19CB3F7B004FA3C9 /* apple.png in Resources */,
 				9C72DFA819C71A90007E67A8 /* iPhone_5.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -547,8 +590,10 @@
 			files = (
 				9C72DF8B19C719AB007E67A8 /* CommonBookViewController.m in Sources */,
 				9CD9F7FC196EA7D400EBBD85 /* HostViewController.m in Sources */,
+				9C597DF319D1C71B000AE471 /* RDVKeyboardAvoidingScrollView.m in Sources */,
 				9CD9F7FA196EA7D400EBBD85 /* GDOLayoutUtils.m in Sources */,
 				9CD9F7FB196EA7D400EBBD85 /* BaseViewController.m in Sources */,
+				9C83F87619CB0E0400F150B4 /* PickerViewController.m in Sources */,
 				9CD9F801196EA7D400EBBD85 /* NavigationControllerController.m in Sources */,
 				9CD9F802196EA7D400EBBD85 /* CustomCell.m in Sources */,
 				9CD9F7F8196EA7D400EBBD85 /* AppDelegate.m in Sources */,
@@ -559,6 +604,7 @@
 				9C72DF8919C719AB007E67A8 /* CommonBookContentViewController.m in Sources */,
 				9CD9F7FD196EA7D400EBBD85 /* MainViewController.m in Sources */,
 				9CD9F7F9196EA7D400EBBD85 /* GDOBarcodeReader.m in Sources */,
+				9C8A6AF919D17EE6000062F7 /* CommonKeyboardViewController.m in Sources */,
 				9CD9F807196EA7D400EBBD85 /* CustomSplitController.m in Sources */,
 				9CD9F803196EA7D400EBBD85 /* main.m in Sources */,
 			);
@@ -684,6 +730,7 @@
 				GCC_PREFIX_HEADER = "CommonUtilsTest/CommonUtilsTest-Prefix.pch";
 				HEADER_SEARCH_PATHS = "\"${PODS_ROOT}/Headers\"/**";
 				INFOPLIST_FILE = "CommonUtilsTest/CommonUtilsTest-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -699,6 +746,7 @@
 				GCC_PREFIX_HEADER = "CommonUtilsTest/CommonUtilsTest-Prefix.pch";
 				HEADER_SEARCH_PATHS = "\"${PODS_ROOT}/Headers\"/**";
 				INFOPLIST_FILE = "CommonUtilsTest/CommonUtilsTest-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};

@@ -4,12 +4,12 @@
 #import "CommonBookContentViewController.h"
 
 //library
-#import "CommonPageViewController.h"
+#import "CommonBook.h"
 
-@interface CommonBookViewController () <CommonPageViewControllerDelegate, CommonPageViewControllerDataSource>
+@interface CommonBookViewController () <CommonBookDelegate, CommonBookDataSource>
 
 @property (readwrite, nonatomic, strong) UIBarButtonItem *done;
-@property (readwrite, nonatomic, strong) CommonPageViewController *commonBook;
+@property (readwrite, nonatomic, strong) CommonBook *commonBook;
 @property (readwrite, nonatomic, assign) NSInteger numPages;
 @property (readwrite, nonatomic, assign) NSInteger index;
 @property (readwrite, nonatomic, strong) NSMutableArray *items;
@@ -53,7 +53,7 @@
     [super viewDidLoad];
     
     self.items = [NSMutableArray array];
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 7; i++) {
         [self.items addObject:[self fabriqueContentController]];
     }
     
@@ -78,7 +78,7 @@
     UIColor *pageIndicatorTintColor = [UIColor colorWithRed:161/255.0 green:161/255.0 blue:161/255.0 alpha:1];
     UIColor *currentPageIndicatorTintColor = [UIColor colorWithRed:224/255.0 green:0/255.0 blue:21/255.0 alpha:1];
     
-    self.commonBook = [CommonPageViewController commonBookWithPageIndicatorTintColor:pageIndicatorTintColor
+    self.commonBook = [CommonBook commonBookWithPageIndicatorTintColor:pageIndicatorTintColor
                                                     andCurrentPageIndicatorTintColor:currentPageIndicatorTintColor];
      
     //*/
@@ -89,23 +89,26 @@
     [self.commonBook presentBookInsideOfContainer:self.view completion:^(BOOL finished) {
         DebugLog(@"finished [%@]", finished ? @"Y" : @"N");
         
-        /*//not used only test
+        ///*//not used only test
         //only when finished presneting book the customize page control
-        [self.commonBook setupCustomPageControlWithTarget:self
-                                                   action:@selector(pageControlValueDidChage:)
-                                               completion:^(UIPageControl *pageControl) {
-                                                   NSLayoutConstraint *c =
-                                                   [NSLayoutConstraint constraintWithItem:pageControl
-                                                                                attribute:NSLayoutAttributeBottom
-                                                                                relatedBy:NSLayoutRelationEqual
-                                                                                   toItem:pageControl.superview
-                                                                                attribute:NSLayoutAttributeBottom
-                                                                               multiplier:1
-                                                                                 constant:-10];
-                                                   [pageControl.superview addConstraint:c];
-                                               }];
+        [self.commonBook setupCustomPageControlWithCompletion:^(UIPageControl *pageControl) {
+            NSLayoutConstraint *c =
+            [NSLayoutConstraint constraintWithItem:pageControl
+                                         attribute:NSLayoutAttributeBottom
+                                         relatedBy:NSLayoutRelationEqual
+                                            toItem:pageControl.superview
+                                         attribute:NSLayoutAttributeBottom
+                                        multiplier:1
+                                          constant:0];
+            [pageControl.superview addConstraint:c];
+        }];
          //*/
     }];
+}
+
+- (void)pageControlValueDidChage:(id)sender
+{
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -133,7 +136,7 @@
     return self.index;
 }
 //*/
- 
+
 - (BOOL)pageContentShouldRecognizeTapAtIndex:(NSInteger)index
 {
     return (index == 0);
@@ -144,7 +147,7 @@
     CommonBookContentViewController *pageContent = [self.items objectAtIndex:index];
     
     NSString *prefix = (iPhone) ? @"iPhone" : @"iPad";
-    NSString *imageName = [prefix stringByAppendingFormat:@"_%@", @(arc4random_uniform(index % 6))];
+    NSString *imageName = [prefix stringByAppendingFormat:@"_%@", @(index)/*@(arc4random_uniform(index % 6))*/];
     pageContent.image = [UIImage imageNamed:imageName];
     DebugLog(@"imageName %@", imageName);
     
@@ -154,12 +157,12 @@
 #pragma mark -
 #pragma mark PageViewControllerDelegate protocol
 
-- (void)pageContentDidPresentAtIndex:(NSInteger)index
+- (void)pageContent:(id)pageContent didPresentAtIndex:(NSInteger)index
 {
     DebugLog(@"currentPage %@", @(index));
 }
 
-- (void)pageContentDidSelectAtIndex:(NSInteger)index
+- (void)pageContent:(id)pageContent didSelectAtIndex:(NSInteger)index
 {
     DebugLog(@"pageContent tapped at index %@", @(index));
 }

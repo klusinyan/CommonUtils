@@ -5,13 +5,13 @@ typedef NS_ENUM(NSInteger, PresentationStyle) {
     PresentationStyleCustom,
 };
 
-@protocol CommonPageViewControllerDataSource;
-@protocol CommonPageViewControllerDelegate;
+@protocol CommonBookDelegate;
+@protocol CommonBookDataSource;
 
-@interface CommonPageViewController : UIViewController
+@interface CommonBook : UIViewController
 
-@property (readwrite, nonatomic, assign) id<CommonPageViewControllerDelegate> delegate;
-@property (readwrite, nonatomic, assign) id<CommonPageViewControllerDataSource> dataSource;
+@property (readwrite, nonatomic, assign) id<CommonBookDelegate> delegate;
+@property (readwrite, nonatomic, assign) id<CommonBookDataSource> dataSource;
 @property (readwrite, nonatomic, assign) UIPageViewControllerTransitionStyle transitionStyle;
 @property (readwrite, nonatomic, assign) PresentationStyle presentationStyle;
 @property (readwrite, nonatomic, getter = isPresented) BOOL presented;
@@ -35,13 +35,11 @@ typedef NS_ENUM(NSInteger, PresentationStyle) {
 - (void)jumpToPageAtIndex:(NSInteger)index animated:(BOOL)animated completion:(void (^)(BOOL finished))completion;
 
 //setup custom page control
-- (void)setupCustomPageControlWithTarget:(id)target
-                                  action:(SEL)action
-                              completion:(void (^)(UIPageControl *pageControl))completion;
+- (void)setupCustomPageControlWithCompletion:(void (^)(UIPageControl *pageControl))completion;
 
 @end
 
-@protocol CommonPageViewControllerDataSource <NSObject>
+@protocol CommonBookDataSource <NSObject>
 
 @required
 - (NSInteger)numberOfPages;
@@ -55,11 +53,14 @@ typedef NS_ENUM(NSInteger, PresentationStyle) {
 
 @end
 
-@protocol CommonPageViewControllerDelegate <NSObject>
+@protocol CommonBookDelegate <NSObject>
 
 @optional
-- (void)pageContentDidPresentAtIndex:(NSInteger)index;
-- (void)pageContentDidSelectAtIndex:(NSInteger)index;
+- (void)pageContent:(UIViewController *)pageContent willMoveAtIndex:(NSInteger)index;
+
+- (void)pageContent:(UIViewController *)pageContent didPresentAtIndex:(NSInteger)index;
+
+- (void)pageContent:(UIViewController *)pageContent didSelectAtIndex:(NSInteger)index;
 
 @end
 
