@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0562DFD0B35442A38D252468 /* libPods-CommonUtilsTest.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BA801513D4DF4D82AFF30164 /* libPods-CommonUtilsTest.a */; };
+		9C01923419D2E5D000E8E9E3 /* CommonBookViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9C01923319D2E5D000E8E9E3 /* CommonBookViewController.xib */; };
 		9C597DF319D1C71B000AE471 /* RDVKeyboardAvoidingScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C597DF219D1C71B000AE471 /* RDVKeyboardAvoidingScrollView.m */; };
 		9C72DF8919C719AB007E67A8 /* CommonBookContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C72DF8519C719AB007E67A8 /* CommonBookContentViewController.m */; };
 		9C72DF8A19C719AB007E67A8 /* CommonBookContentViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9C72DF8619C719AB007E67A8 /* CommonBookContentViewController.xib */; };
@@ -74,6 +75,7 @@
 
 /* Begin PBXFileReference section */
 		3D21A45B1DAB498AB809701F /* Pods-CommonUtilsTest.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CommonUtilsTest.xcconfig"; path = "Pods/Pods-CommonUtilsTest.xcconfig"; sourceTree = "<group>"; };
+		9C01923319D2E5D000E8E9E3 /* CommonBookViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CommonBookViewController.xib; sourceTree = "<group>"; };
 		9C597DF119D1C71B000AE471 /* RDVKeyboardAvoidingScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDVKeyboardAvoidingScrollView.h; sourceTree = "<group>"; };
 		9C597DF219D1C71B000AE471 /* RDVKeyboardAvoidingScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDVKeyboardAvoidingScrollView.m; sourceTree = "<group>"; };
 		9C72DF8419C719AB007E67A8 /* CommonBookContentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonBookContentViewController.h; sourceTree = "<group>"; };
@@ -199,6 +201,7 @@
 			children = (
 				9C72DF8719C719AB007E67A8 /* CommonBookViewController.h */,
 				9C72DF8819C719AB007E67A8 /* CommonBookViewController.m */,
+				9C01923319D2E5D000E8E9E3 /* CommonBookViewController.xib */,
 				9C72DF8419C719AB007E67A8 /* CommonBookContentViewController.h */,
 				9C72DF8519C719AB007E67A8 /* CommonBookContentViewController.m */,
 				9C72DF8619C719AB007E67A8 /* CommonBookContentViewController.xib */,
@@ -524,6 +527,7 @@
 				9C72DFA019C71A90007E67A8 /* iPad_4.png in Resources */,
 				9C72DFA619C71A90007E67A8 /* iPhone_3.png in Resources */,
 				9C72DF9F19C71A90007E67A8 /* iPad_3.png in Resources */,
+				9C01923419D2E5D000E8E9E3 /* CommonBookViewController.xib in Resources */,
 				9CD9F814196EAA5500EBBD85 /* segmented.xcassets in Resources */,
 				9CD9F805196EA7D400EBBD85 /* ProgressViewController.xib in Resources */,
 				9C72DF9C19C71A90007E67A8 /* iPad_0.png in Resources */,

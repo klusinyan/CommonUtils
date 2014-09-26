@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5056" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="5056"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CommonBookViewController">
+            <connections>
+                <outlet property="container0" destination="0E5-JK-JUy" id="IJa-pm-KQQ"/>
+                <outlet property="container1" destination="SBT-fh-qeN" id="KzJ-jj-tnS"/>
+                <outlet property="container2" destination="H3P-JA-roh" id="pyr-hm-T73"/>
+                <outlet property="view" destination="iN0-l3-epB" id="L9X-23-Nn4"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SBT-fh-qeN" userLabel="Container1">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="548"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                    <color key="backgroundColor" red="1" green="0.80000001190000003" blue="0.40000000600000002" alpha="1" colorSpace="calibratedRGB"/>
+                </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="H3P-JA-roh" userLabel="Container2">
+                    <rect key="frame" x="0.0" y="548" width="320" height="20"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <color key="backgroundColor" red="0.13333334029999999" green="0.49411767719999999" blue="0.74117648599999997" alpha="1" colorSpace="deviceRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="20" id="PFc-ii-O8m"/>
+                    </constraints>
+                </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0E5-JK-JUy">
+                    <rect key="frame" x="0.0" y="33" width="320" height="54"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="54" id="uf0-iH-y0y"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="H3P-JA-roh" secondAttribute="trailing" id="020-bx-qZz"/>
+                <constraint firstAttribute="bottom" secondItem="H3P-JA-roh" secondAttribute="bottom" id="501-Tr-EK1"/>
+                <constraint firstItem="SBT-fh-qeN" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="527-5g-Fwk"/>
+                <constraint firstItem="0E5-JK-JUy" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="CwB-sF-036"/>
+                <constraint firstItem="H3P-JA-roh" firstAttribute="top" secondItem="SBT-fh-qeN" secondAttribute="bottom" id="DG7-wv-DRE"/>
+                <constraint firstItem="0E5-JK-JUy" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="33" id="G2u-3c-hjr"/>
+                <constraint firstAttribute="trailing" secondItem="0E5-JK-JUy" secondAttribute="trailing" id="Iys-nM-ezH"/>
+                <constraint firstItem="SBT-fh-qeN" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="VJR-le-tEZ"/>
+                <constraint firstItem="H3P-JA-roh" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="caP-3l-0md"/>
+                <constraint firstAttribute="trailing" secondItem="SBT-fh-qeN" secondAttribute="trailing" id="emU-T6-41I"/>
+            </constraints>
+            <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
+            <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
+        </view>
+    </objects>
+</document>

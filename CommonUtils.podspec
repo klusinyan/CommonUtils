@@ -22,7 +22,7 @@ Pod::Spec.new do |s|
     sna.source_files = non_arc_files
   end
 
-  s.dependency 'AFNetworking', '~> 1.3.3'
+  s.dependency 'AFNetworking'
 
   s.resource_bundle = { 'CommonUtils' => 'CommonUtils/Resources/*.*' }
   #s.resources = 'CommonUtils/Resources/xib/*.{xib}'

@@ -202,7 +202,7 @@ typedef NS_ENUM(NSInteger, RowType) {
             break;
         }
         case RowTypeCommonBook: {
-            CommonBookViewController *vc = [[CommonBookViewController alloc] init];
+            CommonBookViewController *vc = [[CommonBookViewController alloc] initWithNibName:NSStringFromClass([CommonBookViewController class]) bundle:nil];
             [self.navigationController pushViewController:vc animated:YES];
             
             break;

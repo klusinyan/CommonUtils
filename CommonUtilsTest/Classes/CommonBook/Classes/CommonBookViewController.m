@@ -8,6 +8,10 @@
 
 @interface CommonBookViewController () <CommonBookDelegate, CommonBookDataSource>
 
+@property (readwrite, nonatomic, strong) IBOutlet UIView *container0;
+@property (readwrite, nonatomic, strong) IBOutlet UIView *container1;
+@property (readwrite, nonatomic, strong) IBOutlet UIView *container2;
+
 @property (readwrite, nonatomic, strong) UIBarButtonItem *done;
 @property (readwrite, nonatomic, strong) CommonBook *commonBook;
 @property (readwrite, nonatomic, assign) NSInteger numPages;
@@ -35,11 +39,13 @@
     return self;
 }
 
+/*
 - (void)loadView
 {
     self.view = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.view.backgroundColor = [UIColor colorWithRed:247/255.0 green:247/255.0 blue:247/255.0 alpha:1];
 }
+//*/
 
 - (CommonBookContentViewController *)fabriqueContentController
 {
@@ -73,35 +79,38 @@
         self.edgesForExtendedLayout = UIRectEdgeNone;
     }
     
-    //used only for custom page control
-    ///*
-    UIColor *pageIndicatorTintColor = [UIColor colorWithRed:161/255.0 green:161/255.0 blue:161/255.0 alpha:1];
-    UIColor *currentPageIndicatorTintColor = [UIColor colorWithRed:224/255.0 green:0/255.0 blue:21/255.0 alpha:1];
-    
-    self.commonBook = [CommonBook commonBookWithPageIndicatorTintColor:pageIndicatorTintColor
-                                                    andCurrentPageIndicatorTintColor:currentPageIndicatorTintColor];
-     
-    //*/
     //self.commonBook = [CommonPageViewController commonBook];
     
+    //used only for custom page control
+    ///*
+    //__block  UIColor *pageIndicatorTintColor = [UIColor orangeColor];
+    //[UIColor colorWithRed:161/255.0 green:161/255.0 blue:161/255.0 alpha:1];
+    //__block UIColor *currentPageIndicatorTintColor = [UIColor yellowColor];
+    //[UIColor colorWithRed:224/255.0 green:0/255.0 blue:21/255.0 alpha:1];
+    
+    //*/
+    self.commonBook = [CommonBook commonBookWithPageIndicatorTintColor:[UIColor blueColor] andCurrentPageIndicatorTintColor:[UIColor greenColor]];
+
     self.commonBook.delegate = self;
     self.commonBook.dataSource = self;
-    [self.commonBook presentBookInsideOfContainer:self.view completion:^(BOOL finished) {
+    [self.commonBook presentBookInsideOfContainer:self.container1 completion:^(BOOL finished) {
         DebugLog(@"finished [%@]", finished ? @"Y" : @"N");
         
         ///*//not used only test
         //only when finished presneting book the customize page control
         [self.commonBook setupCustomPageControlWithCompletion:^(UIPageControl *pageControl) {
-            NSLayoutConstraint *c =
-            [NSLayoutConstraint constraintWithItem:pageControl
-                                         attribute:NSLayoutAttributeBottom
-                                         relatedBy:NSLayoutRelationEqual
-                                            toItem:pageControl.superview
-                                         attribute:NSLayoutAttributeBottom
-                                        multiplier:1
-                                          constant:0];
-            [pageControl.superview addConstraint:c];
-        }];
+                                                          
+                                                          NSLayoutConstraint *bottom =
+                                                          [NSLayoutConstraint constraintWithItem:pageControl
+                                                                                       attribute:NSLayoutAttributeBottom
+                                                                                       relatedBy:NSLayoutRelationEqual
+                                                                                          toItem:pageControl.superview
+                                                                                       attribute:NSLayoutAttributeBottom
+                                                                                      multiplier:1
+                                                                                        constant:0];
+                                                          
+                                                          [pageControl.superview addConstraint:bottom];
+                                                      }];
          //*/
     }];
 }

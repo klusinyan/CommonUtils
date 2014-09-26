@@ -35,7 +35,9 @@ typedef NS_ENUM(NSInteger, PresentationStyle) {
 - (void)jumpToPageAtIndex:(NSInteger)index animated:(BOOL)animated completion:(void (^)(BOOL finished))completion;
 
 //setup custom page control
-- (void)setupCustomPageControlWithCompletion:(void (^)(UIPageControl *pageControl))completion;
+- (void)setupCustomPageControlWithCompletion:(void (^)(UIPageControl *pageControl))completion; //TODO:: __deprecated_msg("use setupCustomPageControlInsideOfContainer:completion");
+
+- (void)setupCustomPageControlInsideOfContainer:(UIView *)container completion:(void (^)(UIPageControl *pageControl))completion;
 
 @end
 
