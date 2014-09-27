@@ -82,28 +82,17 @@
                 index = [self.dataSource indexOfPresentedPage];
             }
             
+            //tell the pageControl (if there is a custom one) to point to the same page as \"indexOfPresentedPag\"
+            if (self.pageControl) self.pageControl.currentPage = index;
+            
+            [self.viewControllers removeAllObjects];
+            [self setupViewContollers];
+            
             //tell to pageController to set viewContollers
             UIViewController *initialVC = [self.viewControllers objectAtIndex:index];
             [self.pageController setViewControllers:@[initialVC]
                                           direction:UIPageViewControllerNavigationDirectionForward
                                            animated:NO completion:nil];
-            
-            //tell the pageControl (if there is a custom one) to point to the same page as \"indexOfPresentedPag\"
-            if (self.pageControl) self.pageControl.currentPage = index;
-            
-            //ask to dataSource to reload pages
-            for (int i = 0; i < numberOfPages; i++) {
-                if (self.dataSource && [self.dataSource respondsToSelector:@selector(pageContentAtIndex:)]) {
-                    UIViewController *pageContent = [self.dataSource pageContentAtIndex:i];
-                    
-                    //ask to dataSourcento activate or not tap gesture recognizer
-                    if (self.dataSource && [self.dataSource respondsToSelector:@selector(pageContentShouldRecognizeTapAtIndex:)]) {
-                        if ([self.dataSource pageContentShouldRecognizeTapAtIndex:i]) {
-                            [self addTapGestureRecognizerToPageContent:pageContent];
-                        }
-                    }
-                }
-            }
         }
     }
 }

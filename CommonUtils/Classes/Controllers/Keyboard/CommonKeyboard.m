@@ -208,9 +208,15 @@ UIGestureRecognizerDelegate
         //equivalent to upper method
         //CGRect frameToScroll = [[viewToScroll superview] convertRect:viewToScroll.frame toView:self.scrollView];
 
+        //call to scroll to visible rect (done always)
+        [self.scrollView scrollRectToVisible:rectToScroll animated:YES];
+
+        //not used: should be used the one above the one above
+        /*
         if (!CGRectContainsPoint(aRect, rectToScroll.origin)) {
             [self.scrollView scrollRectToVisible:rectToScroll animated:YES];
         }
+        //*/
     }
 }
 
