@@ -234,6 +234,9 @@ UIPopoverControllerDelegate
 
 - (void)orientationDidChange:(NSNotification *)notification
 {
+    if ([self.myPopoverController isPopoverVisible]) {
+        [self.myPopoverController dismissPopoverAnimated:NO];
+    }
     [self reloadPickerWithCompletion:nil];
 }
 

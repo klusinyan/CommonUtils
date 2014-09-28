@@ -102,7 +102,7 @@ CommonPickerDataSource
     }];
 }
 
-- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
 {
     if ([self.commonPicker isVisible]) {
         [self.commonPicker dismissPickerWithCompletion:^{

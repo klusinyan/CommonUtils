@@ -12,7 +12,6 @@ UIGestureRecognizerDelegate
 >
 
 @property (readwrite, nonatomic, strong) UIScrollView *scrollView;
-@property (readwrite, nonatomic, getter = isKeyboardShown) BOOL keyboardShown;
 @property (readwrite, nonatomic, strong) UIGestureRecognizer *tapGestureRegognizer;
 
 @end
@@ -104,24 +103,17 @@ UIGestureRecognizerDelegate
 {
     
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardDidShow:)
-                                                 name:UIKeyboardDidShowNotification
-                                               object:nil];
+                                             selector:@selector(keyboardWasShown:)
+                                                 name:UIKeyboardDidShowNotification object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWillHide:)
-                                                 name:UIKeyboardWillHideNotification
-                                               object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWillChangeFrame:)
-                                                 name:UIKeyboardWillChangeFrameNotification
-                                               object:nil];
+                                             selector:@selector(keyboardWillBeHidden:)
+                                                 name:UIKeyboardWillHideNotification object:nil];
 }
 
 - (void)removeObservers
 {
-
+    
     [[NSNotificationCenter defaultCenter] removeObserver:self
                                                     name:UIKeyboardDidShowNotification
                                                   object:nil];
@@ -129,95 +121,56 @@ UIGestureRecognizerDelegate
     [[NSNotificationCenter defaultCenter] removeObserver:self
                                                     name:UIKeyboardWillHideNotification
                                                   object:nil];
-    
-    [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                    name:UIKeyboardWillChangeFrameNotification
-                                                  object:nil];
 }
 
 #pragma mark -
 #pragma mark Notifications
 
-- (void)keyboardDidShow:(NSNotification *)notification
+// Called when the UIKeyboardDidShowNotification is sent.
+- (void)keyboardWasShown:(NSNotification*)aNotification
 {
-    self.keyboardShown = YES;
+    if (self.delegate && [self.delegate respondsToSelector:@selector(keyboardWasShownWithResponder:)]) {
+        [self.delegate keyboardWasShownWithResponder:[self firstResponder]];
+    }
     
-    if (self.delegate && [self.delegate respondsToSelector:@selector(keyboardDidShowWithResponder:)]) {
-        [self.delegate keyboardDidShowWithResponder:[self firstResponder]];
+    CGFloat offest = 0;
+    if (self.dataSource && [self.dataSource respondsToSelector:@selector(offset)]) {
+        offest = [self.dataSource offset];
+    }
+    
+    NSDictionary* info = [aNotification userInfo];
+    CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+    
+    UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0, 0.0, kbSize.height + offest, 0.0);
+    self.scrollView.contentInset = contentInsets;
+    self.scrollView.scrollIndicatorInsets = contentInsets;
+    
+    // If active text field is hidden by keyboard, scroll it so it's visible
+    // Your app might not need or want this behavior.
+    
+    UIView *activeView = [self firstResponder];
+    if (!activeView) {
+        NSLog(@"Warning: \"no active view is detected, please provide a valid one by implementing activeView of dataSource or register responders by calling registerResponders: or registerResponder:.\"");
+        return;
+    }
+    
+    CGRect aRect = self.scrollView.frame;
+    aRect.size.height -= kbSize.height;
+    if (!CGRectContainsPoint(aRect, activeView.frame.origin) ) {
+        [self.scrollView scrollRectToVisible:activeView.frame animated:YES];
     }
 }
 
-- (void)keyboardWillHide:(NSNotification *)notification
+// Called when the UIKeyboardWillHideNotification is sent
+- (void)keyboardWillBeHidden:(NSNotification*)aNotification
 {
+    if (self.delegate && [self.delegate respondsToSelector:@selector(keyboardWillBeHiddenWithResponder:)]) {
+        [self.delegate keyboardWillBeHiddenWithResponder:[self firstResponder]];
+    }
+    
     UIEdgeInsets contentInsets = UIEdgeInsetsZero;
     self.scrollView.contentInset = contentInsets;
     self.scrollView.scrollIndicatorInsets = contentInsets;
-    self.scrollView.contentOffset = CGPointZero;
-    
-    self.keyboardShown = NO;
-    
-    if (self.delegate && [self.delegate respondsToSelector:@selector(keyboardWillHideWithResponder:)]) {
-        [self.delegate keyboardWillHideWithResponder:[self firstResponder]];
-    }
-}
-
-- (void)keyboardWillChangeFrame:(NSNotification *)notification
-{
-    //keyboard frame
-    CGRect keyboardFrame = [[[notification userInfo] objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
-    
-    //convert keyboardFrame to view's coordinate system, because it is given in the window's which is always portrait
-    CGRect convertedFrame = [self.scrollView convertRect:keyboardFrame fromView:self.scrollView.window];
-
-    [self handleScrollingWithKeyboardFrame:convertedFrame];
-}
-
-#pragma mark -
-#pragma mark Scrolling
-
-- (void)handleScrollingWithKeyboardFrame:(CGRect)keyboardFrame
-{
-    keyboardFrame = CGRectIntersection(self.scrollView.frame, keyboardFrame);
-    
-    //keyboard offset if needed
-    CGFloat offset = 0.0f;
-    if (self.dataSource && [self.dataSource respondsToSelector:@selector(offset)]) {
-        offset = [self.dataSource offset];
-    }
-    
-    UIEdgeInsets contentInsets =
-    UIEdgeInsetsMake(0.0f, 0.0f, keyboardFrame.size.height + self.scrollView.contentOffset.y + offset, 0.0f);
-    
-    self.scrollView.contentInset = contentInsets;
-    self.scrollView.scrollIndicatorInsets = contentInsets;
-    
-    if (!self.isKeyboardShown) {
-        
-        CGRect aRect = self.scrollView.frame;
-        aRect.size.height -= keyboardFrame.size.height;
-
-        UIView *activeView = [self firstResponder];
-        if (!activeView) {
-            NSLog(@"Warning: \"no active view is detected, please provide a valid one by implementing activeView of dataSource or register responders by calling registerResponders: or registerResponder:.\"");
-            return;
-        }
-        
-        // convert viewToScroll to view's coordinate system, maybe the view's superview is in the other coordinate system
-        CGRect rectToScroll = [self.scrollView convertRect:activeView.frame fromView:[activeView superview]];
-        
-        //equivalent to upper method
-        //CGRect frameToScroll = [[viewToScroll superview] convertRect:viewToScroll.frame toView:self.scrollView];
-
-        //call to scroll to visible rect (done always)
-        [self.scrollView scrollRectToVisible:rectToScroll animated:YES];
-
-        //not used: should be used the one above the one above
-        /*
-        if (!CGRectContainsPoint(aRect, rectToScroll.origin)) {
-            [self.scrollView scrollRectToVisible:rectToScroll animated:YES];
-        }
-        //*/
-    }
 }
 
 - (void)hideKeyboard:(id)sender
