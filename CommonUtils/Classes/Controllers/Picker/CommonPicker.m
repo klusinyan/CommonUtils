@@ -4,6 +4,9 @@
 #import "CommonPicker.h"
 #import "BlurView.h"
 
+#define kPickerWidth (iPhone) ? self.target.view.frame.size.width : 320.0f;
+#define kPickerHeight 260.0f
+
 typedef void(^ShowCompletionHandler)(void);
 typedef void(^HideCompletionHandler)(void);
 
@@ -46,10 +49,10 @@ UIPopoverControllerDelegate
         self.toolbarHidden = NO;
         self.needsOverlay = NO;
         self.shouldChangeOrientation = NO;
-        self.pickerWidth = (iPhone) ? self.target.view.frame.size.width : 320.0f;
-        self.pickerHeight = 260.0f;
         self.pickerCornerradius = 0.0f;
-        self.popoverArrowDirection = UIPopoverArrowDirectionAny;
+        
+        self.pickerWidth = kPickerWidth;
+        self.pickerHeight = kPickerHeight;
     }
     return self;
 }
@@ -243,11 +246,17 @@ UIPopoverControllerDelegate
 - (void)reloadPickerWithCompletion:(void(^)(void))completion
 {
     if (iPad && [self.myPopoverController isPopoverVisible]) {
+        
+        UIPopoverArrowDirection popoverArrowDirection = UIPopoverArrowDirectionAny;
+        if (self.dataSource && [self.dataSource respondsToSelector:@selector(pickerArrowDirection)]) {
+            popoverArrowDirection = [self.dataSource pickerArrowDirection];
+        }
+        
         //present from UIBarButtonItem
         if ([self.sender isKindOfClass:[UIBarButtonItem class]]) {
             [self.myPopoverController setPopoverContentSize:CGSizeMake(self.pickerWidth, self.pickerHeight) animated:YES];
             [self.myPopoverController presentPopoverFromBarButtonItem:self.sender
-                                             permittedArrowDirections:self.popoverArrowDirection
+                                             permittedArrowDirections:popoverArrowDirection
                                                              animated:YES];
         }
         //present from any other view
@@ -258,7 +267,7 @@ UIPopoverControllerDelegate
             [self.myPopoverController setPopoverContentSize:CGSizeMake(self.pickerWidth, self.pickerHeight) animated:YES];
             [self.myPopoverController presentPopoverFromRect:myRect
                                                       inView:self.target.view
-                                    permittedArrowDirections:self.popoverArrowDirection
+                                    permittedArrowDirections:popoverArrowDirection
                                                     animated:YES];
         }
         
@@ -300,10 +309,15 @@ UIPopoverControllerDelegate
     //layout picker view early
     [self.pickerView layoutIfNeeded];
     
+    UIPopoverArrowDirection popoverArrowDirection = UIPopoverArrowDirectionAny;
+    if (self.dataSource && [self.dataSource respondsToSelector:@selector(pickerArrowDirection)]) {
+        popoverArrowDirection = [self.dataSource pickerArrowDirection];
+    }
+    
     //present from UIBarButtonItem
     if ([self.sender isKindOfClass:[UIBarButtonItem class]]) {
         [self.myPopoverController presentPopoverFromBarButtonItem:self.sender
-                                         permittedArrowDirections:self.popoverArrowDirection
+                                         permittedArrowDirections:popoverArrowDirection
                                                          animated:YES];
     }
     //present from any other view
@@ -313,7 +327,7 @@ UIPopoverControllerDelegate
         CGRect myRect = [relativeSuperview convertRect:view.frame toView:self.target.view];
         [self.myPopoverController presentPopoverFromRect:myRect
                                                   inView:self.target.view
-                                permittedArrowDirections:self.popoverArrowDirection
+                                permittedArrowDirections:popoverArrowDirection
                                                 animated:YES];
     }
     

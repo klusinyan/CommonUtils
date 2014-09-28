@@ -31,8 +31,6 @@
 
 @property (readwrite, nonatomic, assign) CGFloat pickerCornerradius;
 
-@property (readwrite, nonatomic, assign) UIPopoverArrowDirection popoverArrowDirection;
-
 - (void)showPickerWithCompletion:(void (^)(void))completion;
 
 - (void)dismissPickerWithCompletion:(void (^)(void))completion;
@@ -50,6 +48,8 @@
 @optional
 //if nil or not implemented: returns default toolbar
 - (id)pickerToolbar;
+
+- (UIPopoverArrowDirection)pickerArrowDirection;
 
 //if toolbarHeight is specified with the value <= 0 then toolbar is not visualzied
 //this method has no effect if the default is shown
