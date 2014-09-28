@@ -55,7 +55,7 @@
 //this method has no effect if the default is shown
 - (CGFloat)toolbarHeight;
 
-- (NSString *)toolbarTitle;
+- (NSString *)pickerToolbarTitle;
 
 @end
 

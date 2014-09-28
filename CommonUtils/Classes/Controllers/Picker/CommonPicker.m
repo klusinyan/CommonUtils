@@ -114,8 +114,8 @@ UIPopoverControllerDelegate
     label.textAlignment = NSTextAlignmentCenter;
     //label.backgroundColor = [UIColor whiteColor];
     
-    if (self.dataSource && [self.dataSource respondsToSelector:@selector(toolbarTitle)]) {
-        label.text = [self.dataSource toolbarTitle];
+    if (self.dataSource && [self.dataSource respondsToSelector:@selector(pickerToolbarTitle)]) {
+        label.text = [self.dataSource pickerToolbarTitle];
     }
     
     UIBarButtonItem *title = [[UIBarButtonItem alloc] initWithCustomView:label];
@@ -458,7 +458,7 @@ UIPopoverControllerDelegate
 - (void)slideDownDidStop
 {
     // the date picker has finished sliding downwards, so remove it
-	[self.pickerView removeFromSuperview];
+    [self.pickerView removeFromSuperview];
     
     //remove overlay
     [self.overlay removeFromSuperview];
