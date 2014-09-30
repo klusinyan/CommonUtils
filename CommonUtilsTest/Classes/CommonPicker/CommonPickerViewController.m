@@ -110,6 +110,7 @@ CommonPickerDataSource
     return self.pickerview;
 }
 
+/*
 - (id)pickerToolbar
 {
     UIView *toolbar = [[UIView alloc] init];
@@ -123,7 +124,8 @@ CommonPickerDataSource
 {
     return 20.0f;
 }
-
+//*/
+ 
 - (CGFloat)pickerWidth
 {
     return self.view.bounds.size.width;
@@ -131,7 +133,13 @@ CommonPickerDataSource
 
 - (CGFloat)pickerHeight
 {
-    return 100.0f;
+    BOOL prob = arc4random_uniform(2);
+    if (prob) {
+        return 150.0f;
+    }
+    else {
+        return 260.0f;
+    }
 }
 
 - (UIPopoverArrowDirection)pickerArrowDirection
@@ -142,14 +150,14 @@ CommonPickerDataSource
 #pragma mark -
 #pragma mark CommonPickerDelegate protocol
 
-- (void)pickerDidCancelShowing
+- (void)cancelActionCallback:(id)sender
 {
-    DebugLog(@"pickerDidCancelShowing");
+    DebugLog(@"cancelActionCallback");
 }
 
-- (void)pickerDidFinishShowing
+- (void)doneActionCallback:(id)sender
 {
-    DebugLog(@"pickerDidFinishShowing");
+    DebugLog(@"doneActionCallback");
 }
 
 #pragma mark -
