@@ -1,10 +1,10 @@
 //  Created by Karen Lusinyan on 18/09/14.
 //  Copyright (c) 2014 Karen Lusinyan. All rights reserved.
 
-#import "PickerViewController.h"
+#import "CommonPickerViewController.h"
 #import "CommonPicker.h"
 
-@interface PickerViewController ()
+@interface CommonPickerViewController ()
 <UIPickerViewDelegate,
 UIPickerViewDataSource,
 CommonPickerDelegate,
@@ -20,11 +20,13 @@ CommonPickerDataSource
 @property (readwrite, nonatomic, strong) NSString *selectedItem;
 @property (readwrite, nonatomic, strong) IBOutlet CommonPicker *commonPicker;
 
+@property (readwrite, nonatomic, strong) id sender;
+
 - (IBAction)showPicker:(id)sender;
 
 @end
 
-@implementation PickerViewController
+@implementation CommonPickerViewController
 
 - (void)didReceiveMemoryWarning
 {
@@ -77,11 +79,12 @@ CommonPickerDataSource
     }
     self.commonPicker = [[CommonPicker alloc] initWithTarget:self
                                                       sender:sender
-                                           relativeSuperview:self.imageView];
+                                           relativeSuperview:nil];
     
     //setup delegate, datasource
     self.commonPicker.dataSource = self;
     self.commonPicker.delegate = self;
+    //self.commonPicker.toolbarHidden = YES;
     
     //setup appearance
     //self.commonPicker.toolbarBarTintColor = [UIColor whiteColor];
@@ -89,26 +92,14 @@ CommonPickerDataSource
     
     if (iPhone) {
         self.commonPicker.needsOverlay = YES;
+        self.commonPicker.showAfterOrientationDidChange = YES;
         //self.commonPicker.pickerHeight = self.view.bounds.size.height;
         //self.commonPicker.pickerCornerradius = 10.0f;
-    }
-    else {
-        //self.commonPicker.pickerWidth = self.box_argomento.frame.size.width;
-        self.commonPicker.popoverArrowDirection = UIPopoverArrowDirectionUp; //default any
     }
     
     [self.commonPicker showPickerWithCompletion:^{
         DebugLog(@"picker is shown");
     }];
-}
-
-- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
-{
-    if ([self.commonPicker isVisible]) {
-        [self.commonPicker dismissPickerWithCompletion:^{
-            DebugLog(@"picker is hidden");
-        }];
-    }
 }
 
 #pragma mark -
@@ -117,6 +108,35 @@ CommonPickerDataSource
 - (id)pickerContent
 {
     return self.pickerview;
+}
+
+- (id)pickerToolbar
+{
+    UIView *toolbar = [[UIView alloc] init];
+    toolbar.translatesAutoresizingMaskIntoConstraints = NO;
+    toolbar.backgroundColor = [UIColor yellowColor];
+    
+    return toolbar;
+}
+
+- (CGFloat)pickerToolbarHeight
+{
+    return 20.0f;
+}
+
+- (CGFloat)pickerWidth
+{
+    return self.view.bounds.size.width;
+}
+
+- (CGFloat)pickerHeight
+{
+    return 100.0f;
+}
+
+- (UIPopoverArrowDirection)pickerArrowDirection
+{
+    return UIPopoverArrowDirectionDown;
 }
 
 #pragma mark -

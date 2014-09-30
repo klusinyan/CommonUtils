@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6245" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6245" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
+        <deployment defaultVersion="1808" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="PickerViewController">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CommonPickerViewController">
             <connections>
                 <outlet property="imageView" destination="gf7-7U-GO9" id="emx-DA-Dpn"/>
                 <outlet property="view" destination="iN0-l3-epB" id="kBv-27-zbn"/>
@@ -19,7 +20,7 @@
                     <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                 </imageView>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZDV-eu-wRE">
-                    <rect key="frame" x="143" y="107" width="46" height="30"/>
+                    <rect key="frame" x="137" y="107" width="46" height="30"/>
                     <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                     <state key="normal" title="Button">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -32,12 +33,12 @@
             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
             <constraints>
                 <constraint firstItem="gf7-7U-GO9" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="8Lh-A9-ohZ"/>
-                <constraint firstAttribute="trailing" secondItem="ZDV-eu-wRE" secondAttribute="trailing" constant="131" id="BZF-MW-wJc"/>
                 <constraint firstAttribute="trailing" secondItem="gf7-7U-GO9" secondAttribute="trailing" id="Fx0-Tf-mls"/>
                 <constraint firstItem="ZDV-eu-wRE" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="107" id="Hfd-rP-AOJ"/>
                 <constraint firstItem="gf7-7U-GO9" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="VYm-qA-cZG"/>
+                <constraint firstAttribute="centerX" secondItem="ZDV-eu-wRE" secondAttribute="centerX" id="jKQ-wm-LCY"/>
                 <constraint firstAttribute="bottom" secondItem="gf7-7U-GO9" secondAttribute="bottom" id="qiQ-Ni-M2U"/>
-                <constraint firstItem="ZDV-eu-wRE" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="143" id="v6U-KV-R9A"/>
+                <constraint firstItem="ZDV-eu-wRE" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="iN0-l3-epB" secondAttribute="leading" id="v6U-KV-R9A"/>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>

@@ -28,8 +28,8 @@
 		9C72DFA819C71A90007E67A8 /* iPhone_5.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C72DF9A19C71A90007E67A8 /* iPhone_5.png */; };
 		9C72DFA919C71A90007E67A8 /* iPhone_6.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C72DF9B19C71A90007E67A8 /* iPhone_6.png */; };
 		9C75FC0F19CB3F7B004FA3C9 /* apple.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C75FC0E19CB3F7B004FA3C9 /* apple.png */; };
-		9C83F87619CB0E0400F150B4 /* PickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C83F87519CB0E0400F150B4 /* PickerViewController.m */; };
-		9C83F87819CB0E3E00F150B4 /* PickerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9C83F87719CB0E3E00F150B4 /* PickerViewController.xib */; };
+		9C83F87619CB0E0400F150B4 /* CommonPickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C83F87519CB0E0400F150B4 /* CommonPickerViewController.m */; };
+		9C83F87819CB0E3E00F150B4 /* CommonPickerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9C83F87719CB0E3E00F150B4 /* CommonPickerViewController.xib */; };
 		9C8A6AF919D17EE6000062F7 /* CommonKeyboardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C8A6AF819D17EE6000062F7 /* CommonKeyboardViewController.m */; };
 		9C8A6AFB19D17F01000062F7 /* CommonKeyboardViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9C8A6AFA19D17F01000062F7 /* CommonKeyboardViewController.xib */; };
 		9CD9F79B196EA78500EBBD85 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9CD9F79A196EA78500EBBD85 /* Foundation.framework */; };
@@ -98,9 +98,9 @@
 		9C72DF9A19C71A90007E67A8 /* iPhone_5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = iPhone_5.png; sourceTree = "<group>"; };
 		9C72DF9B19C71A90007E67A8 /* iPhone_6.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = iPhone_6.png; sourceTree = "<group>"; };
 		9C75FC0E19CB3F7B004FA3C9 /* apple.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = apple.png; sourceTree = "<group>"; };
-		9C83F87419CB0E0400F150B4 /* PickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PickerViewController.h; sourceTree = "<group>"; };
-		9C83F87519CB0E0400F150B4 /* PickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PickerViewController.m; sourceTree = "<group>"; };
-		9C83F87719CB0E3E00F150B4 /* PickerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PickerViewController.xib; sourceTree = "<group>"; };
+		9C83F87419CB0E0400F150B4 /* CommonPickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonPickerViewController.h; sourceTree = "<group>"; };
+		9C83F87519CB0E0400F150B4 /* CommonPickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonPickerViewController.m; sourceTree = "<group>"; };
+		9C83F87719CB0E3E00F150B4 /* CommonPickerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CommonPickerViewController.xib; sourceTree = "<group>"; };
 		9C8A6AF719D17EE6000062F7 /* CommonKeyboardViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonKeyboardViewController.h; sourceTree = "<group>"; };
 		9C8A6AF819D17EE6000062F7 /* CommonKeyboardViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonKeyboardViewController.m; sourceTree = "<group>"; };
 		9C8A6AFA19D17F01000062F7 /* CommonKeyboardViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CommonKeyboardViewController.xib; sourceTree = "<group>"; };
@@ -252,9 +252,9 @@
 		9C8C994619CADF5000A9E9B6 /* CommonPicker */ = {
 			isa = PBXGroup;
 			children = (
-				9C83F87419CB0E0400F150B4 /* PickerViewController.h */,
-				9C83F87519CB0E0400F150B4 /* PickerViewController.m */,
-				9C83F87719CB0E3E00F150B4 /* PickerViewController.xib */,
+				9C83F87419CB0E0400F150B4 /* CommonPickerViewController.h */,
+				9C83F87519CB0E0400F150B4 /* CommonPickerViewController.m */,
+				9C83F87719CB0E3E00F150B4 /* CommonPickerViewController.xib */,
 			);
 			path = CommonPicker;
 			sourceTree = "<group>";
@@ -517,7 +517,7 @@
 			files = (
 				9CD9F800196EA7D400EBBD85 /* ModalViewController.xib in Resources */,
 				9C72DFA719C71A90007E67A8 /* iPhone_4.png in Resources */,
-				9C83F87819CB0E3E00F150B4 /* PickerViewController.xib in Resources */,
+				9C83F87819CB0E3E00F150B4 /* CommonPickerViewController.xib in Resources */,
 				9C72DFA319C71A90007E67A8 /* iPhone_0.png in Resources */,
 				9C72DF9D19C71A90007E67A8 /* iPad_1.png in Resources */,
 				9CD9F7FE196EA7D400EBBD85 /* MainViewController.xib in Resources */,
@@ -597,7 +597,7 @@
 				9C597DF319D1C71B000AE471 /* RDVKeyboardAvoidingScrollView.m in Sources */,
 				9CD9F7FA196EA7D400EBBD85 /* GDOLayoutUtils.m in Sources */,
 				9CD9F7FB196EA7D400EBBD85 /* BaseViewController.m in Sources */,
-				9C83F87619CB0E0400F150B4 /* PickerViewController.m in Sources */,
+				9C83F87619CB0E0400F150B4 /* CommonPickerViewController.m in Sources */,
 				9CD9F801196EA7D400EBBD85 /* NavigationControllerController.m in Sources */,
 				9CD9F802196EA7D400EBBD85 /* CustomCell.m in Sources */,
 				9CD9F7F8196EA7D400EBBD85 /* AppDelegate.m in Sources */,

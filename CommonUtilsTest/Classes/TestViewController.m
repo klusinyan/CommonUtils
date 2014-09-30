@@ -11,7 +11,7 @@
 #import "ProgressViewController.h"
 #import "CustomSplitController.h"
 #import "CommonBookViewController.h"
-#import "PickerViewController.h"
+#import "CommonPickerViewController.h"
 #import "CommonKeyboardViewController.h"
 #import "UIImage+Utils.h"
 
@@ -208,8 +208,8 @@ typedef NS_ENUM(NSInteger, RowType) {
             break;
         }
         case RowTypeCommonPicker: {
-            PickerViewController *vc =
-            [[PickerViewController alloc] initWithNibName:NSStringFromClass([PickerViewController class]) bundle:nil];
+            CommonPickerViewController *vc =
+            [[CommonPickerViewController alloc] initWithNibName:NSStringFromClass([CommonPickerViewController class]) bundle:nil];
             [self.navigationController pushViewController:vc animated:YES];
             
             break;

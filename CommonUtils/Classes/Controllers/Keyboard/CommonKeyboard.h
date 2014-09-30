@@ -8,15 +8,12 @@
 
 - (instancetype)initWithTarget:(UIScrollView *)target;
 
-+ (void)registerResponders:(NSArray *)responders;
++ (void)registerClass:(Class)aClass withResponders:(NSArray *)responders;
 
-+ (void)unregisterResponders:(NSArray *)responders;
-
-+ (void)registerResponder:(id)responder;
-
-+ (void)unregisterResponder:(id)responder;
++ (void)unregisterRespondersForClass:(Class)aClass;
 
 @property (readwrite, nonatomic, assign) id<CommonKeyboardDelegate> delegate;
+
 @property (readwrite, nonatomic, assign) id<CommonKeyboardDataSource> dataSource;
 
 @end
@@ -33,13 +30,6 @@
 @protocol CommonKeyboardDataSource <NSObject>
 
 @optional
-//provide active view
-//if activeView is not provided you can register
-//by using registerResponders: for betch registrations
-//or registerResponder: for single responder registration
-- (UIView *)activeView;
-
-//offset (not needed)
-- (CGFloat)offset;
+- (CGFloat)keyboardOffset;
 
 @end

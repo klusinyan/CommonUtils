@@ -3,7 +3,7 @@
 
 #import "CommonKeyboard.h"
 
-static __strong NSMutableArray * firstResponders = nil;
+static NSMutableDictionary *classResponders = nil;
 
 @interface CommonKeyboard ()
 <
@@ -37,38 +37,36 @@ UIGestureRecognizerDelegate
         
         [self addObservers];
         [self configureScrollView];
-        
-        firstResponders = [NSMutableArray array];
     }
     
     return self;
 }
 
-+ (void)registerResponders:(NSArray *)responders
++ (void)registerClass:(Class)aClass withResponders:(NSArray *)responders
 {
-    if (responders) {
-        [firstResponders addObjectsFromArray:responders];
+    NSString *className = NSStringFromClass(aClass);
+    if (!classResponders) {
+        classResponders = [[NSMutableDictionary alloc] init];
+    }
+    if (![classResponders objectForKey:className]) {
+        [classResponders setObject:responders forKey:className];
+    }
+    else {
+        NSMutableArray *compoundResponders = [[classResponders objectForKey:className] mutableCopy];
+        [compoundResponders addObjectsFromArray:responders];
+        [classResponders setObject:compoundResponders forKey:className];
     }
 }
 
-+ (void)unregisterResponders:(NSArray *)responders
++ (void)unregisterRespondersForClass:(Class)aClass
 {
-    if (responders) {
-        [firstResponders removeObjectsInArray:responders];
+    if (classResponders) {
+        if ([classResponders objectForKey:NSStringFromClass(aClass)]) {
+            [classResponders removeObjectForKey:NSStringFromClass(aClass)];
+        }
     }
-}
-
-+ (void)registerResponder:(id)responder
-{
-    if (responder) {
-        [firstResponders addObject:responder];
-    }
-}
-
-+ (void)unregisterResponder:(id)responder
-{
-    if (responder) {
-        [firstResponders removeObject:responder];
+    if ([classResponders count] == 0) {
+        classResponders = nil;
     }
 }
 
@@ -76,11 +74,9 @@ UIGestureRecognizerDelegate
 {
     __block id firstResponder = nil;
     
-    if (self.dataSource && [self.dataSource respondsToSelector:@selector(activeView)]) {
-        firstResponder = [self.dataSource activeView];
-    }
-    if (!firstResponder) {
-        [firstResponders enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+    for (NSString *className in [classResponders allKeys]) {
+        NSArray *responders = [classResponders objectForKey:className];
+        [responders enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
             if ([obj isFirstResponder]) {
                 firstResponder = obj;
                 *stop = YES;
@@ -134,14 +130,15 @@ UIGestureRecognizerDelegate
     }
     
     CGFloat offest = 0;
-    if (self.dataSource && [self.dataSource respondsToSelector:@selector(offset)]) {
-        offest = [self.dataSource offset];
+    if (self.dataSource && [self.dataSource respondsToSelector:@selector(keyboardOffset)]) {
+        offest = [self.dataSource keyboardOffset];
     }
     
     NSDictionary* info = [aNotification userInfo];
-    CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+    CGRect kbRect = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue];
+    kbRect = [self.scrollView convertRect:kbRect fromView:self.scrollView.window];
     
-    UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0, 0.0, kbSize.height + offest, 0.0);
+    UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0, 0.0, kbRect.size.height + offest, 0.0);
     self.scrollView.contentInset = contentInsets;
     self.scrollView.scrollIndicatorInsets = contentInsets;
     
@@ -155,8 +152,10 @@ UIGestureRecognizerDelegate
     }
     
     CGRect aRect = self.scrollView.frame;
-    aRect.size.height -= kbSize.height;
-    if (!CGRectContainsPoint(aRect, activeView.frame.origin) ) {
+    aRect.size.height -= kbRect.size.height;
+    CGPoint aPoint = activeView.frame.origin;
+    aPoint.y += CGRectGetHeight(activeView.frame);
+    if (!CGRectContainsPoint(aRect, aPoint)) {
         [self.scrollView scrollRectToVisible:activeView.frame animated:YES];
     }
 }

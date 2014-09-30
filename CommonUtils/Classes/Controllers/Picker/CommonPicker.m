@@ -17,13 +17,15 @@ UIPopoverControllerDelegate
 
 @property (readwrite, nonatomic, assign) UIViewController *target;
 @property (readwrite, nonatomic, assign) id sender;
-@property (readwrite, nonatomic, assign) id relativeSuperview;
+@property (readwrite, nonatomic, assign) UIView *relativeSuperview;
 @property (readwrite, nonatomic, strong) UIPopoverController *myPopoverController;
 @property (readwrite, nonatomic, strong) UIView *overlay;
 @property (readwrite, nonatomic, strong) UIView *pickerView;
 @property (readwrite, nonatomic, strong) UIView *toolbar;
 @property (readwrite, nonatomic, strong) UIView *picker;
+@property (readwrite, nonatomic, assign) CGFloat customToolbarHeight;
 @property (readwrite, nonatomic, getter = isVisible) BOOL visible;
+@property (readwrite, nonatomic, getter = isTapped) BOOL tapped;
 
 @property (readwrite, nonatomic, copy) ShowCompletionHandler showCompetion;
 @property (readwrite, nonatomic, copy) HideCompletionHandler hideCompetion;
@@ -35,26 +37,57 @@ UIPopoverControllerDelegate
 #pragma mark -
 #pragma mark public methods
 
-- (instancetype)initWithTarget:(id)target
+- (void)dealloc
+{
+    if (iPhone) {
+        [[NSNotificationCenter defaultCenter] removeObserver:self];
+    }
+}
+
+- (instancetype)initWithTarget:(UIViewController *)target
                         sender:(id)sender
-             relativeSuperview:(id)relativeSuperview;
+             relativeSuperview:(UIView *)relativeSuperview
 {
     self = [super init];
     if (self) {
-        self.target = (UIViewController *)target;
+        if (!target) {
+            @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:[NSString stringWithFormat:@"%@ Please, provide valid target of kind of class UIViewController.", NSStringFromClass([self class])] userInfo:nil];
+        }
+
+        self.target = target;
         self.sender = sender;
         self.relativeSuperview = relativeSuperview;
-        
+
         //defaults
-        self.toolbarHidden = NO;
+        self.visible = NO;
+        self.tapped = NO;
         self.needsOverlay = NO;
-        self.shouldChangeOrientation = NO;
+        self.toolbarHidden = NO;
+        self.showAfterOrientationDidChange = NO;
         self.pickerCornerradius = 0.0f;
+        self.customToolbarHeight = 0.0f;
         
-        self.pickerWidth = kPickerWidth;
-        self.pickerHeight = kPickerHeight;
+        if (iPhone) {
+            [[NSNotificationCenter defaultCenter] addObserver:self
+                                                     selector:@selector(statusBarOrientationDidChange:)
+                                                         name:UIApplicationDidChangeStatusBarOrientationNotification
+                                                       object:nil];
+        }
     }
     return self;
+}
+
+- (void)statusBarOrientationDidChange:(NSNotification *)notificaion
+{
+    if (iPhone && self.isVisible) {
+        [self dismissPickerWithCompletion:^{
+            if (self.showAfterOrientationDidChange) {
+                [self showPickerWithCompletion:^{
+                    DebugLog(@"Picker is shown after orientation did change");
+                }];
+            }
+        }];
+    }
 }
 
 - (void)showPickerWithCompletion:(void (^)(void))completion
@@ -76,7 +109,7 @@ UIPopoverControllerDelegate
     self.hideCompetion = completion;
     
     if (iPhone) {
-        [self slideDown];
+        [self slideDown:nil];
     }
     else {
         [self dismissPopover];
@@ -85,11 +118,6 @@ UIPopoverControllerDelegate
 
 #pragma mark -
 #pragma mark private methods
-
-- (void)dealloc
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
 
 - (UIToolbar *)defaultToolbar
 {
@@ -157,6 +185,30 @@ UIPopoverControllerDelegate
     return toolbar;
 }
 
+- (CGFloat)getPickerWidth
+{
+    CGFloat pickerWidth = kPickerWidth;
+    if (self.dataSource && [self.dataSource respondsToSelector:@selector(pickerWidth)]) {
+        pickerWidth = [self.dataSource pickerWidth];
+    }
+    return pickerWidth;
+}
+
+- (CGFloat)getPickerHeight
+{
+    CGFloat pickerHeight = kPickerHeight;
+    if (self.dataSource && [self.dataSource respondsToSelector:@selector(pickerHeight)]) {
+        pickerHeight = [self.dataSource pickerHeight];
+        
+        //sum custom toolbar height (if a custom toolbar provided)
+        pickerHeight += self.customToolbarHeight;
+    }
+    if (self.isToolbarHidden) {
+        pickerHeight -= 44.0f;
+    }
+    return pickerHeight;
+}
+
 - (void)setupPicker
 {
     self.pickerView = (iPad) ? [[UIView alloc] init] : [[BlurView alloc] init];
@@ -170,12 +222,10 @@ UIPopoverControllerDelegate
         @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:[NSString stringWithFormat:@"%@ Failed to call pickerContent:, dataSource should provide a valid pickerContent.", NSStringFromClass([self class])] userInfo:nil];
     }
     
-    BOOL showToolbar = !self.toolbarHidden;
     CGFloat toolbarHeight = 0.0f;
-    
     if (![self.dataSource respondsToSelector:@selector(pickerToolbar)] ||
         ([self.dataSource respondsToSelector:@selector(pickerToolbar)] && [self.dataSource pickerToolbar] == nil)) {
-        if (!self.toolbarHidden) {
+        if (!self.isToolbarHidden) {
             self.toolbar = [self defaultToolbar];
             toolbarHeight = 44.0f;
         }
@@ -183,16 +233,18 @@ UIPopoverControllerDelegate
     else {
         self.toolbar = [self.dataSource pickerToolbar];
         self.toolbar.translatesAutoresizingMaskIntoConstraints = NO;
-        if ([self.dataSource respondsToSelector:@selector(toolbarHeight)]) {
-            toolbarHeight = [self.dataSource toolbarHeight];
-            self.pickerHeight += toolbarHeight;
-        }
-        else {
-            @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:[NSString stringWithFormat:@"%@ Failed to call pickerContent:, dataSource should provide a valid toolbarHeight.", NSStringFromClass([self class])] userInfo:nil];
+        if (!self.isToolbarHidden) {
+            if ([self.dataSource respondsToSelector:@selector(pickerToolbarHeight)]) {
+                toolbarHeight = [self.dataSource pickerToolbarHeight];
+                self.customToolbarHeight = toolbarHeight;
+            }
+            else {
+                @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:[NSString stringWithFormat:@"%@ Failed to call pickerContent:, dataSource should provide a valid pickerToolbarHeight.", NSStringFromClass([self class])] userInfo:nil];
+            }
         }
     }
     
-    if (showToolbar) {
+    if (!self.isToolbarHidden) {
         [self.pickerView addSubview:self.toolbar];
     }
     
@@ -200,7 +252,7 @@ UIPopoverControllerDelegate
     [self.pickerView addSubview:self.picker];
     //self.picker.backgroundColor = [UIColor redColor];
     
-    if (showToolbar) {
+    if (!self.isToolbarHidden) {
         [self.pickerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[_toolbar]|"
                                                                                 options:0
                                                                                 metrics:nil
@@ -212,7 +264,7 @@ UIPopoverControllerDelegate
                                                                             metrics:nil
                                                                               views:NSDictionaryOfVariableBindings(_picker)]];
     
-    if (showToolbar) {
+    if (!self.isToolbarHidden) {
         NSString *contraint_V = [NSString stringWithFormat:@"V:|[_toolbar(==%@)][_picker]|", @(toolbarHeight)];
         [self.pickerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:contraint_V
                                                                                 options:0
@@ -224,54 +276,6 @@ UIPopoverControllerDelegate
                                                                                 options:0
                                                                                 metrics:nil
                                                                                   views:NSDictionaryOfVariableBindings(_picker)]];
-    }
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(orientationDidChange:)
-                                                 name:UIDeviceOrientationDidChangeNotification
-                                               object:nil];
-}
-
-#pragma mark -
-#pragma Rotation methods
-
-- (void)orientationDidChange:(NSNotification *)notification
-{
-    if ([self.myPopoverController isPopoverVisible]) {
-        [self.myPopoverController dismissPopoverAnimated:NO];
-    }
-    [self reloadPickerWithCompletion:nil];
-}
-
-- (void)reloadPickerWithCompletion:(void(^)(void))completion
-{
-    if (iPad && [self.myPopoverController isPopoverVisible]) {
-        
-        UIPopoverArrowDirection popoverArrowDirection = UIPopoverArrowDirectionAny;
-        if (self.dataSource && [self.dataSource respondsToSelector:@selector(pickerArrowDirection)]) {
-            popoverArrowDirection = [self.dataSource pickerArrowDirection];
-        }
-        
-        //present from UIBarButtonItem
-        if ([self.sender isKindOfClass:[UIBarButtonItem class]]) {
-            [self.myPopoverController setPopoverContentSize:CGSizeMake(self.pickerWidth, self.pickerHeight) animated:YES];
-            [self.myPopoverController presentPopoverFromBarButtonItem:self.sender
-                                             permittedArrowDirections:popoverArrowDirection
-                                                             animated:YES];
-        }
-        //present from any other view
-        else if ([self.sender isKindOfClass:[UIView class]]) {
-            UIView *view = (UIView *)self.sender;
-            UIView *relativeSuperview = (UIView *)self.relativeSuperview;
-            CGRect myRect = [relativeSuperview convertRect:view.frame toView:self.target.view];
-            [self.myPopoverController setPopoverContentSize:CGSizeMake(self.pickerWidth, self.pickerHeight) animated:YES];
-            [self.myPopoverController presentPopoverFromRect:myRect
-                                                      inView:self.target.view
-                                    permittedArrowDirections:popoverArrowDirection
-                                                    animated:YES];
-        }
-        
-        if (self.showCompetion) self.showCompetion();
     }
 }
 
@@ -297,17 +301,13 @@ UIPopoverControllerDelegate
     return contentController;
 }
 
-
 - (void)showPopover
 {
-    CGSize size = CGSizeMake(self.pickerWidth, self.pickerHeight);
+    CGSize size = CGSizeMake([self getPickerWidth], [self getPickerHeight]);
     self.myPopoverController =
     [[UIPopoverController alloc] initWithContentViewController:[self contentViewControllerWithSize:size]];
     self.myPopoverController.delegate = self;
     [self.myPopoverController setPopoverContentSize:size animated:YES];
-    
-    //layout picker view early
-    [self.pickerView layoutIfNeeded];
     
     UIPopoverArrowDirection popoverArrowDirection = UIPopoverArrowDirectionAny;
     if (self.dataSource && [self.dataSource respondsToSelector:@selector(pickerArrowDirection)]) {
@@ -322,10 +322,13 @@ UIPopoverControllerDelegate
     }
     //present from any other view
     else if ([self.sender isKindOfClass:[UIView class]]) {
-        UIView *view = (UIView *)self.sender;
-        UIView *relativeSuperview = (UIView *)self.relativeSuperview;
-        CGRect myRect = [relativeSuperview convertRect:view.frame toView:self.target.view];
-        [self.myPopoverController presentPopoverFromRect:myRect
+        UIView *sender = (UIView *)self.sender;
+        UIView *relativeSuperview = [sender superview];
+        if ([self.relativeSuperview isKindOfClass:[UIView class]]) {
+            relativeSuperview = self.relativeSuperview;
+        }
+        CGRect taregtRect = [self.target.view convertRect:sender.frame fromView:relativeSuperview];
+        [self.myPopoverController presentPopoverFromRect:taregtRect
                                                   inView:self.target.view
                                 permittedArrowDirections:popoverArrowDirection
                                                 animated:YES];
@@ -368,7 +371,7 @@ UIPopoverControllerDelegate
     
     UITapGestureRecognizer* tapGesture =
     [[UITapGestureRecognizer alloc] initWithTarget:self
-                                            action:@selector(slideDown)];
+                                            action:@selector(slideDown:)];
     tapGesture.numberOfTapsRequired = 1;
     tapGesture.numberOfTouchesRequired = 1;
     [self.overlay addGestureRecognizer:tapGesture];
@@ -385,13 +388,13 @@ UIPopoverControllerDelegate
         [self addOverlay];
         
         //assign size to picker
-        self.pickerView.frame = CGRectMake(0,0,self.pickerWidth, self.pickerHeight);
+        self.pickerView.frame = CGRectMake(0, 0, [self getPickerWidth], [self getPickerHeight]);
         
         //add to superview
         [self.target.view addSubview:self.pickerView];
         
         CGSize pickerSize = [self.pickerView sizeThatFits:CGSizeZero];
-        self.pickerView.frame = CGRectMake(0,0,pickerSize.width,pickerSize.height);
+        self.pickerView.frame = CGRectMake(0, 0, pickerSize.width, pickerSize.height);
         
         // size up the picker view to our screen and compute the start/end frame origin for our slide up animation
         //
@@ -424,9 +427,13 @@ UIPopoverControllerDelegate
     }
 }
 
-- (void)slideDown
+- (void)slideDown:(UIGestureRecognizer *)tapGesture
 {
     if (self.isVisible && self.pickerView.superview != nil) {
+        
+        if (tapGesture) {
+            self.tapped = YES;
+        }
         
         CGRect screenRect = [[UIScreen mainScreen] applicationFrame];
         CGRect endFrame = self.pickerView.frame;
@@ -466,7 +473,12 @@ UIPopoverControllerDelegate
     //set boolean
     self.visible = NO;
     
-    if (self.hideCompetion) self.hideCompetion();
+    if (!self.isTapped) {
+        if (self.hideCompetion) self.hideCompetion();
+    }
+    
+    //set tapped to default
+    self.tapped = NO;
 }
 
 #pragma mark -
@@ -488,6 +500,28 @@ UIPopoverControllerDelegate
             [self.delegate doneActionCallback:sender];
         }
     }];
+}
+
+#pragma mark -
+#pragma mark - UIPopoverControllerDelegate
+
+- (BOOL)popoverControllerShouldDismissPopover:(UIPopoverController *)popoverController
+{
+    //do somthing
+    return YES;
+}
+
+- (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController
+{
+    //do something
+}
+
+- (void)popoverController:(UIPopoverController *)popoverController willRepositionPopoverToRect:(inout CGRect *)rect inView:(inout UIView *__autoreleasing *)view
+{
+    if (self.myPopoverController == popoverController) {
+        CGRect taregtRect = [self.target.view convertRect:((UIView *)self.sender).frame fromView:(UIView *)self.relativeSuperview];
+        *rect = taregtRect;
+    }
 }
 
 @end

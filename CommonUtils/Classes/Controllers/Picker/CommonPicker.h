@@ -6,12 +6,14 @@
 
 @interface CommonPicker : NSObject
 
-//sender and relativeSuperview needs only for iPad
-//to postion popoverController correctly
-//these values are not considered for iPhone
-- (instancetype)initWithTarget:(id)target
+/*----------------------------------------------------------------------*/
+//target: viewcontoller that present the picker
+//sender: should not be nil, supported types are UIBarButtonItem, UIView
+//relativeSuperview: the relative superview of sender: could be nil
+/*----------------------------------------------------------------------*/
+- (instancetype)initWithTarget:(UIViewController *)target
                         sender:(id)sender
-             relativeSuperview:(id)relativeSuperview;
+             relativeSuperview:(UIView *)relativeSuperview;
 
 @property (readwrite, nonatomic, assign) id<CommonPickerDataSource> dataSource;
 
@@ -19,24 +21,20 @@
 
 @property (readonly, nonatomic, getter = isVisible) BOOL visible;
 
-@property (readwrite, nonatomic, assign) BOOL toolbarHidden;
+@property (readwrite, nonatomic, getter = isToolbarHidden) BOOL toolbarHidden;  //default NO
 
-@property (readwrite, nonatomic, assign) BOOL needsOverlay;
+@property (readwrite, nonatomic, assign) BOOL needsOverlay;                     //default NO
 
-@property (readwrite, nonatomic, assign) BOOL shouldChangeOrientation;
+@property (readwrite, nonatomic, assign) CGFloat pickerCornerradius;            //defualt 0
 
-@property (readwrite, nonatomic, assign) CGFloat pickerWidth;
+//only iPhone
+@property (readwrite, nonatomic, assign) BOOL showAfterOrientationDidChange;
 
-@property (readwrite, nonatomic, assign) CGFloat pickerHeight;
-
-@property (readwrite, nonatomic, assign) CGFloat pickerCornerradius;
-
+//indepenedly from iDevice call this method to show picker
 - (void)showPickerWithCompletion:(void (^)(void))completion;
 
+//indepenedly from iDevice call this method to hide picker
 - (void)dismissPickerWithCompletion:(void (^)(void))completion;
-
-//only iPad: changes popover size dynamically
-- (void)reloadPickerWithCompletion:(void(^)(void))completion;
 
 @end
 
@@ -46,16 +44,23 @@
 - (id)pickerContent;
 
 @optional
-//if nil or not implemented: returns default toolbar
+//if not specified the defualt value is: (iPhone) ? self.target.view.frame.size.width : 320.0f;
+- (CGFloat)pickerWidth;
+
+//if not specified the default value is: 260.0f
+- (CGFloat)pickerHeight;
+
+//implement this method to provide the custom toolbar
 - (id)pickerToolbar;
 
-- (UIPopoverArrowDirection)pickerArrowDirection;
+//this value becomes mandatory when custom toolbar is proveded by at "pickerToolbar"
+- (CGFloat)pickerToolbarHeight;
 
-//if toolbarHeight is specified with the value <= 0 then toolbar is not visualzied
-//this method has no effect if the default is shown
-- (CGFloat)toolbarHeight;
-
+//default is nil
 - (NSString *)pickerToolbarTitle;
+
+//if not specified the default value is UIPopoverArrowDirectionAny
+- (UIPopoverArrowDirection)pickerArrowDirection;
 
 @end
 
