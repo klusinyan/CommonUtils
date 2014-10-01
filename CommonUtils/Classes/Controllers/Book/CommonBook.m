@@ -71,15 +71,15 @@
 - (void)reloadPages
 {
     NSInteger numberOfPages = 0;
-    if (self.dataSource && [self.dataSource respondsToSelector:@selector(numberOfPages)]) {
-        numberOfPages = [self.dataSource numberOfPages];
+    if (self.dataSource && [self.dataSource respondsToSelector:@selector(numberOfPagesForBook:)]) {
+        numberOfPages = [self.dataSource numberOfPagesForBook:self];
         
         if (numberOfPages > 0) {
             
             //ask dataSource for current presenting page
             NSInteger index = 0;
-            if (self.dataSource && [self.dataSource respondsToSelector:@selector(indexOfPresentedPage)]) {
-                index = [self.dataSource indexOfPresentedPage];
+            if (self.dataSource && [self.dataSource respondsToSelector:@selector(indexOfPresentedPageForBook:)]) {
+                index = [self.dataSource indexOfPresentedPageForBook:self];
             }
             
             //tell the pageControl (if there is a custom one) to point to the same page as \"indexOfPresentedPag\"
@@ -115,8 +115,8 @@
 
 - (void)pageContentDidTap
 {
-    if (self.delegate && [self.delegate respondsToSelector:@selector(pageContent:didSelectAtIndex:)]) {
-        [self.delegate pageContent:[self.viewControllers objectAtIndex:self.currentPage] didSelectAtIndex:self.currentPage];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(book:pageContent:didSelectAtIndex:)]) {
+        [self.delegate book:self pageContent:[self.viewControllers objectAtIndex:self.currentPage] didSelectAtIndex:self.currentPage];
     }
 }
 
@@ -141,16 +141,16 @@
 - (void)setupViewContollers
 {
     NSInteger numberOfPages = 0;
-    if (self.dataSource && [self.dataSource respondsToSelector:@selector(numberOfPages)]) {
-        numberOfPages = [self.dataSource numberOfPages];
+    if (self.dataSource && [self.dataSource respondsToSelector:@selector(numberOfPagesForBook:)]) {
+        numberOfPages = [self.dataSource numberOfPagesForBook:self];
     }
     for (int i = 0; i < numberOfPages; i++) {
-        if (self.dataSource && [self.dataSource respondsToSelector:@selector(pageContentAtIndex:)]) {
-            UIViewController *pageContent = [self.dataSource pageContentAtIndex:i];
+        if (self.dataSource && [self.dataSource respondsToSelector:@selector(book:pageContentAtIndex:)]) {
+            UIViewController *pageContent = [self.dataSource book:self pageContentAtIndex:i];
             [self.viewControllers addObject:pageContent];
             
-            if (self.dataSource && [self.dataSource respondsToSelector:@selector(pageContentShouldRecognizeTapAtIndex:)]) {
-                if ([self.dataSource pageContentShouldRecognizeTapAtIndex:i]) {
+            if (self.dataSource && [self.dataSource respondsToSelector:@selector(book:pageContentShouldRecognizeTapAtIndex:)]) {
+                if ([self.dataSource book:self pageContentShouldRecognizeTapAtIndex:i]) {
                     [self addTapGestureRecognizerToPageContent:pageContent];
                 }
             }
@@ -167,8 +167,8 @@
     self.pageController.dataSource = self;
     
     NSInteger index = 0;
-    if (self.dataSource && [self.dataSource respondsToSelector:@selector(indexOfPresentedPage)]) {
-        index = [self.dataSource indexOfPresentedPage];
+    if (self.dataSource && [self.dataSource respondsToSelector:@selector(indexOfPresentedPageForBook:)]) {
+        index = [self.dataSource indexOfPresentedPageForBook:self];
     }
     
     UIViewController *initialVC = [self.viewControllers objectAtIndex:index];
@@ -194,8 +194,8 @@
     if (completion) completion(YES);
     
     //call delegate to pass the initialVC
-    if (self.delegate && [self.delegate respondsToSelector:@selector(pageContent:didPresentAtIndex:)]) {
-        [self.delegate pageContent:initialVC didPresentAtIndex:index];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(book:pageContent:didPresentAtIndex:)]) {
+        [self.delegate book:self pageContent:initialVC didPresentAtIndex:index];
     }
 }
 
@@ -240,8 +240,8 @@
     [self jumpToPageAtIndex:self.pageControl.currentPage
                    animated:YES
                  completion:^(BOOL finished) {
-                     if (self.delegate && [self.delegate respondsToSelector:@selector(pageContent:didPresentAtIndex:)]) {
-                         [self.delegate pageContent:[self.viewControllers objectAtIndex:self.currentPage] didPresentAtIndex:self.currentPage];
+                     if (self.delegate && [self.delegate respondsToSelector:@selector(book:pageContent:didPresentAtIndex:)]) {
+                         [self.delegate book:self pageContent:[self.viewControllers objectAtIndex:self.currentPage] didPresentAtIndex:self.currentPage];
                      }
                  }];
 }
@@ -280,8 +280,8 @@
     if (index == NSNotFound) {
         return;
     }
-    if (self.delegate && [self.delegate respondsToSelector:@selector(pageContent:willMoveAtIndex:)]) {
-        [self.delegate pageContent:[self.viewControllers objectAtIndex:index] willMoveAtIndex:index];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(book:pageContent:willMoveAtIndex:)]) {
+        [self.delegate book:self pageContent:[self.viewControllers objectAtIndex:index] willMoveAtIndex:index];
     }
 }
 
@@ -295,8 +295,8 @@
     if (self.pageControl && [self.pageControl respondsToSelector:@selector(setCurrentPage:)]) {
         self.pageControl.currentPage = self.currentPage;
     }
-    if (self.delegate && [self.delegate respondsToSelector:@selector(pageContent:didPresentAtIndex:)]) {
-        [self.delegate pageContent:[self.viewControllers objectAtIndex:index] didPresentAtIndex:index];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(book:pageContent:didPresentAtIndex:)]) {
+        [self.delegate book:self pageContent:[self.viewControllers objectAtIndex:index] didPresentAtIndex:index];
     }
 }
 
@@ -306,8 +306,8 @@
 - (NSInteger)presentationCountForPageViewController:(UIPageViewController *)pageViewController
 {
     NSInteger index = 0;
-    if (self.dataSource && [self.dataSource respondsToSelector:@selector(numberOfPages)]) {
-        index = [self.dataSource numberOfPages];
+    if (self.dataSource && [self.dataSource respondsToSelector:@selector(numberOfPagesForBook:)]) {
+        index = [self.dataSource numberOfPagesForBook:self];
     }
     return index;
 }
@@ -318,8 +318,8 @@
         return -1;
     }
     NSInteger index = 0;
-    if (self.dataSource && [self.dataSource respondsToSelector:@selector(indexOfPresentedPage)]) {
-        index = [self.dataSource indexOfPresentedPage];
+    if (self.dataSource && [self.dataSource respondsToSelector:@selector(indexOfPresentedPageForBook:)]) {
+        index = [self.dataSource indexOfPresentedPageForBook:self];
     }
     return index;
 }

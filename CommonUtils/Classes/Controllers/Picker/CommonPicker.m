@@ -142,8 +142,8 @@ UIPopoverControllerDelegate
     label.textAlignment = NSTextAlignmentCenter;
     //label.backgroundColor = [UIColor whiteColor];
     
-    if (self.dataSource && [self.dataSource respondsToSelector:@selector(pickerToolbarTitle)]) {
-        label.text = [self.dataSource pickerToolbarTitle];
+    if (self.dataSource && [self.dataSource respondsToSelector:@selector(toolbarTitleForPicker:)]) {
+        label.text = [self.dataSource toolbarTitleForPicker:self];
     }
     
     UIBarButtonItem *title = [[UIBarButtonItem alloc] initWithCustomView:label];
@@ -188,8 +188,8 @@ UIPopoverControllerDelegate
 - (CGFloat)getPickerWidth
 {
     CGFloat pickerWidth = kPickerWidth;
-    if (self.dataSource && [self.dataSource respondsToSelector:@selector(pickerWidth)]) {
-        pickerWidth = [self.dataSource pickerWidth];
+    if (self.dataSource && [self.dataSource respondsToSelector:@selector(widthForPicker:)]) {
+        pickerWidth = [self.dataSource widthForPicker:self];
     }
     return pickerWidth;
 }
@@ -197,8 +197,8 @@ UIPopoverControllerDelegate
 - (CGFloat)getPickerHeight
 {
     CGFloat pickerHeight = kPickerHeight;
-    if (self.dataSource && [self.dataSource respondsToSelector:@selector(pickerHeight)]) {
-        pickerHeight = [self.dataSource pickerHeight];
+    if (self.dataSource && [self.dataSource respondsToSelector:@selector(heightForPicker:)]) {
+        pickerHeight = [self.dataSource heightForPicker:self];
         
         //sum custom toolbar height (if a custom toolbar provided)
         pickerHeight += self.customToolbarHeight;
@@ -215,27 +215,27 @@ UIPopoverControllerDelegate
     self.pickerView.layer.cornerRadius = self.pickerCornerradius;
     //self.pickerView.backgroundColor = [UIColor greenColor];
     
-    if (self.dataSource && [self.dataSource respondsToSelector:@selector(pickerContent)] && [self.dataSource pickerContent]) {
-        self.picker = [self.dataSource pickerContent];
+    if (self.dataSource && [self.dataSource respondsToSelector:@selector(contentForPicker:)]) {
+        self.picker = [self.dataSource contentForPicker:self];
     }
-    else {
+    if (!self.picker) {
         @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:[NSString stringWithFormat:@"%@ Failed to call pickerContent:, dataSource should provide a valid pickerContent.", NSStringFromClass([self class])] userInfo:nil];
     }
     
     CGFloat toolbarHeight = 0.0f;
-    if (![self.dataSource respondsToSelector:@selector(pickerToolbar)] ||
-        ([self.dataSource respondsToSelector:@selector(pickerToolbar)] && [self.dataSource pickerToolbar] == nil)) {
+    if (![self.dataSource respondsToSelector:@selector(toolbarForPicker:)] ||
+        ([self.dataSource respondsToSelector:@selector(toolbarForPicker:)] && [self.dataSource toolbarForPicker:self] == nil)) {
         if (!self.isToolbarHidden) {
             self.toolbar = [self defaultToolbar];
             toolbarHeight = 44.0f;
         }
     }
     else {
-        self.toolbar = [self.dataSource pickerToolbar];
+        self.toolbar = [self.dataSource toolbarForPicker:self];
         self.toolbar.translatesAutoresizingMaskIntoConstraints = NO;
         if (!self.isToolbarHidden) {
-            if ([self.dataSource respondsToSelector:@selector(pickerToolbarHeight)]) {
-                toolbarHeight = [self.dataSource pickerToolbarHeight];
+            if ([self.dataSource respondsToSelector:@selector(toolbarHeightForPicker:)]) {
+                toolbarHeight = [self.dataSource toolbarHeightForPicker:self];
                 self.customToolbarHeight = toolbarHeight;
             }
             else {
@@ -310,8 +310,8 @@ UIPopoverControllerDelegate
     [self.myPopoverController setPopoverContentSize:size animated:YES];
     
     UIPopoverArrowDirection popoverArrowDirection = UIPopoverArrowDirectionAny;
-    if (self.dataSource && [self.dataSource respondsToSelector:@selector(pickerArrowDirection)]) {
-        popoverArrowDirection = [self.dataSource pickerArrowDirection];
+    if (self.dataSource && [self.dataSource respondsToSelector:@selector(popoverArrowDirectionForPicker:)]) {
+        popoverArrowDirection = [self.dataSource popoverArrowDirectionForPicker:self];
     }
     
     //present from UIBarButtonItem
@@ -487,8 +487,8 @@ UIPopoverControllerDelegate
 - (void)cancelAction:(id)sender
 {
     [self dismissPickerWithCompletion:^{
-        if (self.delegate && [self.delegate respondsToSelector:@selector(cancelActionCallback:)]) {
-            [self.delegate cancelActionCallback:sender];
+        if (self.delegate && [self.delegate respondsToSelector:@selector(picker:cancelActionCallback:)]) {
+            [self.delegate picker:self cancelActionCallback:sender];
         }
     }];
 }
@@ -496,8 +496,8 @@ UIPopoverControllerDelegate
 - (void)doneAction:(id)sender
 {
     [self dismissPickerWithCompletion:^{
-        if (self.delegate && [self.delegate respondsToSelector:@selector(doneActionCallback:)]) {
-            [self.delegate doneActionCallback:sender];
+        if (self.delegate && [self.delegate respondsToSelector:@selector(picker:doneActionCallback:)]) {
+            [self.delegate picker:self doneActionCallback:sender];
         }
     }];
 }

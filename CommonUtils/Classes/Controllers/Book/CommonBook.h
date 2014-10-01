@@ -44,25 +44,25 @@ typedef NS_ENUM(NSInteger, PresentationStyle) {
 @protocol CommonBookDataSource <NSObject>
 
 @required
-- (NSInteger)numberOfPages;
+- (NSInteger)numberOfPagesForBook:(CommonBook *)book;
 
-- (UIViewController *)pageContentAtIndex:(NSInteger)index;
+- (UIViewController *)book:(CommonBook *)book pageContentAtIndex:(NSInteger)index;
 
 @optional
-- (NSInteger)indexOfPresentedPage;
+- (NSInteger)indexOfPresentedPageForBook:(CommonBook *)book;
 
-- (BOOL)pageContentShouldRecognizeTapAtIndex:(NSInteger)index;
+- (BOOL)book:(CommonBook *)book pageContentShouldRecognizeTapAtIndex:(NSInteger)index;
 
 @end
 
 @protocol CommonBookDelegate <NSObject>
 
 @optional
-- (void)pageContent:(UIViewController *)pageContent willMoveAtIndex:(NSInteger)index;
+- (void)book:(CommonBook *)book pageContent:(UIViewController *)pageContent willMoveAtIndex:(NSInteger)index;
 
-- (void)pageContent:(UIViewController *)pageContent didPresentAtIndex:(NSInteger)index;
+- (void)book:(CommonBook *)book pageContent:(UIViewController *)pageContent didPresentAtIndex:(NSInteger)index;
 
-- (void)pageContent:(UIViewController *)pageContent didSelectAtIndex:(NSInteger)index;
+- (void)book:(CommonBook *)book pageContent:(UIViewController *)pageContent didSelectAtIndex:(NSInteger)index;
 
 @end
 

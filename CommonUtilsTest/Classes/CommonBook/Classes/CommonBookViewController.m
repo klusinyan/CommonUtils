@@ -134,7 +134,7 @@
 #pragma mark -
 #pragma mark PageViewControllerDataSource protocol
 
-- (NSInteger)numberOfPages
+- (NSInteger)numberOfPagesForBook:(CommonBook *)book
 {
     return [self.items count];
 }
@@ -146,12 +146,12 @@
 }
 //*/
 
-- (BOOL)pageContentShouldRecognizeTapAtIndex:(NSInteger)index
+- (BOOL)book:(CommonBook *)book pageContentShouldRecognizeTapAtIndex:(NSInteger)index
 {
     return (index == 0);
 }
 
-- (UIViewController *)pageContentAtIndex:(NSInteger)index
+- (UIViewController *)book:(CommonBook *)book pageContentAtIndex:(NSInteger)index
 {
     CommonBookContentViewController *pageContent = [self.items objectAtIndex:index];
     
@@ -166,12 +166,12 @@
 #pragma mark -
 #pragma mark PageViewControllerDelegate protocol
 
-- (void)pageContent:(id)pageContent didPresentAtIndex:(NSInteger)index
+- (void)book:(CommonBook *)book pageContent:(id)pageContent didPresentAtIndex:(NSInteger)index
 {
     DebugLog(@"currentPage %@", @(index));
 }
 
-- (void)pageContent:(id)pageContent didSelectAtIndex:(NSInteger)index
+- (void)book:(CommonBook *)book pageContent:(id)pageContent didSelectAtIndex:(NSInteger)index
 {
     DebugLog(@"pageContent tapped at index %@", @(index));
 }

@@ -41,34 +41,34 @@
 @protocol CommonPickerDataSource <NSObject>
 
 @required
-- (id)pickerContent;
+- (id)contentForPicker:(CommonPicker *)picker;
 
 @optional
 //if not specified the defualt value is: (iPhone) ? self.target.view.frame.size.width : 320.0f;
-- (CGFloat)pickerWidth;
+- (CGFloat)widthForPicker:(CommonPicker *)picker;
 
 //if not specified the default value is: 260.0f
-- (CGFloat)pickerHeight;
+- (CGFloat)heightForPicker:(CommonPicker *)picker;
 
 //implement this method to provide the custom toolbar
-- (id)pickerToolbar;
+- (id)toolbarForPicker:(CommonPicker *)toolbar;
 
-//this value becomes mandatory when custom toolbar is proveded by at "pickerToolbar"
-- (CGFloat)pickerToolbarHeight;
+//this value becomes mandatory when custom toolbar is proveded by at "toolbarForPicker:"
+- (CGFloat)toolbarHeightForPicker:(CommonPicker *)picker;
 
 //default is nil
-- (NSString *)pickerToolbarTitle;
+- (NSString *)toolbarTitleForPicker:(CommonPicker *)picker;
 
 //if not specified the default value is UIPopoverArrowDirectionAny
-- (UIPopoverArrowDirection)pickerArrowDirection;
+- (UIPopoverArrowDirection)popoverArrowDirectionForPicker:(CommonPicker *)picker;
 
 @end
 
 @protocol CommonPickerDelegate <NSObject>
 
 @optional
-- (void)cancelActionCallback:(id)sender;
+- (void)picker:(CommonPicker *)picker cancelActionCallback:(id)sender;
 
-- (void)doneActionCallback:(id)sender;
+- (void)picker:(CommonPicker *)picker doneActionCallback:(id)sender;
 
 @end

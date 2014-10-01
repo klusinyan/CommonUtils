@@ -21,15 +21,15 @@
 @protocol CommonKeyboardDelegate <NSObject>
 
 @optional
-- (void)keyboardWasShownWithResponder:(id)responder;
+- (void)keyboard:(CommonKeyboard *)keyboard wasShownWithResponder:(id)responder;
 
-- (void)keyboardWillBeHiddenWithResponder:(id)responder;
+- (void)keyboard:(CommonKeyboard *)keyboard willBeHiddenWithResponder:(id)responder;
 
 @end
 
 @protocol CommonKeyboardDataSource <NSObject>
 
 @optional
-- (CGFloat)keyboardOffset;
+- (CGFloat)offsetForKeyboard:(CommonKeyboard *)keyboard;
 
 @end

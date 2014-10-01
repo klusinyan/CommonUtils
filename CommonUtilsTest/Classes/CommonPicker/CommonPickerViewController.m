@@ -81,6 +81,8 @@ CommonPickerDataSource
                                                       sender:sender
                                            relativeSuperview:nil];
     
+    DebugLog(@"self.picker %@", self.commonPicker);
+    
     //setup delegate, datasource
     self.commonPicker.dataSource = self;
     self.commonPicker.delegate = self;
@@ -105,33 +107,34 @@ CommonPickerDataSource
 #pragma mark -
 #pragma mark CommonPickerDataSource protocol
 
-- (id)pickerContent
+- (id)contentForPicker:(CommonPicker *)picker
 {
+    DebugLog(@"self.picker %@", picker);
     return self.pickerview;
 }
 
 /*
-- (id)pickerToolbar
+- (id)toolbarForPicker:(CommonPicker *)toolbar
 {
-    UIView *toolbar = [[UIView alloc] init];
-    toolbar.translatesAutoresizingMaskIntoConstraints = NO;
-    toolbar.backgroundColor = [UIColor yellowColor];
+    UIView *myToolbar = [[UIView alloc] init];
+    myToolbar.translatesAutoresizingMaskIntoConstraints = NO;
+    myToolbar.backgroundColor = [UIColor yellowColor];
     
     return toolbar;
 }
 
-- (CGFloat)pickerToolbarHeight
+- (CGFloat)toolbarHeightForPicker:(CommonPicker *)picker
 {
     return 20.0f;
 }
 //*/
  
-- (CGFloat)pickerWidth
+- (CGFloat)widthForPicker:(CommonPicker *)picker
 {
     return self.view.bounds.size.width;
 }
 
-- (CGFloat)pickerHeight
+- (CGFloat)heightForPicker:(CommonPicker *)picker
 {
     BOOL prob = arc4random_uniform(2);
     if (prob) {
@@ -142,7 +145,7 @@ CommonPickerDataSource
     }
 }
 
-- (UIPopoverArrowDirection)pickerArrowDirection
+- (UIPopoverArrowDirection)popoverArrowDirectionForPicker:(CommonPicker *)picker
 {
     return UIPopoverArrowDirectionDown;
 }
@@ -150,12 +153,12 @@ CommonPickerDataSource
 #pragma mark -
 #pragma mark CommonPickerDelegate protocol
 
-- (void)cancelActionCallback:(id)sender
+- (void)cancelActionCallback:(id)sender forPicker:(CommonPicker *)picker
 {
     DebugLog(@"cancelActionCallback");
 }
 
-- (void)doneActionCallback:(id)sender
+- (void)doneActionCallback:(id)sender forPicker:(CommonPicker *)picker
 {
     DebugLog(@"doneActionCallback");
 }

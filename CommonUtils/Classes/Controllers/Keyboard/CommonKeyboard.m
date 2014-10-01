@@ -125,13 +125,13 @@ UIGestureRecognizerDelegate
 // Called when the UIKeyboardDidShowNotification is sent.
 - (void)keyboardWasShown:(NSNotification*)aNotification
 {
-    if (self.delegate && [self.delegate respondsToSelector:@selector(keyboardWasShownWithResponder:)]) {
-        [self.delegate keyboardWasShownWithResponder:[self firstResponder]];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(keyboard:wasShownWithResponder:)]) {
+        [self.delegate keyboard:self wasShownWithResponder:[self firstResponder]];
     }
     
     CGFloat offest = 0;
-    if (self.dataSource && [self.dataSource respondsToSelector:@selector(keyboardOffset)]) {
-        offest = [self.dataSource keyboardOffset];
+    if (self.dataSource && [self.dataSource respondsToSelector:@selector(offsetForKeyboard:)]) {
+        offest = [self.dataSource offsetForKeyboard:self];
     }
     
     NSDictionary* info = [aNotification userInfo];
@@ -163,8 +163,8 @@ UIGestureRecognizerDelegate
 // Called when the UIKeyboardWillHideNotification is sent
 - (void)keyboardWillBeHidden:(NSNotification*)aNotification
 {
-    if (self.delegate && [self.delegate respondsToSelector:@selector(keyboardWillBeHiddenWithResponder:)]) {
-        [self.delegate keyboardWillBeHiddenWithResponder:[self firstResponder]];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(keyboard:willBeHiddenWithResponder:)]) {
+        [self.delegate keyboard:self willBeHiddenWithResponder:[self firstResponder]];
     }
     
     UIEdgeInsets contentInsets = UIEdgeInsetsZero;
