@@ -414,11 +414,11 @@ UIPopoverControllerDelegate
                                        pickerViewContainerSize.height);
         // start the slide up animation
         [UIView beginAnimations:nil context:NULL];
-        [UIView setAnimationWillStartSelector:@selector(slideWillStartStop)];
         [UIView setAnimationDuration:0.3];
         
         // we need to perform some post operations after the animation is complete
         [UIView setAnimationDelegate:self];
+        [UIView setAnimationWillStartSelector:@selector(slideUpDidStop)];
         
         self.pickerView.frame = pickerRect;
         self.overlay.backgroundColor = [UIColor colorWithWhite:0.2f alpha:0.5f];
@@ -454,7 +454,7 @@ UIPopoverControllerDelegate
     }
 }
 
-- (void)slideWillStartStop
+- (void)slideUpDidStop
 {
     //set boolean
     self.visible = YES;
