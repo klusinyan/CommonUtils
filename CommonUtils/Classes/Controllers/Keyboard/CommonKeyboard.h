@@ -16,6 +16,8 @@
 
 @property (readwrite, nonatomic, assign) id<CommonKeyboardDataSource> dataSource;
 
+@property (readonly, nonatomic, getter = isVisible) BOOL visible;
+
 @end
 
 @protocol CommonKeyboardDelegate <NSObject>

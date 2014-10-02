@@ -13,6 +13,7 @@ UIGestureRecognizerDelegate
 
 @property (readwrite, nonatomic, strong) UIScrollView *scrollView;
 @property (readwrite, nonatomic, strong) UIGestureRecognizer *tapGestureRegognizer;
+@property (readwrite, nonatomic, getter = isVisible) BOOL visible;
 
 @end
 
@@ -125,6 +126,8 @@ UIGestureRecognizerDelegate
 // Called when the UIKeyboardDidShowNotification is sent.
 - (void)keyboardWasShown:(NSNotification*)aNotification
 {
+    self.visible = YES;
+    
     if (self.delegate && [self.delegate respondsToSelector:@selector(keyboard:wasShownWithResponder:)]) {
         [self.delegate keyboard:self wasShownWithResponder:[self firstResponder]];
     }
@@ -170,6 +173,8 @@ UIGestureRecognizerDelegate
     UIEdgeInsets contentInsets = UIEdgeInsetsZero;
     self.scrollView.contentInset = contentInsets;
     self.scrollView.scrollIndicatorInsets = contentInsets;
+    
+    self.visible = NO;
 }
 
 - (void)hideKeyboard:(id)sender
