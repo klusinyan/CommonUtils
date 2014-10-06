@@ -3,6 +3,7 @@
 //  Copyright (c) 2014 Yiming Tang. All rights reserved.
 
 #import "CommonProgress.h"
+#import "BlurView.h"
 
 @interface CommonProgress ()
 
@@ -141,7 +142,7 @@
     return _sharedObject;
 }
 
-+ (instancetype)commonProgressWithTarget:(id)target
++ (instancetype)commonProgressWithTarget:(id)target blur:(BOOL)blur
 {
     CommonProgress *sharedProgress = [CommonProgress sharedInstance];
     sharedProgress.target = target;
@@ -158,6 +159,24 @@
     UIView *targetView = nil;
     if ([target isKindOfClass:[UIViewController class]]) {
         targetView = ((UIViewController *)target).view;
+        
+        if (blur) {
+            BlurView *blurView = [[BlurView alloc] init];
+            blurView.translatesAutoresizingMaskIntoConstraints = NO;
+            [targetView addSubview:blurView];
+            
+            NSDictionary *bindings = @{@"blur": blurView};
+            [targetView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[blur]|"
+                                                                              options:0
+                                                                              metrics:nil
+                                                                                views:bindings]];
+            
+            [targetView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[blur]|"
+                                                                              options:0
+                                                                              metrics:nil
+                                                                                 views:bindings]];
+        }
+        
         [targetView addSubview:sharedProgress];
 
         sharedProgress.translatesAutoresizingMaskIntoConstraints = NO;

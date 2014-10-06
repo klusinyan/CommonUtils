@@ -38,7 +38,7 @@
 
 - (void)showProgress:(id)sender
 {
-    __block CommonProgress *commonProgress = [CommonProgress commonProgressWithTarget:self];
+    __block CommonProgress *commonProgress = [CommonProgress commonProgressWithTarget:self blur:YES];
     commonProgress.activityIndicatorViewStyle = CommonProgressActivityIndicatorViewStyleLarge;
     [commonProgress startAnimating];
     

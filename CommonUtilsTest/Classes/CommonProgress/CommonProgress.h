@@ -83,7 +83,7 @@ typedef NS_ENUM(NSInteger, CommonProgressActivityIndicatorViewStyle) {
 /**
  Returns sharedInstance with default "activityIndicatorViewStyle = CommonProgressActivityIndicatorViewStyleNormal"
  */
-+ (instancetype)commonProgressWithTarget:(id)target;
++ (instancetype)commonProgressWithTarget:(id)target blur:(BOOL)blur;
 
 ///-----------------------------
 /// @name Controlling Animations
