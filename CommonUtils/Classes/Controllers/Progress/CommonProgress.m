@@ -159,7 +159,7 @@
     if ([target isKindOfClass:[UIViewController class]]) {
         targetView = ((UIViewController *)target).view;
         [targetView addSubview:sharedProgress];
-        
+
         sharedProgress.translatesAutoresizingMaskIntoConstraints = NO;
         
         [targetView addConstraint:[NSLayoutConstraint constraintWithItem:sharedProgress
@@ -177,6 +177,7 @@
                                                                attribute:NSLayoutAttributeCenterY
                                                               multiplier:1
                                                                 constant:0]];
+        
     }
     
     return sharedProgress;

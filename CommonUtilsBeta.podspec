@@ -31,6 +31,6 @@ Pod::Spec.new do |s|
   #  'CommonProgress' => ['CommonUtils/Resources/CommonProgress.bundle']
   #}
 
-  s.resource_bundles = { 'ResourceBundle' => ['CommonUtils/Resources/Images/**/*.*', 'CommonUtils/Resources/Sounds/**/*.*'] }
+  s.resource_bundles = { 'ResourceBundle' => ['CommonUtils/Resources/Images/**/*.*', 'CommonUtils/Resources/Sounds/**/*.*', 'CommonUtils/Classes/Controllers/Progress/CommonProgress.bundle'] }
 
 end

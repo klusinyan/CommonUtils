@@ -27,6 +27,8 @@
                                                                                   target:self
                                                                                   action:@selector(showProgress:)];
     self.navigationItem.rightBarButtonItems = @[showProgress];
+    
+    [self showProgress:nil];
 }
 
 - (void)didReceiveMemoryWarning
@@ -40,10 +42,12 @@
     commonProgress.activityIndicatorViewStyle = CommonProgressActivityIndicatorViewStyleLarge;
     [commonProgress startAnimating];
     
+    /*
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         commonProgress = [CommonProgress commonProgressWithTarget:self];
         [commonProgress startAnimating];
     });
+    //*/
 }
 
 
