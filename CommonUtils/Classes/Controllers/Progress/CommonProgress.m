@@ -142,14 +142,15 @@
     return _sharedObject;
 }
 
-+ (instancetype)commonProgressWithTarget:(id)target blur:(BOOL)blur
++ (instancetype)commonProgressWithTarget:(id)target
 {
     CommonProgress *sharedProgress = [CommonProgress sharedInstance];
+    sharedProgress.translatesAutoresizingMaskIntoConstraints = NO;
     sharedProgress.target = target;
 
     //defualt
     sharedProgress.activityIndicatorViewStyle = CommonProgressActivityIndicatorViewStyleNormal;
-    
+
     //if progress is already running then stop it
     if (sharedProgress.isAnimating) {
         [sharedProgress stopAnimating];
@@ -160,7 +161,9 @@
     if ([target isKindOfClass:[UIViewController class]]) {
         targetView = ((UIViewController *)target).view;
         
-        if (blur) {
+        //TODO::
+        /*
+        if (NO) {
             BlurView *blurView = [[BlurView alloc] init];
             blurView.translatesAutoresizingMaskIntoConstraints = NO;
             [targetView addSubview:blurView];
@@ -176,10 +179,9 @@
                                                                               metrics:nil
                                                                                  views:bindings]];
         }
+        //*/
         
         [targetView addSubview:sharedProgress];
-
-        sharedProgress.translatesAutoresizingMaskIntoConstraints = NO;
         
         [targetView addConstraint:[NSLayoutConstraint constraintWithItem:sharedProgress
                                                                attribute:NSLayoutAttributeCenterX
