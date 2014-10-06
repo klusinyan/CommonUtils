@@ -35,6 +35,6 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   AFNetworking: 0aabc6fae66d6e5d039eeb21c315843c7aae51ab
-  CommonUtilsBeta: c077afeff3f2163b1b46b434a9b7d71e4a1d7c8d
+  CommonUtilsBeta: eab4e5832fc51b1c7225e80bd3a0da0bf4147dc6
 
 COCOAPODS: 0.34.1

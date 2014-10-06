@@ -13,6 +13,7 @@
 #import "CommonBookViewController.h"
 #import "CommonPickerViewController.h"
 #import "CommonKeyboardViewController.h"
+#import "CommonProgressViewController.h"
 #import "UIImage+Utils.h"
 
 typedef NS_ENUM(NSInteger, RowType) {
@@ -23,6 +24,7 @@ typedef NS_ENUM(NSInteger, RowType) {
     RowTypeCommonBook,
     RowTypeCommonPicker,
     RowTypeCommonKeyboard,
+    RowTypeCommonProgress,
     RowCount,
 };
 
@@ -100,6 +102,9 @@ typedef NS_ENUM(NSInteger, RowType) {
             break;
         case RowTypeCommonKeyboard:
             cell.textLabel.text = @"CommonKeyboard";
+            break;
+        case RowTypeCommonProgress:
+            cell.textLabel.text = @"CommonProgress";
             break;
         default:
             break;
@@ -217,6 +222,13 @@ typedef NS_ENUM(NSInteger, RowType) {
         case RowTypeCommonKeyboard: {
             CommonKeyboardViewController *vc =
             [[CommonKeyboardViewController alloc] init];
+            [self.navigationController pushViewController:vc animated:YES];
+            
+            break;
+        }
+        case RowTypeCommonProgress: {
+            CommonProgressViewController *vc =
+            [[CommonProgressViewController alloc] initWithNibName:NSStringFromClass([CommonProgressViewController class]) bundle:nil];
             [self.navigationController pushViewController:vc animated:YES];
             
             break;

@@ -42,7 +42,6 @@
 		9C90FF8319377F7F004CE056 /* NSMutableArray+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C90FF7F19377F7F004CE056 /* NSMutableArray+Utils.m */; };
 		9C96B096193F089B0014AC23 /* SplitViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C96B094193F089B0014AC23 /* SplitViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9C96B097193F089B0014AC23 /* SplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C96B095193F089B0014AC23 /* SplitViewController.m */; };
-		9C96B0A3193F09B30014AC23 /* apple.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C96B09B193F09B30014AC23 /* apple.png */; };
 		9C96B0A4193F09B30014AC23 /* ico_close_nav_bar.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C96B09D193F09B30014AC23 /* ico_close_nav_bar.png */; };
 		9C96B0A5193F09B30014AC23 /* ico_close_nav_bar@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C96B09E193F09B30014AC23 /* ico_close_nav_bar@2x.png */; };
 		9C96B0A6193F09B30014AC23 /* ico_open_nav_bar.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C96B09F193F09B30014AC23 /* ico_open_nav_bar.png */; };
@@ -65,7 +64,6 @@
 		9CB4800E19558E8400A5AC1B /* UIColor+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CB4800C19558E8400A5AC1B /* UIColor+Utils.m */; };
 		9CB4801119558FBE00A5AC1B /* UIImage+Utils.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CB4800F19558FBE00A5AC1B /* UIImage+Utils.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9CB4801219558FBE00A5AC1B /* UIimage+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CB4801019558FBE00A5AC1B /* UIimage+Utils.m */; };
-		9CB480141955B59E00A5AC1B /* placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = 9CB480131955B59E00A5AC1B /* placeholder.png */; };
 		9CCF0D6D1921196E00489B74 /* BarcodeReader.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CCF0D6B1921196E00489B74 /* BarcodeReader.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9CCF0D6E1921196E00489B74 /* BarcodeReader.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CCF0D6C1921196E00489B74 /* BarcodeReader.m */; };
 		9CD702211933572A0066FFC0 /* ALEListViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CD702191933572A0066FFC0 /* ALEListViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -88,6 +86,8 @@
 		9CD9F773196E907900EBBD85 /* NSString+HTML.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9F76F196E907900EBBD85 /* NSString+HTML.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		9CE7A8A719542CCF00E699E4 /* DirectoryUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CE7A8A519542CCF00E699E4 /* DirectoryUtils.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9CE7A8A819542CCF00E699E4 /* DirectoryUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CE7A8A619542CCF00E699E4 /* DirectoryUtils.m */; };
+		9CF5403E19E2AC3D006297AE /* CommonProgress.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CF5403C19E2AC3D006297AE /* CommonProgress.h */; };
+		9CF5403F19E2AC3D006297AE /* CommonProgress.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CF5403D19E2AC3D006297AE /* CommonProgress.m */; };
 		9CF9663818FD3ADC00E265A1 /* CallBackProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CF9663618FD3ADC00E265A1 /* CallBackProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
@@ -135,7 +135,6 @@
 		9C90FF7F19377F7F004CE056 /* NSMutableArray+Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableArray+Utils.m"; sourceTree = "<group>"; };
 		9C96B094193F089B0014AC23 /* SplitViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SplitViewController.h; sourceTree = "<group>"; };
 		9C96B095193F089B0014AC23 /* SplitViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SplitViewController.m; sourceTree = "<group>"; };
-		9C96B09B193F09B30014AC23 /* apple.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = apple.png; sourceTree = "<group>"; };
 		9C96B09D193F09B30014AC23 /* ico_close_nav_bar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ico_close_nav_bar.png; sourceTree = "<group>"; };
 		9C96B09E193F09B30014AC23 /* ico_close_nav_bar@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ico_close_nav_bar@2x.png"; sourceTree = "<group>"; };
 		9C96B09F193F09B30014AC23 /* ico_open_nav_bar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ico_open_nav_bar.png; sourceTree = "<group>"; };
@@ -158,9 +157,10 @@
 		9CB4800C19558E8400A5AC1B /* UIColor+Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Utils.m"; sourceTree = "<group>"; };
 		9CB4800F19558FBE00A5AC1B /* UIImage+Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Utils.h"; sourceTree = "<group>"; };
 		9CB4801019558FBE00A5AC1B /* UIimage+Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIimage+Utils.m"; sourceTree = "<group>"; };
-		9CB480131955B59E00A5AC1B /* placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = placeholder.png; sourceTree = "<group>"; };
 		9CB81F4718FD2C9C00C918FB /* libCommonUtils.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libCommonUtils.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		9CB81F8618FD2EFB00C918FB /* CommonUtils.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CommonUtils.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
+		9CC831E219E28A9B005A10A8 /* apple.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = apple.png; sourceTree = "<group>"; };
+		9CC831E319E28A9B005A10A8 /* placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = placeholder.png; sourceTree = "<group>"; };
 		9CCF0D6B1921196E00489B74 /* BarcodeReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BarcodeReader.h; sourceTree = "<group>"; };
 		9CCF0D6C1921196E00489B74 /* BarcodeReader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BarcodeReader.m; sourceTree = "<group>"; };
 		9CD702191933572A0066FFC0 /* ALEListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALEListViewController.h; sourceTree = "<group>"; };
@@ -188,6 +188,9 @@
 		9CD9F76F196E907900EBBD85 /* NSString+HTML.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+HTML.m"; sourceTree = "<group>"; };
 		9CE7A8A519542CCF00E699E4 /* DirectoryUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DirectoryUtils.h; sourceTree = "<group>"; };
 		9CE7A8A619542CCF00E699E4 /* DirectoryUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DirectoryUtils.m; sourceTree = "<group>"; };
+		9CF5403B19E2AC3D006297AE /* CommonProgress.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = CommonProgress.bundle; sourceTree = "<group>"; };
+		9CF5403C19E2AC3D006297AE /* CommonProgress.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonProgress.h; sourceTree = "<group>"; };
+		9CF5403D19E2AC3D006297AE /* CommonProgress.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonProgress.m; sourceTree = "<group>"; };
 		9CF9663618FD3ADC00E265A1 /* CallBackProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CallBackProtocol.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -353,19 +356,10 @@
 		9C96B099193F09B30014AC23 /* Images */ = {
 			isa = PBXGroup;
 			children = (
-				9C96B09A193F09B30014AC23 /* Generic */,
+				9CC831E119E28A9B005A10A8 /* Common */,
 				9C96B09C193F09B30014AC23 /* Split */,
 			);
 			path = Images;
-			sourceTree = "<group>";
-		};
-		9C96B09A193F09B30014AC23 /* Generic */ = {
-			isa = PBXGroup;
-			children = (
-				9CB480131955B59E00A5AC1B /* placeholder.png */,
-				9C96B09B193F09B30014AC23 /* apple.png */,
-			);
-			path = Generic;
 			sourceTree = "<group>";
 		};
 		9C96B09C193F09B30014AC23 /* Split */ = {
@@ -379,11 +373,12 @@
 			path = Split;
 			sourceTree = "<group>";
 		};
-		9C96B0A1193F09B30014AC23 /* Sound */ = {
+		9C96B0A1193F09B30014AC23 /* Sounds */ = {
 			isa = PBXGroup;
 			children = (
 				9C96B0A2193F09B30014AC23 /* beep.mp3 */,
 			);
+			name = Sounds;
 			path = Sound;
 			sourceTree = "<group>";
 		};
@@ -427,6 +422,7 @@
 		9CB1FC81197598D00080534F /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				9CF5403A19E2AC3D006297AE /* Progress */,
 				9C01920D19D2CBD600E8E9E3 /* Book */,
 				9C01921019D2CBD600E8E9E3 /* Keyboard */,
 				9C01921319D2CBD600E8E9E3 /* Picker */,
@@ -454,13 +450,6 @@
 				9CB1FC9919759B6A0080534F /* SelectedListController.m */,
 			);
 			path = SelectionList;
-			sourceTree = "<group>";
-		};
-		9CB1FCA91975A22B0080534F /* Xib */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Xib;
 			sourceTree = "<group>";
 		};
 		9CB4800619558E5900A5AC1B /* UIColor */ = {
@@ -515,12 +504,28 @@
 		9CB81FDC18FD378100C918FB /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				9CB1FCA91975A22B0080534F /* Xib */,
+				9CC831E419E28B12005A10A8 /* Nibs */,
 				9C96B099193F09B30014AC23 /* Images */,
-				9C96B0A1193F09B30014AC23 /* Sound */,
+				9C96B0A1193F09B30014AC23 /* Sounds */,
 			);
 			name = Resources;
 			path = CommonUtils/Resources;
+			sourceTree = "<group>";
+		};
+		9CC831E119E28A9B005A10A8 /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				9CC831E219E28A9B005A10A8 /* apple.png */,
+				9CC831E319E28A9B005A10A8 /* placeholder.png */,
+			);
+			path = Common;
+			sourceTree = "<group>";
+		};
+		9CC831E419E28B12005A10A8 /* Nibs */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Nibs;
 			sourceTree = "<group>";
 		};
 		9CCF0D6A1921196E00489B74 /* BarcodeReader */ = {
@@ -597,6 +602,16 @@
 			path = Directory;
 			sourceTree = "<group>";
 		};
+		9CF5403A19E2AC3D006297AE /* Progress */ = {
+			isa = PBXGroup;
+			children = (
+				9CF5403B19E2AC3D006297AE /* CommonProgress.bundle */,
+				9CF5403C19E2AC3D006297AE /* CommonProgress.h */,
+				9CF5403D19E2AC3D006297AE /* CommonProgress.m */,
+			);
+			path = Progress;
+			sourceTree = "<group>";
+		};
 		9CF9663518FD3ADC00E265A1 /* Protocols */ = {
 			isa = PBXGroup;
 			children = (
@@ -652,6 +667,7 @@
 				9CD70242193388790066FFC0 /* UIImage+RoundedCorner.h in Headers */,
 				9C96B096193F089B0014AC23 /* SplitViewController.h in Headers */,
 				9CD9F770196E907900EBBD85 /* GTMNSString+HTML.h in Headers */,
+				9CF5403E19E2AC3D006297AE /* CommonProgress.h in Headers */,
 				9CD702231933572A0066FFC0 /* ALESegmentedViewController.h in Headers */,
 				9CB1FC8F197598D00080534F /* SelectedListController.h in Headers */,
 				9CD702211933572A0066FFC0 /* ALEListViewController.h in Headers */,
@@ -748,8 +764,6 @@
 				9C96B0A5193F09B30014AC23 /* ico_close_nav_bar@2x.png in Resources */,
 				9C96B0A4193F09B30014AC23 /* ico_close_nav_bar.png in Resources */,
 				9C96B0A8193F09B30014AC23 /* beep.mp3 in Resources */,
-				9C96B0A3193F09B30014AC23 /* apple.png in Resources */,
-				9CB480141955B59E00A5AC1B /* placeholder.png in Resources */,
 				9C96B0A7193F09B30014AC23 /* ico_open_nav_bar@2x.png in Resources */,
 				9C96B0A6193F09B30014AC23 /* ico_open_nav_bar.png in Resources */,
 			);
@@ -767,6 +781,7 @@
 				9C90FF6719377D33004CE056 /* NSFileManager-Utilities.m in Sources */,
 				9C90FF6C19377DEC004CE056 /* NSDate+Utils.m in Sources */,
 				9C34F7D1192CAFF9001B8D6D /* ProgressView.m in Sources */,
+				9CF5403F19E2AC3D006297AE /* CommonProgress.m in Sources */,
 				9C01921919D2CBD600E8E9E3 /* CommonKeyboard.m in Sources */,
 				9CB4800E19558E8400A5AC1B /* UIColor+Utils.m in Sources */,
 				9C1E3932198E42F600EA933D /* UIAlertView+Blocks.m in Sources */,

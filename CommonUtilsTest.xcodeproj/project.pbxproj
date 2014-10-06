@@ -702,6 +702,74 @@ fi
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
+		<key>9CC831D019E28041005A10A8</key>
+		<dict>
+			<key>children</key>
+			<array>
+				<string>9CC831D119E2805B005A10A8</string>
+				<string>9CC831D219E2805B005A10A8</string>
+				<string>9CC831D319E2805B005A10A8</string>
+			</array>
+			<key>isa</key>
+			<string>PBXGroup</string>
+			<key>path</key>
+			<string>CommonProgress</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>9CC831D119E2805B005A10A8</key>
+		<dict>
+			<key>fileEncoding</key>
+			<string>4</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>path</key>
+			<string>CommonProgressViewController.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>9CC831D219E2805B005A10A8</key>
+		<dict>
+			<key>fileEncoding</key>
+			<string>4</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.objc</string>
+			<key>path</key>
+			<string>CommonProgressViewController.m</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>9CC831D319E2805B005A10A8</key>
+		<dict>
+			<key>fileEncoding</key>
+			<string>4</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>file.xib</string>
+			<key>path</key>
+			<string>CommonProgressViewController.xib</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>9CC831D419E2805B005A10A8</key>
+		<dict>
+			<key>fileRef</key>
+			<string>9CC831D219E2805B005A10A8</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>9CC831D519E2805B005A10A8</key>
+		<dict>
+			<key>fileRef</key>
+			<string>9CC831D319E2805B005A10A8</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
 		<key>9CD9F78E196EA78500EBBD85</key>
 		<dict>
 			<key>children</key>
@@ -804,6 +872,7 @@ fi
 				<string>9CD9F7F9196EA7D400EBBD85</string>
 				<string>9C8A6AF919D17EE6000062F7</string>
 				<string>9CD9F807196EA7D400EBBD85</string>
+				<string>9CC831D419E2805B005A10A8</string>
 				<string>9CD9F803196EA7D400EBBD85</string>
 			</array>
 			<key>isa</key>
@@ -857,6 +926,7 @@ fi
 				<string>9CD9F813196EAA5500EBBD85</string>
 				<string>9CD9F811196EAA5500EBBD85</string>
 				<string>9C72DFA519C71A90007E67A8</string>
+				<string>9CC831D519E2805B005A10A8</string>
 				<string>9C75FC0F19CB3F7B004FA3C9</string>
 				<string>9C72DFA819C71A90007E67A8</string>
 			</array>
@@ -1440,7 +1510,10 @@ fi
 				<key>GCC_PREFIX_HEADER</key>
 				<string>CommonUtilsTest/CommonUtilsTest-Prefix.pch</string>
 				<key>HEADER_SEARCH_PATHS</key>
-				<string>"${PODS_ROOT}/Headers"/**</string>
+				<array>
+					<string>$(inherited)</string>
+					<string>"${PODS_ROOT}/Headers"/**</string>
+				</array>
 				<key>INFOPLIST_FILE</key>
 				<string>CommonUtilsTest/CommonUtilsTest-Info.plist</string>
 				<key>IPHONEOS_DEPLOYMENT_TARGET</key>
@@ -1470,7 +1543,10 @@ fi
 				<key>GCC_PREFIX_HEADER</key>
 				<string>CommonUtilsTest/CommonUtilsTest-Prefix.pch</string>
 				<key>HEADER_SEARCH_PATHS</key>
-				<string>"${PODS_ROOT}/Headers"/**</string>
+				<array>
+					<string>$(inherited)</string>
+					<string>"${PODS_ROOT}/Headers"/**</string>
+				</array>
 				<key>INFOPLIST_FILE</key>
 				<string>CommonUtilsTest/CommonUtilsTest-Info.plist</string>
 				<key>IPHONEOS_DEPLOYMENT_TARGET</key>
@@ -1571,6 +1647,7 @@ fi
 				<string>9CD9F7D3196EA7D400EBBD85</string>
 				<string>9CD9F7D4196EA7D400EBBD85</string>
 				<string>9CD9F7EB196EA7D400EBBD85</string>
+				<string>9CC831D019E28041005A10A8</string>
 				<string>9C8A6AF319D1767D000062F7</string>
 				<string>9C8C994619CADF5000A9E9B6</string>
 				<string>9C72DF8119C7193E007E67A8</string>

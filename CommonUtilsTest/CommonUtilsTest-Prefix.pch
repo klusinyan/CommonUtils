@@ -21,7 +21,7 @@
 #endif
 
 //Bundle constants
-#define kCommonUtilsBundlePath                               [[NSBundle mainBundle] pathForResource:@"CommonUtils" ofType:@"bundle"]
+#define kCommonUtilsBundlePath                               [[NSBundle mainBundle] pathForResource:@"CommonUtilsBunlde" ofType:@"bundle"]
 #define kCommonUtilsBundle                                   [NSBundle bundleWithPath:kCommonUtilsBundlePath]
 #define kCommonUtilsImageWithNameOfType(name, type)          [UIImage imageWithContentsOfFile:[kCommonUtilsBundle pathForResource:name ofType:type]]
 #define kCommonUtilsImagePNGWithName(name)                   [UIImage imageWithContentsOfFile:[kCommonUtilsBundle pathForResource:name ofType:@"png"]]

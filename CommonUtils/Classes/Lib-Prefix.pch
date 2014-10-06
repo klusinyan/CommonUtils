@@ -23,8 +23,8 @@
 #endif
 
 //Bundle constants
-#define kCommonBundlePath                               [[NSBundle mainBundle] pathForResource:@"Common" ofType:@"bundle"]
-#define kCommonBundle                                   [NSBundle bundleWithPath:kCommonBundlePath]
-#define kCommonImageWithNameOfType(name, type)          [UIImage imageWithContentsOfFile:[kCommonBundle pathForResource:name ofType:type]]
-#define kCommonImagePNGWithName(name)                   [UIImage imageWithContentsOfFile:[kCommonBundle pathForResource:name ofType:@"png"]]
-#define kCommonLocalizedString(key)                     [kCommonBundle localizedStringForKey:key value:key table:nil]
+#define kCommonBundlePath                       [[NSBundle mainBundle] pathForResource:@"ResourceBunlde" ofType:@"bundle"]
+#define kCommonBundle                           [NSBundle bundleWithPath:kCommonBundlePath]
+#define kCommonImageWithNameOfType(name, type)  [UIImage imageWithContentsOfFile:[kCommonBundle pathForResource:name ofType:type]]
+#define kCommonImagePNGWithName(name)           [UIImage imageWithContentsOfFile:[kCommonBundle pathForResource:name ofType:@"png"]]
+#define kCommonLocalizedString(key)             [kCommonBundle localizedStringForKey:key value:key table:nil]

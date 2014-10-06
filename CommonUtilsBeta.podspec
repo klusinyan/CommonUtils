@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = 'CommonUtilsBeta'
-  s.version      = '1.2.0'
+  s.version      = '1.2.1'
   s.summary      = 'Common Utilities Beta Versions.'
   s.homepage     = 'https://bitbucket.org/mrklteam/commonutils'
   s.license      = { :type => 'MIT', :file => 'LICENSE' }
@@ -24,7 +24,13 @@ Pod::Spec.new do |s|
 
   s.dependency 'AFNetworking'
 
-  s.resource_bundle = { 'CommonUtils' => 'CommonUtils/Resources/*.*' }
-  #s.resources = 'CommonUtils/Resources/xib/*.{xib}'
+  #s.resource_bundles = {
+  #  'Nibs'   => ['CommonUtils/Resources/Images/**/*.*'],
+  #  'Images' => ['CommonUtils/Resources/Images/**/*.*'],
+  #  'Sounds' => ['CommonUtils/Resources/Sounds/**/*.*'],
+  #  'CommonProgress' => ['CommonUtils/Resources/CommonProgress.bundle']
+  #}
+
+  s.resource_bundles = { 'ResourceBundle' => ['CommonUtils/Resources/Images/**/*.*', 'CommonUtils/Resources/Sounds/**/*.*'] }
 
 end
