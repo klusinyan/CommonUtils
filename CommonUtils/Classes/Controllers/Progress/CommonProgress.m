@@ -3,7 +3,6 @@
 //  Copyright (c) 2014 Yiming Tang. All rights reserved.
 
 #import "CommonProgress.h"
-#import "BlurView.h"
 
 @interface CommonProgress ()
 
@@ -11,6 +10,9 @@
 @property (nonatomic, strong) UIImageView *indicatorImageView;
 @property (nonatomic, strong) UIImageView *backgroundImageView;
 @property (nonatomic, strong) id target;
+
+@property (readwrite, nonatomic, copy) ShowCompletionHandler showCompetion;
+@property (readwrite, nonatomic, copy) HideCompletionHandler hideCompetion;
 
 @end
 
@@ -132,7 +134,7 @@
     return self;
 }
 
-+ (instancetype)sharedInstance
++ (instancetype)sharedProgress
 {
     static dispatch_once_t pred = 0;
     __strong static id _sharedObject = nil;
@@ -142,47 +144,28 @@
     return _sharedObject;
 }
 
-+ (instancetype)commonProgressWithTarget:(id)target
++ (void)showWithTaregt:(id)target completion:(ShowCompletionHandler)completion
 {
-    CommonProgress *sharedProgress = [CommonProgress sharedInstance];
+    //hides the old one
+    [CommonProgress hideWithCompletion:nil];
+    
+    //shows the new one
+    CommonProgress *sharedProgress = [CommonProgress sharedProgress];
     sharedProgress.translatesAutoresizingMaskIntoConstraints = NO;
     sharedProgress.target = target;
-
-    //defualt
-    sharedProgress.activityIndicatorViewStyle = CommonProgressActivityIndicatorViewStyleNormal;
-
-    //if progress is already running then stop it
-    if (sharedProgress.isAnimating) {
-        [sharedProgress stopAnimating];
+    sharedProgress.activityIndicatorViewStyle = CommonProgressActivityIndicatorViewStyleNormal; //default
+    sharedProgress.showCompetion = completion;
+    
+    if (!target) {
+        NSLog(@"Warning: please provide valid target for common progress");
+        return;
     }
     
     //use NSAutoLayout to position in target view
     UIView *targetView = nil;
     if ([target isKindOfClass:[UIViewController class]]) {
         targetView = ((UIViewController *)target).view;
-        
-        //TODO::
-        /*
-        if (NO) {
-            BlurView *blurView = [[BlurView alloc] init];
-            blurView.translatesAutoresizingMaskIntoConstraints = NO;
-            [targetView addSubview:blurView];
-            
-            NSDictionary *bindings = @{@"blur": blurView};
-            [targetView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[blur]|"
-                                                                              options:0
-                                                                              metrics:nil
-                                                                                views:bindings]];
-            
-            [targetView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[blur]|"
-                                                                              options:0
-                                                                              metrics:nil
-                                                                                 views:bindings]];
-        }
-        //*/
-        
         [targetView addSubview:sharedProgress];
-        
         [targetView addConstraint:[NSLayoutConstraint constraintWithItem:sharedProgress
                                                                attribute:NSLayoutAttributeCenterX
                                                                relatedBy:NSLayoutRelationEqual
@@ -201,7 +184,15 @@
         
     }
     
-    return sharedProgress;
+    [sharedProgress startAnimating];
+}
+
++ (void)hideWithCompletion:(HideCompletionHandler)completion
+{
+    if ([[CommonProgress sharedProgress] isAnimating]) {
+        [CommonProgress sharedProgress].hideCompetion = completion;
+        [[CommonProgress sharedProgress] stopAnimating];
+    }
 }
 
 - (void)layoutSubviews
@@ -232,8 +223,8 @@
 - (void)startAnimating
 {
     UIView *targetView = nil;
-    if ([[CommonProgress sharedInstance].target isKindOfClass:[UIViewController class]]) {
-        targetView = ((UIViewController *)[CommonProgress sharedInstance].target).view;
+    if ([[CommonProgress sharedProgress].target isKindOfClass:[UIViewController class]]) {
+        targetView = ((UIViewController *)[CommonProgress sharedProgress].target).view;
         targetView.userInteractionEnabled = NO;
     }
     
@@ -248,8 +239,8 @@
 - (void)stopAnimating
 {
     UIView *targetView = nil;
-    if ([[CommonProgress sharedInstance].target isKindOfClass:[UIViewController class]]) {
-        targetView = ((UIViewController *)[CommonProgress sharedInstance].target).view;
+    if ([[CommonProgress sharedProgress].target isKindOfClass:[UIViewController class]]) {
+        targetView = ((UIViewController *)[CommonProgress sharedProgress].target).view;
         targetView.userInteractionEnabled = YES;
     }
     
@@ -260,6 +251,8 @@
     if (self.hidesWhenStopped) {
         self.hidden = YES;
     }
+    
+    if (self.hideCompetion) self.hideCompetion();
 }
 
 
@@ -303,7 +296,13 @@
     rotationAnimation.RepeatCount = repeatCount;
     rotationAnimation.removedOnCompletion = NO;
     rotationAnimation.fillMode = kCAFillModeForwards;
+    rotationAnimation.delegate = self;
     [self.indicatorImageView.layer addAnimation:rotationAnimation forKey:@"rotation"];
+}
+
+- (void)animationDidStart:(CAAnimation *)anim
+{
+    if (self.showCompetion) self.showCompetion();
 }
 
 @end

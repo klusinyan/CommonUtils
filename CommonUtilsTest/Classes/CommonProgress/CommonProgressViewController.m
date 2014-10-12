@@ -10,6 +10,11 @@
 
 @implementation CommonProgressViewController
 
+- (void)didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];
+}
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -25,30 +30,26 @@
     
     UIBarButtonItem *showProgress = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction
                                                                                   target:self
-                                                                                  action:@selector(showProgress:)];
+                                                                                  action:@selector(hideCommonProgress:)];
     self.navigationItem.rightBarButtonItems = @[showProgress];
     
-    [self showProgress:nil];
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-}
-
-- (void)showProgress:(id)sender
-{
-    __block CommonProgress *commonProgress = [CommonProgress commonProgressWithTarget:self blur:YES];
-    commonProgress.activityIndicatorViewStyle = CommonProgressActivityIndicatorViewStyleLarge;
-    [commonProgress startAnimating];
+    BOOL random = arc4random_uniform(2);
+    [CommonProgress showWithTaregt:self completion:^{
+        DebugLog(@"common progress did start");
+    }];
+    [CommonProgress sharedProgress].activityIndicatorViewStyle = (random) ? CommonProgressActivityIndicatorViewStyleLarge : CommonProgressActivityIndicatorViewStyleNormal;
     
-    /*
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        commonProgress = [CommonProgress commonProgressWithTarget:self];
-        [commonProgress startAnimating];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        CommonProgressViewController *vc = [[CommonProgressViewController alloc] initWithNibName:NSStringFromClass([CommonProgressViewController class]) bundle:nil];
+        [self.navigationController pushViewController:vc animated:YES];
     });
-    //*/
 }
 
+- (void)hideCommonProgress:(id)sender
+{
+    [CommonProgress hideWithCompletion:^{
+        DebugLog(@"common progress did stop");
+    }];
+}
 
 @end

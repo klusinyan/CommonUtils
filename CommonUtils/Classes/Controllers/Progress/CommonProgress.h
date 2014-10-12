@@ -4,6 +4,9 @@
 
 #import <UIKit/UIKit.h>
 
+typedef void(^ShowCompletionHandler)(void);
+typedef void(^HideCompletionHandler)(void);
+
 /**
  Activity indicator type.
  */
@@ -70,7 +73,6 @@ typedef NS_ENUM(NSInteger, CommonProgressActivityIndicatorViewStyle) {
  */
 @property (nonatomic, assign) CommonProgressActivityIndicatorViewStyle activityIndicatorViewStyle;
 
-
 ///-------------------
 /// @name Initializing
 ///-------------------
@@ -79,11 +81,6 @@ typedef NS_ENUM(NSInteger, CommonProgressActivityIndicatorViewStyle) {
  Initialize a indicator view with built-in sizes and resources according to the specific style.
  */
 - (id)initWithActivityIndicatorStyle:(CommonProgressActivityIndicatorViewStyle)style;
-
-/**
- Returns sharedInstance with default "activityIndicatorViewStyle = CommonProgressActivityIndicatorViewStyleNormal"
- */
-+ (instancetype)commonProgressWithTarget:(id)target;
 
 ///-----------------------------
 /// @name Controlling Animations
@@ -103,5 +100,24 @@ typedef NS_ENUM(NSInteger, CommonProgressActivityIndicatorViewStyle) {
  Whether the indicator is animating.
  */
 - (BOOL)isAnimating;
+
+///---------------------------
+/// @name Desired Initializing
+///---------------------------
+
+/**
+ Shared instance to the specific style.
+ */
++ (instancetype)sharedProgress;
+
+/**
+ Shows shared common prpgress
+ */
++ (void)showWithTaregt:(id)target completion:(ShowCompletionHandler)completion;
+
+/**
+ Hides shared common prpgress
+ */
++ (void)hideWithCompletion:(HideCompletionHandler)completion;
 
 @end

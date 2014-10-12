@@ -2,7 +2,7 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:../LibCommonUtils/CommonUtils.xcodeproj">
+      location = "group:CommonUtils.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:CommonUtilsTest.xcodeproj">
