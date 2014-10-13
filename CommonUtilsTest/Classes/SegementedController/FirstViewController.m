@@ -197,8 +197,14 @@
 
 }
 
-- (void)segmentedControllerDidSelect
+- (void)segmentedController:(UIViewController *)segmentedController
+            didSelectConent:(id<CommonSegmentedControllerDelegate>)content
+                    atIndex:(NSInteger)index
 {
+    DebugLog(@"segmentedController %@", segmentedController);
+    DebugLog(@"content %@", content);
+    DebugLog(@"index %@", @(index));
+    
     /*
     UIAlertView *segmetnedGray = [[UIAlertView alloc] initWithTitle:@"Segemented Gray"
                                                             message:nil

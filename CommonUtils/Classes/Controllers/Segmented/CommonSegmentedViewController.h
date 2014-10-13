@@ -44,7 +44,7 @@
 @protocol CommonSegmentedControllerDelegate <NSObject>
 
 @optional
-- (void)segmentedController:(UIViewController *)segmentedController
+- (void)segmentedController:(CommonSegmentedViewController *)segmentedController
             didSelectConent:(id<CommonSegmentedControllerDelegate>)content
                     atIndex:(NSInteger)index;
 

@@ -2,7 +2,7 @@
 //  Copyright (c) 2014 Parrocchia. All rights reserved.
 
 #import "TestViewController.h"
-#import "SegmentedViewController.h"
+#import "CommonSegmentedViewController.h"
 #import "HostViewController.h"
 #import "FirstViewController.h"
 #import "NavigationControllerController.h"
@@ -132,8 +132,8 @@ typedef NS_ENUM(NSInteger, RowType) {
             secondVC.title = @"CustomTransition";
             //*/
             
-            SegmentedViewController *segmentController =
-            [[SegmentedViewController alloc] initWithViewControllers:@[firstVC, secondVC]];
+            CommonSegmentedViewController *segmentController =
+            [[CommonSegmentedViewController alloc] initWithViewControllers:@[firstVC, secondVC]];
             
             [[UISegmentedControl appearance] setBackgroundImage:[UIImage imageNamed:@"stepper_and_segment_background_normal"] forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
             
