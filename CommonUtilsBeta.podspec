@@ -1,12 +1,12 @@
 Pod::Spec.new do |s|
-  s.name         = 'CommonUtils'
-  s.version      = '1.0.2-beta3'
-  s.summary      = 'Common Utilities.'
-  s.homepage     = 'https://git.sftc.it/softec-ios/libcommonutils'
+  s.name         = 'CommonUtilsBeta'
+  s.version      = '1.0.2'
+  s.summary      = 'Common Utilities Beta Versions.'
+  s.homepage     = 'https://bitbucket.org/mrklteam/commonutils'
   s.license      = { :type => 'MIT', :file => 'LICENSE' }
   s.author       = { 'Karen Lusinyan' => 'karen.lusinyan@softecspa.it' }
   s.platform     = :ios, '7.0'
-  s.source       = { :git => 'git@git.sftc.it:softec-ios/libcommonutils.git', :tag => s.version.to_s }
+  s.source       = { :git => 'https://mrcararia@bitbucket.org/mrklteam/commonutils.git', :tag => s.version.to_s }
 
   s.prefix_header_file = 'CommonUtils/Classes/Lib-Prefix.pch'
 
@@ -22,7 +22,7 @@ Pod::Spec.new do |s|
     sna.source_files = non_arc_files
   end
 
-  s.dependency 'AFNetworking', '~> 1.3.3'
+  s.dependency 'AFNetworking'
 
   s.resource_bundle = { 'CommonUtils' => 'CommonUtils/Resources/*.*' }
   #s.resources = 'CommonUtils/Resources/xib/*.{xib}'

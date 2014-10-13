@@ -179,7 +179,7 @@
 		9CD70237193388600066FFC0 /* UIImage+RoundedCorner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+RoundedCorner.h"; sourceTree = "<group>"; };
 		9CD70238193388600066FFC0 /* UIImage+RoundedCorner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+RoundedCorner.m"; sourceTree = "<group>"; };
 		9CD9F75C196E876000EBBD85 /* Lib-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Lib-Prefix.pch"; sourceTree = "<group>"; };
-		9CD9F762196E8AAF00EBBD85 /* CommonUtils.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = CommonUtils.podspec; sourceTree = "<group>"; };
+		9CD9F762196E8AAF00EBBD85 /* CommonUtilsBeta.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = CommonUtilsBeta.podspec; sourceTree = "<group>"; };
 		9CD9F76C196E907900EBBD85 /* GTMNSString+HTML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GTMNSString+HTML.h"; sourceTree = "<group>"; };
 		9CD9F76D196E907900EBBD85 /* GTMNSString+HTML.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GTMNSString+HTML.m"; sourceTree = "<group>"; };
 		9CD9F76E196E907900EBBD85 /* NSString+HTML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+HTML.h"; sourceTree = "<group>"; };
@@ -449,7 +449,7 @@
 		9CB81EFF18FD2BDC00C918FB = {
 			isa = PBXGroup;
 			children = (
-				9CD9F762196E8AAF00EBBD85 /* CommonUtils.podspec */,
+				9CD9F762196E8AAF00EBBD85 /* CommonUtilsBeta.podspec */,
 				9CB81FD718FD375300C918FB /* Classes */,
 				9CB81FDC18FD378100C918FB /* Resources */,
 				9CB81F0918FD2BDC00C918FB /* Products */,
