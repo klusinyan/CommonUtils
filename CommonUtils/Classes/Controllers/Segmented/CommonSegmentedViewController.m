@@ -1,11 +1,11 @@
 //  Created by Karen Lusinyan on 10/04/14.
 //  Copyright (c) 2012 Home. All rights reserved.
 
-#import "CommonSegementedViewController.h"
+#import "CommonSegmentedViewController.h"
 
 #define kTest NO
 
-@interface CommonSegementedViewController ()
+@interface CommonSegmentedViewController ()
 
 @property (readwrite, nonatomic, strong) UIView *toolbar;
 @property (readwrite, nonatomic, strong) UISegmentedControl *segmentedControl;
@@ -20,7 +20,7 @@
 
 @end
 
-@implementation CommonSegementedViewController
+@implementation CommonSegmentedViewController
 
 - (void)didReceiveMemoryWarning
 {
@@ -311,7 +311,7 @@
     [super viewWillLayoutSubviews];
 }
 
-- (void)loadViewController:(id<CommonSegementedControllerDelegate>)delegate
+- (void)loadViewController:(id<CommonSegmentedControllerDelegate>)delegate
 {
     UIViewController *previousVC = [self.viewControllers objectAtIndex:self.selectedIndex];
     [previousVC.view removeFromSuperview];
@@ -351,13 +351,13 @@
 {
     if ([self.viewControllers count] > index) {
         self.segmentedControl.selectedSegmentIndex = index;
-        id<CommonSegementedControllerDelegate> controllerWithIndex = [self.viewControllers objectAtIndex:index];
+        id<CommonSegmentedControllerDelegate> controllerWithIndex = [self.viewControllers objectAtIndex:index];
         [self loadViewController:controllerWithIndex];
     }
 }
 
 //override
-- (void)viewControllerDidLoad:(id<CommonSegementedControllerDelegate>)viewController atIndex:(NSInteger)index
+- (void)viewControllerDidLoad:(id<CommonSegmentedControllerDelegate>)viewController atIndex:(NSInteger)index
 {
     //do nothing
 }

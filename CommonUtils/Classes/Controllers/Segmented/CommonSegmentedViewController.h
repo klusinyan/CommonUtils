@@ -1,12 +1,12 @@
 //  Created by Karen Lusinyan on 10/04/14.
 //  Copyright (c) 2012 Home. All rights reserved.
 
-@protocol CommonSegementedControllerDelegate;
+@protocol CommonSegmentedControllerDelegate;
 
-@interface CommonSegementedViewController : UIViewController
+@interface CommonSegmentedViewController : UIViewController
 
 //readwrite
-@property (readwrite, nonatomic, assign) id<CommonSegementedControllerDelegate> delegate;
+@property (readwrite, nonatomic, assign) id<CommonSegmentedControllerDelegate> delegate;
 
 @property (readwrite, nonatomic, strong) UIView *headerView;                     //defautl nil
 
@@ -37,15 +37,15 @@
 - (void)loadViewControllerWithIndex:(NSInteger)index;
 
 //override
-- (void)viewControllerDidLoad:(id<CommonSegementedControllerDelegate>)viewController atIndex:(NSInteger)index;
+- (void)viewControllerDidLoad:(id<CommonSegmentedControllerDelegate>)viewController atIndex:(NSInteger)index;
 
 @end
 
-@protocol CommonSegementedControllerDelegate <NSObject>
+@protocol CommonSegmentedControllerDelegate <NSObject>
 
 @optional
 - (void)segmentedController:(UIViewController *)segmentedController
-            didSelectConent:(id<CommonSegementedControllerDelegate>)content
+            didSelectConent:(id<CommonSegmentedControllerDelegate>)content
                     atIndex:(NSInteger)index;
 
 @end
