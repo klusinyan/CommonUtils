@@ -74,9 +74,13 @@
     NSString *backgroundImageName;
     NSString *indicatorImageName;
     switch (_activityIndicatorViewStyle) {
+        case CommonProgressActivityIndicatorViewStyleSmall:
+            backgroundImageName = @"ResourceBundle.bundle/background-small";
+            indicatorImageName = @"ResourceBundle.bundle/spinner-small";
+            break;
         case CommonProgressActivityIndicatorViewStyleNormal:
-            backgroundImageName = @"ResourceBundle.bundle/background";
-            indicatorImageName = @"ResourceBundle.bundle/spinner";
+            backgroundImageName = @"ResourceBundle.bundle/background-normal";
+            indicatorImageName = @"ResourceBundle.bundle/spinner-normal";
             break;
         case CommonProgressActivityIndicatorViewStyleLarge:
             backgroundImageName = @"ResourceBundle.bundle/background-large";

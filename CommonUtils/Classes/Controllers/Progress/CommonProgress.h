@@ -11,10 +11,12 @@ typedef void(^HideCompletionHandler)(void);
  Activity indicator type.
  */
 typedef NS_ENUM(NSInteger, CommonProgressActivityIndicatorViewStyle) {
+    /** A normal activity indicator view. About 37 * 37 in size */
+    CommonProgressActivityIndicatorViewStyleSmall,
+    /** A normal activity indicator view. About 78 * 78 in size */
+    CommonProgressActivityIndicatorViewStyleNormal,
     /** A large activity indicator view. About 157 * 157 in size. */
     CommonProgressActivityIndicatorViewStyleLarge,
-    /** A normal activity indicator view. About 37 * 37 in size */
-    CommonProgressActivityIndicatorViewStyleNormal,
 };
 
 /**

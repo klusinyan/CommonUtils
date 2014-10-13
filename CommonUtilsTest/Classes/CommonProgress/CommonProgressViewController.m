@@ -33,12 +33,12 @@
                                                                                   action:@selector(hideCommonProgress:)];
     self.navigationItem.rightBarButtonItems = @[showProgress];
     
-    BOOL random = arc4random_uniform(2);
+    BOOL random = arc4random_uniform(3);
     [CommonProgress showWithTaregt:self completion:^{
         DebugLog(@"common progress did start");
     }];
     
-    [CommonProgress sharedProgress].activityIndicatorViewStyle = (random) ? CommonProgressActivityIndicatorViewStyleLarge : CommonProgressActivityIndicatorViewStyleNormal;
+    [CommonProgress sharedProgress].activityIndicatorViewStyle = (random) ? CommonProgressActivityIndicatorViewStyleNormal : CommonProgressActivityIndicatorViewStyleSmall;
     
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         CommonProgressViewController *vc = [[CommonProgressViewController alloc] initWithNibName:NSStringFromClass([CommonProgressViewController class]) bundle:nil];
