@@ -113,7 +113,7 @@ typedef NS_ENUM(NSInteger, CommonProgressActivityIndicatorViewStyle) {
 + (instancetype)sharedProgress;
 
 /**
- Shows shared common prpgress
+ Shows shared common prpgress, with default CommonProgressActivityIndicatorViewStyleNormal
  */
 + (void)showWithTaregt:(id)target completion:(ShowCompletionHandler)completion;
 
