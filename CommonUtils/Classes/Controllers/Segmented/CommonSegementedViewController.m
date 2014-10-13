@@ -1,11 +1,11 @@
 //  Created by Karen Lusinyan on 10/04/14.
 //  Copyright (c) 2012 Home. All rights reserved.
 
-#import "CommonSegment.h"
+#import "CommonSegementedViewController.h"
 
 #define kTest NO
 
-@interface CommonSegment ()
+@interface CommonSegementedViewController ()
 
 @property (readwrite, nonatomic, strong) UIView *toolbar;
 @property (readwrite, nonatomic, strong) UISegmentedControl *segmentedControl;
@@ -14,16 +14,13 @@
 @property (readwrite, nonatomic, strong) NSArray *viewControllers;
 @property (readwrite, nonatomic, strong) UIViewController *selectedViewController;
 
-@property (readwrite, nonatomic, strong) UIView *headerView;                     //defautl nil
-@property (readwrite, nonatomic, assign) CGFloat headerHeight;                   //defualt 0
-
 //swipe gesture
 @property (readwrite, nonatomic, strong) UISwipeGestureRecognizer *leftSwipe;
 @property (readwrite, nonatomic, strong) UISwipeGestureRecognizer *rightSwipe;
 
 @end
 
-@implementation CommonSegment
+@implementation CommonSegementedViewController
 
 - (void)didReceiveMemoryWarning
 {
@@ -48,15 +45,15 @@
     return self;
 }
 
+//override to setup addional UI components es: headerView
+- (void)setupCustomUI
+{
+    //override
+}
+
 - (void)loadView
 {
-    //ask dataSource to provide headerView and headerViewHeight (optional)
-    if (self.dataSource && [self.dataSource respondsToSelector:@selector(headerViewForCommonSegment:)]) {
-        self.headerView = [self.dataSource headerViewForCommonSegment:self];
-    }
-    if (self.dataSource && [self.dataSource respondsToSelector:@selector(headerViewHeightForCommonSegmented:)]) {
-        self.headerHeight = [self.dataSource headerViewHeightForCommonSegmented:self];
-    }
+    [self setupCustomUI];
     
     self.view = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.view.backgroundColor = [UIColor whiteColor];
@@ -314,7 +311,7 @@
     [super viewWillLayoutSubviews];
 }
 
-- (void)loadViewController:(id<CommonSegmentDelegate>)delegate
+- (void)loadViewController:(id<CommonSegementedControllerDelegate>)delegate
 {
     UIViewController *previousVC = [self.viewControllers objectAtIndex:self.selectedIndex];
     [previousVC.view removeFromSuperview];
@@ -342,11 +339,8 @@
                                                                                    views:binding]];
     }
     
-    if ([delegate respondsToSelector:@selector(segmentedControllerDidSelect)]) {
-        [delegate segmentedControllerDidSelect];
-    }
-    if ([delegate respondsToSelector:@selector(segmentedControllerDidSelect:)]) {
-        [delegate segmentedControllerDidSelect:self];
+    if (delegate && [delegate respondsToSelector:@selector(segmentedController:didSelectConent:atIndex:)]) {
+        [delegate segmentedController:self didSelectConent:delegate atIndex:self.selectedIndex];
     }
     
     //calls for subclasses to override by implementing additional features
@@ -357,13 +351,13 @@
 {
     if ([self.viewControllers count] > index) {
         self.segmentedControl.selectedSegmentIndex = index;
-        id<CommonSegmentDelegate> controllerWithIndex = [self.viewControllers objectAtIndex:index];
+        id<CommonSegementedControllerDelegate> controllerWithIndex = [self.viewControllers objectAtIndex:index];
         [self loadViewController:controllerWithIndex];
     }
 }
 
 //override
-- (void)viewControllerDidLoad:(id<CommonSegmentDelegate>)viewController atIndex:(NSInteger)index
+- (void)viewControllerDidLoad:(id<CommonSegementedControllerDelegate>)viewController atIndex:(NSInteger)index
 {
     //do nothing
 }

@@ -1,14 +1,16 @@
 //  Created by Karen Lusinyan on 10/04/14.
 //  Copyright (c) 2012 Home. All rights reserved.
 
-@protocol CommonSegmentDataSource;
-@protocol CommonSegmentDelegate;
+@protocol CommonSegementedControllerDelegate;
 
-@interface CommonSegment : UIViewController
+@interface CommonSegementedViewController : UIViewController
 
 //readwrite
-@property (readwrite, nonatomic, assign) id<CommonSegmentDataSource> dataSource;
-@property (readwrite, nonatomic, assign) id<CommonSegmentDelegate> delegate;
+@property (readwrite, nonatomic, assign) id<CommonSegementedControllerDelegate> delegate;
+
+@property (readwrite, nonatomic, strong) UIView *headerView;                     //defautl nil
+
+@property (readwrite, nonatomic, assign) CGFloat headerHeight;                   //defualt 0
 
 @property (readwrite, nonatomic, assign) BOOL useToolBar;                        //default YES
 
@@ -28,30 +30,22 @@
 //desired initializer
 - (id)initWithViewControllers:(NSArray *)viewControllers;
 
+//override to setup addional UI components es: headerView
+- (void)setupCustomUI;
+
 //call containter explicity to load descired controller
 - (void)loadViewControllerWithIndex:(NSInteger)index;
 
 //override
-- (void)viewControllerDidLoad:(id<CommonSegmentDelegate>)viewController atIndex:(NSInteger)index;
+- (void)viewControllerDidLoad:(id<CommonSegementedControllerDelegate>)viewController atIndex:(NSInteger)index;
 
 @end
 
-@protocol  CommonSegmentDataSource <NSObject>
+@protocol CommonSegementedControllerDelegate <NSObject>
 
 @optional
-- (id)headerViewForCommonSegment:(CommonSegment *)commonSegment;
-
-- (CGFloat)headerViewHeightForCommonSegmented:(CommonSegment *)commonSegment;
-
-@end
-
-@protocol CommonSegmentDelegate <NSObject>
-
-@optional
-//called when controller did select
-- (void)segmentedControllerDidSelect;
-
-//called when controller did select, by passing SELF as a param "sender"
-- (void)segmentedControllerDidSelect:(id)sender;
+- (void)segmentedController:(UIViewController *)segmentedController
+            didSelectConent:(id<CommonSegementedControllerDelegate>)content
+                    atIndex:(NSInteger)index;
 
 @end

@@ -42,6 +42,8 @@
 		9C90FF7A19377EBB004CE056 /* NSDictionary+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C90FF7819377EBB004CE056 /* NSDictionary+Utils.m */; };
 		9C90FF8219377F7F004CE056 /* NSMutableArray+Utils.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C90FF7E19377F7F004CE056 /* NSMutableArray+Utils.h */; };
 		9C90FF8319377F7F004CE056 /* NSMutableArray+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C90FF7F19377F7F004CE056 /* NSMutableArray+Utils.m */; };
+		9C94A99119EBC911003DF554 /* CommonSegementedViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C94A98F19EBC911003DF554 /* CommonSegementedViewController.h */; };
+		9C94A99219EBC911003DF554 /* CommonSegementedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C94A99019EBC911003DF554 /* CommonSegementedViewController.m */; };
 		9C96B096193F089B0014AC23 /* SplitViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C96B094193F089B0014AC23 /* SplitViewController.h */; };
 		9C96B097193F089B0014AC23 /* SplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C96B095193F089B0014AC23 /* SplitViewController.m */; };
 		9C96B0A4193F09B30014AC23 /* ico_close_nav_bar.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C96B09D193F09B30014AC23 /* ico_close_nav_bar.png */; };
@@ -66,8 +68,6 @@
 		9CB4800E19558E8400A5AC1B /* UIColor+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CB4800C19558E8400A5AC1B /* UIColor+Utils.m */; };
 		9CB4801119558FBE00A5AC1B /* UIImage+Utils.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CB4800F19558FBE00A5AC1B /* UIImage+Utils.h */; };
 		9CB4801219558FBE00A5AC1B /* UIimage+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CB4801019558FBE00A5AC1B /* UIimage+Utils.m */; };
-		9CBB9EAB19E826A30045B10D /* CommonSegment.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CBB9EA919E826A30045B10D /* CommonSegment.h */; };
-		9CBB9EAC19E826A30045B10D /* CommonSegment.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CBB9EAA19E826A30045B10D /* CommonSegment.m */; };
 		9CCF0D6D1921196E00489B74 /* BarcodeReader.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CCF0D6B1921196E00489B74 /* BarcodeReader.h */; };
 		9CCF0D6E1921196E00489B74 /* BarcodeReader.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CCF0D6C1921196E00489B74 /* BarcodeReader.m */; };
 		9CD702211933572A0066FFC0 /* ALEListViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CD702191933572A0066FFC0 /* ALEListViewController.h */; };
@@ -138,6 +138,8 @@
 		9C90FF7819377EBB004CE056 /* NSDictionary+Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+Utils.m"; sourceTree = "<group>"; };
 		9C90FF7E19377F7F004CE056 /* NSMutableArray+Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableArray+Utils.h"; sourceTree = "<group>"; };
 		9C90FF7F19377F7F004CE056 /* NSMutableArray+Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableArray+Utils.m"; sourceTree = "<group>"; };
+		9C94A98F19EBC911003DF554 /* CommonSegementedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonSegementedViewController.h; sourceTree = "<group>"; };
+		9C94A99019EBC911003DF554 /* CommonSegementedViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonSegementedViewController.m; sourceTree = "<group>"; };
 		9C96B094193F089B0014AC23 /* SplitViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SplitViewController.h; sourceTree = "<group>"; };
 		9C96B095193F089B0014AC23 /* SplitViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SplitViewController.m; sourceTree = "<group>"; };
 		9C96B09D193F09B30014AC23 /* ico_close_nav_bar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ico_close_nav_bar.png; sourceTree = "<group>"; };
@@ -164,8 +166,6 @@
 		9CB4801019558FBE00A5AC1B /* UIimage+Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIimage+Utils.m"; sourceTree = "<group>"; };
 		9CB81F4718FD2C9C00C918FB /* libCommonUtils.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libCommonUtils.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		9CB81F8618FD2EFB00C918FB /* CommonUtils.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CommonUtils.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
-		9CBB9EA919E826A30045B10D /* CommonSegment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonSegment.h; sourceTree = "<group>"; };
-		9CBB9EAA19E826A30045B10D /* CommonSegment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonSegment.m; sourceTree = "<group>"; };
 		9CC831E219E28A9B005A10A8 /* apple.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = apple.png; sourceTree = "<group>"; };
 		9CC831E319E28A9B005A10A8 /* placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = placeholder.png; sourceTree = "<group>"; };
 		9CCF0D6B1921196E00489B74 /* BarcodeReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BarcodeReader.h; sourceTree = "<group>"; };
@@ -440,8 +440,8 @@
 		9CB1FC82197598D00080534F /* Segmented */ = {
 			isa = PBXGroup;
 			children = (
-				9CBB9EA919E826A30045B10D /* CommonSegment.h */,
-				9CBB9EAA19E826A30045B10D /* CommonSegment.m */,
+				9C94A98F19EBC911003DF554 /* CommonSegementedViewController.h */,
+				9C94A99019EBC911003DF554 /* CommonSegementedViewController.m */,
 				9CB1FC83197598D00080534F /* SegmentedViewController.h */,
 				9CB1FC9B19759B960080534F /* SegmentedViewController.m */,
 			);
@@ -676,9 +676,9 @@
 				9C20BE5B1949EF830077C6E8 /* ADVAnimationController.h in Headers */,
 				9C2AC5E119EA96F900588538 /* CommonProgress.h in Headers */,
 				9C90FF6B19377DEC004CE056 /* NSDate+Utils.h in Headers */,
+				9C94A99119EBC911003DF554 /* CommonSegementedViewController.h in Headers */,
 				9C01921619D2CBD600E8E9E3 /* CommonBook.h in Headers */,
 				9CA4F69D19790E7D000BCFCC /* ViewPagerController.h in Headers */,
-				9CBB9EAB19E826A30045B10D /* CommonSegment.h in Headers */,
 				9C01921A19D2CBD600E8E9E3 /* CommonPicker.h in Headers */,
 				9C46A59919766A840018B109 /* ImageDownloader.h in Headers */,
 				9CD9F772196E907900EBBD85 /* NSString+HTML.h in Headers */,
@@ -789,6 +789,7 @@
 				9C90FF6C19377DEC004CE056 /* NSDate+Utils.m in Sources */,
 				9C34F7D1192CAFF9001B8D6D /* ProgressView.m in Sources */,
 				9C01921919D2CBD600E8E9E3 /* CommonKeyboard.m in Sources */,
+				9C94A99219EBC911003DF554 /* CommonSegementedViewController.m in Sources */,
 				9CB4800E19558E8400A5AC1B /* UIColor+Utils.m in Sources */,
 				9C1E3932198E42F600EA933D /* UIAlertView+Blocks.m in Sources */,
 				9CD702221933572A0066FFC0 /* ALEListViewController.m in Sources */,
@@ -796,7 +797,6 @@
 				9C90FF7A19377EBB004CE056 /* NSDictionary+Utils.m in Sources */,
 				9CD9F773196E907900EBBD85 /* NSString+HTML.m in Sources */,
 				9C8C0AFE1934A1800033D2A9 /* UIImage+RoundedCorner.m in Sources */,
-				9CBB9EAC19E826A30045B10D /* CommonSegment.m in Sources */,
 				9C8C0AFF1934A1830033D2A9 /* UIImage+FixOrientation.m in Sources */,
 				9CB4801219558FBE00A5AC1B /* UIimage+Utils.m in Sources */,
 				9CB1FC9C19759B960080534F /* SegmentedViewController.m in Sources */,
