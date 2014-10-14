@@ -4,7 +4,7 @@ Pod::Spec.new do |s|
   s.summary      = 'Common Utilities Beta Versions.'
   s.homepage     = 'https://bitbucket.org/mrklteam/commonutils'
   s.license      = { :type => 'MIT', :file => 'LICENSE' }
-  s.author       = { 'Karen Lusinyan' => 'karen.lusinyan@softecspa.it' }
+  s.author       = { 'Karen Lusinyan' => 'karen.lusinyan.developerios@gmail.com' }
   s.platform     = :ios, '7.0'
   s.source       = { :git => 'https://mrcararia@bitbucket.org/mrklteam/commonutils.git', :tag => s.version.to_s }
 
