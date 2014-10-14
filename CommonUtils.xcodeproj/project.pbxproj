@@ -63,6 +63,8 @@
 		9CB4800E19558E8400A5AC1B /* UIColor+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CB4800C19558E8400A5AC1B /* UIColor+Utils.m */; };
 		9CB4801119558FBE00A5AC1B /* UIImage+Utils.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CB4800F19558FBE00A5AC1B /* UIImage+Utils.h */; };
 		9CB4801219558FBE00A5AC1B /* UIimage+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CB4801019558FBE00A5AC1B /* UIimage+Utils.m */; };
+		9CCB62DE19ED156F0061D0C1 /* CommonSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CCB62DC19ED156F0061D0C1 /* CommonSystem.h */; };
+		9CCB62DF19ED156F0061D0C1 /* CommonSystem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CCB62DD19ED156F0061D0C1 /* CommonSystem.m */; };
 		9CCF0D6D1921196E00489B74 /* BarcodeReader.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CCF0D6B1921196E00489B74 /* BarcodeReader.h */; };
 		9CCF0D6E1921196E00489B74 /* BarcodeReader.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CCF0D6C1921196E00489B74 /* BarcodeReader.m */; };
 		9CD702211933572A0066FFC0 /* ALEListViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CD702191933572A0066FFC0 /* ALEListViewController.h */; };
@@ -157,6 +159,8 @@
 		9CB4801019558FBE00A5AC1B /* UIimage+Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIimage+Utils.m"; sourceTree = "<group>"; };
 		9CB81F4718FD2C9C00C918FB /* libCommonUtils.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libCommonUtils.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		9CB81F8618FD2EFB00C918FB /* CommonUtils.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CommonUtils.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
+		9CCB62DC19ED156F0061D0C1 /* CommonSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonSystem.h; sourceTree = "<group>"; };
+		9CCB62DD19ED156F0061D0C1 /* CommonSystem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonSystem.m; sourceTree = "<group>"; };
 		9CCF0D6B1921196E00489B74 /* BarcodeReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BarcodeReader.h; sourceTree = "<group>"; };
 		9CCF0D6C1921196E00489B74 /* BarcodeReader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BarcodeReader.m; sourceTree = "<group>"; };
 		9CD702191933572A0066FFC0 /* ALEListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALEListViewController.h; sourceTree = "<group>"; };
@@ -454,6 +458,7 @@
 			children = (
 				9CD9F75C196E876000EBBD85 /* Lib-Prefix.pch */,
 				9CB1FC81197598D00080534F /* Controllers */,
+				9CCB62DB19ED156F0061D0C1 /* System */,
 				9CE7A89819541A5000E699E4 /* Directory */,
 				9C34F7CD192CAFF9001B8D6D /* Network */,
 				9CCF0D6A1921196E00489B74 /* BarcodeReader */,
@@ -474,6 +479,15 @@
 			);
 			name = Resources;
 			path = CommonUtils/Resources;
+			sourceTree = "<group>";
+		};
+		9CCB62DB19ED156F0061D0C1 /* System */ = {
+			isa = PBXGroup;
+			children = (
+				9CCB62DC19ED156F0061D0C1 /* CommonSystem.h */,
+				9CCB62DD19ED156F0061D0C1 /* CommonSystem.m */,
+			);
+			path = System;
 			sourceTree = "<group>";
 		};
 		9CCF0D6A1921196E00489B74 /* BarcodeReader */ = {
@@ -631,6 +645,7 @@
 				9C34F7D0192CAFF9001B8D6D /* ProgressView.h in Headers */,
 				9CCF0D6D1921196E00489B74 /* BarcodeReader.h in Headers */,
 				9CB1FC8E197598D00080534F /* SelectedElementDelegate.h in Headers */,
+				9CCB62DE19ED156F0061D0C1 /* CommonSystem.h in Headers */,
 				9C90FF6119374DD3004CE056 /* UITableView+Utils.h in Headers */,
 				9CD7022B193388150066FFC0 /* UIView+AutoLayout.h in Headers */,
 				9CA09778191133A000605020 /* TransitionManager.h in Headers */,
@@ -733,6 +748,7 @@
 				9CD702261933572A0066FFC0 /* ALEWebViewController.m in Sources */,
 				9C90FF7A19377EBB004CE056 /* NSDictionary+Utils.m in Sources */,
 				9CD9F773196E907900EBBD85 /* NSString+HTML.m in Sources */,
+				9CCB62DF19ED156F0061D0C1 /* CommonSystem.m in Sources */,
 				9C8C0AFE1934A1800033D2A9 /* UIImage+RoundedCorner.m in Sources */,
 				9C8C0AFF1934A1830033D2A9 /* UIImage+FixOrientation.m in Sources */,
 				9CB4801219558FBE00A5AC1B /* UIimage+Utils.m in Sources */,
