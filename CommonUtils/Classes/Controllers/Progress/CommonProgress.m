@@ -74,6 +74,9 @@
     NSString *backgroundImageName;
     NSString *indicatorImageName;
     switch (_activityIndicatorViewStyle) {
+        case CommonProgressActivityIndicatorViewStyleNone:
+            //do nothing
+            break;
         case CommonProgressActivityIndicatorViewStyleSmall:
             backgroundImageName = @"ResourceBundle.bundle/CommonProgress.bundle/background-small";
             indicatorImageName = @"ResourceBundle.bundle/CommonProgress.bundle/spinner-small";
@@ -157,8 +160,12 @@
     CommonProgress *sharedProgress = [CommonProgress sharedProgress];
     sharedProgress.translatesAutoresizingMaskIntoConstraints = NO;
     sharedProgress.target = target;
-    sharedProgress.activityIndicatorViewStyle = CommonProgressActivityIndicatorViewStyleNormal; //default
     sharedProgress.showCompetion = completion;
+    
+    //set to default if activityIndicatorViewStyle is NONE
+    if (sharedProgress.activityIndicatorViewStyle == CommonProgressActivityIndicatorViewStyleNone) {
+        sharedProgress.activityIndicatorViewStyle = CommonProgressActivityIndicatorViewStyleSmall;
+    }
     
     if (!target) {
         NSLog(@"Warning: please provide valid target for common progress");

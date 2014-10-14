@@ -15,6 +15,7 @@
 #import "CommonKeyboardViewController.h"
 #import "CommonProgressViewController.h"
 #import "UIImage+Utils.h"
+#import "CommonSystem.h"
 
 typedef NS_ENUM(NSInteger, RowType) {
     RowTypeSegementController,
@@ -50,6 +51,14 @@ typedef NS_ENUM(NSInteger, RowType) {
     self.navigationController.navigationBar.translucent = NO;
 
     self.tableView.rowHeight = 60;
+    
+    [CommonSystem networkInfoWithCompletion:^(NSDictionary *networkInfo) {
+        DebugLog(@"networkInfo %@", networkInfo);
+    }];
+    
+    [CommonSystem networkInfoWithCompletion:^(NSDictionary *networkInfo) {
+        DebugLog(@"networkInfo %@", networkInfo);
+    }];
 }
 
 - (void)didReceiveMemoryWarning

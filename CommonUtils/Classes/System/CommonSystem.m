@@ -8,9 +8,10 @@
 #import <sys/sysctl.h>
 #import <ifaddrs.h>
 
+#import "AFNetworking.h"
 #import "CommonSystem.h"
 
-static __strong NSMutableDictionary *systemNetworkInfo = nil;
+static __strong NSMutableDictionary *NETWORK_INFO = nil;
 
 NSString * const kCurrentIPAddress          = @"currentIPAddress";
 NSString * const kCurrentMACAddress         = @"currentMACAddress";
@@ -30,53 +31,53 @@ NSString * const kConnectedToCellNetwork    = @"connectedToCellNetwork";
 
 #define kUnknwon @"unknown"
 
-+ (NSDictionary *)networkInfo
++ (void)networkInfoWithCompletion:(NetworkInfoCompletionHandler)completion
 {
-    if (systemNetworkInfo == nil) {
-        systemNetworkInfo = [NSMutableDictionary dictionary];
+    if (NETWORK_INFO == nil) {
+        NETWORK_INFO = [NSMutableDictionary dictionary];
     }
     
-    [systemNetworkInfo setObject:kUnknwon forKey:kCurrentIPAddress];
-    [systemNetworkInfo setObject:kUnknwon forKey:kCurrentMACAddress];
-    [systemNetworkInfo setObject:kUnknwon forKey:kExternalIPAddress];
-    [systemNetworkInfo setObject:kUnknwon forKey:kCellIPAddress];
-    [systemNetworkInfo setObject:kUnknwon forKey:kCellMACAddress];
-    [systemNetworkInfo setObject:kUnknwon forKey:kCellNetmaskAddress];
-    [systemNetworkInfo setObject:kUnknwon forKey:kCellBroadcastAddress];
-    [systemNetworkInfo setObject:kUnknwon forKey:kWiFiIPAddress];
-    [systemNetworkInfo setObject:kUnknwon forKey:kWiFiMACAddress];
-    [systemNetworkInfo setObject:kUnknwon forKey:kWiFiNetmaskAddress];
-    [systemNetworkInfo setObject:kUnknwon forKey:kWiFiBroadcastAddress];
-    [systemNetworkInfo setObject:kUnknwon forKey:kConnectedToWiFi];
-    [systemNetworkInfo setObject:kUnknwon forKey:kConnectedToCellNetwork];
+    [NETWORK_INFO setObject:kUnknwon forKey:kCurrentIPAddress];
+    [NETWORK_INFO setObject:kUnknwon forKey:kCurrentMACAddress];
+    [NETWORK_INFO setObject:kUnknwon forKey:kExternalIPAddress];
+    [NETWORK_INFO setObject:kUnknwon forKey:kCellIPAddress];
+    [NETWORK_INFO setObject:kUnknwon forKey:kCellMACAddress];
+    [NETWORK_INFO setObject:kUnknwon forKey:kCellNetmaskAddress];
+    [NETWORK_INFO setObject:kUnknwon forKey:kCellBroadcastAddress];
+    [NETWORK_INFO setObject:kUnknwon forKey:kWiFiIPAddress];
+    [NETWORK_INFO setObject:kUnknwon forKey:kWiFiMACAddress];
+    [NETWORK_INFO setObject:kUnknwon forKey:kWiFiNetmaskAddress];
+    [NETWORK_INFO setObject:kUnknwon forKey:kWiFiBroadcastAddress];
+    [NETWORK_INFO setObject:kUnknwon forKey:kConnectedToWiFi];
+    [NETWORK_INFO setObject:kUnknwon forKey:kConnectedToCellNetwork];
     
-    if ([self currentIPAddress])
-        [systemNetworkInfo setObject:[self currentIPAddress] forKey:kCurrentIPAddress];
-    if ([self currentMACAddress])
-        [systemNetworkInfo setObject:[self currentMACAddress] forKey:kCurrentMACAddress];
-    if ([self externalIPAddress])
-        [systemNetworkInfo setObject:[self externalIPAddress] forKey:kExternalIPAddress];
-    if ([self cellIPAddress])
-        [systemNetworkInfo setObject:[self cellIPAddress] forKey:kCellIPAddress];
-    if ([self cellMACAddress])
-        [systemNetworkInfo setObject:[self cellMACAddress] forKey:kCellMACAddress];
-    if ([self cellNetmaskAddress])
-        [systemNetworkInfo setObject:[self cellNetmaskAddress] forKey:kCellNetmaskAddress];
-    if ([self cellBroadcastAddress])
-        [systemNetworkInfo setObject:[self cellBroadcastAddress] forKey:kCellBroadcastAddress];
-    if ([self wiFiIPAddress])
-        [systemNetworkInfo setObject:[self wiFiIPAddress] forKey:kWiFiIPAddress];
-    if ([self wiFiMACAddress])
-        [systemNetworkInfo setObject:[self wiFiMACAddress] forKey:kWiFiMACAddress];
-    if ([self wiFiNetmaskAddress])
-        [systemNetworkInfo setObject:[self wiFiNetmaskAddress] forKey:kWiFiNetmaskAddress];
-    if ([self wiFiBroadcastAddress])
-        [systemNetworkInfo setObject:[self wiFiBroadcastAddress] forKey:kWiFiBroadcastAddress];
-    
-    [systemNetworkInfo setObject:[self connectedToWiFi] ? @"yes" : @"no"  forKey:kConnectedToWiFi];
-    [systemNetworkInfo setObject:[self connectedToCellNetwork] ? @"yes" : @"no" forKey:kConnectedToCellNetwork];
-    
-    return systemNetworkInfo;
+    [self externalIPAddressWithCompletion:^(NSDictionary *networkInfo) {
+        if ([self currentIPAddress])
+            [NETWORK_INFO setObject:[self currentIPAddress] forKey:kCurrentIPAddress];
+        if ([self currentMACAddress])
+            [NETWORK_INFO setObject:[self currentMACAddress] forKey:kCurrentMACAddress];
+        if ([self cellIPAddress])
+            [NETWORK_INFO setObject:[self cellIPAddress] forKey:kCellIPAddress];
+        if ([self cellMACAddress])
+            [NETWORK_INFO setObject:[self cellMACAddress] forKey:kCellMACAddress];
+        if ([self cellNetmaskAddress])
+            [NETWORK_INFO setObject:[self cellNetmaskAddress] forKey:kCellNetmaskAddress];
+        if ([self cellBroadcastAddress])
+            [NETWORK_INFO setObject:[self cellBroadcastAddress] forKey:kCellBroadcastAddress];
+        if ([self wiFiIPAddress])
+            [NETWORK_INFO setObject:[self wiFiIPAddress] forKey:kWiFiIPAddress];
+        if ([self wiFiMACAddress])
+            [NETWORK_INFO setObject:[self wiFiMACAddress] forKey:kWiFiMACAddress];
+        if ([self wiFiNetmaskAddress])
+            [NETWORK_INFO setObject:[self wiFiNetmaskAddress] forKey:kWiFiNetmaskAddress];
+        if ([self wiFiBroadcastAddress])
+            [NETWORK_INFO setObject:[self wiFiBroadcastAddress] forKey:kWiFiBroadcastAddress];
+        
+        [NETWORK_INFO setObject:[self connectedToWiFi] ? @"yes" : @"no"  forKey:kConnectedToWiFi];
+        [NETWORK_INFO setObject:[self connectedToCellNetwork] ? @"yes" : @"no" forKey:kConnectedToCellNetwork];
+        
+        if (completion) completion(NETWORK_INFO);
+    }];
 }
 
 // Network Information
@@ -162,6 +163,7 @@ NSString * const kConnectedToCellNetwork    = @"connectedToCellNetwork";
 }
 
 // Get the External IP Address
+// not used: using externalIPAddressWithCompletion:
 + (NSString *)externalIPAddress
 {
     @try {
@@ -220,6 +222,42 @@ NSString * const kConnectedToCellNetwork    = @"connectedToCellNetwork";
     @catch (NSException *exception) {
         // Error, no address found
         return nil;
+    }
+}
+
+// Get the External IP Address
++ (void)externalIPAddressWithCompletion:(NetworkInfoCompletionHandler)completion
+{
+    @try {
+        NSString *url = @"http://www.trackip.net/ip?json";
+        NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
+        
+        AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
+        [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+            
+            NSError *error = nil;
+            NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject
+                                                                 options:NSJSONReadingMutableContainers
+                                                                   error:&error];
+            if ([dict valueForKey:@"ip"])
+                [NETWORK_INFO setObject:[dict valueForKey:@"ip"] forKey:kExternalIPAddress];
+            
+            if (completion) completion(NETWORK_INFO);
+            
+        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+            DebugLog(@"Network info error = %@",[error localizedDescription]);
+            if (completion) completion(NETWORK_INFO);
+        }];
+        
+        [operation start];
+
+    }
+    @catch (NSException *exception) {
+        DebugLog(@"exeption network external ip address %@", exception);
+        completion(NETWORK_INFO);
+    }
+    @finally {
+        //do something
     }
 }
 

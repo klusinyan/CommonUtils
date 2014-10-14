@@ -15,10 +15,12 @@ extern NSString * const kWiFiBroadcastAddress;
 extern NSString * const kConnectedToWiFi;
 extern NSString * const kConnectedToCellNetwork;
 
+typedef void(^NetworkInfoCompletionHandler)(NSDictionary *networkInfo);
+
 @interface CommonSystem : NSObject
 
 // Network Information
-+ (NSDictionary *)networkInfo;
++ (void)networkInfoWithCompletion:(NetworkInfoCompletionHandler)completion;
 
 // Get Current IP Address
 + (NSString *)currentIPAddress;
