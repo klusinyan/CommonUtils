@@ -4,6 +4,26 @@
 
 #import "CommonProgress.h"
 
+#import <libkern/OSAtomic.h>
+
+@implementation UIApplication (NetworkActivityIndicator)
+
+static volatile int32_t numberOfActiveNetworkConnections;
+
+#pragma mark Public API
+
+- (void)showNetworkActivity
+{
+	self.networkActivityIndicatorVisible = OSAtomicAdd32(1, &numberOfActiveNetworkConnections) > 0;
+}
+
+- (void)hideNetworkActivity
+{
+	self.networkActivityIndicatorVisible = OSAtomicAdd32(-1, &numberOfActiveNetworkConnections) > 0;
+}
+
+@end
+
 @interface CommonProgress ()
 
 @property (nonatomic, assign) BOOL animating;
@@ -154,56 +174,55 @@
 + (void)showWithTaregt:(id)target completion:(ShowCompletionHandler)completion
 {
     //hides the old one
-    [CommonProgress hideWithCompletion:nil];
-    
-    //shows the new one
-    CommonProgress *sharedProgress = [CommonProgress sharedProgress];
-    sharedProgress.translatesAutoresizingMaskIntoConstraints = NO;
-    sharedProgress.target = target;
-    sharedProgress.showCompetion = completion;
-    
-    //set to default if activityIndicatorViewStyle is NONE
-    if (sharedProgress.activityIndicatorViewStyle == CommonProgressActivityIndicatorViewStyleNone) {
-        sharedProgress.activityIndicatorViewStyle = CommonProgressActivityIndicatorViewStyleSmall;
-    }
-    
-    if (!target) {
-        NSLog(@"Warning: please provide valid target for common progress");
-        return;
-    }
-    
-    //use NSAutoLayout to position in target view
-    UIView *targetView = nil;
-    if ([target isKindOfClass:[UIViewController class]]) {
-        targetView = ((UIViewController *)target).view;
-        [targetView addSubview:sharedProgress];
-        [targetView addConstraint:[NSLayoutConstraint constraintWithItem:sharedProgress
-                                                               attribute:NSLayoutAttributeCenterX
-                                                               relatedBy:NSLayoutRelationEqual
-                                                                  toItem:[sharedProgress superview]
-                                                               attribute:NSLayoutAttributeCenterX
-                                                              multiplier:1
-                                                                constant:0]];
+    [CommonProgress hideWithCompletion:^{
         
-        [targetView addConstraint:[NSLayoutConstraint constraintWithItem:sharedProgress
-                                                               attribute:NSLayoutAttributeCenterY
-                                                               relatedBy:NSLayoutRelationEqual
-                                                                  toItem:[sharedProgress superview]
-                                                               attribute:NSLayoutAttributeCenterY
-                                                              multiplier:1
-                                                                constant:0]];
+        //shows the new one
+        CommonProgress *sharedProgress = [CommonProgress sharedProgress];
+        sharedProgress.translatesAutoresizingMaskIntoConstraints = NO;
+        sharedProgress.target = target;
+        sharedProgress.showCompetion = completion;
         
-    }
-    
-    [sharedProgress startAnimating];
+        //set to default if activityIndicatorViewStyle is NONE
+        if (sharedProgress.activityIndicatorViewStyle == CommonProgressActivityIndicatorViewStyleNone) {
+            sharedProgress.activityIndicatorViewStyle = CommonProgressActivityIndicatorViewStyleSmall;
+        }
+        
+        if (!target) {
+            NSLog(@"Warning: please provide valid target for common progress");
+            return;
+        }
+        
+        //use NSAutoLayout to position in target view
+        UIView *targetView = nil;
+        if ([target isKindOfClass:[UIViewController class]]) {
+            targetView = ((UIViewController *)target).view;
+            [targetView addSubview:sharedProgress];
+            [targetView addConstraint:[NSLayoutConstraint constraintWithItem:sharedProgress
+                                                                   attribute:NSLayoutAttributeCenterX
+                                                                   relatedBy:NSLayoutRelationEqual
+                                                                      toItem:[sharedProgress superview]
+                                                                   attribute:NSLayoutAttributeCenterX
+                                                                  multiplier:1
+                                                                    constant:0]];
+            
+            [targetView addConstraint:[NSLayoutConstraint constraintWithItem:sharedProgress
+                                                                   attribute:NSLayoutAttributeCenterY
+                                                                   relatedBy:NSLayoutRelationEqual
+                                                                      toItem:[sharedProgress superview]
+                                                                   attribute:NSLayoutAttributeCenterY
+                                                                  multiplier:1
+                                                                    constant:0]];
+            
+        }
+        
+        [sharedProgress startAnimating];
+    }];
 }
 
 + (void)hideWithCompletion:(HideCompletionHandler)completion
 {
-    if ([[CommonProgress sharedProgress] isAnimating]) {
-        [CommonProgress sharedProgress].hideCompetion = completion;
-        [[CommonProgress sharedProgress] stopAnimating];
-    }
+    [CommonProgress sharedProgress].hideCompetion = completion;
+    [[CommonProgress sharedProgress] stopAnimating];
 }
 
 - (void)layoutSubviews
@@ -229,40 +248,53 @@
 }
 
 
+#pragma mark -
 #pragma mark - Public
 
 - (void)startAnimating
 {
-    UIView *targetView = nil;
-    if ([[CommonProgress sharedProgress].target isKindOfClass:[UIViewController class]]) {
-        targetView = ((UIViewController *)[CommonProgress sharedProgress].target).view;
-        targetView.userInteractionEnabled = NO;
+    //start if not animating
+    if (!self.animating) {
+        
+        UIView *targetView = nil;
+        if ([[CommonProgress sharedProgress].target isKindOfClass:[UIViewController class]]) {
+            targetView = ((UIViewController *)[CommonProgress sharedProgress].target).view;
+            targetView.userInteractionEnabled = NO;
+        }
+        
+        if (self.networkActivityIndicatorVisible) {
+            [[UIApplication sharedApplication] showNetworkActivity];
+        }
+        
+        self.animating = YES;
+        self.hidden = NO;
+        [self _rotateImageViewFrom:0.0f to:M_PI*2 duration:self.fullRotationDuration repeatCount:HUGE_VALF];
     }
-    
-    if (self.animating) return;
-    
-    self.animating = YES;
-    self.hidden = NO;
-    [self _rotateImageViewFrom:0.0f to:M_PI*2 duration:self.fullRotationDuration repeatCount:HUGE_VALF];
 }
-
 
 - (void)stopAnimating
 {
-    UIView *targetView = nil;
-    if ([[CommonProgress sharedProgress].target isKindOfClass:[UIViewController class]]) {
-        targetView = ((UIViewController *)[CommonProgress sharedProgress].target).view;
-        targetView.userInteractionEnabled = YES;
+    //stop if animating
+    if (self.animating) {
+        
+        UIView *targetView = nil;
+        if ([[CommonProgress sharedProgress].target isKindOfClass:[UIViewController class]]) {
+            targetView = ((UIViewController *)[CommonProgress sharedProgress].target).view;
+            targetView.userInteractionEnabled = YES;
+        }
+        
+        if (self.networkActivityIndicatorVisible) {
+            [[UIApplication sharedApplication] hideNetworkActivity];
+        }
+        
+        self.animating = NO;
+        [self.indicatorImageView.layer removeAllAnimations];
+        if (self.hidesWhenStopped) {
+            self.hidden = YES;
+        }
     }
     
-    if (!self.animating) return;
-    
-    self.animating = NO;
-    [self.indicatorImageView.layer removeAllAnimations];
-    if (self.hidesWhenStopped) {
-        self.hidden = YES;
-    }
-    
+    //calling completion done in any case
     if (self.hideCompetion) self.hideCompetion();
 }
 

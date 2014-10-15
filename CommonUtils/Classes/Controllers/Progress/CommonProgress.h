@@ -2,7 +2,19 @@
 //  Modified by Karen Lusinyan
 //  Copyright (c) 2014 Yiming Tang. All rights reserved.
 
-#import <UIKit/UIKit.h>
+@interface UIApplication (NetworkActivityIndicator)
+
+/*
+ This category will automatically keep track of concurrent network activity and display the network activity indicator accordingly.
+ */
+/// Tell the application that network activity has begun. The network activity indicator will then be shown.
+/// Display the network activity indicator to provide feedback when your application accesses the network for more than a couple of seconds. If the operation finishes sooner than that, you don’t have to show the network activity indicator, because the indicator would be likely to disappear before users notice its presence.
+- (void)showNetworkActivity;
+
+/// Tell the application that a session of network activity has begun. The network activity indicator will remain showing or hide automatically depending the presence of other ongoing network activity in the app.
+- (void)hideNetworkActivity;
+
+@end
 
 typedef void(^ShowCompletionHandler)(void);
 typedef void(^HideCompletionHandler)(void);
@@ -75,6 +87,11 @@ typedef NS_ENUM(NSInteger, CommonProgressActivityIndicatorViewStyle) {
  The activity indicator view style. Default is `TYMActivityIndicatorViewStyleNormal`.
  */
 @property (nonatomic, assign) CommonProgressActivityIndicatorViewStyle activityIndicatorViewStyle;
+
+/**
+ The network activity indicator should be visible or not while progress is animating
+ */
+@property (readwrite, nonatomic, getter = isNetworkActivityIndicatorVisible) BOOL networkActivityIndicatorVisible;
 
 ///-------------------
 /// @name Initializing
