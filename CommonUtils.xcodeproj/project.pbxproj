@@ -56,8 +56,8 @@
 		9CA2B4BF19584AFA00E29A8B /* UICollectionView+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CA2B4BD19584AFA00E29A8B /* UICollectionView+Utils.m */; };
 		9CA4F69D19790E7D000BCFCC /* ViewPagerController.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CA4F69B19790E7D000BCFCC /* ViewPagerController.h */; };
 		9CA4F69E19790E7D000BCFCC /* ViewPagerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CA4F69C19790E7D000BCFCC /* ViewPagerController.m */; };
-		9CA5896D19F15F3200724F33 /* UIViewController+Utils.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CA5896B19F15F3200724F33 /* UIViewController+Utils.h */; };
-		9CA5896E19F15F3200724F33 /* UIViewController+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CA5896C19F15F3200724F33 /* UIViewController+Utils.m */; };
+		9CA5896D19F15F3200724F33 /* UIViewController+CUUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CA5896B19F15F3200724F33 /* UIViewController+CUUtils.h */; };
+		9CA5896E19F15F3200724F33 /* UIViewController+CUUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CA5896C19F15F3200724F33 /* UIViewController+CUUtils.m */; };
 		9CB1FC8C197598D00080534F /* SegmentedViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CB1FC83197598D00080534F /* SegmentedViewController.h */; };
 		9CB1FC8E197598D00080534F /* SelectedElementDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CB1FC86197598D00080534F /* SelectedElementDelegate.h */; };
 		9CB1FC8F197598D00080534F /* SelectedListController.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CB1FC87197598D00080534F /* SelectedListController.h */; };
@@ -152,8 +152,8 @@
 		9CA2B4BD19584AFA00E29A8B /* UICollectionView+Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UICollectionView+Utils.m"; sourceTree = "<group>"; };
 		9CA4F69B19790E7D000BCFCC /* ViewPagerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewPagerController.h; sourceTree = "<group>"; };
 		9CA4F69C19790E7D000BCFCC /* ViewPagerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewPagerController.m; sourceTree = "<group>"; };
-		9CA5896B19F15F3200724F33 /* UIViewController+Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+Utils.h"; sourceTree = "<group>"; };
-		9CA5896C19F15F3200724F33 /* UIViewController+Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+Utils.m"; sourceTree = "<group>"; };
+		9CA5896B19F15F3200724F33 /* UIViewController+CUUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+CUUtils.h"; sourceTree = "<group>"; };
+		9CA5896C19F15F3200724F33 /* UIViewController+CUUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+CUUtils.m"; sourceTree = "<group>"; };
 		9CB1FC83197598D00080534F /* SegmentedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SegmentedViewController.h; sourceTree = "<group>"; };
 		9CB1FC86197598D00080534F /* SelectedElementDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectedElementDelegate.h; sourceTree = "<group>"; };
 		9CB1FC87197598D00080534F /* SelectedListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectedListController.h; sourceTree = "<group>"; };
@@ -395,8 +395,8 @@
 		9CA5896A19F15F2600724F33 /* UIViewController */ = {
 			isa = PBXGroup;
 			children = (
-				9CA5896B19F15F3200724F33 /* UIViewController+Utils.h */,
-				9CA5896C19F15F3200724F33 /* UIViewController+Utils.m */,
+				9CA5896B19F15F3200724F33 /* UIViewController+CUUtils.h */,
+				9CA5896C19F15F3200724F33 /* UIViewController+CUUtils.m */,
 			);
 			path = UIViewController;
 			sourceTree = "<group>";
@@ -639,7 +639,7 @@
 				9C96B096193F089B0014AC23 /* SplitViewController.h in Headers */,
 				9CD702231933572A0066FFC0 /* ALESegmentedViewController.h in Headers */,
 				9CB1FC8F197598D00080534F /* SelectedListController.h in Headers */,
-				9CA5896D19F15F3200724F33 /* UIViewController+Utils.h in Headers */,
+				9CA5896D19F15F3200724F33 /* UIViewController+CUUtils.h in Headers */,
 				9CD702211933572A0066FFC0 /* ALEListViewController.h in Headers */,
 				9CA2B4BE19584AFA00E29A8B /* UICollectionView+Utils.h in Headers */,
 				9C20BE5E1949EF830077C6E8 /* ZoomAnimationController.h in Headers */,
@@ -777,7 +777,7 @@
 				9C01922019D2CC0300E8E9E3 /* BlurView.m in Sources */,
 				9CCF0D6E1921196E00489B74 /* BarcodeReader.m in Sources */,
 				9C2AC5E219EA96F900588538 /* CommonProgress.m in Sources */,
-				9CA5896E19F15F3200724F33 /* UIViewController+Utils.m in Sources */,
+				9CA5896E19F15F3200724F33 /* UIViewController+CUUtils.m in Sources */,
 				9C90FF6219374DD3004CE056 /* UITableView+Utils.m in Sources */,
 				9C8C0AFD1934A17C0033D2A9 /* UIImage+Alpha.m in Sources */,
 				9CA10B621953521400DC3C5B /* NSIndexPath+Utils.m in Sources */,
