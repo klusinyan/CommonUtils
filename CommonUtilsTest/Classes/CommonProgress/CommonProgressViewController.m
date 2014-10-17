@@ -33,17 +33,19 @@
                                                                                   action:@selector(hideCommonProgress:)];
     self.navigationItem.rightBarButtonItems = @[showProgress];
     
-    BOOL random = arc4random_uniform(3);
+    //BOOL random = arc4random_uniform(3);
+    [CommonProgress sharedProgress].backgroundImageColor = [UIColor greenColor];
+    [CommonProgress sharedProgress].indicatorImageColor = [UIColor redColor];
     [CommonProgress showWithTaregt:self completion:^{
         DebugLog(@"common progress did start");
     }];
-    
-    [CommonProgress sharedProgress].activityIndicatorViewStyle = (random) ? CommonProgressActivityIndicatorViewStyleNormal : CommonProgressActivityIndicatorViewStyleSmall;
-    
+
+    /*
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         CommonProgressViewController *vc = [[CommonProgressViewController alloc] initWithNibName:NSStringFromClass([CommonProgressViewController class]) bundle:nil];
         [self.navigationController pushViewController:vc animated:YES];
     });
+    //*/
 }
 
 - (void)hideCommonProgress:(id)sender

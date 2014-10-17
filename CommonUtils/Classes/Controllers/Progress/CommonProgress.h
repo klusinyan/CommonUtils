@@ -92,6 +92,16 @@ typedef NS_ENUM(NSInteger, CommonProgressActivityIndicatorViewStyle) {
  */
 @property (readwrite, nonatomic, getter = isNetworkActivityIndicatorVisible) BOOL networkActivityIndicatorVisible;
 
+/**
+ Background image color. Default is GRAY
+ */
+@property (readwrite, nonatomic, strong) UIColor *backgroundImageColor;
+
+/**
+ Indicator image color. Default is SKYBLUE
+ */
+@property (readwrite, nonatomic, strong) UIColor *indicatorImageColor;
+
 ///-------------------
 /// @name Initializing
 ///-------------------

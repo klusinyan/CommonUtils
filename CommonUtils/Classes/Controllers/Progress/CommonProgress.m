@@ -3,6 +3,7 @@
 //  Copyright (c) 2014 Yiming Tang. All rights reserved.
 
 #import "CommonProgress.h"
+#import "UIImage+Color.h"
 
 #import <libkern/OSAtomic.h>
 
@@ -114,7 +115,6 @@ static volatile int32_t numberOfActiveNetworkConnections;
     self.indicatorImageView.image = _indicatorImage;
     [self setNeedsLayout];
 }
-
 
 - (BOOL)isAnimating
 {
@@ -342,6 +342,25 @@ static volatile int32_t numberOfActiveNetworkConnections;
 - (void)animationDidStart:(CAAnimation *)anim
 {
     if (self.showCompetion) self.showCompetion();
+}
+
+#pragma mark -
+#pragma mark  getter/setter
+
+- (void)setBackgroundImageColor:(UIColor *)backgroundImageColor
+{
+    if (backgroundImageColor) {
+        _backgroundImageColor = backgroundImageColor;
+        self.backgroundImage = [self.backgroundImage imageWithColor:backgroundImageColor];
+    }
+}
+
+- (void)setIndicatorImageColor:(UIColor *)indicatorImageColor
+{
+    if (indicatorImageColor) {
+        _indicatorImageColor = indicatorImageColor;
+        self.indicatorImage = [self.indicatorImage imageWithColor:indicatorImageColor];
+    }
 }
 
 @end

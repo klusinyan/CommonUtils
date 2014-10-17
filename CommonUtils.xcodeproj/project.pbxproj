@@ -28,6 +28,8 @@
 		9C34F7D1192CAFF9001B8D6D /* ProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C34F7CF192CAFF9001B8D6D /* ProgressView.m */; };
 		9C46A59919766A840018B109 /* ImageDownloader.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C46A59719766A840018B109 /* ImageDownloader.h */; };
 		9C46A59A19766A840018B109 /* ImageDownloader.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C46A59819766A840018B109 /* ImageDownloader.m */; };
+		9C6DD7D419F130670013D333 /* UIImage+Color.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C6DD7D219F130670013D333 /* UIImage+Color.h */; };
+		9C6DD7D519F130670013D333 /* UIImage+Color.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C6DD7D319F130670013D333 /* UIImage+Color.m */; };
 		9C8C0AFC1934A1780033D2A9 /* UIImage+Resize.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD70236193388600066FFC0 /* UIImage+Resize.m */; };
 		9C8C0AFD1934A17C0033D2A9 /* UIImage+Alpha.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD70230193388600066FFC0 /* UIImage+Alpha.m */; };
 		9C8C0AFE1934A1800033D2A9 /* UIImage+RoundedCorner.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD70238193388600066FFC0 /* UIImage+RoundedCorner.m */; };
@@ -123,6 +125,8 @@
 		9C34F7CF192CAFF9001B8D6D /* ProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProgressView.m; sourceTree = "<group>"; };
 		9C46A59719766A840018B109 /* ImageDownloader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageDownloader.h; sourceTree = "<group>"; };
 		9C46A59819766A840018B109 /* ImageDownloader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageDownloader.m; sourceTree = "<group>"; };
+		9C6DD7D219F130670013D333 /* UIImage+Color.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Color.h"; sourceTree = "<group>"; };
+		9C6DD7D319F130670013D333 /* UIImage+Color.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Color.m"; sourceTree = "<group>"; };
 		9C8A6AF019D16A09000062F7 /* CommonUtilsBeta.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CommonUtilsBeta.podspec; sourceTree = "<group>"; };
 		9C8A6AF219D17151000062F7 /* RELEASE_INFO.md */ = {isa = PBXFileReference; lastKnownFileType = text; path = RELEASE_INFO.md; sourceTree = "<group>"; };
 		9C90FF5F19374DD3004CE056 /* UITableView+Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableView+Utils.h"; sourceTree = "<group>"; };
@@ -551,6 +555,8 @@
 				9CD70238193388600066FFC0 /* UIImage+RoundedCorner.m */,
 				9CD70231193388600066FFC0 /* UIImage+FixOrientation.h */,
 				9CD70232193388600066FFC0 /* UIImage+FixOrientation.m */,
+				9C6DD7D219F130670013D333 /* UIImage+Color.h */,
+				9C6DD7D319F130670013D333 /* UIImage+Color.m */,
 			);
 			path = UIImage;
 			sourceTree = "<group>";
@@ -616,6 +622,7 @@
 				9C1E3931198E42F600EA933D /* UIAlertView+Blocks.h in Headers */,
 				9CA10B611953521400DC3C5B /* NSIndexPath+Utils.h in Headers */,
 				9CD7023F193388790066FFC0 /* UIImage+FixOrientation.h in Headers */,
+				9C6DD7D419F130670013D333 /* UIImage+Color.h in Headers */,
 				9CB4801119558FBE00A5AC1B /* UIImage+Utils.h in Headers */,
 				9C90FF8219377F7F004CE056 /* NSMutableArray+Utils.h in Headers */,
 				9CD702251933572A0066FFC0 /* ALEWebViewController.h in Headers */,
@@ -747,6 +754,7 @@
 				9CD702221933572A0066FFC0 /* ALEListViewController.m in Sources */,
 				9CD702261933572A0066FFC0 /* ALEWebViewController.m in Sources */,
 				9C90FF7A19377EBB004CE056 /* NSDictionary+Utils.m in Sources */,
+				9C6DD7D519F130670013D333 /* UIImage+Color.m in Sources */,
 				9CD9F773196E907900EBBD85 /* NSString+HTML.m in Sources */,
 				9CCB62DF19ED156F0061D0C1 /* CommonSystem.m in Sources */,
 				9C8C0AFE1934A1800033D2A9 /* UIImage+RoundedCorner.m in Sources */,

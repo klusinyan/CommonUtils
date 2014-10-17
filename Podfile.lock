@@ -20,10 +20,10 @@ PODS:
   - AFNetworking/UIKit (2.4.1):
     - AFNetworking/NSURLConnection
     - AFNetworking/NSURLSession
-  - CommonUtilsBeta (1.2.3):
+  - CommonUtilsBeta (1.2.4):
     - AFNetworking
     - CommonUtilsBeta/no-arc
-  - CommonUtilsBeta/no-arc (1.2.3):
+  - CommonUtilsBeta/no-arc (1.2.4):
     - AFNetworking
 
 DEPENDENCIES:
@@ -35,6 +35,6 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   AFNetworking: 0aabc6fae66d6e5d039eeb21c315843c7aae51ab
-  CommonUtilsBeta: 48148f94fcf56239721fb1ec9ceae88451cd0b4b
+  CommonUtilsBeta: 324f87cb9907431eb36fe144587967248fb415af
 
 COCOAPODS: 0.34.2
