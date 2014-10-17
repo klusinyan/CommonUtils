@@ -5,13 +5,13 @@
 
 @implementation UIViewController (CUUtils)
 
-- (void)backButtonItemWithTitle:(NSString *)title
+- (void)backButtonItemWithTitle:(NSString *)title target:(id)target action:(SEL)action
 {
     UIBarButtonItem *backButtonItem =
     [[UIBarButtonItem alloc] initWithTitle:title
                                      style:UIBarButtonItemStyleBordered
-                                    target:nil
-                                    action:nil];
+                                    target:target
+                                    action:action];
     
     self.navigationItem.backBarButtonItem = backButtonItem;
 }

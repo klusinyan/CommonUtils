@@ -3,6 +3,6 @@
 
 @interface UIViewController (CUUtils)
 
-- (void)backButtonItemWithTitle:(NSString *)title;
+- (void)backButtonItemWithTitle:(NSString *)title target:(id)target action:(SEL)action;
 
 @end
