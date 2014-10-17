@@ -34,8 +34,8 @@
     self.navigationItem.rightBarButtonItems = @[showProgress];
     
     //BOOL random = arc4random_uniform(3);
-    [CommonProgress sharedProgress].backgroundImageColor = [UIColor greenColor];
-    [CommonProgress sharedProgress].indicatorImageColor = [UIColor redColor];
+    [CommonProgress sharedProgress].backgroundImageColor = [UIColor lightGrayColor];
+    [CommonProgress sharedProgress].indicatorImageColor = [UIColor magentaColor];
     [CommonProgress showWithTaregt:self completion:^{
         DebugLog(@"common progress did start");
     }];
