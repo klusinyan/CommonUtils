@@ -94,16 +94,13 @@ static volatile int32_t numberOfActiveNetworkConnections;
     NSString *backgroundImageName;
     NSString *indicatorImageName;
     switch (_activityIndicatorViewStyle) {
-        case CommonProgressActivityIndicatorViewStyleNone:
-            //do nothing
+        case CommonProgressActivityIndicatorViewStyleNormal:
+            backgroundImageName = @"ResourceBundle.bundle/CommonProgress.bundle/background-normal";
+            indicatorImageName = @"ResourceBundle.bundle/CommonProgress.bundle/spinner-normal";
             break;
         case CommonProgressActivityIndicatorViewStyleSmall:
             backgroundImageName = @"ResourceBundle.bundle/CommonProgress.bundle/background-small";
             indicatorImageName = @"ResourceBundle.bundle/CommonProgress.bundle/spinner-small";
-            break;
-        case CommonProgressActivityIndicatorViewStyleNormal:
-            backgroundImageName = @"ResourceBundle.bundle/CommonProgress.bundle/background-normal";
-            indicatorImageName = @"ResourceBundle.bundle/CommonProgress.bundle/spinner-normal";
             break;
         case CommonProgressActivityIndicatorViewStyleLarge:
             backgroundImageName = @"ResourceBundle.bundle/CommonProgress.bundle/background-large";
@@ -164,9 +161,13 @@ static volatile int32_t numberOfActiveNetworkConnections;
 + (instancetype)sharedProgress
 {
     static dispatch_once_t pred = 0;
-    __strong static id _sharedObject = nil;
+    __strong static CommonProgress *_sharedObject = nil;
     dispatch_once(&pred, ^{
         _sharedObject = [[self alloc] init];
+        
+        //defualts
+        _sharedObject.activityIndicatorViewStyle = CommonProgressActivityIndicatorViewStyleNormal;
+        _sharedObject.networkActivityIndicatorVisible = NO;
     });
     return _sharedObject;
 }
@@ -181,11 +182,6 @@ static volatile int32_t numberOfActiveNetworkConnections;
         sharedProgress.translatesAutoresizingMaskIntoConstraints = NO;
         sharedProgress.target = target;
         sharedProgress.showCompetion = completion;
-        
-        //set to default if activityIndicatorViewStyle is NONE
-        if (sharedProgress.activityIndicatorViewStyle == CommonProgressActivityIndicatorViewStyleNone) {
-            sharedProgress.activityIndicatorViewStyle = CommonProgressActivityIndicatorViewStyleSmall;
-        }
         
         if (!target) {
             NSLog(@"Warning: please provide valid target for common progress");
