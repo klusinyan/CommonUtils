@@ -3,6 +3,8 @@
 
 @interface UIImage (Color)
 
++ (UIImage *)imageFromColor:(UIColor *)color;
+
 - (UIImage *)imageWithColor:(UIColor *)color;
 
 @end

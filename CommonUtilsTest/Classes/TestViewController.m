@@ -14,7 +14,6 @@
 #import "CommonPickerViewController.h"
 #import "CommonKeyboardViewController.h"
 #import "CommonProgressViewController.h"
-#import "UIImage+Utils.h"
 #import "CommonSystem.h"
 
 typedef NS_ENUM(NSInteger, RowType) {

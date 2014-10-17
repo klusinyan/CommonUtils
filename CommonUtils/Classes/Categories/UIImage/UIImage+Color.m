@@ -5,6 +5,18 @@
 
 @implementation UIImage (Color)
 
++ (UIImage *)imageFromColor:(UIColor *)color
+{
+    CGRect rect = CGRectMake(0, 0, 1, 1);
+    UIGraphicsBeginImageContext(rect.size);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSetFillColorWithColor(context, [color CGColor]);
+    CGContextFillRect(context, rect);
+    UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return img;
+}
+
 - (UIImage *)imageWithColor:(UIColor *)color
 {
     UIGraphicsBeginImageContextWithOptions(self.size, NO, self.scale);

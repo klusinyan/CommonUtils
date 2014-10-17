@@ -56,6 +56,8 @@
 		9CA2B4BF19584AFA00E29A8B /* UICollectionView+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CA2B4BD19584AFA00E29A8B /* UICollectionView+Utils.m */; };
 		9CA4F69D19790E7D000BCFCC /* ViewPagerController.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CA4F69B19790E7D000BCFCC /* ViewPagerController.h */; };
 		9CA4F69E19790E7D000BCFCC /* ViewPagerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CA4F69C19790E7D000BCFCC /* ViewPagerController.m */; };
+		9CA5896D19F15F3200724F33 /* UIViewController+Utils.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CA5896B19F15F3200724F33 /* UIViewController+Utils.h */; };
+		9CA5896E19F15F3200724F33 /* UIViewController+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CA5896C19F15F3200724F33 /* UIViewController+Utils.m */; };
 		9CB1FC8C197598D00080534F /* SegmentedViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CB1FC83197598D00080534F /* SegmentedViewController.h */; };
 		9CB1FC8E197598D00080534F /* SelectedElementDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CB1FC86197598D00080534F /* SelectedElementDelegate.h */; };
 		9CB1FC8F197598D00080534F /* SelectedListController.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CB1FC87197598D00080534F /* SelectedListController.h */; };
@@ -63,8 +65,6 @@
 		9CB1FC9C19759B960080534F /* SegmentedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CB1FC9B19759B960080534F /* SegmentedViewController.m */; };
 		9CB4800D19558E8400A5AC1B /* UIColor+Utils.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CB4800B19558E8400A5AC1B /* UIColor+Utils.h */; };
 		9CB4800E19558E8400A5AC1B /* UIColor+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CB4800C19558E8400A5AC1B /* UIColor+Utils.m */; };
-		9CB4801119558FBE00A5AC1B /* UIImage+Utils.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CB4800F19558FBE00A5AC1B /* UIImage+Utils.h */; };
-		9CB4801219558FBE00A5AC1B /* UIimage+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CB4801019558FBE00A5AC1B /* UIimage+Utils.m */; };
 		9CCB62DE19ED156F0061D0C1 /* CommonSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CCB62DC19ED156F0061D0C1 /* CommonSystem.h */; };
 		9CCB62DF19ED156F0061D0C1 /* CommonSystem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CCB62DD19ED156F0061D0C1 /* CommonSystem.m */; };
 		9CCF0D6D1921196E00489B74 /* BarcodeReader.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CCF0D6B1921196E00489B74 /* BarcodeReader.h */; };
@@ -152,6 +152,8 @@
 		9CA2B4BD19584AFA00E29A8B /* UICollectionView+Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UICollectionView+Utils.m"; sourceTree = "<group>"; };
 		9CA4F69B19790E7D000BCFCC /* ViewPagerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewPagerController.h; sourceTree = "<group>"; };
 		9CA4F69C19790E7D000BCFCC /* ViewPagerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewPagerController.m; sourceTree = "<group>"; };
+		9CA5896B19F15F3200724F33 /* UIViewController+Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+Utils.h"; sourceTree = "<group>"; };
+		9CA5896C19F15F3200724F33 /* UIViewController+Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+Utils.m"; sourceTree = "<group>"; };
 		9CB1FC83197598D00080534F /* SegmentedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SegmentedViewController.h; sourceTree = "<group>"; };
 		9CB1FC86197598D00080534F /* SelectedElementDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectedElementDelegate.h; sourceTree = "<group>"; };
 		9CB1FC87197598D00080534F /* SelectedListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectedListController.h; sourceTree = "<group>"; };
@@ -159,8 +161,6 @@
 		9CB1FC9B19759B960080534F /* SegmentedViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SegmentedViewController.m; sourceTree = "<group>"; };
 		9CB4800B19558E8400A5AC1B /* UIColor+Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+Utils.h"; sourceTree = "<group>"; };
 		9CB4800C19558E8400A5AC1B /* UIColor+Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Utils.m"; sourceTree = "<group>"; };
-		9CB4800F19558FBE00A5AC1B /* UIImage+Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Utils.h"; sourceTree = "<group>"; };
-		9CB4801019558FBE00A5AC1B /* UIimage+Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIimage+Utils.m"; sourceTree = "<group>"; };
 		9CB81F4718FD2C9C00C918FB /* libCommonUtils.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libCommonUtils.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		9CB81F8618FD2EFB00C918FB /* CommonUtils.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CommonUtils.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		9CCB62DC19ED156F0061D0C1 /* CommonSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonSystem.h; sourceTree = "<group>"; };
@@ -392,6 +392,15 @@
 			path = TabPageController;
 			sourceTree = "<group>";
 		};
+		9CA5896A19F15F2600724F33 /* UIViewController */ = {
+			isa = PBXGroup;
+			children = (
+				9CA5896B19F15F3200724F33 /* UIViewController+Utils.h */,
+				9CA5896C19F15F3200724F33 /* UIViewController+Utils.m */,
+			);
+			path = UIViewController;
+			sourceTree = "<group>";
+		};
 		9CB1FC81197598D00080534F /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
@@ -545,8 +554,6 @@
 		9CD7022E193388600066FFC0 /* UIImage */ = {
 			isa = PBXGroup;
 			children = (
-				9CB4800F19558FBE00A5AC1B /* UIImage+Utils.h */,
-				9CB4801019558FBE00A5AC1B /* UIimage+Utils.m */,
 				9CD7022F193388600066FFC0 /* UIImage+Alpha.h */,
 				9CD70230193388600066FFC0 /* UIImage+Alpha.m */,
 				9CD70235193388600066FFC0 /* UIImage+Resize.h */,
@@ -603,6 +610,7 @@
 				9C90FF5E19374DBE004CE056 /* UITableView */,
 				9CD7022E193388600066FFC0 /* UIImage */,
 				9CD70228193388150066FFC0 /* UIView */,
+				9CA5896A19F15F2600724F33 /* UIViewController */,
 			);
 			path = Categories;
 			sourceTree = "<group>";
@@ -623,7 +631,6 @@
 				9CA10B611953521400DC3C5B /* NSIndexPath+Utils.h in Headers */,
 				9CD7023F193388790066FFC0 /* UIImage+FixOrientation.h in Headers */,
 				9C6DD7D419F130670013D333 /* UIImage+Color.h in Headers */,
-				9CB4801119558FBE00A5AC1B /* UIImage+Utils.h in Headers */,
 				9C90FF8219377F7F004CE056 /* NSMutableArray+Utils.h in Headers */,
 				9CD702251933572A0066FFC0 /* ALEWebViewController.h in Headers */,
 				9CD70241193388790066FFC0 /* UIImage+Resize.h in Headers */,
@@ -632,6 +639,7 @@
 				9C96B096193F089B0014AC23 /* SplitViewController.h in Headers */,
 				9CD702231933572A0066FFC0 /* ALESegmentedViewController.h in Headers */,
 				9CB1FC8F197598D00080534F /* SelectedListController.h in Headers */,
+				9CA5896D19F15F3200724F33 /* UIViewController+Utils.h in Headers */,
 				9CD702211933572A0066FFC0 /* ALEListViewController.h in Headers */,
 				9CA2B4BE19584AFA00E29A8B /* UICollectionView+Utils.h in Headers */,
 				9C20BE5E1949EF830077C6E8 /* ZoomAnimationController.h in Headers */,
@@ -759,7 +767,6 @@
 				9CCB62DF19ED156F0061D0C1 /* CommonSystem.m in Sources */,
 				9C8C0AFE1934A1800033D2A9 /* UIImage+RoundedCorner.m in Sources */,
 				9C8C0AFF1934A1830033D2A9 /* UIImage+FixOrientation.m in Sources */,
-				9CB4801219558FBE00A5AC1B /* UIimage+Utils.m in Sources */,
 				9CB1FC9C19759B960080534F /* SegmentedViewController.m in Sources */,
 				9CE7A8A819542CCF00E699E4 /* DirectoryUtils.m in Sources */,
 				9C20BE5D1949EF830077C6E8 /* DropAnimationController.m in Sources */,
@@ -770,6 +777,7 @@
 				9C01922019D2CC0300E8E9E3 /* BlurView.m in Sources */,
 				9CCF0D6E1921196E00489B74 /* BarcodeReader.m in Sources */,
 				9C2AC5E219EA96F900588538 /* CommonProgress.m in Sources */,
+				9CA5896E19F15F3200724F33 /* UIViewController+Utils.m in Sources */,
 				9C90FF6219374DD3004CE056 /* UITableView+Utils.m in Sources */,
 				9C8C0AFD1934A17C0033D2A9 /* UIImage+Alpha.m in Sources */,
 				9CA10B621953521400DC3C5B /* NSIndexPath+Utils.m in Sources */,
