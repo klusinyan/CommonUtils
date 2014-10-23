@@ -9,7 +9,6 @@
 #import "ImageDownloader.h"
 #import "UIImageView+AFNetworking.h"
 #import "UIColor+Utils.h"
-#import "UIImage+Utils.h"
 
 //others
 #import "ZoomAnimationController.h"
