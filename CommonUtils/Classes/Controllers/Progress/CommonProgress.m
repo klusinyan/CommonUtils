@@ -1,29 +1,7 @@
-//  Created by Yiming Tang on 14-2-9.
-//  Modified by Karen Lusinyan
-//  Copyright (c) 2014 Yiming Tang. All rights reserved.
+//  Created by Karen Lusinyan on 16/07/14.
 
 #import "CommonProgress.h"
 #import "UIImage+Color.h"
-
-#import <libkern/OSAtomic.h>
-
-@implementation UIApplication (NetworkActivityIndicator)
-
-static volatile int32_t numberOfActiveNetworkConnections;
-
-#pragma mark Public API
-
-- (void)showNetworkActivity
-{
-	self.networkActivityIndicatorVisible = OSAtomicAdd32(1, &numberOfActiveNetworkConnections) > 0;
-}
-
-- (void)hideNetworkActivity
-{
-	self.networkActivityIndicatorVisible = OSAtomicAdd32(-1, &numberOfActiveNetworkConnections) > 0;
-}
-
-@end
 
 @interface CommonProgress ()
 
@@ -259,7 +237,7 @@ static volatile int32_t numberOfActiveNetworkConnections;
         }
         
         if (self.networkActivityIndicatorVisible) {
-            [[UIApplication sharedApplication] showNetworkActivity];
+            [CommonProgress setNetworkActivityIndicatorVisible:YES];
         }
         
         self.animating = YES;
@@ -280,7 +258,7 @@ static volatile int32_t numberOfActiveNetworkConnections;
         }
         
         if (self.networkActivityIndicatorVisible) {
-            [[UIApplication sharedApplication] hideNetworkActivity];
+            [CommonProgress setNetworkActivityIndicatorVisible:NO];
         }
         
         self.animating = NO;
@@ -324,7 +302,6 @@ static volatile int32_t numberOfActiveNetworkConnections;
     [self addSubview:self.indicatorImageView];
 }
 
-
 - (void)_rotateImageViewFrom:(CGFloat)fromValue to:(CGFloat)toValue duration:(CFTimeInterval)duration repeatCount:(CGFloat)repeatCount
 {
     CABasicAnimation *rotationAnimation;
@@ -361,6 +338,23 @@ static volatile int32_t numberOfActiveNetworkConnections;
         _indicatorImageColor = indicatorImageColor;
         self.indicatorImage = [self.indicatorImage imageWithColor:indicatorImageColor];
     }
+}
+
++ (void)setNetworkActivityIndicatorVisible:(BOOL)setVisible
+{
+    static NSInteger NumberOfCallsToSetVisible = 0;
+    if (setVisible)
+        NumberOfCallsToSetVisible++;
+    else
+        NumberOfCallsToSetVisible--;
+    
+    // The assertion helps to find programmer errors in activity indicator management.
+    // Since a negative NumberOfCallsToSetVisible is not a fatal error,
+    // it should probably be removed from production code.
+    //NSAssert(NumberOfCallsToSetVisible >= 0, @"Network Activity Indicator was asked to hide more often than shown");
+    
+    // Display the indicator as long as our static counter is > 0.
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:(NumberOfCallsToSetVisible > 0)];
 }
 
 @end
