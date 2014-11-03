@@ -136,6 +136,6 @@ typedef NS_ENUM(NSInteger, CommonProgressActivityIndicatorViewStyle) {
 /**
  Shows/hide shared network acitivity indicator
  */
-+ (void)setNetworkActivityIndicatorVisible:(BOOL)setVisible;
++ (void)setNetworkActivityIndicatorVisible:(BOOL)setVisible __deprecated_msg("Use NetworkUtils");
 
 @end

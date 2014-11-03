@@ -63,6 +63,8 @@
 		9CB1FC9C19759B960080534F /* SegmentedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CB1FC9B19759B960080534F /* SegmentedViewController.m */; };
 		9CB4800D19558E8400A5AC1B /* UIColor+Utils.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CB4800B19558E8400A5AC1B /* UIColor+Utils.h */; };
 		9CB4800E19558E8400A5AC1B /* UIColor+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CB4800C19558E8400A5AC1B /* UIColor+Utils.m */; };
+		9CBCB4591A079EBC00E6BC7C /* NetworkUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CBCB4571A079EBC00E6BC7C /* NetworkUtils.h */; };
+		9CBCB45A1A079EBC00E6BC7C /* NetworkUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CBCB4581A079EBC00E6BC7C /* NetworkUtils.m */; };
 		9CCB62DE19ED156F0061D0C1 /* CommonSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CCB62DC19ED156F0061D0C1 /* CommonSystem.h */; };
 		9CCB62DF19ED156F0061D0C1 /* CommonSystem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CCB62DD19ED156F0061D0C1 /* CommonSystem.m */; };
 		9CCF0D6D1921196E00489B74 /* BarcodeReader.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CCF0D6B1921196E00489B74 /* BarcodeReader.h */; };
@@ -159,6 +161,8 @@
 		9CB4800C19558E8400A5AC1B /* UIColor+Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Utils.m"; sourceTree = "<group>"; };
 		9CB81F4718FD2C9C00C918FB /* libCommonUtils.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libCommonUtils.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		9CB81F8618FD2EFB00C918FB /* CommonUtils.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CommonUtils.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
+		9CBCB4571A079EBC00E6BC7C /* NetworkUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkUtils.h; sourceTree = "<group>"; };
+		9CBCB4581A079EBC00E6BC7C /* NetworkUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NetworkUtils.m; sourceTree = "<group>"; };
 		9CCB62DC19ED156F0061D0C1 /* CommonSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonSystem.h; sourceTree = "<group>"; };
 		9CCB62DD19ED156F0061D0C1 /* CommonSystem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonSystem.m; sourceTree = "<group>"; };
 		9CCF0D6B1921196E00489B74 /* BarcodeReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BarcodeReader.h; sourceTree = "<group>"; };
@@ -277,6 +281,8 @@
 		9C34F7CD192CAFF9001B8D6D /* Network */ = {
 			isa = PBXGroup;
 			children = (
+				9CBCB4571A079EBC00E6BC7C /* NetworkUtils.h */,
+				9CBCB4581A079EBC00E6BC7C /* NetworkUtils.m */,
 				9C46A59719766A840018B109 /* ImageDownloader.h */,
 				9C46A59819766A840018B109 /* ImageDownloader.m */,
 				9C34F7CE192CAFF9001B8D6D /* ProgressView.h */,
@@ -619,6 +625,7 @@
 				9C6DD7D419F130670013D333 /* UIImage+Color.h in Headers */,
 				9C90FF8219377F7F004CE056 /* NSMutableArray+Utils.h in Headers */,
 				9CD702251933572A0066FFC0 /* ALEWebViewController.h in Headers */,
+				9CBCB4591A079EBC00E6BC7C /* NetworkUtils.h in Headers */,
 				9CD70241193388790066FFC0 /* UIImage+Resize.h in Headers */,
 				9C20BE5C1949EF830077C6E8 /* DropAnimationController.h in Headers */,
 				9CD70242193388790066FFC0 /* UIImage+RoundedCorner.h in Headers */,
@@ -758,6 +765,7 @@
 				9CD9F771196E907900EBBD85 /* GTMNSString+HTML.m in Sources */,
 				9CA2B4BF19584AFA00E29A8B /* UICollectionView+Utils.m in Sources */,
 				9CD7022C193388150066FFC0 /* UIView+AutoLayout.m in Sources */,
+				9CBCB45A1A079EBC00E6BC7C /* NetworkUtils.m in Sources */,
 				9CD702241933572A0066FFC0 /* ALESegmentedViewController.m in Sources */,
 				9C01922019D2CC0300E8E9E3 /* BlurView.m in Sources */,
 				9CCF0D6E1921196E00489B74 /* BarcodeReader.m in Sources */,
