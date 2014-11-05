@@ -2,6 +2,7 @@
 
 #import "CommonProgress.h"
 #import "UIImage+Color.h"
+#import "NetworkUtils.h"
 
 @interface CommonProgress ()
 
@@ -237,7 +238,7 @@
         }
         
         if (self.networkActivityIndicatorVisible) {
-            [CommonProgress setNetworkActivityIndicatorVisible:YES];
+            [NetworkUtils setNetworkActivityIndicatorVisible:YES];
         }
         
         self.animating = YES;
@@ -258,7 +259,7 @@
         }
         
         if (self.networkActivityIndicatorVisible) {
-            [CommonProgress setNetworkActivityIndicatorVisible:NO];
+            [NetworkUtils setNetworkActivityIndicatorVisible:NO];
         }
         
         self.animating = NO;
@@ -340,6 +341,7 @@
     }
 }
 
+//not used__deprecated("now using networkutils")
 + (void)setNetworkActivityIndicatorVisible:(BOOL)setVisible
 {
     static NSInteger NumberOfCallsToSetVisible = 0;
