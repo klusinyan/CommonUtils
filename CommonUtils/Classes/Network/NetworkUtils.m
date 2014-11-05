@@ -5,6 +5,7 @@
 
 @implementation NetworkUtils
 
+/*
 + (void)setNetworkActivityIndicatorVisible:(BOOL)setVisible
 {
     static NSInteger NumberOfCallsToSetVisible = 0;
@@ -21,5 +22,26 @@
     // Display the indicator as long as our static counter is > 0.
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:(NumberOfCallsToSetVisible > 0)];
 }
+//*/
 
++ (void)setNetworkActivityIndicatorVisible:(BOOL)setVisible
+{
+    /*
+    DebugLog(@"--------------requesting--------------");
+    DebugLog(@"setVisible %@", setVisible ? @"Y" : @"N");
+    DebugLog(@"isNetworkActivityIndicatorVisible %@", [[UIApplication sharedApplication] isNetworkActivityIndicatorVisible] ? @"Y" : @"N");
+    DebugLog(@"--------------requesting--------------\n");
+    //*/
+    
+    if ((setVisible && [[UIApplication sharedApplication] isNetworkActivityIndicatorVisible]) ||
+       (!setVisible && ![[UIApplication sharedApplication] isNetworkActivityIndicatorVisible]))
+        return;
+
+    DebugLog(@"--------------///////--------------");
+    DebugLog(@"setVisible %@", setVisible ? @"Y" : @"N");
+    DebugLog(@"isNetworkActivityIndicatorVisible %@", [[UIApplication sharedApplication] isNetworkActivityIndicatorVisible] ? @"Y" : @"N");
+    DebugLog(@"--------------\\\\\\\\\\\\\\--------------\n");
+
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:setVisible];
+}
 @end

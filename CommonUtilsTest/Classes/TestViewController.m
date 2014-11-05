@@ -15,6 +15,7 @@
 #import "CommonKeyboardViewController.h"
 #import "CommonProgressViewController.h"
 #import "CommonSystem.h"
+#import "NetworkUtils.h"
 
 typedef NS_ENUM(NSInteger, RowType) {
     RowTypeSegementController,
@@ -58,6 +59,15 @@ typedef NS_ENUM(NSInteger, RowType) {
     [CommonSystem networkInfoWithCompletion:^(NSDictionary *networkInfo) {
         DebugLog(@"networkInfo %@", networkInfo);
     }];
+    
+    [NetworkUtils setNetworkActivityIndicatorVisible:YES];
+    [NetworkUtils setNetworkActivityIndicatorVisible:YES];
+    [NetworkUtils setNetworkActivityIndicatorVisible:YES];
+    [NetworkUtils setNetworkActivityIndicatorVisible:YES];
+
+    [NetworkUtils setNetworkActivityIndicatorVisible:NO];
+    //[NetworkUtils setNetworkActivityIndicatorVisible:NO];
+    //[NetworkUtils setNetworkActivityIndicatorVisible:NO];
 }
 
 - (void)didReceiveMemoryWarning

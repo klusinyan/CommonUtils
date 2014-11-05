@@ -36,6 +36,7 @@
     //BOOL random = arc4random_uniform(3);
     [CommonProgress sharedProgress].backgroundImageColor = [UIColor lightGrayColor];
     [CommonProgress sharedProgress].indicatorImageColor = [UIColor magentaColor];
+    [CommonProgress sharedProgress].networkActivityIndicatorVisible = YES;
     [CommonProgress showWithTaregt:self completion:^{
         DebugLog(@"common progress did start");
     }];
@@ -46,6 +47,12 @@
         [self.navigationController pushViewController:vc animated:YES];
     });
     //*/
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [self hideCommonProgress:nil];
 }
 
 - (void)hideCommonProgress:(id)sender
