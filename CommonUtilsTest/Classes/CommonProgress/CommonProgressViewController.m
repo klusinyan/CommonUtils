@@ -30,13 +30,16 @@
     
     UIBarButtonItem *showProgress = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction
                                                                                   target:self
-                                                                                  action:@selector(hideCommonProgress:)];
+                                                                                  action:@selector(showHideCommonProgress:)];
     self.navigationItem.rightBarButtonItems = @[showProgress];
     
     //BOOL random = arc4random_uniform(3);
-    [CommonProgress sharedProgress].backgroundImageColor = [UIColor lightGrayColor];
-    [CommonProgress sharedProgress].indicatorImageColor = [UIColor magentaColor];
+    [CommonProgress sharedProgress].backgroundImageColor = [UIColor colorWithWhite:0.5 alpha:0.8];
+    [CommonProgress sharedProgress].activityIndicatorViewStyle = CommonProgressActivityIndicatorViewStyleSmall;
+    [CommonProgress sharedProgress].indicatorImageColor = [UIColor greenColor];
     [CommonProgress sharedProgress].networkActivityIndicatorVisible = YES;
+    
+
     [CommonProgress showWithTaregt:self completion:^{
         DebugLog(@"common progress did start");
     }];
@@ -52,14 +55,22 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    [self hideCommonProgress:nil];
+    [self showHideCommonProgress:nil];
 }
 
-- (void)hideCommonProgress:(id)sender
+- (void)showHideCommonProgress:(id)sender
 {
-    [CommonProgress hideWithCompletion:^{
-        DebugLog(@"common progress did stop");
-    }];
+    if ([[CommonProgress sharedProgress] isAnimating] || !sender) {
+        [CommonProgress hideWithCompletion:^{
+            DebugLog(@"common progress did stop");
+        }];
+    }
+    else {
+        [CommonProgress showWithTaregt:self
+                            completion:^{
+                                DebugLog(@"common progress did start");
+                            }];
+    }
 }
 
 @end

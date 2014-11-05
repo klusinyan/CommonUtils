@@ -88,10 +88,19 @@
             break;
     }
     
-    _backgroundImage = [UIImage imageNamed:backgroundImageName];
-    _indicatorImage = [UIImage imageNamed:indicatorImageName];
-    self.backgroundImageView.image = _backgroundImage;
-    self.indicatorImageView.image = _indicatorImage;
+    self.backgroundImage = [UIImage imageNamed:backgroundImageName];
+    self.indicatorImage = [UIImage imageNamed:indicatorImageName];
+
+    self.backgroundImageView.image = self.backgroundImage;
+    self.indicatorImageView.image = self.indicatorImage;
+
+    if (self.backgroundImageColor) {
+        self.backgroundImage = [self.backgroundImage imageWithColor:self.backgroundImageColor];
+    }
+    if (self.indicatorImageColor) {
+        self.indicatorImage = [self.indicatorImage imageWithColor:self.indicatorImageColor];
+    }
+
     [self setNeedsLayout];
 }
 
