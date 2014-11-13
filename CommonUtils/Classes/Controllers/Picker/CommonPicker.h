@@ -56,8 +56,14 @@
 //this value becomes mandatory when custom toolbar is proveded by at "toolbarForPicker:"
 - (CGFloat)toolbarHeightForPicker:(CommonPicker *)picker;
 
+//default nil
+- (UILabel *)toolbarTitleLabelForPicker:(CommonPicker *)picker;
+
 //default is nil
 - (NSString *)toolbarTitleForPicker:(CommonPicker *)picker;
+
+//defualt is white
+- (UIColor *)toolbarTitleColorForPicker:(CommonPicker *)picker;
 
 //if not specified the default value is UIPopoverArrowDirectionAny
 - (UIPopoverArrowDirection)popoverArrowDirectionForPicker:(CommonPicker *)picker;
