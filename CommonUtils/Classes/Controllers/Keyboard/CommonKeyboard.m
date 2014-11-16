@@ -161,15 +161,16 @@ UIGestureRecognizerDelegate
     //contro esempio: se la view sta su una cella di table view [CGPoint aPoint = activeView.frame.origin] non funziona
     //quindi bisogna prendere il punto relativo a self.scrollView
     CGPoint aPoint = [activeView convertPoint:activeView.frame.origin toView:self.scrollView];
+    CGRect aFrame = [[activeView superview] convertRect:activeView.frame toView:self.scrollView];
     
     //aggiunto, ma puo' essere toglto se e' attivo [self.scrollView.contentOffset = CGPointZero]
     //esempio: tableView che non risponde a self.tableView.contentInset = UIEdgeInsetsZero
     //quindi bisogna forzare con contentOffest = CGPointZero
     aPoint.y -= self.scrollView.contentOffset.y;
     
-    aPoint.y += CGRectGetHeight(activeView.frame);
+    aPoint.y += CGRectGetHeight(aFrame);
     if (!CGRectContainsPoint(aRect, aPoint)) {
-        [self.scrollView scrollRectToVisible:activeView.frame animated:YES];
+        [self.scrollView scrollRectToVisible:aFrame animated:YES];
     }
 }
 
@@ -186,7 +187,7 @@ UIGestureRecognizerDelegate
     
     //decidere, e' neccessario per tableView o no???
     //una volta fixato aPoint.y -= self.scrollView.contentOffset.y], non dovrebbe essere piu' neccessario
-    //self.scrollView.contentOffset = CGPointZero;
+    self.scrollView.contentOffset = CGPointZero;
     
     self.visible = NO;
 }
