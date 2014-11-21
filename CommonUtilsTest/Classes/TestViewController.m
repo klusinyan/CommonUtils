@@ -60,6 +60,7 @@ typedef NS_ENUM(NSInteger, RowType) {
         DebugLog(@"networkInfo %@", networkInfo);
     }];
     
+    //TEST network activity indicator
     [NetworkUtils setNetworkActivityIndicatorVisible:YES];
     [NetworkUtils setNetworkActivityIndicatorVisible:YES];
     [NetworkUtils setNetworkActivityIndicatorVisible:YES];

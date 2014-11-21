@@ -4,7 +4,12 @@
 #import "CommonProgressViewController.h"
 #import "CommonProgress.h"
 
+#import "ChildViewController.h"
+#import "UIViewController+ChildrenHandler.h"
+
 @interface CommonProgressViewController ()
+
+@property (nonatomic, strong) IBOutlet UIView *container;
 
 @end
 
@@ -50,6 +55,29 @@
         [self.navigationController pushViewController:vc animated:YES];
     });
     //*/
+    
+    //TEST children view controller
+    ChildViewController *child_1 = [[ChildViewController alloc] init];
+    child_1.view.backgroundColor = [UIColor redColor];
+    child_1.title = @"Child_1";
+    [self parentViewController:self
+        addChildViewController:child_1
+                 containerView:self.container
+                    completion:^(UIViewController *controller, ControllerTransitionStatus transitionStatus) {
+                        DebugLog(@"vc = %@ status = %@", controller.title, controllerTransitionStatus(transitionStatus));
+                    }];
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        ChildViewController *child_2 = [[ChildViewController alloc] init];
+        child_2.view.backgroundColor = [UIColor yellowColor];
+        child_2.title = @"Child_2";
+        [self parentViewController:self
+            addChildViewController:child_2
+                     containerView:self.container
+                        completion:^(UIViewController *controller, ControllerTransitionStatus transitionStatus) {
+                            DebugLog(@"vc = %@ status = %@", controller.title, controllerTransitionStatus(transitionStatus));
+                        }];
+    });
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -60,6 +88,11 @@
 
 - (void)showHideCommonProgress:(id)sender
 {
+    [self dismissChildrenViewControllerWithCompletion:^(UIViewController *controller, ControllerTransitionStatus transitionStatus) {
+        DebugLog(@"vc = %@ status = %@", controller.title, controllerTransitionStatus(transitionStatus));
+    }];
+    
+    /*OK
     if ([[CommonProgress sharedProgress] isAnimating] || !sender) {
         [CommonProgress hideWithCompletion:^{
             DebugLog(@"common progress did stop");
@@ -71,6 +104,7 @@
                                 DebugLog(@"common progress did start");
                             }];
     }
+    //*/
 }
 
 @end

@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		0562DFD0B35442A38D252468 /* libPods-CommonUtilsTest.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BA801513D4DF4D82AFF30164 /* libPods-CommonUtilsTest.a */; };
 		9C01923419D2E5D000E8E9E3 /* CommonBookViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9C01923319D2E5D000E8E9E3 /* CommonBookViewController.xib */; };
+		9C1008751A1F820800A8C9BE /* ChildViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C1008741A1F820800A8C9BE /* ChildViewController.m */; };
 		9C597DF319D1C71B000AE471 /* RDVKeyboardAvoidingScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C597DF219D1C71B000AE471 /* RDVKeyboardAvoidingScrollView.m */; };
 		9C72DF8919C719AB007E67A8 /* CommonBookContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C72DF8519C719AB007E67A8 /* CommonBookContentViewController.m */; };
 		9C72DF8A19C719AB007E67A8 /* CommonBookContentViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9C72DF8619C719AB007E67A8 /* CommonBookContentViewController.xib */; };
@@ -32,6 +33,12 @@
 		9C83F87819CB0E3E00F150B4 /* CommonPickerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9C83F87719CB0E3E00F150B4 /* CommonPickerViewController.xib */; };
 		9C8A6AF919D17EE6000062F7 /* CommonKeyboardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C8A6AF819D17EE6000062F7 /* CommonKeyboardViewController.m */; };
 		9C8A6AFB19D17F01000062F7 /* CommonKeyboardViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9C8A6AFA19D17F01000062F7 /* CommonKeyboardViewController.xib */; };
+		9CC719F61A1B5F4A00CC0DF2 /* CommonLogin.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CC719EF1A1B5F4A00CC0DF2 /* CommonLogin.m */; };
+		9CC719F71A1B5F4A00CC0DF2 /* SFLoginButtonCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CC719F11A1B5F4A00CC0DF2 /* SFLoginButtonCell.m */; };
+		9CC719F81A1B5F4A00CC0DF2 /* SFLoginButtonCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9CC719F21A1B5F4A00CC0DF2 /* SFLoginButtonCell.xib */; };
+		9CC719F91A1B5F4A00CC0DF2 /* SFLoginTextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CC719F41A1B5F4A00CC0DF2 /* SFLoginTextFieldCell.m */; };
+		9CC719FA1A1B5F4A00CC0DF2 /* SFLoginTextFieldCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9CC719F51A1B5F4A00CC0DF2 /* SFLoginTextFieldCell.xib */; };
+		9CC719FD1A1B5FA100CC0DF2 /* SFLoginCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CC719FC1A1B5FA100CC0DF2 /* SFLoginCell.m */; };
 		9CC831D419E2805B005A10A8 /* CommonProgressViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CC831D219E2805B005A10A8 /* CommonProgressViewController.m */; };
 		9CC831D519E2805B005A10A8 /* CommonProgressViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9CC831D319E2805B005A10A8 /* CommonProgressViewController.xib */; };
 		9CD9F79B196EA78500EBBD85 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9CD9F79A196EA78500EBBD85 /* Foundation.framework */; };
@@ -62,6 +69,8 @@
 
 /* Begin PBXFileReference section */
 		9C01923319D2E5D000E8E9E3 /* CommonBookViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CommonBookViewController.xib; sourceTree = "<group>"; };
+		9C1008731A1F820800A8C9BE /* ChildViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChildViewController.h; sourceTree = SOURCE_ROOT; };
+		9C1008741A1F820800A8C9BE /* ChildViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChildViewController.m; sourceTree = SOURCE_ROOT; };
 		9C597DF119D1C71B000AE471 /* RDVKeyboardAvoidingScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDVKeyboardAvoidingScrollView.h; sourceTree = "<group>"; };
 		9C597DF219D1C71B000AE471 /* RDVKeyboardAvoidingScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDVKeyboardAvoidingScrollView.m; sourceTree = "<group>"; };
 		9C72DF8419C719AB007E67A8 /* CommonBookContentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonBookContentViewController.h; sourceTree = "<group>"; };
@@ -90,6 +99,16 @@
 		9C8A6AF719D17EE6000062F7 /* CommonKeyboardViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonKeyboardViewController.h; sourceTree = "<group>"; };
 		9C8A6AF819D17EE6000062F7 /* CommonKeyboardViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonKeyboardViewController.m; sourceTree = "<group>"; };
 		9C8A6AFA19D17F01000062F7 /* CommonKeyboardViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CommonKeyboardViewController.xib; sourceTree = "<group>"; };
+		9CC719EE1A1B5F4A00CC0DF2 /* CommonLogin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonLogin.h; sourceTree = "<group>"; };
+		9CC719EF1A1B5F4A00CC0DF2 /* CommonLogin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonLogin.m; sourceTree = "<group>"; };
+		9CC719F01A1B5F4A00CC0DF2 /* SFLoginButtonCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFLoginButtonCell.h; sourceTree = "<group>"; };
+		9CC719F11A1B5F4A00CC0DF2 /* SFLoginButtonCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFLoginButtonCell.m; sourceTree = "<group>"; };
+		9CC719F21A1B5F4A00CC0DF2 /* SFLoginButtonCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SFLoginButtonCell.xib; sourceTree = "<group>"; };
+		9CC719F31A1B5F4A00CC0DF2 /* SFLoginTextFieldCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFLoginTextFieldCell.h; sourceTree = "<group>"; };
+		9CC719F41A1B5F4A00CC0DF2 /* SFLoginTextFieldCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFLoginTextFieldCell.m; sourceTree = "<group>"; };
+		9CC719F51A1B5F4A00CC0DF2 /* SFLoginTextFieldCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SFLoginTextFieldCell.xib; sourceTree = "<group>"; };
+		9CC719FB1A1B5FA100CC0DF2 /* SFLoginCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFLoginCell.h; sourceTree = "<group>"; };
+		9CC719FC1A1B5FA100CC0DF2 /* SFLoginCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFLoginCell.m; sourceTree = "<group>"; };
 		9CC831D119E2805B005A10A8 /* CommonProgressViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonProgressViewController.h; sourceTree = "<group>"; };
 		9CC831D219E2805B005A10A8 /* CommonProgressViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonProgressViewController.m; sourceTree = "<group>"; };
 		9CC831D319E2805B005A10A8 /* CommonProgressViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CommonProgressViewController.xib; sourceTree = "<group>"; };
@@ -236,6 +255,23 @@
 			path = CommonPicker;
 			sourceTree = "<group>";
 		};
+		9CC719ED1A1B5E8A00CC0DF2 /* CommonLogin */ = {
+			isa = PBXGroup;
+			children = (
+				9CC719FB1A1B5FA100CC0DF2 /* SFLoginCell.h */,
+				9CC719FC1A1B5FA100CC0DF2 /* SFLoginCell.m */,
+				9CC719EE1A1B5F4A00CC0DF2 /* CommonLogin.h */,
+				9CC719EF1A1B5F4A00CC0DF2 /* CommonLogin.m */,
+				9CC719F01A1B5F4A00CC0DF2 /* SFLoginButtonCell.h */,
+				9CC719F11A1B5F4A00CC0DF2 /* SFLoginButtonCell.m */,
+				9CC719F21A1B5F4A00CC0DF2 /* SFLoginButtonCell.xib */,
+				9CC719F31A1B5F4A00CC0DF2 /* SFLoginTextFieldCell.h */,
+				9CC719F41A1B5F4A00CC0DF2 /* SFLoginTextFieldCell.m */,
+				9CC719F51A1B5F4A00CC0DF2 /* SFLoginTextFieldCell.xib */,
+			);
+			path = CommonLogin;
+			sourceTree = "<group>";
+		};
 		9CC831D019E28041005A10A8 /* CommonProgress */ = {
 			isa = PBXGroup;
 			children = (
@@ -302,6 +338,7 @@
 				9CD9F7D3196EA7D400EBBD85 /* AppDelegate.h */,
 				9CD9F7D4196EA7D400EBBD85 /* AppDelegate.m */,
 				9CD9F7EB196EA7D400EBBD85 /* main.m */,
+				9CC719ED1A1B5E8A00CC0DF2 /* CommonLogin */,
 				9CC831D019E28041005A10A8 /* CommonProgress */,
 				9C8A6AF319D1767D000062F7 /* CommonKeyboard */,
 				9C8C994619CADF5000A9E9B6 /* CommonPicker */,
@@ -313,6 +350,8 @@
 				9CD9F7F3196EA7D400EBBD85 /* SplitViewController */,
 				9CD9F7F6196EA7D400EBBD85 /* TestViewController.h */,
 				9CD9F7F7196EA7D400EBBD85 /* TestViewController.m */,
+				9C1008731A1F820800A8C9BE /* ChildViewController.h */,
+				9C1008741A1F820800A8C9BE /* ChildViewController.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -480,6 +519,7 @@
 				9C72DFA019C71A90007E67A8 /* iPad_4.png in Resources */,
 				9C72DFA619C71A90007E67A8 /* iPhone_3.png in Resources */,
 				9C72DF9F19C71A90007E67A8 /* iPad_3.png in Resources */,
+				9CC719FA1A1B5F4A00CC0DF2 /* SFLoginTextFieldCell.xib in Resources */,
 				9C01923419D2E5D000E8E9E3 /* CommonBookViewController.xib in Resources */,
 				9CD9F814196EAA5500EBBD85 /* segmented.xcassets in Resources */,
 				9CD9F805196EA7D400EBBD85 /* ProgressViewController.xib in Resources */,
@@ -492,6 +532,7 @@
 				9CD9F813196EAA5500EBBD85 /* placeholder.png in Resources */,
 				9CD9F811196EAA5500EBBD85 /* InfoPlist.strings in Resources */,
 				9C72DFA519C71A90007E67A8 /* iPhone_2.png in Resources */,
+				9CC719F81A1B5F4A00CC0DF2 /* SFLoginButtonCell.xib in Resources */,
 				9CC831D519E2805B005A10A8 /* CommonProgressViewController.xib in Resources */,
 				9C75FC0F19CB3F7B004FA3C9 /* apple.png in Resources */,
 				9C72DFA819C71A90007E67A8 /* iPhone_5.png in Resources */,
@@ -538,7 +579,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9CC719F71A1B5F4A00CC0DF2 /* SFLoginButtonCell.m in Sources */,
 				9C72DF8B19C719AB007E67A8 /* CommonBookViewController.m in Sources */,
+				9C1008751A1F820800A8C9BE /* ChildViewController.m in Sources */,
 				9CD9F7FC196EA7D400EBBD85 /* HostViewController.m in Sources */,
 				9C597DF319D1C71B000AE471 /* RDVKeyboardAvoidingScrollView.m in Sources */,
 				9CD9F7FA196EA7D400EBBD85 /* GDOLayoutUtils.m in Sources */,
@@ -547,10 +590,13 @@
 				9CD9F801196EA7D400EBBD85 /* NavigationControllerController.m in Sources */,
 				9CD9F802196EA7D400EBBD85 /* CustomCell.m in Sources */,
 				9CD9F7F8196EA7D400EBBD85 /* AppDelegate.m in Sources */,
+				9CC719FD1A1B5FA100CC0DF2 /* SFLoginCell.m in Sources */,
 				9CD9F7FF196EA7D400EBBD85 /* ModalViewController.m in Sources */,
 				9CD9F806196EA7D400EBBD85 /* FirstViewController.m in Sources */,
+				9CC719F61A1B5F4A00CC0DF2 /* CommonLogin.m in Sources */,
 				9CD9F804196EA7D400EBBD85 /* ProgressViewController.m in Sources */,
 				9CD9F808196EA7D400EBBD85 /* TestViewController.m in Sources */,
+				9CC719F91A1B5F4A00CC0DF2 /* SFLoginTextFieldCell.m in Sources */,
 				9C72DF8919C719AB007E67A8 /* CommonBookContentViewController.m in Sources */,
 				9CD9F7FD196EA7D400EBBD85 /* MainViewController.m in Sources */,
 				9CD9F7F9196EA7D400EBBD85 /* GDOBarcodeReader.m in Sources */,

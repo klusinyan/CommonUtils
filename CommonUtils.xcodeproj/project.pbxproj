@@ -15,6 +15,8 @@
 		9C01921B19D2CBD600E8E9E3 /* CommonPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C01921519D2CBD600E8E9E3 /* CommonPicker.m */; };
 		9C01921F19D2CC0300E8E9E3 /* BlurView.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C01921D19D2CC0300E8E9E3 /* BlurView.h */; };
 		9C01922019D2CC0300E8E9E3 /* BlurView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C01921E19D2CC0300E8E9E3 /* BlurView.m */; };
+		9C0802611A1F4B7B00040153 /* UIViewController+ChildrenHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C08025F1A1F4B7B00040153 /* UIViewController+ChildrenHandler.h */; };
+		9C0802621A1F4B7B00040153 /* UIViewController+ChildrenHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C0802601A1F4B7B00040153 /* UIViewController+ChildrenHandler.m */; };
 		9C1E3931198E42F600EA933D /* UIAlertView+Blocks.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C1E392F198E42F600EA933D /* UIAlertView+Blocks.h */; };
 		9C1E3932198E42F600EA933D /* UIAlertView+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C1E3930198E42F600EA933D /* UIAlertView+Blocks.m */; };
 		9C20BE5B1949EF830077C6E8 /* ADVAnimationController.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C20BE561949EF830077C6E8 /* ADVAnimationController.h */; };
@@ -111,6 +113,8 @@
 		9C01921519D2CBD600E8E9E3 /* CommonPicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonPicker.m; sourceTree = "<group>"; };
 		9C01921D19D2CC0300E8E9E3 /* BlurView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BlurView.h; sourceTree = "<group>"; };
 		9C01921E19D2CC0300E8E9E3 /* BlurView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BlurView.m; sourceTree = "<group>"; };
+		9C08025F1A1F4B7B00040153 /* UIViewController+ChildrenHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+ChildrenHandler.h"; sourceTree = "<group>"; };
+		9C0802601A1F4B7B00040153 /* UIViewController+ChildrenHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+ChildrenHandler.m"; sourceTree = "<group>"; };
 		9C1E392F198E42F600EA933D /* UIAlertView+Blocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIAlertView+Blocks.h"; sourceTree = "<group>"; };
 		9C1E3930198E42F600EA933D /* UIAlertView+Blocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertView+Blocks.m"; sourceTree = "<group>"; };
 		9C20BE561949EF830077C6E8 /* ADVAnimationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ADVAnimationController.h; sourceTree = "<group>"; };
@@ -255,6 +259,15 @@
 				9C01921C19D2CC0300E8E9E3 /* Blur */,
 			);
 			path = CusomViews;
+			sourceTree = "<group>";
+		};
+		9C08025E1A1F4B7B00040153 /* UIViewController */ = {
+			isa = PBXGroup;
+			children = (
+				9C08025F1A1F4B7B00040153 /* UIViewController+ChildrenHandler.h */,
+				9C0802601A1F4B7B00040153 /* UIViewController+ChildrenHandler.m */,
+			);
+			path = UIViewController;
 			sourceTree = "<group>";
 		};
 		9C1E392E198E42F600EA933D /* UIAlertView */ = {
@@ -591,6 +604,7 @@
 		9CF9663718FD3ADC00E265A1 /* Categories */ = {
 			isa = PBXGroup;
 			children = (
+				9C08025E1A1F4B7B00040153 /* UIViewController */,
 				9C1E392E198E42F600EA933D /* UIAlertView */,
 				9CA2B4BB19584ACC00E29A8B /* UICollectionView */,
 				9CB4800619558E5900A5AC1B /* UIColor */,
@@ -651,6 +665,7 @@
 				9CD9F75D196E876000EBBD85 /* Lib-Prefix.pch in Headers */,
 				9C34F7D0192CAFF9001B8D6D /* ProgressView.h in Headers */,
 				9CCF0D6D1921196E00489B74 /* BarcodeReader.h in Headers */,
+				9C0802611A1F4B7B00040153 /* UIViewController+ChildrenHandler.h in Headers */,
 				9CB1FC8E197598D00080534F /* SelectedElementDelegate.h in Headers */,
 				9CCB62DE19ED156F0061D0C1 /* CommonSystem.h in Headers */,
 				9C90FF6119374DD3004CE056 /* UITableView+Utils.h in Headers */,
@@ -744,6 +759,7 @@
 			files = (
 				9C96B097193F089B0014AC23 /* SplitViewController.m in Sources */,
 				9C90FF8319377F7F004CE056 /* NSMutableArray+Utils.m in Sources */,
+				9C0802621A1F4B7B00040153 /* UIViewController+ChildrenHandler.m in Sources */,
 				9C90FF6719377D33004CE056 /* NSFileManager-Utilities.m in Sources */,
 				9C90FF6C19377DEC004CE056 /* NSDate+Utils.m in Sources */,
 				9C34F7D1192CAFF9001B8D6D /* ProgressView.m in Sources */,
