@@ -33,4 +33,8 @@ Pod::Spec.new do |s|
 
   s.resource_bundles = { 'ResourceBundle' => ['CommonUtils/Resources/Nibs/**/*.*', 'CommonUtils/Resources/Images/**/*.*', 'CommonUtils/Resources/Sounds/**/*.*', 'CommonUtils/Classes/Controllers/Progress/CommonProgress.bundle', 'CommonUtils/Classes/SplitViewController/Split.bundle', 'CommonUtils/Classes/Controllers/BarcodeReader/CommonBarcodeReader.bundle'] }
 
+  #-------- Frameworks --------
+  s.frameworks = 'SystemConfiguration','MobileCoreServices'
+  #---------------------------
+
 end
