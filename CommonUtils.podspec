@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = 'CommonUtils'
-  s.version      = '1.3.1'
+  s.version      = '1.3.2'
   s.summary      = 'Common Utilities.'
   s.homepage     = 'https://bitbucket.org/mrklteam/commonutils'
   s.license      = { :type => 'MIT', :file => 'LICENSE' }
@@ -32,5 +32,9 @@ Pod::Spec.new do |s|
   #}
 
   s.resource_bundles = { 'ResourceBundle' => ['CommonUtils/Resources/Nibs/**/*.*', 'CommonUtils/Resources/Images/**/*.*', 'CommonUtils/Resources/Sounds/**/*.*', 'CommonUtils/Classes/Controllers/Progress/CommonProgress.bundle', 'CommonUtils/Classes/SplitViewController/Split.bundle'] }
+
+#-------- Frameworks --------
+s.frameworks = 'SystemConfiguration','MobileCoreServices'
+#---------------------------
 
 end
