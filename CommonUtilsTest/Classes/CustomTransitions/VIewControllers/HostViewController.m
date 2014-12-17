@@ -185,5 +185,16 @@ contentViewControllerForTabAtIndex:(NSUInteger)index
     return _vc3;
 }
 
+#pragma mark -
+#pragma mark CommonSegmentedControllerDelegate protocol
+
+- (void)segmentedController:(UIViewController *)segmentedController
+            didSelectConent:(id<CommonSegmentedControllerDelegate>)content
+                    atIndex:(NSInteger)index
+{
+    DebugLog(@"segmentedController %@", segmentedController);
+    DebugLog(@"content %@", content);
+    DebugLog(@"index %@", @(index));
+}
 
 @end

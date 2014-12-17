@@ -1,10 +1,10 @@
 Pod::Spec.new do |s|
   s.name         = 'CommonUtils'
-  s.version      = '1.2.1'
+  s.version      = '1.3.1'
   s.summary      = 'Common Utilities.'
   s.homepage     = 'https://bitbucket.org/mrklteam/commonutils'
   s.license      = { :type => 'MIT', :file => 'LICENSE' }
-  s.author       = { 'Karen Lusinyan' => 'karen.lusinyan@softecspa.it' }
+  s.author       = { 'Karen Lusinyan' => 'karen.lusinyan.developerios@gmail.com' }
   s.platform     = :ios, '7.0'
   s.source       = { :git => 'https://mrcararia@bitbucket.org/mrklteam/commonutils.git', :tag => s.version.to_s }
 
@@ -31,6 +31,6 @@ Pod::Spec.new do |s|
   #  'CommonProgress' => ['CommonUtils/Resources/CommonProgress.bundle']
   #}
 
-  s.resource_bundles = { 'ResourceBundle' => ['CommonUtils/Resources/Nibs/**/*.*', 'CommonUtils/Resources/Images/**/*.*', 'CommonUtils/Resources/Sounds/**/*.*', 'CommonUtils/Classes/Controllers/Progress/CommonProgress.bundle'] }
+  s.resource_bundles = { 'ResourceBundle' => ['CommonUtils/Resources/Nibs/**/*.*', 'CommonUtils/Resources/Images/**/*.*', 'CommonUtils/Resources/Sounds/**/*.*', 'CommonUtils/Classes/Controllers/Progress/CommonProgress.bundle', 'CommonUtils/Classes/SplitViewController/Split.bundle'] }
 
 end

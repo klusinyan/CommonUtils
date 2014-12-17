@@ -1,7 +1,7 @@
 //  Created by Karen Lusinyan on 10/04/14.
 //  Copyright (c) 2012 Home. All rights reserved.
 
-#pragma mark - v1.0.0
+#pragma mark - v1.0.1
 @protocol SegmentedControllerDelegate;
 
 @interface SegmentedViewController : UIViewController
@@ -31,6 +31,9 @@
 //desired initializer
 - (id)initWithViewControllers:(NSArray *)viewControllers;
 
+//override to setup addional UI components es: headerView
+- (void)setupCustomUI;
+
 //call containter explicity to load descired controller
 - (void)loadViewControllerWithIndex:(NSInteger)index;
 
@@ -44,6 +47,7 @@
 @optional
 //called when controller did select
 - (void)segmentedControllerDidSelect;
+
 //called when controller did select, by passing SELF as a param "sender"
 - (void)segmentedControllerDidSelect:(id)sender;
 

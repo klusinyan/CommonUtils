@@ -1,17 +1,18 @@
-//  Created by Yiming Tang on 14-2-9.
-//  Modified by Karen Lusinyan
-//  Copyright (c) 2014 Yiming Tang. All rights reserved.
+//  Created by Karen Lusinyan on 16/07/14.
 
-#import <UIKit/UIKit.h>
+typedef void(^ShowCompletionHandler)(void);
+typedef void(^HideCompletionHandler)(void);
 
 /**
  Activity indicator type.
  */
 typedef NS_ENUM(NSInteger, CommonProgressActivityIndicatorViewStyle) {
+    /** A normal activity indicator view. About 78 * 78 in size */
+    CommonProgressActivityIndicatorViewStyleNormal,
+    /** A normal activity indicator view. About 37 * 37 in size */
+    CommonProgressActivityIndicatorViewStyleSmall,
     /** A large activity indicator view. About 157 * 157 in size. */
     CommonProgressActivityIndicatorViewStyleLarge,
-    /** A normal activity indicator view. About 37 * 37 in size */
-    CommonProgressActivityIndicatorViewStyleNormal,
 };
 
 /**
@@ -70,6 +71,20 @@ typedef NS_ENUM(NSInteger, CommonProgressActivityIndicatorViewStyle) {
  */
 @property (nonatomic, assign) CommonProgressActivityIndicatorViewStyle activityIndicatorViewStyle;
 
+/**
+ The network activity indicator should be visible or not while progress is animating
+ */
+@property (readwrite, nonatomic, getter = isNetworkActivityIndicatorVisible) BOOL networkActivityIndicatorVisible;
+
+/**
+ Background image color. Default is GRAY
+ */
+@property (readwrite, nonatomic, strong) UIColor *backgroundImageColor;
+
+/**
+ Indicator image color. Default is SKYBLUE
+ */
+@property (readwrite, nonatomic, strong) UIColor *indicatorImageColor;
 
 ///-------------------
 /// @name Initializing
@@ -79,11 +94,6 @@ typedef NS_ENUM(NSInteger, CommonProgressActivityIndicatorViewStyle) {
  Initialize a indicator view with built-in sizes and resources according to the specific style.
  */
 - (id)initWithActivityIndicatorStyle:(CommonProgressActivityIndicatorViewStyle)style;
-
-/**
- Returns sharedInstance with default "activityIndicatorViewStyle = CommonProgressActivityIndicatorViewStyleNormal"
- */
-+ (instancetype)commonProgressWithTarget:(id)target;
 
 ///-----------------------------
 /// @name Controlling Animations
@@ -103,5 +113,24 @@ typedef NS_ENUM(NSInteger, CommonProgressActivityIndicatorViewStyle) {
  Whether the indicator is animating.
  */
 - (BOOL)isAnimating;
+
+///---------------------------
+/// @name Desired Initializing
+///---------------------------
+
+/**
+ Shared instance to the specific style.
+ */
++ (instancetype)sharedProgress;
+
+/**
+ Shows shared common prpgress, with default CommonProgressActivityIndicatorViewStyleNormal
+ */
++ (void)showWithTaregt:(id)target completion:(ShowCompletionHandler)completion;
+
+/**
+ Hides shared common prpgress
+ */
++ (void)hideWithCompletion:(HideCompletionHandler)completion;
 
 @end

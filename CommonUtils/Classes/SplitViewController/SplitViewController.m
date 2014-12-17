@@ -58,8 +58,8 @@ NSString * const NotificationMenuDidFinishClosing = @"NotificationMenuDidFinishC
     self.menuMode = MenuModeHiddenInPortrait;
     self.menuState = MenuStateOpen;
     
-    self.imageCloseMenu = kCommonImageWithNameOfType(@"ico_close_nav_bar", @"png");
-    self.imageOpenMenu = kCommonImageWithNameOfType(@"ico_open_nav_bar", @"png");
+    self.imageCloseMenu = [UIImage imageNamed:@"ResourceBundle.bundle/Split.bundle/ico_close_nav_bar"];
+    self.imageOpenMenu = [UIImage imageNamed:@"ResourceBundle.bundle/Split.bundle/ico_open_nav_bar"];
     
     return self;
 }

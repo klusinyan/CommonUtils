@@ -134,17 +134,24 @@ UIPopoverControllerDelegate
                                                                                action:NULL];
     
     UILabel *label = [[UILabel alloc] init];
-    label.translatesAutoresizingMaskIntoConstraints = NO;
-    label.font = [UIFont fontWithName:@"Helvetica-Neue" size:14.0f];
-    //label.shadowColor = [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0.5];
-    //label.shadowOffset = CGSizeMake(0, -1);
-    label.textColor = [UIColor colorWithRed:14/255.0 green:121/255.0 blue:255/255.0 alpha:1];
-    label.textAlignment = NSTextAlignmentCenter;
-    //label.backgroundColor = [UIColor whiteColor];
-    
-    if (self.dataSource && [self.dataSource respondsToSelector:@selector(toolbarTitleForPicker:)]) {
-        label.text = [self.dataSource toolbarTitleForPicker:self];
+    if (self.dataSource && [self.dataSource respondsToSelector:@selector(toolbarTitleLabelForPicker:)]) {
+        label = [self.dataSource toolbarTitleLabelForPicker:self];
     }
+    else {
+        label.font = [UIFont fontWithName:@"Helvetica-Neue" size:15.0f];
+        label.textAlignment = NSTextAlignmentCenter;
+        label.textColor = [UIColor whiteColor];
+        
+        if (self.dataSource && [self.dataSource respondsToSelector:@selector(toolbarTitleForPicker:)]) {
+            label.text = [self.dataSource toolbarTitleForPicker:self];
+        }
+        if (self.dataSource && [self.dataSource respondsToSelector:@selector(toolbarTitleColorForPicker:)]) {
+            label.textColor = [self.dataSource toolbarTitleColorForPicker:self];
+        }
+    }
+    
+    label.translatesAutoresizingMaskIntoConstraints = NO;
+    //label.backgroundColor = [UIColor grayColor];
     
     UIBarButtonItem *title = [[UIBarButtonItem alloc] initWithCustomView:label];
     

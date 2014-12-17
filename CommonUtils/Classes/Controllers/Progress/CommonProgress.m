@@ -1,9 +1,8 @@
-//  Created by Yiming Tang on 14-2-9.
-//  Modified by Karen Lusinyan
-//  Copyright (c) 2014 Yiming Tang. All rights reserved.
+//  Created by Karen Lusinyan on 16/07/14.
 
 #import "CommonProgress.h"
-#import "BlurView.h"
+#import "UIImage+Color.h"
+#import "NetworkUtils.h"
 
 @interface CommonProgress ()
 
@@ -11,6 +10,9 @@
 @property (nonatomic, strong) UIImageView *indicatorImageView;
 @property (nonatomic, strong) UIImageView *backgroundImageView;
 @property (nonatomic, strong) id target;
+
+@property (readwrite, nonatomic, copy) ShowCompletionHandler showCompetion;
+@property (readwrite, nonatomic, copy) HideCompletionHandler hideCompetion;
 
 @end
 
@@ -73,22 +75,34 @@
     NSString *indicatorImageName;
     switch (_activityIndicatorViewStyle) {
         case CommonProgressActivityIndicatorViewStyleNormal:
-            backgroundImageName = @"ResourceBundle.bundle/background";
-            indicatorImageName = @"ResourceBundle.bundle/spinner";
+            backgroundImageName = @"ResourceBundle.bundle/CommonProgress.bundle/background-normal";
+            indicatorImageName = @"ResourceBundle.bundle/CommonProgress.bundle/spinner-normal";
+            break;
+        case CommonProgressActivityIndicatorViewStyleSmall:
+            backgroundImageName = @"ResourceBundle.bundle/CommonProgress.bundle/background-small";
+            indicatorImageName = @"ResourceBundle.bundle/CommonProgress.bundle/spinner-small";
             break;
         case CommonProgressActivityIndicatorViewStyleLarge:
-            backgroundImageName = @"ResourceBundle.bundle/background-large";
-            indicatorImageName = @"ResourceBundle.bundle/spinner-large";
+            backgroundImageName = @"ResourceBundle.bundle/CommonProgress.bundle/background-large";
+            indicatorImageName = @"ResourceBundle.bundle/CommonProgress.bundle/spinner-large";
             break;
     }
     
-    _backgroundImage = [UIImage imageNamed:backgroundImageName];
-    _indicatorImage = [UIImage imageNamed:indicatorImageName];
-    self.backgroundImageView.image = _backgroundImage;
-    self.indicatorImageView.image = _indicatorImage;
+    self.backgroundImage = [UIImage imageNamed:backgroundImageName];
+    self.indicatorImage = [UIImage imageNamed:indicatorImageName];
+
+    self.backgroundImageView.image = self.backgroundImage;
+    self.indicatorImageView.image = self.indicatorImage;
+
+    if (self.backgroundImageColor) {
+        self.backgroundImage = [self.backgroundImage imageWithColor:self.backgroundImageColor];
+    }
+    if (self.indicatorImageColor) {
+        self.indicatorImage = [self.indicatorImage imageWithColor:self.indicatorImageColor];
+    }
+
     [self setNeedsLayout];
 }
-
 
 - (BOOL)isAnimating
 {
@@ -132,76 +146,67 @@
     return self;
 }
 
-+ (instancetype)sharedInstance
++ (instancetype)sharedProgress
 {
     static dispatch_once_t pred = 0;
-    __strong static id _sharedObject = nil;
+    __strong static CommonProgress *_sharedObject = nil;
     dispatch_once(&pred, ^{
         _sharedObject = [[self alloc] init];
+        
+        //defualts
+        _sharedObject.activityIndicatorViewStyle = CommonProgressActivityIndicatorViewStyleNormal;
+        _sharedObject.networkActivityIndicatorVisible = NO;
     });
     return _sharedObject;
 }
 
-+ (instancetype)commonProgressWithTarget:(id)target
++ (void)showWithTaregt:(id)target completion:(ShowCompletionHandler)completion
 {
-    CommonProgress *sharedProgress = [CommonProgress sharedInstance];
-    sharedProgress.translatesAutoresizingMaskIntoConstraints = NO;
-    sharedProgress.target = target;
-
-    //defualt
-    sharedProgress.activityIndicatorViewStyle = CommonProgressActivityIndicatorViewStyleNormal;
-
-    //if progress is already running then stop it
-    if (sharedProgress.isAnimating) {
-        [sharedProgress stopAnimating];
-    }
-    
-    //use NSAutoLayout to position in target view
-    UIView *targetView = nil;
-    if ([target isKindOfClass:[UIViewController class]]) {
-        targetView = ((UIViewController *)target).view;
+    //hides the old one
+    [CommonProgress hideWithCompletion:^{
         
-        //TODO::
-        /*
-        if (NO) {
-            BlurView *blurView = [[BlurView alloc] init];
-            blurView.translatesAutoresizingMaskIntoConstraints = NO;
-            [targetView addSubview:blurView];
-            
-            NSDictionary *bindings = @{@"blur": blurView};
-            [targetView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[blur]|"
-                                                                              options:0
-                                                                              metrics:nil
-                                                                                views:bindings]];
-            
-            [targetView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[blur]|"
-                                                                              options:0
-                                                                              metrics:nil
-                                                                                 views:bindings]];
+        //shows the new one
+        CommonProgress *sharedProgress = [CommonProgress sharedProgress];
+        sharedProgress.translatesAutoresizingMaskIntoConstraints = NO;
+        sharedProgress.target = target;
+        sharedProgress.showCompetion = completion;
+        
+        if (!target) {
+            NSLog(@"Warning: please provide valid target for common progress");
+            return;
         }
-        //*/
         
-        [targetView addSubview:sharedProgress];
+        //use NSAutoLayout to position in target view
+        UIView *targetView = nil;
+        if ([target isKindOfClass:[UIViewController class]]) {
+            targetView = ((UIViewController *)target).view;
+            [targetView addSubview:sharedProgress];
+            [targetView addConstraint:[NSLayoutConstraint constraintWithItem:sharedProgress
+                                                                   attribute:NSLayoutAttributeCenterX
+                                                                   relatedBy:NSLayoutRelationEqual
+                                                                      toItem:[sharedProgress superview]
+                                                                   attribute:NSLayoutAttributeCenterX
+                                                                  multiplier:1
+                                                                    constant:0]];
+            
+            [targetView addConstraint:[NSLayoutConstraint constraintWithItem:sharedProgress
+                                                                   attribute:NSLayoutAttributeCenterY
+                                                                   relatedBy:NSLayoutRelationEqual
+                                                                      toItem:[sharedProgress superview]
+                                                                   attribute:NSLayoutAttributeCenterY
+                                                                  multiplier:1
+                                                                    constant:0]];
+            
+        }
         
-        [targetView addConstraint:[NSLayoutConstraint constraintWithItem:sharedProgress
-                                                               attribute:NSLayoutAttributeCenterX
-                                                               relatedBy:NSLayoutRelationEqual
-                                                                  toItem:[sharedProgress superview]
-                                                               attribute:NSLayoutAttributeCenterX
-                                                              multiplier:1
-                                                                constant:0]];
-        
-        [targetView addConstraint:[NSLayoutConstraint constraintWithItem:sharedProgress
-                                                               attribute:NSLayoutAttributeCenterY
-                                                               relatedBy:NSLayoutRelationEqual
-                                                                  toItem:[sharedProgress superview]
-                                                               attribute:NSLayoutAttributeCenterY
-                                                              multiplier:1
-                                                                constant:0]];
-        
-    }
-    
-    return sharedProgress;
+        [sharedProgress startAnimating];
+    }];
+}
+
++ (void)hideWithCompletion:(HideCompletionHandler)completion
+{
+    [CommonProgress sharedProgress].hideCompetion = completion;
+    [[CommonProgress sharedProgress] stopAnimating];
 }
 
 - (void)layoutSubviews
@@ -227,39 +232,54 @@
 }
 
 
+#pragma mark -
 #pragma mark - Public
 
 - (void)startAnimating
 {
-    UIView *targetView = nil;
-    if ([[CommonProgress sharedInstance].target isKindOfClass:[UIViewController class]]) {
-        targetView = ((UIViewController *)[CommonProgress sharedInstance].target).view;
-        targetView.userInteractionEnabled = NO;
+    //start if not animating
+    if (!self.animating) {
+        
+        UIView *targetView = nil;
+        if ([[CommonProgress sharedProgress].target isKindOfClass:[UIViewController class]]) {
+            targetView = ((UIViewController *)[CommonProgress sharedProgress].target).view;
+            targetView.userInteractionEnabled = NO;
+        }
+        
+        if (self.networkActivityIndicatorVisible) {
+            [NetworkUtils setNetworkActivityIndicatorVisible:YES];
+        }
+        
+        self.animating = YES;
+        self.hidden = NO;
+        [self _rotateImageViewFrom:0.0f to:M_PI*2 duration:self.fullRotationDuration repeatCount:HUGE_VALF];
     }
-    
-    if (self.animating) return;
-    
-    self.animating = YES;
-    self.hidden = NO;
-    [self _rotateImageViewFrom:0.0f to:M_PI*2 duration:self.fullRotationDuration repeatCount:HUGE_VALF];
 }
-
 
 - (void)stopAnimating
 {
-    UIView *targetView = nil;
-    if ([[CommonProgress sharedInstance].target isKindOfClass:[UIViewController class]]) {
-        targetView = ((UIViewController *)[CommonProgress sharedInstance].target).view;
-        targetView.userInteractionEnabled = YES;
+    //stop if animating
+    if (self.animating) {
+        
+        UIView *targetView = nil;
+        if ([[CommonProgress sharedProgress].target isKindOfClass:[UIViewController class]]) {
+            targetView = ((UIViewController *)[CommonProgress sharedProgress].target).view;
+            targetView.userInteractionEnabled = YES;
+        }
+        
+        if (self.networkActivityIndicatorVisible) {
+            [NetworkUtils setNetworkActivityIndicatorVisible:NO];
+        }
+        
+        self.animating = NO;
+        [self.indicatorImageView.layer removeAllAnimations];
+        if (self.hidesWhenStopped) {
+            self.hidden = YES;
+        }
     }
     
-    if (!self.animating) return;
-    
-    self.animating = NO;
-    [self.indicatorImageView.layer removeAllAnimations];
-    if (self.hidesWhenStopped) {
-        self.hidden = YES;
-    }
+    //calling completion done in any case
+    if (self.hideCompetion) self.hideCompetion();
 }
 
 
@@ -292,7 +312,6 @@
     [self addSubview:self.indicatorImageView];
 }
 
-
 - (void)_rotateImageViewFrom:(CGFloat)fromValue to:(CGFloat)toValue duration:(CFTimeInterval)duration repeatCount:(CGFloat)repeatCount
 {
     CABasicAnimation *rotationAnimation;
@@ -303,7 +322,50 @@
     rotationAnimation.RepeatCount = repeatCount;
     rotationAnimation.removedOnCompletion = NO;
     rotationAnimation.fillMode = kCAFillModeForwards;
+    rotationAnimation.delegate = self;
     [self.indicatorImageView.layer addAnimation:rotationAnimation forKey:@"rotation"];
+}
+
+- (void)animationDidStart:(CAAnimation *)anim
+{
+    if (self.showCompetion) self.showCompetion();
+}
+
+#pragma mark -
+#pragma mark  getter/setter
+
+- (void)setBackgroundImageColor:(UIColor *)backgroundImageColor
+{
+    if (backgroundImageColor) {
+        _backgroundImageColor = backgroundImageColor;
+        self.backgroundImage = [self.backgroundImage imageWithColor:backgroundImageColor];
+    }
+}
+
+- (void)setIndicatorImageColor:(UIColor *)indicatorImageColor
+{
+    if (indicatorImageColor) {
+        _indicatorImageColor = indicatorImageColor;
+        self.indicatorImage = [self.indicatorImage imageWithColor:indicatorImageColor];
+    }
+}
+
+//not used__deprecated("now using networkutils")
++ (void)setNetworkActivityIndicatorVisible:(BOOL)setVisible
+{
+    static NSInteger NumberOfCallsToSetVisible = 0;
+    if (setVisible)
+        NumberOfCallsToSetVisible++;
+    else
+        NumberOfCallsToSetVisible--;
+    
+    // The assertion helps to find programmer errors in activity indicator management.
+    // Since a negative NumberOfCallsToSetVisible is not a fatal error,
+    // it should probably be removed from production code.
+    //NSAssert(NumberOfCallsToSetVisible >= 0, @"Network Activity Indicator was asked to hide more often than shown");
+    
+    // Display the indicator as long as our static counter is > 0.
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:(NumberOfCallsToSetVisible > 0)];
 }
 
 @end

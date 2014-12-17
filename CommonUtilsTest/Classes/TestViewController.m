@@ -2,7 +2,7 @@
 //  Copyright (c) 2014 Parrocchia. All rights reserved.
 
 #import "TestViewController.h"
-#import "SegmentedViewController.h"
+#import "CommonSegmentedViewController.h"
 #import "HostViewController.h"
 #import "FirstViewController.h"
 #import "NavigationControllerController.h"
@@ -14,7 +14,8 @@
 #import "CommonPickerViewController.h"
 #import "CommonKeyboardViewController.h"
 #import "CommonProgressViewController.h"
-#import "UIImage+Utils.h"
+#import "CommonSystem.h"
+#import "NetworkUtils.h"
 
 typedef NS_ENUM(NSInteger, RowType) {
     RowTypeSegementController,
@@ -50,6 +51,24 @@ typedef NS_ENUM(NSInteger, RowType) {
     self.navigationController.navigationBar.translucent = NO;
 
     self.tableView.rowHeight = 60;
+    
+    [CommonSystem networkInfoWithCompletion:^(NSDictionary *networkInfo) {
+        DebugLog(@"networkInfo %@", networkInfo);
+    }];
+    
+    [CommonSystem networkInfoWithCompletion:^(NSDictionary *networkInfo) {
+        DebugLog(@"networkInfo %@", networkInfo);
+    }];
+    
+    //TEST network activity indicator
+    [NetworkUtils setNetworkActivityIndicatorVisible:YES];
+    [NetworkUtils setNetworkActivityIndicatorVisible:YES];
+    [NetworkUtils setNetworkActivityIndicatorVisible:YES];
+    [NetworkUtils setNetworkActivityIndicatorVisible:YES];
+
+    [NetworkUtils setNetworkActivityIndicatorVisible:NO];
+    //[NetworkUtils setNetworkActivityIndicatorVisible:NO];
+    //[NetworkUtils setNetworkActivityIndicatorVisible:NO];
 }
 
 - (void)didReceiveMemoryWarning
@@ -132,8 +151,8 @@ typedef NS_ENUM(NSInteger, RowType) {
             secondVC.title = @"CustomTransition";
             //*/
             
-            SegmentedViewController *segmentController =
-            [[SegmentedViewController alloc] initWithViewControllers:@[firstVC, secondVC]];
+            CommonSegmentedViewController *segmentController =
+            [[CommonSegmentedViewController alloc] initWithViewControllers:@[firstVC, secondVC]];
             
             [[UISegmentedControl appearance] setBackgroundImage:[UIImage imageNamed:@"stepper_and_segment_background_normal"] forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
             

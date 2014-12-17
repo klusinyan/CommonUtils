@@ -84,6 +84,7 @@
             
             //tell the pageControl (if there is a custom one) to point to the same page as \"indexOfPresentedPag\"
             if (self.pageControl) self.pageControl.currentPage = index;
+            if (self.pageControl) self.pageControl.numberOfPages = numberOfPages;
             
             [self.viewControllers removeAllObjects];
             [self setupViewContollers];

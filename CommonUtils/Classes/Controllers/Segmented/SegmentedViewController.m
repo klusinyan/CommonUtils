@@ -45,18 +45,26 @@
     return self;
 }
 
+//override to setup addional UI components es: headerView
+- (void)setupCustomUI
+{
+    //override
+}
+
 - (void)loadView
 {
+    [self setupCustomUI];
+    
     self.view = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.view.backgroundColor = [UIColor whiteColor];
-
+    
     self.toolbar = (self.useToolBar) ? [[UIToolbar alloc] init] : [[UIView alloc] init];
     if (kTest) {
         self.toolbar.backgroundColor = [UIColor redColor];
     }
     self.toolbar.translatesAutoresizingMaskIntoConstraints = NO;
     [self.view addSubview:self.toolbar];
-
+    
     self.contentView = [[UIView alloc] init];
     self.contentView.translatesAutoresizingMaskIntoConstraints = NO;
     self.contentView.backgroundColor = (self.versioneTest) ? [UIColor greenColor] : [UIColor clearColor];
@@ -81,7 +89,7 @@
                                                       attributes:@{NSFontAttributeName : [UIFont boldSystemFontOfSize:(iPad) ? 20 : 14]}
                                                          context:nil];
         CGFloat maxHeight = fmaxf(defaultHeight, rect.size.height + 45.0f);
-
+        
         [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[_contentView]|"
                                                                           options:0
                                                                           metrics:nil
@@ -91,12 +99,12 @@
                                                                           options:0
                                                                           metrics:nil
                                                                             views:NSDictionaryOfVariableBindings(_contentView)]];
-
+        
         [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-(>=20)-[_lblMessage]-(>=20)-|"
                                                                           options:0
                                                                           metrics:nil
                                                                             views:NSDictionaryOfVariableBindings(_lblMessage)]];
-
+        
         [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.lblMessage
                                                               attribute:NSLayoutAttributeHeight
                                                               relatedBy:NSLayoutRelationEqual
@@ -120,8 +128,8 @@
                                                               attribute:NSLayoutAttributeCenterY
                                                              multiplier:1
                                                                constant:0]];
-         //*/
-
+        //*/
+        
     }
     else if ([self.viewControllers count] == 1) {
         if (self.headerView) {
@@ -177,7 +185,7 @@
                                                                   attribute:NSLayoutAttributeNotAnAttribute
                                                                  multiplier:1
                                                                    constant:self.headerHeight]];
-
+            
         }
         else {
             [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[_toolbar(==44)][_contentView]|"
@@ -185,7 +193,7 @@
                                                                               metrics:nil
                                                                                 views:NSDictionaryOfVariableBindings(_toolbar, _contentView)]];
         }
-
+        
         [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[_toolbar]|"
                                                                           options:0
                                                                           metrics:nil
@@ -195,7 +203,7 @@
                                                                           options:0
                                                                           metrics:nil
                                                                             views:NSDictionaryOfVariableBindings(_contentView)]];
-
+        
         NSMutableArray *titles = [NSMutableArray array];
         for (int i = 0; i <  [self.viewControllers count]; i++) {
             NSString *title = [[self.viewControllers objectAtIndex:i] valueForKeyPath:@"title"];
@@ -207,12 +215,12 @@
         self.segmentedControl = [[UISegmentedControl alloc] initWithItems:titles];
         self.segmentedControl.translatesAutoresizingMaskIntoConstraints = NO;
         /* //not used
-        if (SYSTEM_VERSION_LESS_THAN(@"7.0")) {
-            self.segmentedControl.segmentedControlStyle = UISegmentedControlStyleBar;
-        }
-        //*/
+         if (SYSTEM_VERSION_LESS_THAN(@"7.0")) {
+         self.segmentedControl.segmentedControlStyle = UISegmentedControlStyleBar;
+         }
+         //*/
         ////[self.segmentedControl sizeToFit];
-
+        
         if (self.useToolBar) {
             //header is UIToolbar
             UIBarButtonItem *flexLeft = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
@@ -232,12 +240,12 @@
             //header is UIView
             [self.toolbar addSubview:self.segmentedControl];
         }
-
+        
         //SEL
         [self.segmentedControl addTarget:self
                                   action:@selector(segmentedControlDidChange:)
                         forControlEvents:UIControlEventValueChanged];
-
+        
         
         //constraints to segmented control
         [self.toolbar addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-(==10)-[_segmentedControl]-(==10)-|"
@@ -321,14 +329,14 @@
         NSDictionary *binding = @{@"subview" : vc.view};
         
         [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[subview]|"
-                                                                          options:0
-                                                                          metrics:nil
-                                                                            views:binding]];
+                                                                                 options:0
+                                                                                 metrics:nil
+                                                                                   views:binding]];
         
         [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[subview]|"
-                                                                          options:0
-                                                                          metrics:nil
-                                                                            views:binding]];
+                                                                                 options:0
+                                                                                 metrics:nil
+                                                                                   views:binding]];
     }
     
     if ([delegate respondsToSelector:@selector(segmentedControllerDidSelect)]) {
@@ -371,7 +379,7 @@
 
 - (void)swipeGesture:(UISwipeGestureRecognizer *)swipeGesture
 {
-     NSInteger currentIndex = self.segmentedControl.selectedSegmentIndex;
+    NSInteger currentIndex = self.segmentedControl.selectedSegmentIndex;
     
     if (swipeGesture.direction == UISwipeGestureRecognizerDirectionLeft) {
         //DebugLog(@" *** SWIPE LEFT ***");
