@@ -187,7 +187,7 @@ UIGestureRecognizerDelegate
     
     //decidere, e' neccessario per tableView o no???
     //una volta fixato aPoint.y -= self.scrollView.contentOffset.y], non dovrebbe essere piu' neccessario
-    self.scrollView.contentOffset = CGPointZero;
+    //self.scrollView.contentOffset = CGPointZero;
     
     self.visible = NO;
 }

@@ -1,15 +1,15 @@
 //  Created by Karen Lusinyan on 12/05/14.
 
-@protocol BarcodeReaderDelegate <NSObject>
+#import <AVFoundation/AVFoundation.h>
+
+@protocol CommonBarcodeDelegate <NSObject>
 
 @required
 - (void)capturedCode:(NSString *)code;
 
 @end
 
-#import <AVFoundation/AVFoundation.h>
-
-@interface BarcodeReader : UIViewController <BarcodeReaderDelegate> {
+@interface CommonBarcode : UIViewController <CommonBarcodeDelegate> {
     UIView *_previewContainer;
 }
 

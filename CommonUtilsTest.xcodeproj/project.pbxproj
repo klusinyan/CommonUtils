@@ -41,12 +41,12 @@
 		9CC719FD1A1B5FA100CC0DF2 /* SFLoginCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CC719FC1A1B5FA100CC0DF2 /* SFLoginCell.m */; };
 		9CC831D419E2805B005A10A8 /* CommonProgressViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CC831D219E2805B005A10A8 /* CommonProgressViewController.m */; };
 		9CC831D519E2805B005A10A8 /* CommonProgressViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9CC831D319E2805B005A10A8 /* CommonProgressViewController.xib */; };
+		9CCDD9321A40462A0003EAF3 /* CommonBarcodeController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CCDD9301A40462A0003EAF3 /* CommonBarcodeController.m */; };
+		9CCDD9331A40462A0003EAF3 /* CommonBarcodeController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9CCDD9311A40462A0003EAF3 /* CommonBarcodeController.xib */; };
 		9CD9F79B196EA78500EBBD85 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9CD9F79A196EA78500EBBD85 /* Foundation.framework */; };
 		9CD9F79D196EA78500EBBD85 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9CD9F79C196EA78500EBBD85 /* CoreGraphics.framework */; };
 		9CD9F79F196EA78500EBBD85 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9CD9F79E196EA78500EBBD85 /* UIKit.framework */; };
 		9CD9F7F8196EA7D400EBBD85 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9F7D4196EA7D400EBBD85 /* AppDelegate.m */; };
-		9CD9F7F9196EA7D400EBBD85 /* GDOBarcodeReader.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9F7D7196EA7D400EBBD85 /* GDOBarcodeReader.m */; };
-		9CD9F7FA196EA7D400EBBD85 /* GDOLayoutUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9F7D9196EA7D400EBBD85 /* GDOLayoutUtils.m */; };
 		9CD9F7FB196EA7D400EBBD85 /* BaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9F7DD196EA7D400EBBD85 /* BaseViewController.m */; };
 		9CD9F7FC196EA7D400EBBD85 /* HostViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9F7DF196EA7D400EBBD85 /* HostViewController.m */; };
 		9CD9F7FD196EA7D400EBBD85 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9F7E1196EA7D400EBBD85 /* MainViewController.m */; };
@@ -112,6 +112,9 @@
 		9CC831D119E2805B005A10A8 /* CommonProgressViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonProgressViewController.h; sourceTree = "<group>"; };
 		9CC831D219E2805B005A10A8 /* CommonProgressViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonProgressViewController.m; sourceTree = "<group>"; };
 		9CC831D319E2805B005A10A8 /* CommonProgressViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CommonProgressViewController.xib; sourceTree = "<group>"; };
+		9CCDD92F1A40462A0003EAF3 /* CommonBarcodeController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonBarcodeController.h; sourceTree = "<group>"; };
+		9CCDD9301A40462A0003EAF3 /* CommonBarcodeController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonBarcodeController.m; sourceTree = "<group>"; };
+		9CCDD9311A40462A0003EAF3 /* CommonBarcodeController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CommonBarcodeController.xib; sourceTree = "<group>"; };
 		9CD9F797196EA78500EBBD85 /* CommonUtilsTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CommonUtilsTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9CD9F79A196EA78500EBBD85 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		9CD9F79C196EA78500EBBD85 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -121,10 +124,6 @@
 		9CD9F7BC196EA78500EBBD85 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		9CD9F7D3196EA7D400EBBD85 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		9CD9F7D4196EA7D400EBBD85 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		9CD9F7D6196EA7D400EBBD85 /* GDOBarcodeReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GDOBarcodeReader.h; sourceTree = "<group>"; };
-		9CD9F7D7196EA7D400EBBD85 /* GDOBarcodeReader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GDOBarcodeReader.m; sourceTree = "<group>"; };
-		9CD9F7D8196EA7D400EBBD85 /* GDOLayoutUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GDOLayoutUtils.h; sourceTree = "<group>"; };
-		9CD9F7D9196EA7D400EBBD85 /* GDOLayoutUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GDOLayoutUtils.m; sourceTree = "<group>"; };
 		9CD9F7DC196EA7D400EBBD85 /* BaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseViewController.h; sourceTree = "<group>"; };
 		9CD9F7DD196EA7D400EBBD85 /* BaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseViewController.m; sourceTree = "<group>"; };
 		9CD9F7DE196EA7D400EBBD85 /* HostViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HostViewController.h; sourceTree = "<group>"; };
@@ -282,6 +281,16 @@
 			path = CommonProgress;
 			sourceTree = "<group>";
 		};
+		9CCDD92E1A40462A0003EAF3 /* CommonBarcode */ = {
+			isa = PBXGroup;
+			children = (
+				9CCDD92F1A40462A0003EAF3 /* CommonBarcodeController.h */,
+				9CCDD9301A40462A0003EAF3 /* CommonBarcodeController.m */,
+				9CCDD9311A40462A0003EAF3 /* CommonBarcodeController.xib */,
+			);
+			path = CommonBarcode;
+			sourceTree = "<group>";
+		};
 		9CD9F78E196EA78500EBBD85 = {
 			isa = PBXGroup;
 			children = (
@@ -343,7 +352,7 @@
 				9C8A6AF319D1767D000062F7 /* CommonKeyboard */,
 				9C8C994619CADF5000A9E9B6 /* CommonPicker */,
 				9C72DF8119C7193E007E67A8 /* CommonBook */,
-				9CD9F7D5196EA7D400EBBD85 /* BarcodeReader */,
+				9CCDD92E1A40462A0003EAF3 /* CommonBarcode */,
 				9CD9F7DA196EA7D400EBBD85 /* CustomTransitions */,
 				9CD9F7EC196EA7D400EBBD85 /* ProgressView */,
 				9CD9F7F0196EA7D400EBBD85 /* SegementedController */,
@@ -354,17 +363,6 @@
 				9C1008741A1F820800A8C9BE /* ChildViewController.m */,
 			);
 			path = Classes;
-			sourceTree = "<group>";
-		};
-		9CD9F7D5196EA7D400EBBD85 /* BarcodeReader */ = {
-			isa = PBXGroup;
-			children = (
-				9CD9F7D6196EA7D400EBBD85 /* GDOBarcodeReader.h */,
-				9CD9F7D7196EA7D400EBBD85 /* GDOBarcodeReader.m */,
-				9CD9F7D8196EA7D400EBBD85 /* GDOLayoutUtils.h */,
-				9CD9F7D9196EA7D400EBBD85 /* GDOLayoutUtils.m */,
-			);
-			path = BarcodeReader;
 			sourceTree = "<group>";
 		};
 		9CD9F7DA196EA7D400EBBD85 /* CustomTransitions */ = {
@@ -521,6 +519,7 @@
 				9C72DF9F19C71A90007E67A8 /* iPad_3.png in Resources */,
 				9CC719FA1A1B5F4A00CC0DF2 /* SFLoginTextFieldCell.xib in Resources */,
 				9C01923419D2E5D000E8E9E3 /* CommonBookViewController.xib in Resources */,
+				9CCDD9331A40462A0003EAF3 /* CommonBarcodeController.xib in Resources */,
 				9CD9F814196EAA5500EBBD85 /* segmented.xcassets in Resources */,
 				9CD9F805196EA7D400EBBD85 /* ProgressViewController.xib in Resources */,
 				9C72DF9C19C71A90007E67A8 /* iPad_0.png in Resources */,
@@ -584,7 +583,6 @@
 				9C1008751A1F820800A8C9BE /* ChildViewController.m in Sources */,
 				9CD9F7FC196EA7D400EBBD85 /* HostViewController.m in Sources */,
 				9C597DF319D1C71B000AE471 /* RDVKeyboardAvoidingScrollView.m in Sources */,
-				9CD9F7FA196EA7D400EBBD85 /* GDOLayoutUtils.m in Sources */,
 				9CD9F7FB196EA7D400EBBD85 /* BaseViewController.m in Sources */,
 				9C83F87619CB0E0400F150B4 /* CommonPickerViewController.m in Sources */,
 				9CD9F801196EA7D400EBBD85 /* NavigationControllerController.m in Sources */,
@@ -598,8 +596,8 @@
 				9CD9F808196EA7D400EBBD85 /* TestViewController.m in Sources */,
 				9CC719F91A1B5F4A00CC0DF2 /* SFLoginTextFieldCell.m in Sources */,
 				9C72DF8919C719AB007E67A8 /* CommonBookContentViewController.m in Sources */,
+				9CCDD9321A40462A0003EAF3 /* CommonBarcodeController.m in Sources */,
 				9CD9F7FD196EA7D400EBBD85 /* MainViewController.m in Sources */,
-				9CD9F7F9196EA7D400EBBD85 /* GDOBarcodeReader.m in Sources */,
 				9C8A6AF919D17EE6000062F7 /* CommonKeyboardViewController.m in Sources */,
 				9CD9F807196EA7D400EBBD85 /* CustomSplitController.m in Sources */,
 				9CC831D419E2805B005A10A8 /* CommonProgressViewController.m in Sources */,

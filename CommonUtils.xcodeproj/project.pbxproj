@@ -69,8 +69,8 @@
 		9CBCB45A1A079EBC00E6BC7C /* NetworkUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CBCB4581A079EBC00E6BC7C /* NetworkUtils.m */; };
 		9CCB62DE19ED156F0061D0C1 /* CommonSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CCB62DC19ED156F0061D0C1 /* CommonSystem.h */; };
 		9CCB62DF19ED156F0061D0C1 /* CommonSystem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CCB62DD19ED156F0061D0C1 /* CommonSystem.m */; };
-		9CCF0D6D1921196E00489B74 /* BarcodeReader.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CCF0D6B1921196E00489B74 /* BarcodeReader.h */; };
-		9CCF0D6E1921196E00489B74 /* BarcodeReader.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CCF0D6C1921196E00489B74 /* BarcodeReader.m */; };
+		9CCDD91E1A4040130003EAF3 /* CommonBarcode.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CCDD91A1A4040130003EAF3 /* CommonBarcode.h */; };
+		9CCDD91F1A4040130003EAF3 /* CommonBarcode.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CCDD91B1A4040130003EAF3 /* CommonBarcode.m */; };
 		9CD702211933572A0066FFC0 /* ALEListViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CD702191933572A0066FFC0 /* ALEListViewController.h */; };
 		9CD702221933572A0066FFC0 /* ALEListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD7021A1933572A0066FFC0 /* ALEListViewController.m */; };
 		9CD702231933572A0066FFC0 /* ALESegmentedViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CD7021B1933572A0066FFC0 /* ALESegmentedViewController.h */; };
@@ -169,8 +169,8 @@
 		9CBCB4581A079EBC00E6BC7C /* NetworkUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NetworkUtils.m; sourceTree = "<group>"; };
 		9CCB62DC19ED156F0061D0C1 /* CommonSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonSystem.h; sourceTree = "<group>"; };
 		9CCB62DD19ED156F0061D0C1 /* CommonSystem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonSystem.m; sourceTree = "<group>"; };
-		9CCF0D6B1921196E00489B74 /* BarcodeReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BarcodeReader.h; sourceTree = "<group>"; };
-		9CCF0D6C1921196E00489B74 /* BarcodeReader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BarcodeReader.m; sourceTree = "<group>"; };
+		9CCDD91A1A4040130003EAF3 /* CommonBarcode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonBarcode.h; sourceTree = "<group>"; };
+		9CCDD91B1A4040130003EAF3 /* CommonBarcode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonBarcode.m; sourceTree = "<group>"; };
 		9CD702191933572A0066FFC0 /* ALEListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALEListViewController.h; sourceTree = "<group>"; };
 		9CD7021A1933572A0066FFC0 /* ALEListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALEListViewController.m; sourceTree = "<group>"; };
 		9CD7021B1933572A0066FFC0 /* ALESegmentedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALESegmentedViewController.h; sourceTree = "<group>"; };
@@ -414,6 +414,7 @@
 				9C01920D19D2CBD600E8E9E3 /* Book */,
 				9C01921019D2CBD600E8E9E3 /* Keyboard */,
 				9C01921319D2CBD600E8E9E3 /* Picker */,
+				9CCDD9181A4040130003EAF3 /* BarcodeReader */,
 				9CA4F69A19790E7D000BCFCC /* TabPageController */,
 				9CB1FC82197598D00080534F /* Segmented */,
 				9CB1FC85197598D00080534F /* SelectionList */,
@@ -480,7 +481,6 @@
 				9CCB62DB19ED156F0061D0C1 /* System */,
 				9CE7A89819541A5000E699E4 /* Directory */,
 				9C34F7CD192CAFF9001B8D6D /* Network */,
-				9CCF0D6A1921196E00489B74 /* BarcodeReader */,
 				9C96B093193F089B0014AC23 /* SplitViewController */,
 				9C0747F81936280D000B28F6 /* CusomViews */,
 				9CA097571911329600605020 /* CustomTransitions */,
@@ -509,11 +509,11 @@
 			path = System;
 			sourceTree = "<group>";
 		};
-		9CCF0D6A1921196E00489B74 /* BarcodeReader */ = {
+		9CCDD9181A4040130003EAF3 /* BarcodeReader */ = {
 			isa = PBXGroup;
 			children = (
-				9CCF0D6B1921196E00489B74 /* BarcodeReader.h */,
-				9CCF0D6C1921196E00489B74 /* BarcodeReader.m */,
+				9CCDD91A1A4040130003EAF3 /* CommonBarcode.h */,
+				9CCDD91B1A4040130003EAF3 /* CommonBarcode.m */,
 			);
 			path = BarcodeReader;
 			sourceTree = "<group>";
@@ -664,7 +664,7 @@
 				9C01921F19D2CC0300E8E9E3 /* BlurView.h in Headers */,
 				9CD9F75D196E876000EBBD85 /* Lib-Prefix.pch in Headers */,
 				9C34F7D0192CAFF9001B8D6D /* ProgressView.h in Headers */,
-				9CCF0D6D1921196E00489B74 /* BarcodeReader.h in Headers */,
+				9CCDD91E1A4040130003EAF3 /* CommonBarcode.h in Headers */,
 				9C0802611A1F4B7B00040153 /* UIViewController+ChildrenHandler.h in Headers */,
 				9CB1FC8E197598D00080534F /* SelectedElementDelegate.h in Headers */,
 				9CCB62DE19ED156F0061D0C1 /* CommonSystem.h in Headers */,
@@ -784,7 +784,6 @@
 				9CBCB45A1A079EBC00E6BC7C /* NetworkUtils.m in Sources */,
 				9CD702241933572A0066FFC0 /* ALESegmentedViewController.m in Sources */,
 				9C01922019D2CC0300E8E9E3 /* BlurView.m in Sources */,
-				9CCF0D6E1921196E00489B74 /* BarcodeReader.m in Sources */,
 				9C2AC5E219EA96F900588538 /* CommonProgress.m in Sources */,
 				9C90FF6219374DD3004CE056 /* UITableView+Utils.m in Sources */,
 				9C8C0AFD1934A17C0033D2A9 /* UIImage+Alpha.m in Sources */,
@@ -796,6 +795,7 @@
 				9CA09777191133A000605020 /* TransitionManager.m in Sources */,
 				9C01921719D2CBD600E8E9E3 /* CommonBook.m in Sources */,
 				9C8C0AFC1934A1780033D2A9 /* UIImage+Resize.m in Sources */,
+				9CCDD91F1A4040130003EAF3 /* CommonBarcode.m in Sources */,
 				9CA4F69E19790E7D000BCFCC /* ViewPagerController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

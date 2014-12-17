@@ -7,7 +7,7 @@
 #import "FirstViewController.h"
 #import "NavigationControllerController.h"
 #import "MainViewController.h"
-#import "GDOBarcodeReader.h"
+#import "CommonBarcodeController.h"
 #import "ProgressViewController.h"
 #import "CustomSplitController.h"
 #import "CommonBookViewController.h"
@@ -16,6 +16,7 @@
 #import "CommonProgressViewController.h"
 #import "CommonSystem.h"
 #import "NetworkUtils.h"
+#import "UIAlertView+Blocks.h"
 
 typedef NS_ENUM(NSInteger, RowType) {
     RowTypeSegementController,
@@ -29,7 +30,7 @@ typedef NS_ENUM(NSInteger, RowType) {
     RowCount,
 };
 
-@interface TestViewController () <GDOBarcodeReaderDeleate>
+@interface TestViewController () <CommonBarcodeControllerDelegate>
 
 @end
 
@@ -205,13 +206,20 @@ typedef NS_ENUM(NSInteger, RowType) {
             break;
         }
         case RowTypeBarcodeReader: {
-            GDOBarcodeReader *barcodeReader = [[GDOBarcodeReader alloc] init];
+            CommonBarcodeController *barcodeReader = [CommonBarcodeController barcodeReader];
             //barcodeReader.supportedBarcodes = @[AVMetadataObjectTypeEAN13Code, AVMetadataObjectTypeQRCode];
+            barcodeReader.UIInterfaceType = UIInterfaceTypeFull;
             barcodeReader.themeColor = [UIColor redColor];
-            barcodeReader.soundOn = YES;
             barcodeReader.delegate = self;
-            //barcodeReader.flashEnabled = YES;
+            barcodeReader.buttonDoneTitle = @"Procedi";
+            barcodeReader.buttonRetryTitle = @"Riprova";
+
+            barcodeReader.cornerRadius = 8.0f;
+            barcodeReader.flashEnabled = YES;
+            barcodeReader.soundOn = NO;
+            
             [self.navigationController pushViewController:barcodeReader animated:YES];
+            
             break;
         }
         case RowTypeProgressView: {
@@ -257,14 +265,14 @@ typedef NS_ENUM(NSInteger, RowType) {
     }
 }
 
-- (void)selectedBarcodeCode:(NSString *)code
+- (void)selectedBarcodeCode:(NSString *)selectedCode withTarget:(id)target
 {
-    
-}
-
-- (void)capturedCode:(NSString *)code
-{
-    DebugLog(@"capturedCode %@", code);
+    UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Selected code"
+                                                 message:selectedCode
+                                                delegate:nil
+                                       cancelButtonTitle:@"Ok"
+                                       otherButtonTitles:nil];
+    [av show];
 }
 
 @end

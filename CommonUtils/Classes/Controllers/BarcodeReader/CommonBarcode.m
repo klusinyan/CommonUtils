@@ -1,8 +1,8 @@
 //  Created by Karen Lusinyan on 12/05/14.
 
-#import "BarcodeReader.h"
+#import "CommonBarcode.h"
 
-@interface BarcodeReader () <AVCaptureMetadataOutputObjectsDelegate>
+@interface CommonBarcode () <AVCaptureMetadataOutputObjectsDelegate>
 
 //avcapture...
 @property (readwrite, nonatomic, strong) AVCaptureDevice *captureDevice;
@@ -19,17 +19,12 @@
 
 @end
 
-@implementation BarcodeReader
+@implementation CommonBarcode
 
 - (id)init
 {
     self = [super init];
     if (self) {
-
-        //setup edgesForExtendedLayout
-        if ([self respondsToSelector:@selector(setEdgesForExtendedLayout:)]) {
-            self.edgesForExtendedLayout = UIRectEdgeNone;
-        }
         
         //setup defaults
         self.themeColor = nil;
@@ -50,11 +45,6 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
 
     if (self) {
-        
-        //setup edgesForExtendedLayout
-        if ([self respondsToSelector:@selector(setEdgesForExtendedLayout:)]) {
-            self.edgesForExtendedLayout = UIRectEdgeNone;
-        }
         
         //setup defaults
         self.themeColor = nil;
@@ -99,7 +89,6 @@
         [self.captureDevice setTorchMode:AVCaptureTorchModeOn];
         [self.captureDevice unlockForConfiguration];
     }
-    [self.captureDevice unlockForConfiguration];
 }
 
 //frame utilities
@@ -345,6 +334,5 @@
 {
     //override
 }
-
 
 @end
