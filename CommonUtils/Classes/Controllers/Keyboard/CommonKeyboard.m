@@ -44,7 +44,9 @@ UIGestureRecognizerDelegate
 }
 
 + (void)registerClass:(Class)aClass withResponders:(NSArray *)responders
-{
+{    
+    if (!responders || [responders count] == 0) return;
+
     NSString *className = NSStringFromClass(aClass);
     if (!classResponders) {
         classResponders = [[NSMutableDictionary alloc] init];
