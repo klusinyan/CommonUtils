@@ -7,4 +7,9 @@
 
 - (UIImage *)imageWithColor:(UIColor *)color;
 
+//Aggiunte da Niccolò
++ (UIImage *)imageWithColor:(UIColor *)color;
++ (UIImage *)tintImage:(UIImage *)baseImage color:(UIColor *)theColor;
+- (UIImage *)imageTintedWithColor:(UIColor *)color;
+
 @end
