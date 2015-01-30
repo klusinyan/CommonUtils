@@ -17,6 +17,8 @@
 		9C01922019D2CC0300E8E9E3 /* BlurView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C01921E19D2CC0300E8E9E3 /* BlurView.m */; };
 		9C0802611A1F4B7B00040153 /* UIViewController+ChildrenHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C08025F1A1F4B7B00040153 /* UIViewController+ChildrenHandler.h */; };
 		9C0802621A1F4B7B00040153 /* UIViewController+ChildrenHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C0802601A1F4B7B00040153 /* UIViewController+ChildrenHandler.m */; };
+		9C1192021A7BE0AB000B6090 /* CommonSpinner.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C1192001A7BE0AB000B6090 /* CommonSpinner.h */; };
+		9C1192031A7BE0AB000B6090 /* CommonSpinner.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C1192011A7BE0AB000B6090 /* CommonSpinner.m */; };
 		9C1E3931198E42F600EA933D /* UIAlertView+Blocks.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C1E392F198E42F600EA933D /* UIAlertView+Blocks.h */; };
 		9C1E3932198E42F600EA933D /* UIAlertView+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C1E3930198E42F600EA933D /* UIAlertView+Blocks.m */; };
 		9C20BE5B1949EF830077C6E8 /* ADVAnimationController.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C20BE561949EF830077C6E8 /* ADVAnimationController.h */; };
@@ -115,6 +117,8 @@
 		9C01921E19D2CC0300E8E9E3 /* BlurView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BlurView.m; sourceTree = "<group>"; };
 		9C08025F1A1F4B7B00040153 /* UIViewController+ChildrenHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+ChildrenHandler.h"; sourceTree = "<group>"; };
 		9C0802601A1F4B7B00040153 /* UIViewController+ChildrenHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+ChildrenHandler.m"; sourceTree = "<group>"; };
+		9C1192001A7BE0AB000B6090 /* CommonSpinner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonSpinner.h; sourceTree = "<group>"; };
+		9C1192011A7BE0AB000B6090 /* CommonSpinner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonSpinner.m; sourceTree = "<group>"; };
 		9C1E392F198E42F600EA933D /* UIAlertView+Blocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIAlertView+Blocks.h"; sourceTree = "<group>"; };
 		9C1E3930198E42F600EA933D /* UIAlertView+Blocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertView+Blocks.m"; sourceTree = "<group>"; };
 		9C20BE561949EF830077C6E8 /* ADVAnimationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ADVAnimationController.h; sourceTree = "<group>"; };
@@ -270,6 +274,15 @@
 			path = UIViewController;
 			sourceTree = "<group>";
 		};
+		9C1191FF1A7BE0A2000B6090 /* Spinner */ = {
+			isa = PBXGroup;
+			children = (
+				9C1192001A7BE0AB000B6090 /* CommonSpinner.h */,
+				9C1192011A7BE0AB000B6090 /* CommonSpinner.m */,
+			);
+			path = Spinner;
+			sourceTree = "<group>";
+		};
 		9C1E392E198E42F600EA933D /* UIAlertView */ = {
 			isa = PBXGroup;
 			children = (
@@ -410,6 +423,7 @@
 		9CB1FC81197598D00080534F /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				9C1191FF1A7BE0A2000B6090 /* Spinner */,
 				9CF5403A19E2AC3D006297AE /* Progress */,
 				9C01920D19D2CBD600E8E9E3 /* Book */,
 				9C01921019D2CBD600E8E9E3 /* Keyboard */,
@@ -649,6 +663,7 @@
 				9CD702211933572A0066FFC0 /* ALEListViewController.h in Headers */,
 				9CA2B4BE19584AFA00E29A8B /* UICollectionView+Utils.h in Headers */,
 				9C20BE5E1949EF830077C6E8 /* ZoomAnimationController.h in Headers */,
+				9C1192021A7BE0AB000B6090 /* CommonSpinner.h in Headers */,
 				9CB4800D19558E8400A5AC1B /* UIColor+Utils.h in Headers */,
 				9C20BE5B1949EF830077C6E8 /* ADVAnimationController.h in Headers */,
 				9C2AC5E119EA96F900588538 /* CommonProgress.h in Headers */,
@@ -790,6 +805,7 @@
 				9CA10B621953521400DC3C5B /* NSIndexPath+Utils.m in Sources */,
 				9C01921B19D2CBD600E8E9E3 /* CommonPicker.m in Sources */,
 				9C20BE5F1949EF830077C6E8 /* ZoomAnimationController.m in Sources */,
+				9C1192031A7BE0AB000B6090 /* CommonSpinner.m in Sources */,
 				9C46A59A19766A840018B109 /* ImageDownloader.m in Sources */,
 				9CB1FC9A19759B6A0080534F /* SelectedListController.m in Sources */,
 				9CA09777191133A000605020 /* TransitionManager.m in Sources */,

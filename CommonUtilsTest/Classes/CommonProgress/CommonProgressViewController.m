@@ -3,6 +3,7 @@
 
 #import "CommonProgressViewController.h"
 #import "CommonProgress.h"
+#import "CommonSpinner.h"
 
 #import "ChildViewController.h"
 #import "UIViewController+ChildrenHandler.h"
@@ -38,6 +39,8 @@
                                                                                   action:@selector(showHideCommonProgress:)];
     self.navigationItem.rightBarButtonItems = @[showProgress];
     
+    //---------------COMMON PROGRESS---------------//
+    /*
     //BOOL random = arc4random_uniform(3);
     [CommonProgress sharedProgress].backgroundImageColor = [UIColor colorWithWhite:0.5 alpha:0.8];
     [CommonProgress sharedProgress].activityIndicatorViewStyle = CommonProgressActivityIndicatorViewStyleSmall;
@@ -48,7 +51,18 @@
     [CommonProgress showWithTaregt:self completion:^{
         DebugLog(@"common progress did start");
     }];
-
+    //*/
+    
+    //---------------COMMON SPINNER---------------//
+    [CommonSpinner sharedSpinner].lineWidth = 3.0f;
+    [CommonSpinner sharedSpinner].hidesWhenStopped = YES;
+    [CommonSpinner sharedSpinner].size = (CGSize){40, 40};
+    [CommonSpinner sharedSpinner].tintColor = [UIColor grayColor];
+    //[CommonSpinner sharedSpinner].timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
+    [CommonSpinner showWithTaregt:self completion:^{
+        
+    }];
+    
     /*
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         CommonProgressViewController *vc = [[CommonProgressViewController alloc] initWithNibName:NSStringFromClass([CommonProgressViewController class]) bundle:nil];
@@ -92,7 +106,8 @@
         DebugLog(@"vc = %@ status = %@", controller.title, controllerTransitionStatus(transitionStatus));
     }];
     
-    /*OK
+    //---------------COMMON PROGRESS---------------//
+    /*
     if ([[CommonProgress sharedProgress] isAnimating] || !sender) {
         [CommonProgress hideWithCompletion:^{
             DebugLog(@"common progress did stop");
@@ -105,6 +120,18 @@
                             }];
     }
     //*/
+    
+    if ([[CommonSpinner sharedSpinner] isAnimating] || !sender) {
+        [CommonSpinner hideWithCompletion:^{
+            DebugLog(@"common progress did stop");
+        }];
+    }
+    else {
+        [CommonSpinner showWithTaregt:self
+                            completion:^{
+                                DebugLog(@"common progress did start");
+                            }];
+    }
 }
 
 @end
