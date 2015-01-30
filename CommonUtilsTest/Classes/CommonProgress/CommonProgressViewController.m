@@ -54,10 +54,8 @@
     //*/
     
     //---------------COMMON SPINNER---------------//
-    [CommonSpinner sharedSpinner].lineWidth = 3.0f;
     [CommonSpinner sharedSpinner].hidesWhenStopped = YES;
-    [CommonSpinner sharedSpinner].size = (CGSize){40, 40};
-    [CommonSpinner sharedSpinner].tintColor = [UIColor grayColor];
+    //[CommonSpinner sharedSpinner].size = (CGSize){40, 40};
     //[CommonSpinner sharedSpinner].timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
     [CommonSpinner showWithTaregt:self completion:^{
         

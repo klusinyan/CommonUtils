@@ -9,7 +9,6 @@ typedef void(^CommonSpinnerHideCompletionHandler)(void);
 @property (nonatomic) BOOL hidesWhenStopped;
 @property (nonatomic, strong) CAMediaTimingFunction *timingFunction;
 @property (nonatomic) CGSize size;
-@property (nonatomic) CGFloat lineWidth;
 @property (nonatomic, readonly) BOOL isAnimating;
 
 + (instancetype)sharedSpinner;
