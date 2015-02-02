@@ -6,9 +6,13 @@ typedef void(^CommonSpinnerHideCompletionHandler)(void);
 
 @interface CommonSpinner : UIView
 
-@property (nonatomic) BOOL hidesWhenStopped;
-@property (nonatomic, strong) CAMediaTimingFunction *timingFunction;
-@property (nonatomic) CGSize size;
+// Default tintColor = [UIColor grayColor]
+// To change tintColor use: [CommonSpinner sharedSpinner].tintColor = [UIColor redColor]
+
+@property (nonatomic) BOOL hidesWhenStopped;                            //defualt NO
+@property (nonatomic, strong) CAMediaTimingFunction *timingFunction;    //default kCAMediaTimingFunctionLinear
+@property (nonatomic) CGSize size;                                      //default {40, 40}
+@property (nonatomic) CGFloat lineWidth;                                //default 1.5
 @property (nonatomic, readonly) BOOL isAnimating;
 
 + (instancetype)sharedSpinner;

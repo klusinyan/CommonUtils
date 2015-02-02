@@ -19,6 +19,7 @@ static NSString *kLLARingSpinnerAnimationKey = @"llaringspinnerview.rotation";
 @implementation CommonSpinner
 
 @synthesize progressLayer = _progressLayer;
+@synthesize lineWidth = _lineWidth;
 @synthesize isAnimating = _isAnimating;
 
 - (instancetype)init
@@ -47,11 +48,15 @@ static NSString *kLLARingSpinnerAnimationKey = @"llaringspinnerview.rotation";
 
 - (void)initialize
 {
-    //defaults
-    _timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-    _size = (CGSize){40.0, 40.0};
-    self.tintColor = [UIColor grayColor];
+    //-----------------SETUP DEFAULTS-----------------//
+    _hidesWhenStopped = NO;
+    _timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
+    _size = (CGSize){40.0f, 40.0f};
+    _lineWidth = 1.5f;
     
+    //tint color setup separately
+    self.tintColor = [UIColor grayColor];
+
     [self.layer addSublayer:self.progressLayer];
 }
 
@@ -197,7 +202,7 @@ static NSString *kLLARingSpinnerAnimationKey = @"llaringspinnerview.rotation";
         _progressLayer = [CAShapeLayer layer];
         _progressLayer.strokeColor = self.tintColor.CGColor;
         _progressLayer.fillColor = nil;
-        _progressLayer.lineWidth = 1.5f;
+        _progressLayer.lineWidth = self.lineWidth;
     }
     return _progressLayer;
 }
