@@ -31,15 +31,15 @@ typedef void(^ControllerTransintionHandler)(UIViewController *controller, Contro
 @interface UIViewController (ChildrenHandler) <ChildControllerDelegate>
 
 //add child view controller to parent
-- (void)parentViewController:(UIViewController *)parentViewController
-      addChildViewController:(UIViewController<ChildControllerDelegate> *)childViewController
-               containerView:(UIView *)containerView
-                  completion:(ControllerTransintionHandler)completion;
+- (void)addChildViewController:(UIViewController<ChildControllerDelegate> *)childViewController
+        toParentViewController:(UIViewController *)parentViewController
+                     container:(UIView *)container
+                    completion:(ControllerTransintionHandler)completion;
 
 //remove child view controller from parent
-- (void)parentViewController:(UIViewController *)parentViewController
-   removeChildViewController:(UIViewController<ChildControllerDelegate> *)childViewController
-                  completion:(ControllerTransintionHandler)completion;
+- (void)removeChildViewController:(UIViewController<ChildControllerDelegate> *)childViewController
+         fromParentViewController:(UIViewController *)parentViewController
+                       completion:(ControllerTransintionHandler)completion;
 
 //dissmis child viewController
 - (void)dismissChildrenViewControllerWithCompletion:(ControllerTransintionHandler)completion;

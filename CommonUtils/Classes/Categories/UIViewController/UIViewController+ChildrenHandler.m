@@ -5,22 +5,22 @@
 @implementation UIViewController (ChildrenHandler)
 @dynamic controllerTransitionHandler;
 
-- (void)parentViewController:(UIViewController *)parentViewController
-      addChildViewController:(UIViewController<ChildControllerDelegate> *)childViewController
-               containerView:(UIView *)containerView
-                  completion:(ControllerTransintionHandler)completion
+- (void)addChildViewController:(UIViewController<ChildControllerDelegate> *)childViewController
+        toParentViewController:(UIViewController *)parentViewController
+                     container:(UIView *)container
+                    completion:(ControllerTransintionHandler)completion
 {
     childViewController.controllerTransitionHandler = ^(UIViewController *controller, ControllerTransitionStatus transitionStatus) {
         if (completion) completion(controller, transitionStatus);
     };
     
     //if container view is nil -> assign it self.view as a default value
-    if (!containerView) containerView = self.view;
+    if (!container) container = self.view;
 
     [parentViewController addChildViewController:childViewController];
     [childViewController didMoveToParentViewController:parentViewController];
-    childViewController.view.frame = containerView.bounds;
-    [containerView addSubview:childViewController.view];
+    childViewController.view.frame = container.bounds;
+    [container addSubview:childViewController.view];
 
     //set constrains to childView
     childViewController.view.translatesAutoresizingMaskIntoConstraints = NO;
@@ -29,20 +29,20 @@
     NSDictionary *bindings = @{@"childView" : childViewController.view};
     
     //assign contstrains
-    [containerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[childView]|"
-                                                                          options:0
-                                                                          metrics:nil
-                                                                            views:bindings]];
+    [container addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[childView]|"
+                                                                      options:0
+                                                                      metrics:nil
+                                                                        views:bindings]];
     
-    [containerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[childView]|"
-                                                                          options:0
-                                                                          metrics:nil
-                                                                            views:bindings]];
+    [container addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[childView]|"
+                                                                      options:0
+                                                                      metrics:nil
+                                                                        views:bindings]];
 }
 
-- (void)parentViewController:(UIViewController *)parentViewController
-   removeChildViewController:(UIViewController<ChildControllerDelegate> *)childViewController
-                  completion:(ControllerTransintionHandler)completion
+- (void)removeChildViewController:(UIViewController<ChildControllerDelegate> *)childViewController
+         fromParentViewController:(UIViewController *)parentViewController
+                       completion:(ControllerTransintionHandler)completion
 {
     childViewController.controllerTransitionHandler = ^(UIViewController *controller, ControllerTransitionStatus transitionStatus) {
         if (completion) completion(controller, transitionStatus);

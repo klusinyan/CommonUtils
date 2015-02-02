@@ -197,7 +197,7 @@ static NSString *kLLARingSpinnerAnimationKey = @"llaringspinnerview.rotation";
         _progressLayer = [CAShapeLayer layer];
         _progressLayer.strokeColor = self.tintColor.CGColor;
         _progressLayer.fillColor = nil;
-        _progressLayer.lineWidth = 3.0f;
+        _progressLayer.lineWidth = 1.5f;
     }
     return _progressLayer;
 }

@@ -56,7 +56,7 @@
     //---------------COMMON SPINNER---------------//
     [CommonSpinner sharedSpinner].hidesWhenStopped = YES;
     //[CommonSpinner sharedSpinner].size = (CGSize){40, 40};
-    //[CommonSpinner sharedSpinner].timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
+    [CommonSpinner sharedSpinner].timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
     [CommonSpinner showWithTaregt:self completion:^{
         
     }];
@@ -72,23 +72,23 @@
     ChildViewController *child_1 = [[ChildViewController alloc] init];
     child_1.view.backgroundColor = [UIColor redColor];
     child_1.title = @"Child_1";
-    [self parentViewController:self
-        addChildViewController:child_1
-                 containerView:self.container
-                    completion:^(UIViewController *controller, ControllerTransitionStatus transitionStatus) {
-                        DebugLog(@"vc = %@ status = %@", controller.title, controllerTransitionStatus(transitionStatus));
-                    }];
+    [self addChildViewController:child_1
+          toParentViewController:self
+                       container:self.container
+                      completion:^(UIViewController *controller, ControllerTransitionStatus transitionStatus) {
+                          DebugLog(@"vc = %@ status = %@", controller.title, controllerTransitionStatus(transitionStatus));
+                      }];
     
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         ChildViewController *child_2 = [[ChildViewController alloc] init];
         child_2.view.backgroundColor = [UIColor yellowColor];
         child_2.title = @"Child_2";
-        [self parentViewController:self
-            addChildViewController:child_2
-                     containerView:self.container
-                        completion:^(UIViewController *controller, ControllerTransitionStatus transitionStatus) {
-                            DebugLog(@"vc = %@ status = %@", controller.title, controllerTransitionStatus(transitionStatus));
-                        }];
+        [self addChildViewController:child_2
+              toParentViewController:self
+                           container:self.container
+                          completion:^(UIViewController *controller, ControllerTransitionStatus transitionStatus) {
+                              DebugLog(@"vc = %@ status = %@", controller.title, controllerTransitionStatus(transitionStatus));
+                          }];
     });
 }
 
