@@ -66,6 +66,13 @@
     
     if (self.flashEnabled) {
         if (self.captureDevice.hasFlash || self.captureDevice.hasTorch) {
+            
+            //switch off on-start
+            [self.captureDevice lockForConfiguration:nil];
+            [self.captureDevice setFlashMode:AVCaptureFlashModeOff];
+            [self.captureDevice setTorchMode:AVCaptureTorchModeOff];
+            [self.captureDevice unlockForConfiguration];
+
             self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Flash"
                                                                                       style:UIBarButtonItemStyleBordered
                                                                                      target:self
