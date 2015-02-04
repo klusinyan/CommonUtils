@@ -66,7 +66,7 @@
     //---------------COMMON SPINNER---------------//
     [CommonSpinner sharedSpinner].hidesWhenStopped = YES;
     [CommonSpinner sharedSpinner].runInBackgroud = YES;
-    [CommonSpinner sharedSpinner].size = (CGSize){20, 20};
+    [CommonSpinner sharedSpinner].size = (CGSize){22, 22}; //Apple's size
     //[CommonSpinner sharedSpinner].lineWidth = 4.0f;
     //[CommonSpinner sharedSpinner].timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
     [CommonSpinner showWithTaregt:self completion:^{
