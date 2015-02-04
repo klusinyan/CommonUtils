@@ -38,6 +38,16 @@
                                                                                   target:self
                                                                                   action:@selector(showHideCommonProgress:)];
     self.navigationItem.rightBarButtonItems = @[showProgress];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(applicationDidEnterBackground:)
+                                                 name:UIApplicationDidEnterBackgroundNotification
+                                               object:nil];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(applicationWillEnterForeground:)
+                                                 name:UIApplicationWillEnterForegroundNotification
+                                               object:nil];
     
     //---------------COMMON PROGRESS---------------//
     /*
@@ -55,6 +65,7 @@
     
     //---------------COMMON SPINNER---------------//
     [CommonSpinner sharedSpinner].hidesWhenStopped = YES;
+    [CommonSpinner sharedSpinner].runInBackgroud = YES;
     [CommonSpinner sharedSpinner].size = (CGSize){20, 20};
     //[CommonSpinner sharedSpinner].lineWidth = 4.0f;
     //[CommonSpinner sharedSpinner].timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
@@ -91,6 +102,29 @@
                               DebugLog(@"vc = %@ status = %@", controller.title, controllerTransitionStatus(transitionStatus));
                           }];
     });
+}
+
+- (void)applicationDidEnterBackground:(NSNotification *)notification
+{
+    /*
+    [CommonSpinner hideWithCompletion:^{
+        DebugLog(@"Spinner did hide");
+    }];
+    //*/
+}
+
+- (void)applicationWillEnterForeground:(NSNotification *)notification
+{
+    /*
+    [CommonSpinner showWithTaregt:self completion:^{
+        DebugLog(@"Spinner did show");
+    }];
+    //*/
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
 }
 
 - (void)viewWillDisappear:(BOOL)animated

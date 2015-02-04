@@ -2,6 +2,7 @@
 //  Modified by Karen Lusinyan on 30/01/15.
 
 #import "CommonSpinner.h"
+#import "NetworkUtils.h"
 
 static NSString *kLLARingSpinnerAnimationKey = @"llaringspinnerview.rotation";
 
@@ -10,6 +11,9 @@ static NSString *kLLARingSpinnerAnimationKey = @"llaringspinnerview.rotation";
 @property (readonly, nonatomic, strong) CAShapeLayer *progressLayer;
 @property (readwrite, nonatomic, assign) BOOL isAnimating;
 @property (readwrite, nonatomic, assign) id target;
+
+//bg execution
+@property (readwrite, nonatomic, assign)  UIBackgroundTaskIdentifier bgTask;
 
 @property (readwrite, nonatomic, copy) CommonSpinnerShowCompletionHandler showCompetion;
 @property (readwrite, nonatomic, copy) CommonSpinnerHideCompletionHandler hideCompetion;
@@ -22,10 +26,16 @@ static NSString *kLLARingSpinnerAnimationKey = @"llaringspinnerview.rotation";
 @synthesize lineWidth = _lineWidth;
 @synthesize isAnimating = _isAnimating;
 
+- (void)dealloc
+{
+    [self removeObservers];
+}
+
 - (instancetype)init
 {
     if (self = [super init]) {
         [self initialize];
+        [self addObservers];
     }
     return self;
 }
@@ -34,6 +44,7 @@ static NSString *kLLARingSpinnerAnimationKey = @"llaringspinnerview.rotation";
 {
     if (self = [super initWithFrame:frame]) {
         [self initialize];
+        [self addObservers];
     }
     return self;
 }
@@ -42,14 +53,32 @@ static NSString *kLLARingSpinnerAnimationKey = @"llaringspinnerview.rotation";
 {
     if (self = [super initWithCoder:aDecoder]) {
         [self initialize];
+        [self addObservers];
     }
     return self;
+}
+
+- (void)addObservers
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(applicationWillEnterForeground:)
+                                                 name:UIApplicationWillEnterForegroundNotification
+                                               object:nil];
+}
+
+- (void)removeObservers
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:UIApplicationWillEnterForegroundNotification
+                                                  object:nil];
 }
 
 - (void)initialize
 {
     //-----------------SETUP DEFAULTS-----------------//
     _hidesWhenStopped = NO;
+    _runInBackgroud = NO;
+    _networkActivityIndicatorVisible = YES;
     _timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
     _size = (CGSize){40.0f, 40.0f};
     _lineWidth = 1.5f;
@@ -122,7 +151,22 @@ static NSString *kLLARingSpinnerAnimationKey = @"llaringspinnerview.rotation";
             
         }
         
-        [sharedSpinner startAnimating];
+        UIApplication *application = [UIApplication sharedApplication];
+        [CommonSpinner sharedSpinner].bgTask = [application beginBackgroundTaskWithName:@"bgTask" expirationHandler:^{
+            // Clean up any unfinished task business by marking where you
+            // stopped or ending the task outright.
+            [application endBackgroundTask:[CommonSpinner sharedSpinner].bgTask];
+            [CommonSpinner sharedSpinner].bgTask = UIBackgroundTaskInvalid;
+        }];
+        
+        // Start the long-running task and return immediately.
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [sharedSpinner startAnimating];
+            });
+            [application endBackgroundTask:[CommonSpinner sharedSpinner].bgTask];
+            [CommonSpinner sharedSpinner].bgTask = UIBackgroundTaskInvalid;
+        });
     }];
 }
 
@@ -161,6 +205,10 @@ static NSString *kLLARingSpinnerAnimationKey = @"llaringspinnerview.rotation";
         [self.progressLayer addAnimation:animation forKey:kLLARingSpinnerAnimationKey];
         self.isAnimating = true;
         
+        if (self.networkActivityIndicatorVisible) {
+            [NetworkUtils setNetworkActivityIndicatorVisible:YES];
+        }
+
         if (self.hidesWhenStopped) {
             self.hidden = NO;
         }
@@ -173,6 +221,10 @@ static NSString *kLLARingSpinnerAnimationKey = @"llaringspinnerview.rotation";
         [self.progressLayer removeAnimationForKey:kLLARingSpinnerAnimationKey];
         self.isAnimating = false;
         
+        if (self.networkActivityIndicatorVisible) {
+            [NetworkUtils setNetworkActivityIndicatorVisible:NO];
+        }
+
         if (self.hidesWhenStopped) {
             self.hidden = YES;
         }
@@ -227,6 +279,17 @@ static NSString *kLLARingSpinnerAnimationKey = @"llaringspinnerview.rotation";
 {
     _hidesWhenStopped = hidesWhenStopped;
     self.hidden = !self.isAnimating && hidesWhenStopped;
+}
+
+#pragma mark -
+#pragma mark NSNotificationCenter
+
+- (void)applicationWillEnterForeground:(NSNotification *)notification
+{
+    if (self.runInBackgroud && self.isAnimating) {
+        [self stopAnimating];
+        [self startAnimating];
+    }
 }
 
 @end

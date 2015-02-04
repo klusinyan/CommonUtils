@@ -73,13 +73,6 @@
 		9CCB62DF19ED156F0061D0C1 /* CommonSystem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CCB62DD19ED156F0061D0C1 /* CommonSystem.m */; };
 		9CCDD91E1A4040130003EAF3 /* CommonBarcode.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CCDD91A1A4040130003EAF3 /* CommonBarcode.h */; };
 		9CCDD91F1A4040130003EAF3 /* CommonBarcode.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CCDD91B1A4040130003EAF3 /* CommonBarcode.m */; };
-		9CD702211933572A0066FFC0 /* ALEListViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CD702191933572A0066FFC0 /* ALEListViewController.h */; };
-		9CD702221933572A0066FFC0 /* ALEListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD7021A1933572A0066FFC0 /* ALEListViewController.m */; };
-		9CD702231933572A0066FFC0 /* ALESegmentedViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CD7021B1933572A0066FFC0 /* ALESegmentedViewController.h */; };
-		9CD702241933572A0066FFC0 /* ALESegmentedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD7021C1933572A0066FFC0 /* ALESegmentedViewController.m */; };
-		9CD702251933572A0066FFC0 /* ALEWebViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CD7021D1933572A0066FFC0 /* ALEWebViewController.h */; };
-		9CD702261933572A0066FFC0 /* ALEWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD7021E1933572A0066FFC0 /* ALEWebViewController.m */; };
-		9CD702271933572A0066FFC0 /* ALESecondaryViewControllerDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CD702201933572A0066FFC0 /* ALESecondaryViewControllerDelegate.h */; };
 		9CD7022B193388150066FFC0 /* UIView+AutoLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CD70229193388150066FFC0 /* UIView+AutoLayout.h */; };
 		9CD7022C193388150066FFC0 /* UIView+AutoLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD7022A193388150066FFC0 /* UIView+AutoLayout.m */; };
 		9CD7023E193388790066FFC0 /* UIImage+Alpha.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CD7022F193388600066FFC0 /* UIImage+Alpha.h */; };
@@ -175,13 +168,6 @@
 		9CCB62DD19ED156F0061D0C1 /* CommonSystem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonSystem.m; sourceTree = "<group>"; };
 		9CCDD91A1A4040130003EAF3 /* CommonBarcode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonBarcode.h; sourceTree = "<group>"; };
 		9CCDD91B1A4040130003EAF3 /* CommonBarcode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonBarcode.m; sourceTree = "<group>"; };
-		9CD702191933572A0066FFC0 /* ALEListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALEListViewController.h; sourceTree = "<group>"; };
-		9CD7021A1933572A0066FFC0 /* ALEListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALEListViewController.m; sourceTree = "<group>"; };
-		9CD7021B1933572A0066FFC0 /* ALESegmentedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALESegmentedViewController.h; sourceTree = "<group>"; };
-		9CD7021C1933572A0066FFC0 /* ALESegmentedViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALESegmentedViewController.m; sourceTree = "<group>"; };
-		9CD7021D1933572A0066FFC0 /* ALEWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALEWebViewController.h; sourceTree = "<group>"; };
-		9CD7021E1933572A0066FFC0 /* ALEWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALEWebViewController.m; sourceTree = "<group>"; };
-		9CD702201933572A0066FFC0 /* ALESecondaryViewControllerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALESecondaryViewControllerDelegate.h; sourceTree = "<group>"; };
 		9CD70229193388150066FFC0 /* UIView+AutoLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+AutoLayout.h"; sourceTree = "<group>"; };
 		9CD7022A193388150066FFC0 /* UIView+AutoLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+AutoLayout.m"; sourceTree = "<group>"; };
 		9CD7022F193388600066FFC0 /* UIImage+Alpha.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Alpha.h"; sourceTree = "<group>"; };
@@ -500,7 +486,6 @@
 				9CA097571911329600605020 /* CustomTransitions */,
 				9CF9663518FD3ADC00E265A1 /* Protocols */,
 				9CF9663718FD3ADC00E265A1 /* Categories */,
-				9CD702171933572A0066FFC0 /* AleUtils */,
 			);
 			name = Classes;
 			path = CommonUtils/Classes;
@@ -530,36 +515,6 @@
 				9CCDD91B1A4040130003EAF3 /* CommonBarcode.m */,
 			);
 			path = BarcodeReader;
-			sourceTree = "<group>";
-		};
-		9CD702171933572A0066FFC0 /* AleUtils */ = {
-			isa = PBXGroup;
-			children = (
-				9CD702181933572A0066FFC0 /* Controllers */,
-				9CD7021F1933572A0066FFC0 /* Protocols */,
-			);
-			path = AleUtils;
-			sourceTree = "<group>";
-		};
-		9CD702181933572A0066FFC0 /* Controllers */ = {
-			isa = PBXGroup;
-			children = (
-				9CD702191933572A0066FFC0 /* ALEListViewController.h */,
-				9CD7021A1933572A0066FFC0 /* ALEListViewController.m */,
-				9CD7021B1933572A0066FFC0 /* ALESegmentedViewController.h */,
-				9CD7021C1933572A0066FFC0 /* ALESegmentedViewController.m */,
-				9CD7021D1933572A0066FFC0 /* ALEWebViewController.h */,
-				9CD7021E1933572A0066FFC0 /* ALEWebViewController.m */,
-			);
-			path = Controllers;
-			sourceTree = "<group>";
-		};
-		9CD7021F1933572A0066FFC0 /* Protocols */ = {
-			isa = PBXGroup;
-			children = (
-				9CD702201933572A0066FFC0 /* ALESecondaryViewControllerDelegate.h */,
-			);
-			path = Protocols;
 			sourceTree = "<group>";
 		};
 		9CD70228193388150066FFC0 /* UIView */ = {
@@ -652,15 +607,12 @@
 				9CD7023F193388790066FFC0 /* UIImage+FixOrientation.h in Headers */,
 				9C6DD7D419F130670013D333 /* UIImage+Color.h in Headers */,
 				9C90FF8219377F7F004CE056 /* NSMutableArray+Utils.h in Headers */,
-				9CD702251933572A0066FFC0 /* ALEWebViewController.h in Headers */,
 				9CBCB4591A079EBC00E6BC7C /* NetworkUtils.h in Headers */,
 				9CD70241193388790066FFC0 /* UIImage+Resize.h in Headers */,
 				9C20BE5C1949EF830077C6E8 /* DropAnimationController.h in Headers */,
 				9CD70242193388790066FFC0 /* UIImage+RoundedCorner.h in Headers */,
 				9C96B096193F089B0014AC23 /* SplitViewController.h in Headers */,
-				9CD702231933572A0066FFC0 /* ALESegmentedViewController.h in Headers */,
 				9CB1FC8F197598D00080534F /* SelectedListController.h in Headers */,
-				9CD702211933572A0066FFC0 /* ALEListViewController.h in Headers */,
 				9CA2B4BE19584AFA00E29A8B /* UICollectionView+Utils.h in Headers */,
 				9C20BE5E1949EF830077C6E8 /* ZoomAnimationController.h in Headers */,
 				9C1192021A7BE0AB000B6090 /* CommonSpinner.h in Headers */,
@@ -687,7 +639,6 @@
 				9CD7022B193388150066FFC0 /* UIView+AutoLayout.h in Headers */,
 				9CA09778191133A000605020 /* TransitionManager.h in Headers */,
 				9CB1FC8C197598D00080534F /* SegmentedViewController.h in Headers */,
-				9CD702271933572A0066FFC0 /* ALESecondaryViewControllerDelegate.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -782,8 +733,6 @@
 				9C94A99219EBC911003DF554 /* CommonSegmentedViewController.m in Sources */,
 				9CB4800E19558E8400A5AC1B /* UIColor+Utils.m in Sources */,
 				9C1E3932198E42F600EA933D /* UIAlertView+Blocks.m in Sources */,
-				9CD702221933572A0066FFC0 /* ALEListViewController.m in Sources */,
-				9CD702261933572A0066FFC0 /* ALEWebViewController.m in Sources */,
 				9C90FF7A19377EBB004CE056 /* NSDictionary+Utils.m in Sources */,
 				9C6DD7D519F130670013D333 /* UIImage+Color.m in Sources */,
 				9CD9F773196E907900EBBD85 /* NSString+HTML.m in Sources */,
@@ -797,7 +746,6 @@
 				9CA2B4BF19584AFA00E29A8B /* UICollectionView+Utils.m in Sources */,
 				9CD7022C193388150066FFC0 /* UIView+AutoLayout.m in Sources */,
 				9CBCB45A1A079EBC00E6BC7C /* NetworkUtils.m in Sources */,
-				9CD702241933572A0066FFC0 /* ALESegmentedViewController.m in Sources */,
 				9C01922019D2CC0300E8E9E3 /* BlurView.m in Sources */,
 				9C2AC5E219EA96F900588538 /* CommonProgress.m in Sources */,
 				9C90FF6219374DD3004CE056 /* UITableView+Utils.m in Sources */,

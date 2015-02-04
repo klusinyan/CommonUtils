@@ -115,8 +115,20 @@
                                                                                  options:0
                                                                                  metrics:nil
                                                                                    views:NSDictionaryOfVariableBindings(_lblNome, _lblDescr, _lblPeriodo)]];
+        
+        
+        self.imageView.clipsToBounds = YES;
+        self.imageView.contentMode = UIViewContentModeScaleAspectFill;
     }
     return self;
+}
+
+
+//only nib
+- (void)awakeFromNib
+{
+    self.imageView.clipsToBounds = YES;
+    self.imageView.contentMode = UIViewContentModeScaleAspectFill;
 }
 
 @end

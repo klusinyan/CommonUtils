@@ -12,7 +12,7 @@
 
 @interface MainViewController : BaseViewController <UIViewControllerTransitioningDelegate, MainViewControllerDelegate>
 
-@property(readwrite, nonatomic, strong) NSArray *dataSource;
+@property(readwrite, nonatomic, strong) NSMutableArray *dataSource;
 
 //not used
 @property(readwrite, nonatomic, getter = isAnimating) BOOL animating;

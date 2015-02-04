@@ -10,6 +10,8 @@ typedef void(^CommonSpinnerHideCompletionHandler)(void);
 // To change tintColor use: [CommonSpinner sharedSpinner].tintColor = [UIColor redColor]
 
 @property (nonatomic) BOOL hidesWhenStopped;                            //defualt NO
+@property (nonatomic) BOOL runInBackgroud;                              //defualt NO
+@property (nonatomic) BOOL networkActivityIndicatorVisible;             //default YES
 @property (nonatomic, strong) CAMediaTimingFunction *timingFunction;    //default kCAMediaTimingFunctionLinear
 @property (nonatomic) CGSize size;                                      //default {40, 40}
 @property (nonatomic) CGFloat lineWidth;                                //default 1.5

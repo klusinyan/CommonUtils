@@ -17,6 +17,9 @@
 #define USE_iOS7_UIVCTransitioningDelegate 1
 #define USE_MY_TRANSITION 1
 
+#define kRowCount   1000
+#define kImageSize  100
+
 static NSString *CustomCellIdentifier = @"CustomCellIdentifier";
 
 @interface MainViewController () <UICollectionViewDelegate, UICollectionViewDataSource>
@@ -48,6 +51,13 @@ static NSString *CustomCellIdentifier = @"CustomCellIdentifier";
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         self.dataSource = [NSMutableArray array];
+        
+        for (int i = 0; i < kRowCount; i++) {
+            UIColor *color = [UIColor colorWithHue:i/100.0f saturation:1 brightness:1 alpha:1];
+            NSString *hexColor = [UIColor hexStringFromColor:color];
+            NSString *url = [NSString stringWithFormat:@"http://placehold.it/%@x%@/%@/&text=image%@", @(kImageSize), @(kImageSize), hexColor, @(i)];
+            if (url) [self.dataSource addObject:url];
+        }
     }
     return self;
 }
@@ -57,6 +67,12 @@ static NSString *CustomCellIdentifier = @"CustomCellIdentifier";
     self = [super init];
     if (self) {
         self.dataSource = [NSMutableArray array];
+        for (int i = 0; i < kRowCount; i++) {
+            UIColor *color = [UIColor colorWithHue:i/100.0f saturation:1 brightness:1 alpha:1];
+            NSString *hexColor = [UIColor hexStringFromColor:color];
+            NSString *url = [NSString stringWithFormat:@"http://placehold.it/%@x%@/%@/&text=image%@", @(kImageSize), @(kImageSize), hexColor, @(i)];
+            if (url) [self.dataSource addObject:url];
+        }
     }
     return self;
 }
@@ -119,6 +135,9 @@ static NSString *CustomCellIdentifier = @"CustomCellIdentifier";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    //start load images immediately
+    [self.collectionView reloadData];
 }
 
 - (void)viewWillLayoutSubviews
@@ -130,6 +149,11 @@ static NSString *CustomCellIdentifier = @"CustomCellIdentifier";
 - (void)updateUI
 {
     [self.collectionView reloadData];
+    
+    // -------------------------------------------------------------------------------
+    //  Load images for all onscreen rows when scrolling is finished.
+    // -------------------------------------------------------------------------------
+    [self loadImagesForOnscreenRows];
 }
 
 #pragma mark  -
@@ -137,8 +161,7 @@ static NSString *CustomCellIdentifier = @"CustomCellIdentifier";
 
 - (NSInteger)collectionView:(UICollectionView *)view numberOfItemsInSection:(NSInteger)section
 {
-    //return [self.dataSource count];
-    return 500;
+    return [self.dataSource count];
 }
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
@@ -146,14 +169,29 @@ static NSString *CustomCellIdentifier = @"CustomCellIdentifier";
     return 1;
 }
 
-- (UICollectionViewCell *)collectionView:(UICollectionView *)cv cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     
-    CustomCell *cell = [cv dequeueReusableCellWithReuseIdentifier:CustomCellIdentifier forIndexPath:indexPath];
+    CustomCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:CustomCellIdentifier forIndexPath:indexPath];
     
     cell.lblNome.text = [NSString stringWithFormat:@"Nome: [%@%@]", @(indexPath.section), @(indexPath.row)];
     cell.lblDescr.text = [NSString stringWithFormat:@"Descrizione: [%@%@]", @(indexPath.section), @(indexPath.row)];
     cell.lblPeriodo.text = [NSString stringWithFormat:@"Periodo di validita: [%@%@]", @(indexPath.section), @(indexPath.row)];
     
+    //Logging
+    [ImageDownloader setLogging:YES];
+    
+    //Load images without placeholder
+    cell.imageView.image = [ImageDownloader offlineImageWithUrl:[self.dataSource objectAtIndex:indexPath.row]
+                                                     moduleName:@"my_image_folder_name"
+                                                    placeholder:nil];
+    
+    //Load images if not exists with placeholder
+    if (!cell.imageView.image) {
+        [self downloadImageView:cell.imageView
+                        withUrl:[self.dataSource objectAtIndex:indexPath.row]
+                    placeholder:[UIImage imageNamed:@"placeholder"]];
+    }
+
     /*
     UIColor *randomColor = [UIColor colorWithRed:(arc4random() % 255) / 255.0f
                                            green:(arc4random() % 255) / 255.0f
@@ -161,70 +199,76 @@ static NSString *CustomCellIdentifier = @"CustomCellIdentifier";
                                            alpha:1];
     //*/
     //cell.imageView.image = [UIImage imageNamed:@"apple.png"];
-    
-    
-    
-    cell.imageView.clipsToBounds = YES;
-    cell.imageView.contentMode = UIViewContentModeScaleAspectFill;
-    //cell.imageView.backgroundColor = [UIColor colorWithHue:[indexPath row]/100.0f saturation:1 brightness:1 alpha:1];
-    
-    UIColor *color = [UIColor colorWithHue:[indexPath row]/100.0f saturation:1 brightness:1 alpha:1];
-    cell.imageView.backgroundColor = color;
-    NSString *hexColor = [UIColor hexStringFromColor:color];
-    NSString *url = [NSString stringWithFormat:@"http://placehold.it/1024x1024/%@/&text=image%@", hexColor, @(indexPath.row)];
-    
-    [ImageDownloader setLogging:YES];
-    cell.imageView.image = [ImageDownloader imageWithUrl:url
-                                              moduleName:@"my_images"
-                                           downloadImage:cell.imageView
-                                            forIndexPath:(NSIndexPath *)indexPath
-                                     imageRepresentation:UIImageRepresentationJPEG
-                                             placeholder:[UIImage imageNamed:@"placeholder"]
-                                              completion:^(UIImage *image, NSIndexPath *indexPath) {
-                                                  cell.imageView.image = image;
-                                                  cell.imageView.layer.transform = CATransform3DMakeScale(0, 0, 0);
-                                                  [UIView animateWithDuration:0.25
-                                                                        delay:0
-                                                                      options:UIViewAnimationOptionCurveEaseOut
-                                                                   animations:^{
-                                                                       cell.imageView.layer.transform = CATransform3DMakeScale(1, 1, 1);
-                                                                   } completion:^(BOOL finished) {
-                                                                       //
-                                                                   }];
 
-                                              }];
     return cell;
 }
 
+#pragma mark -
+#pragma mark - UIScrollViewDelegate+ImageDownloader
+
+// -------------------------------------------------------------------------------
+//	scrollViewDidEndDragging:willDecelerate:
+//  Load images for all onscreen rows when scrolling is finished.
+// -------------------------------------------------------------------------------
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
-    /*
-    NSInteger batchSize = 5;
-    
-    NSArray *indexPaths = [self.collectionView indexPathsForVisibleItems];
-    NSIndexPath *lastIndexPath = [indexPaths lastObject];
-    NSInteger fromIndex = [lastIndexPath row];
-    NSInteger toIndex = (fromIndex+batchSize > 500) ? 500 : fromIndex+batchSize;
-    
-    for (int i = [lastIndexPath row]; i < toIndex; i++) {
-        UIColor *color = [UIColor colorWithHue:i/100.0f saturation:1 brightness:1 alpha:1];
-        NSString *hexColor = [UIColor hexStringFromColor:color];
-        NSString *url = [NSString stringWithFormat:@"http://placehold.it/1024x1024/%@/&text=image%@", hexColor, @(i)];
-        if (![DirectoryUtils imageExistsWithName:url moduleName:@"my_images"]) {
-            
-            @autoreleasepool {
-                [ImageDownloader imageWithUrl:url
-                                   moduleName:@"my_images"
-                                downloadImage:[UIImageView new]
-                          imageRepresentation:UIImageRepresentationJPEG
-                                  placeholder:nil
-                                   completion:^(UIImage *image) {
-                                       //do nothing
-                                   }];
-            }
+    if (!decelerate) {
+        [self loadImagesForOnscreenRows];
+    }
+}
+
+// -------------------------------------------------------------------------------
+//	scrollViewDidEndDecelerating:
+// -------------------------------------------------------------------------------
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+{
+    [self loadImagesForOnscreenRows];
+}
+
+// -------------------------------------------------------------------------------
+//	scrollViewWillBeginDragging:
+//  Cancel all downloads when scrollView starts scrolling
+// -------------------------------------------------------------------------------
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+{
+    [ImageDownloader cancelAllDownloads];
+}
+
+// -------------------------------------------------------------------------------
+//	loadImagesForOnscreenRows
+//  This method is used in case the user scrolled into a set of cells that don't
+//  have their app icons yet.
+// -------------------------------------------------------------------------------
+- (void)loadImagesForOnscreenRows
+{
+    if ([self.dataSource count] > 0) {
+        NSArray *visiblePaths = [self.collectionView indexPathsForVisibleItems];
+        for (NSIndexPath *indexPath in visiblePaths) {
+            [self downloadImageView:((CustomCell *)[self.collectionView cellForItemAtIndexPath:indexPath]).imageView
+                            withUrl:[self.dataSource objectAtIndex:indexPath.row]
+                        placeholder:[UIImage imageNamed:@"placeholder"]];
         }
     }
-    //*/
+}
+
+// -------------------------------------------------------------------------------
+//	downloadImageView
+//  This method is used to download and show image
+// -------------------------------------------------------------------------------
+- (void)downloadImageView:(UIImageView *)imageView withUrl:(NSString *)url placeholder:(UIImage *)placeholder
+{
+    if (url != nil && [url length] > 0) {
+        [ImageDownloader setLogging:NO];
+        imageView.image = [ImageDownloader imageWithUrl:url
+                                             moduleName:@"my_image_folder_name"
+                                          downloadImage:imageView
+                                           forIndexPath:nil
+                                    imageRepresentation:UIImageRepresentationPNG
+                                            placeholder:placeholder
+                                             completion:^(UIImage *image, NSIndexPath *indexPath) {
+                                                 imageView.image = image;
+                                             }];
+    }
 }
 
 #pragma mark -
@@ -450,21 +494,13 @@ static NSString *CustomCellIdentifier = @"CustomCellIdentifier";
 - (id<UIViewControllerAnimatedTransitioning>)animationControllerForDismissedController:(UIViewController *)dismissed
 {
     if (iPad || USE_MY_TRANSITION) {
-        self.transitionManager.presenting = NO;
+        self.transitionManager.presenting = NO;        
         return self.transitionManager;
     }
     else {
         self.animationController.isPresenting = NO;
         return self.animationController;
     }
-}
-
-#pragma mark -
-#pragma mark KLSegmentedControllerDelegate delegate methods
-
-- (void)controllerDidBecomeActive
-{
-    [self updateUI];
 }
 
 #pragma mark -
