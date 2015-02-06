@@ -23,6 +23,7 @@ Pod::Spec.new do |s|
   end
 
   s.dependency 'AFNetworking'
+  s.dependency 'Canvas'
 
   #s.resource_bundles = {
   #  'Nibs'   => ['CommonUtils/Resources/Images/**/*.*'],

@@ -77,7 +77,7 @@ static NSString *kLLARingSpinnerAnimationKey = @"llaringspinnerview.rotation";
 {
     //-----------------SETUP DEFAULTS-----------------//
     _hidesWhenStopped = NO;
-    _runInBackgroud = NO;
+    _runInBackgroud = YES;
     _networkActivityIndicatorVisible = YES;
     _timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
     _size = (CGSize){40.0f, 40.0f};

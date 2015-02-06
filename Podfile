@@ -6,6 +6,10 @@ platform :ios, '7.0'
  
 xcodeproj 'CommonUtilsTest.xcodeproj'
  
- target 'CommonUtilsTest' do
-     pod 'CommonUtilsBeta', :path =>  '.'
+target 'CommonUtilsTest' do
+     pod 'CommonUtils', :path =>  '.'
 end
+
+#target 'CommonUtilsTest' do
+#    pod 'CommonUtilsBeta', :path =>  '.'
+#[end
