@@ -44,4 +44,5 @@
 
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:setVisible];
 }
+
 @end
