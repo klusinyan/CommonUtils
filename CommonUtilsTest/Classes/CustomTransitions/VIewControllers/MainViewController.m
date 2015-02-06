@@ -169,6 +169,15 @@ static NSString *CustomCellIdentifier = @"CustomCellIdentifier";
     return 1;
 }
 
+- (void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    /*
+    if ([cell isMemberOfClass:[CustomCell class]]) {
+        [(CustomCell *)cell startCanvasAnimation];
+    }
+    //*/
+}
+
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     
     CustomCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:CustomCellIdentifier forIndexPath:indexPath];
@@ -184,12 +193,12 @@ static NSString *CustomCellIdentifier = @"CustomCellIdentifier";
     cell.imageView.image = [ImageDownloader offlineImageWithUrl:[self.dataSource objectAtIndex:indexPath.row]
                                                      moduleName:@"my_image_folder_name"
                                                     placeholder:nil];
-    
     //Load images if not exists with placeholder
     if (!cell.imageView.image) {
         [self downloadImageView:cell.imageView
                         withUrl:[self.dataSource objectAtIndex:indexPath.row]
-                    placeholder:[UIImage imageNamed:@"placeholder"]];
+                    placeholder:[UIImage imageNamed:@"placeholder"]
+                      indexPath:indexPath];
     }
 
     /*
@@ -246,7 +255,8 @@ static NSString *CustomCellIdentifier = @"CustomCellIdentifier";
         for (NSIndexPath *indexPath in visiblePaths) {
             [self downloadImageView:((CustomCell *)[self.collectionView cellForItemAtIndexPath:indexPath]).imageView
                             withUrl:[self.dataSource objectAtIndex:indexPath.row]
-                        placeholder:[UIImage imageNamed:@"placeholder"]];
+                        placeholder:[UIImage imageNamed:@"placeholder"]
+                          indexPath:indexPath];
         }
     }
 }
@@ -255,18 +265,21 @@ static NSString *CustomCellIdentifier = @"CustomCellIdentifier";
 //	downloadImageView
 //  This method is used to download and show image
 // -------------------------------------------------------------------------------
-- (void)downloadImageView:(UIImageView *)imageView withUrl:(NSString *)url placeholder:(UIImage *)placeholder
+- (void)downloadImageView:(UIImageView *)imageView withUrl:(NSString *)url placeholder:(UIImage *)placeholder indexPath:(NSIndexPath *)indexPath
 {
     if (url != nil && [url length] > 0) {
         [ImageDownloader setLogging:NO];
         imageView.image = [ImageDownloader imageWithUrl:url
                                              moduleName:@"my_image_folder_name"
                                           downloadImage:imageView
-                                           forIndexPath:nil
+                                           forIndexPath:indexPath
                                     imageRepresentation:UIImageRepresentationPNG
                                             placeholder:placeholder
                                              completion:^(UIImage *image, NSIndexPath *indexPath) {
                                                  imageView.image = image;
+                                                 if (image != placeholder) {
+                                                     [[self.collectionView cellForItemAtIndexPath:indexPath] startCanvasAnimation];
+                                                 }
                                              }];
     }
 }
