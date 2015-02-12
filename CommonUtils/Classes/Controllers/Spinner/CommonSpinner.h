@@ -9,6 +9,7 @@ typedef void(^CommonSpinnerHideCompletionHandler)(void);
 // Default tintColor = [UIColor grayColor]
 // To change tintColor use: [CommonSpinner sharedSpinner].tintColor = [UIColor redColor]
 
+@property (nonatomic) NSString *title;                                  //default nil
 @property (nonatomic) BOOL hidesWhenStopped;                            //defualt NO
 @property (nonatomic) BOOL runInBackgroud;                              //defualt NO
 @property (nonatomic) BOOL networkActivityIndicatorVisible;             //default YES

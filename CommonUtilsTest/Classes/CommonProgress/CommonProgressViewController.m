@@ -4,11 +4,14 @@
 #import "CommonProgressViewController.h"
 #import "CommonProgress.h"
 #import "CommonSpinner.h"
+#import "CSAnimationView.h"
 
 #import "ChildViewController.h"
 #import "UIViewController+ChildrenHandler.h"
 
 @interface CommonProgressViewController ()
+@property (weak, nonatomic) IBOutlet CSAnimationView *titleAnimationView;
+@property (weak, nonatomic) IBOutlet CSAnimationView *descrAnimationView;
 
 @property (nonatomic, strong) IBOutlet UIView *container;
 
@@ -66,12 +69,13 @@
     //---------------COMMON SPINNER---------------//
     [CommonSpinner sharedSpinner].hidesWhenStopped = YES;
     [CommonSpinner sharedSpinner].runInBackgroud = YES;
-    [CommonSpinner sharedSpinner].size = (CGSize){22, 22}; //Apple's size
-    //[CommonSpinner sharedSpinner].lineWidth = 4.0f;
+    [CommonSpinner sharedSpinner].title = @"Coop Mobile";
     //[CommonSpinner sharedSpinner].timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-    [CommonSpinner showWithTaregt:self completion:^{
-        DebugLog(@"Loading");
-    }];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [CommonSpinner showWithTaregt:self completion:^{
+            DebugLog(@"Loading");
+        }];
+    });
     
     /*
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -79,6 +83,10 @@
         [self.navigationController pushViewController:vc animated:YES];
     });
     //*/
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self animate:NO];
+    });
     
     //TEST children view controller
     ChildViewController *child_1 = [[ChildViewController alloc] init];
@@ -158,13 +166,29 @@
         [CommonSpinner hideWithCompletion:^{
             DebugLog(@"common progress did stop");
         }];
+        [self animate:NO];
     }
     else {
         [CommonSpinner showWithTaregt:self
                             completion:^{
                                 DebugLog(@"common progress did start");
                             }];
+        [self animate:YES];
     }
+}
+
+- (void)animate:(BOOL)show
+{
+    self.titleAnimationView.type = show ? CSAnimationTypeFadeInLeft : CSAnimationTypeFadeOutLeft;
+    self.titleAnimationView.delay = 0.4;
+    self.titleAnimationView.duration = 0.5;
+    
+    self.descrAnimationView.type = show ? CSAnimationTypeFadeInLeft : CSAnimationTypeFadeOutLeft;
+    self.descrAnimationView.delay = 0.5;
+    self.descrAnimationView.duration = 0.5;
+    
+    [self.titleAnimationView startCanvasAnimation];
+    [self.descrAnimationView startCanvasAnimation];
 }
 
 @end

@@ -4,11 +4,17 @@
 #import "CommonSpinner.h"
 #import "NetworkUtils.h"
 
+#define kMaxWidth 300
+#define kOffset 5
+
 static NSString *kLLARingSpinnerAnimationKey = @"llaringspinnerview.rotation";
 
 @interface CommonSpinner ()
 
-@property (readonly, nonatomic, strong) CAShapeLayer *progressLayer;
+@property (readwrite, nonatomic, strong) NSString *titleFont;
+@property (readwrite, nonatomic, assign) CGFloat  titleFontSize;
+@property (readwrite, nonatomic, strong) CATextLayer *titleLayer;
+@property (readwrite, nonatomic, strong) CAShapeLayer *progressLayer;
 @property (readwrite, nonatomic, assign) BOOL isAnimating;
 @property (readwrite, nonatomic, assign) id target;
 
@@ -21,8 +27,6 @@ static NSString *kLLARingSpinnerAnimationKey = @"llaringspinnerview.rotation";
 @end
 
 @implementation CommonSpinner
-
-@synthesize progressLayer = _progressLayer;
 @synthesize lineWidth = _lineWidth;
 @synthesize isAnimating = _isAnimating;
 
@@ -80,13 +84,18 @@ static NSString *kLLARingSpinnerAnimationKey = @"llaringspinnerview.rotation";
     _runInBackgroud = YES;
     _networkActivityIndicatorVisible = YES;
     _timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
-    _size = (CGSize){40.0f, 40.0f};
+    _size = (CGSize){20.0f, 20.0f};
     _lineWidth = 1.5f;
     
+    _titleFont = @"HelveticaNeue-Light";
+    _titleFontSize = 20.0f;
+    _title = nil;
+
     //tint color setup separately
     self.tintColor = [UIColor grayColor];
-
+    
     [self.layer addSublayer:self.progressLayer];
+    [self.layer addSublayer:self.titleLayer];
 }
 
 + (instancetype)sharedSpinner
@@ -141,13 +150,17 @@ static NSString *kLLARingSpinnerAnimationKey = @"llaringspinnerview.rotation";
                                                                    attribute:NSLayoutAttributeCenterX
                                                                   multiplier:1
                                                                     constant:0]];
+            CGFloat offset = 0;
+            if ([CommonSpinner sharedSpinner].title) {
+                offset = -([CommonSpinner sharedSpinner].titleFontSize+kOffset);
+            }
             [targetView addConstraint:[NSLayoutConstraint constraintWithItem:sharedSpinner
                                                                    attribute:NSLayoutAttributeCenterY
                                                                    relatedBy:NSLayoutRelationEqual
                                                                       toItem:[sharedSpinner superview]
                                                                    attribute:NSLayoutAttributeCenterY
                                                                   multiplier:1
-                                                                    constant:0]];
+                                                                    constant:offset]];
             
         }
         
@@ -180,8 +193,17 @@ static NSString *kLLARingSpinnerAnimationKey = @"llaringspinnerview.rotation";
 {
     [super layoutSubviews];
     
-    self.progressLayer.frame = CGRectMake(0, 0, CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds));
+    /*-----LABEL----*/
+    UIFont *font = [UIFont fontWithName:self.titleFont size:self.titleFontSize];
+    CGSize size = [self.titleLayer.string sizeWithAttributes:@{NSFontAttributeName : font}];
+    self.titleLayer.frame = CGRectMake(0, 0, MIN(size.width+kOffset, kMaxWidth), size.height+kOffset);
+    self.titleLayer.position = (CGPoint){CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds)};
+    
+    /*-----SPINNER----*/
+    self.progressLayer.frame = CGRectMake(0, CGRectGetHeight(self.titleLayer.bounds), CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds));
+    
     [self updatePath];
+    [self updateTitle];
 }
 
 - (void)tintColorDidChange
@@ -246,7 +268,28 @@ static NSString *kLLARingSpinnerAnimationKey = @"llaringspinnerview.rotation";
     self.progressLayer.path = path.CGPath;
 }
 
+- (void)updateTitle
+{
+    self.titleLayer.font = (__bridge CFTypeRef)(self.titleFont);
+    self.titleLayer.fontSize = self.titleFontSize;
+    self.titleLayer.string = self.title;
+}
+
 #pragma mark - Properties
+
+- (CATextLayer *)titleLayer
+{
+    if (!_titleLayer) {
+        _titleLayer = [CATextLayer layer];
+        _titleLayer.font = (__bridge CFTypeRef)(self.titleFont);
+        _titleLayer.fontSize = self.titleFontSize;
+        _titleLayer.alignmentMode = kCAAlignmentCenter;
+        _titleLayer.foregroundColor = [UIColor darkTextColor].CGColor;
+        _titleLayer.contentsScale = [UIScreen mainScreen].scale;
+    }
+    return _titleLayer;
+}
+
 
 - (CAShapeLayer *)progressLayer
 {
