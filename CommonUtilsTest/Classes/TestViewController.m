@@ -17,7 +17,6 @@
 #import "CommonSystem.h"
 #import "NetworkUtils.h"
 #import "UIAlertView+Blocks.h"
-#import "Canvas.h"
 
 typedef NS_ENUM(NSInteger, RowType) {
     RowTypeSegementController,
@@ -71,8 +70,6 @@ typedef NS_ENUM(NSInteger, RowType) {
     [NetworkUtils setNetworkActivityIndicatorVisible:NO];
     //[NetworkUtils setNetworkActivityIndicatorVisible:NO];
     //[NetworkUtils setNetworkActivityIndicatorVisible:NO];
-    
-    [self.view startCanvasAnimation];
 }
 
 - (void)didReceiveMemoryWarning

@@ -1,6 +1,5 @@
 source 'https://github.com/CocoaPods/Specs.git'
 source 'https://git.sftc.it/softec-ios/softeccocoapods.git'
-source 'https://git.sftc.it/softec-ios/softeccocoapodsbeta.git'
 
 platform :ios, '7.0'
  

@@ -4,7 +4,7 @@
 #import "CommonProgressViewController.h"
 #import "CommonProgress.h"
 #import "CommonSpinner.h"
-#import "CSAnimationView.h"
+#import "Canvas.h"
 
 #import "ChildViewController.h"
 #import "UIViewController+ChildrenHandler.h"
@@ -65,6 +65,9 @@
         DebugLog(@"common progress did start");
     }];
     //*/
+    
+    //[CSBlurView setBlur:UIBarStyleDefault view:self.titleAnimationView];
+    //[CSBlurView setBlur:UIBarStyleDefault view:self.descrAnimationView];
     
     //---------------COMMON SPINNER---------------//
     [CommonSpinner sharedSpinner].hidesWhenStopped = YES;
