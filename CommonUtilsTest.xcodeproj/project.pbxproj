@@ -65,6 +65,7 @@
 		9CD9F812196EAA5500EBBD85 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9CD9F80E196EAA5500EBBD85 /* Images.xcassets */; };
 		9CD9F813196EAA5500EBBD85 /* placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = 9CD9F80F196EAA5500EBBD85 /* placeholder.png */; };
 		9CD9F814196EAA5500EBBD85 /* segmented.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9CD9F810196EAA5500EBBD85 /* segmented.xcassets */; };
+		9CFCFD8D1A8E501900B847D2 /* CommonLoadingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CFCFD8B1A8E501900B847D2 /* CommonLoadingViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -153,6 +154,8 @@
 		9CD9F80E196EAA5500EBBD85 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		9CD9F80F196EAA5500EBBD85 /* placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = placeholder.png; sourceTree = "<group>"; };
 		9CD9F810196EAA5500EBBD85 /* segmented.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = segmented.xcassets; sourceTree = "<group>"; };
+		9CFCFD8A1A8E501900B847D2 /* CommonLoadingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonLoadingViewController.h; sourceTree = "<group>"; };
+		9CFCFD8B1A8E501900B847D2 /* CommonLoadingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonLoadingViewController.m; sourceTree = "<group>"; };
 		9E65652A1EB25D3AEF5972DF /* Pods-CommonUtilsTest.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CommonUtilsTest.release.xcconfig"; path = "Pods/Target Support Files/Pods-CommonUtilsTest/Pods-CommonUtilsTest.release.xcconfig"; sourceTree = "<group>"; };
 		BA801513D4DF4D82AFF30164 /* libPods-CommonUtilsTest.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-CommonUtilsTest.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		FA01A732F5C68DD5ECA6F43D /* Pods-CommonUtilsTest.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CommonUtilsTest.debug.xcconfig"; path = "Pods/Target Support Files/Pods-CommonUtilsTest/Pods-CommonUtilsTest.debug.xcconfig"; sourceTree = "<group>"; };
@@ -279,6 +282,8 @@
 				9CC831D119E2805B005A10A8 /* CommonProgressViewController.h */,
 				9CC831D219E2805B005A10A8 /* CommonProgressViewController.m */,
 				9CC831D319E2805B005A10A8 /* CommonProgressViewController.xib */,
+				9CFCFD8A1A8E501900B847D2 /* CommonLoadingViewController.h */,
+				9CFCFD8B1A8E501900B847D2 /* CommonLoadingViewController.m */,
 			);
 			path = CommonProgress;
 			sourceTree = "<group>";
@@ -592,6 +597,7 @@
 				9C1191FA1A7BE033000B6090 /* ChildViewController.m in Sources */,
 				9CD9F806196EA7D400EBBD85 /* FirstViewController.m in Sources */,
 				9CC719F61A1B5F4A00CC0DF2 /* CommonLogin.m in Sources */,
+				9CFCFD8D1A8E501900B847D2 /* CommonLoadingViewController.m in Sources */,
 				9CD9F804196EA7D400EBBD85 /* ProgressViewController.m in Sources */,
 				9CD9F808196EA7D400EBBD85 /* TestViewController.m in Sources */,
 				9CC719F91A1B5F4A00CC0DF2 /* SFLoginTextFieldCell.m in Sources */,

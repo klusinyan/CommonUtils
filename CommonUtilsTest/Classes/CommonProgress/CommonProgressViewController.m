@@ -8,6 +8,7 @@
 
 #import "ChildViewController.h"
 #import "UIViewController+ChildrenHandler.h"
+#import "CommonLoadingViewController.h"
 
 @interface CommonProgressViewController ()
 @property (weak, nonatomic) IBOutlet CSAnimationView *titleAnimationView;
@@ -56,23 +57,39 @@
                                                  name:UIApplicationWillEnterForegroundNotification
                                                object:nil];
     
+    CommonLoadingViewController *vc = [CommonLoadingViewController instanceWithTarget:self];
+    [self presentViewController:vc animated:YES completion:nil];
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(4 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [vc dismissViewControllerAnimated:YES completion:nil];
+        [self startTest];
+    });
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+}
+
+- (void)startTest
+{
     //---------------COMMON PROGRESS---------------//
     /*
-    //BOOL random = arc4random_uniform(3);
-    [CommonProgress sharedProgress].backgroundImageColor = [UIColor colorWithWhite:0.5 alpha:0.8];
-    [CommonProgress sharedProgress].activityIndicatorViewStyle = CommonProgressActivityIndicatorViewStyleSmall;
-    [CommonProgress sharedProgress].indicatorImageColor = [UIColor greenColor];
-    [CommonProgress sharedProgress].networkActivityIndicatorVisible = YES;
-    
-
-    [CommonProgress showWithTaregt:self completion:^{
-        DebugLog(@"common progress did start");
-    }];
-    //*/
+     //BOOL random = arc4random_uniform(3);
+     [CommonProgress sharedProgress].backgroundImageColor = [UIColor colorWithWhite:0.5 alpha:0.8];
+     [CommonProgress sharedProgress].activityIndicatorViewStyle = CommonProgressActivityIndicatorViewStyleSmall;
+     [CommonProgress sharedProgress].indicatorImageColor = [UIColor greenColor];
+     [CommonProgress sharedProgress].networkActivityIndicatorVisible = YES;
+     
+     
+     [CommonProgress showWithTaregt:self completion:^{
+     DebugLog(@"common progress did start");
+     }];
+     //*/
     
     //[CSBlurView setBlur:UIBarStyleDefault view:self.titleAnimationView];
     //[CSBlurView setBlur:UIBarStyleDefault view:self.descrAnimationView];
-    
+
     //---------------COMMON SPINNER---------------//
     [CommonSpinner sharedSpinner].hidesWhenStopped = YES;
     [CommonSpinner sharedSpinner].title = @"Coop Mobile";
@@ -88,7 +105,7 @@
         CommonProgressViewController *vc = [[CommonProgressViewController alloc] initWithNibName:NSStringFromClass([CommonProgressViewController class]) bundle:nil];
         [self.navigationController pushViewController:vc animated:YES];
     });
-    //*/
+     //*/
     
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self animate:NO];
@@ -134,11 +151,6 @@
         DebugLog(@"Spinner did show");
     }];
     //*/
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
 }
 
 - (void)viewWillDisappear:(BOOL)animated

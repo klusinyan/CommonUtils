@@ -2,7 +2,6 @@
 
 #import "CommonBookViewController.h"
 #import "CommonBookContentViewController.h"
-#import "TGRImageViewController.h"
 
 //library
 #import "CommonBook.h"
@@ -60,9 +59,8 @@
 
 - (CommonPageContent *)fabriquePageContent
 {
-    return
-    [[CommonPageContent alloc] init];
-
+    return [[CommonPageContent alloc] init];
+    
     /*
     return
     [[TGRImageViewController alloc] initWithNibName:NSStringFromClass([TGRImageViewController class])
@@ -187,11 +185,11 @@
 
 - (UIViewController *)book:(CommonBook *)book pageContentAtIndex:(NSInteger)index
 {
-    CommonPageContent *pageContent = [self.items objectAtIndex:index];
+    CommonPageContent *pageContent = [[CommonPageContent alloc] init];
     pageContent.zoomEnabled = YES;
     pageContent.backgroundColor = kPageBackgroundColor;
-    //pageContent.contentInset = UIEdgeInsetsZero;
-    
+    pageContent.contentInset = UIEdgeInsetsMake(0, 10, 0, 10);
+
     NSString *prefix = (iPhone) ? @"iPhone" : @"iPad";
     NSString *imageName = [prefix stringByAppendingFormat:@"_%@", @(index % 7)];
     pageContent.image = [UIImage imageNamed:imageName];
