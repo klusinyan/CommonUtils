@@ -15,6 +15,7 @@ typedef NS_ENUM(NSInteger, PresentationStyle) {
 @property (readwrite, nonatomic, assign) UIPageViewControllerTransitionStyle transitionStyle;
 @property (readwrite, nonatomic, assign) PresentationStyle presentationStyle;
 @property (readwrite, nonatomic, getter = isPresented) BOOL presented;
+@property (readwrite, nonatomic, getter = isPageControlHidden) BOOL pageControlHidden;
 
 //desired initializers;
 + (instancetype)commonBook;

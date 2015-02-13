@@ -15,9 +15,13 @@
 
 @property (nonatomic, strong) IBOutlet UIView *container;
 
+//BLOCK EXAMPLE
+//@property (copy) void(^completion)(BOOL finished);
+
 @end
 
 @implementation CommonProgressViewController
+//@synthesize completion;
 
 - (void)didReceiveMemoryWarning
 {
@@ -71,7 +75,6 @@
     
     //---------------COMMON SPINNER---------------//
     [CommonSpinner sharedSpinner].hidesWhenStopped = YES;
-    [CommonSpinner sharedSpinner].runInBackgroud = YES;
     [CommonSpinner sharedSpinner].title = @"Coop Mobile";
     //[CommonSpinner sharedSpinner].timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{

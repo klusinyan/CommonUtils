@@ -2,9 +2,13 @@
 
 #import "CommonBookViewController.h"
 #import "CommonBookContentViewController.h"
+#import "TGRImageViewController.h"
 
 //library
 #import "CommonBook.h"
+#import "CommonPageContent.h"
+
+#define kPageBackgroundColor [UIColor blackColor]
 
 @interface CommonBookViewController () <CommonBookDelegate, CommonBookDataSource>
 
@@ -54,13 +58,33 @@
                                                       bundle:nil];
 }
 
+- (CommonPageContent *)fabriquePageContent
+{
+    return
+    [[CommonPageContent alloc] init];
+
+    /*
+    return
+    [[TGRImageViewController alloc] initWithNibName:NSStringFromClass([TGRImageViewController class])
+                                             bundle:nil];
+    //*/
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
+    self.view.backgroundColor = kPageBackgroundColor;
+    
     self.items = [NSMutableArray array];
+    /*
     for (int i = 0; i < 7; i++) {
         [self.items addObject:[self fabriqueContentController]];
+    }
+    //*/
+    
+    for (int i = 0; i < 10; i++) {
+        [self.items addObject:[self fabriquePageContent]];
     }
     
     /*
@@ -89,14 +113,17 @@
     //[UIColor colorWithRed:224/255.0 green:0/255.0 blue:21/255.0 alpha:1];
     
     //*/
-    self.commonBook = [CommonBook commonBookWithPageIndicatorTintColor:[UIColor blueColor] andCurrentPageIndicatorTintColor:[UIColor greenColor]];
-
+    self.commonBook = [CommonBook commonBookWithPageIndicatorTintColor:[UIColor whiteColor]
+                                      andCurrentPageIndicatorTintColor:[UIColor redColor]];
     self.commonBook.delegate = self;
     self.commonBook.dataSource = self;
+    self.commonBook.pageControlHidden = YES;
     [self.commonBook presentBookInsideOfContainer:self.container1 completion:^(BOOL finished) {
         DebugLog(@"finished [%@]", finished ? @"Y" : @"N");
         
-        ///*//not used only test
+        /*
+        //setup and position page control
+        //not used only test
         //only when finished presneting book the customize page control
         [self.commonBook setupCustomPageControlWithCompletion:^(UIPageControl *pageControl) {
                                                           
@@ -115,14 +142,16 @@
     }];
     
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self.items removeLastObject];
-        [self.commonBook reloadPages];
+        //---------------RELOAD PAGES---------------//
+        //[self.items removeLastObject];
+        //[self.commonBook reloadPages];
+        //---------------RELOAD PAGES---------------//
     });
 }
 
 - (void)pageControlValueDidChage:(id)sender
 {
-    
+    //do something
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -158,22 +187,45 @@
 
 - (UIViewController *)book:(CommonBook *)book pageContentAtIndex:(NSInteger)index
 {
-    CommonBookContentViewController *pageContent = [self.items objectAtIndex:index];
+    CommonPageContent *pageContent = [self.items objectAtIndex:index];
+    pageContent.zoomEnabled = YES;
+    pageContent.backgroundColor = kPageBackgroundColor;
+    //pageContent.contentInset = UIEdgeInsetsZero;
     
     NSString *prefix = (iPhone) ? @"iPhone" : @"iPad";
-    NSString *imageName = [prefix stringByAppendingFormat:@"_%@", @(index)/*@(arc4random_uniform(index % 6))*/];
+    NSString *imageName = [prefix stringByAppendingFormat:@"_%@", @(index % 7)];
     pageContent.image = [UIImage imageNamed:imageName];
     DebugLog(@"imageName %@", imageName);
     
     return pageContent;
+    
+    /*
+    CommonBookContentViewController *pageContent = [self.items objectAtIndex:index];
+    
+    NSString *prefix = (iPhone) ? @"iPhone" : @"iPad";
+    NSString *imageName = [prefix stringByAppendingFormat:@"_%@", @(index)];
+    pageContent.image = [UIImage imageNamed:imageName];
+    DebugLog(@"imageName %@", imageName);
+    
+    return pageContent;
+    //*/
 }
 
 #pragma mark -
 #pragma mark PageViewControllerDelegate protocol
 
+- (void)book:(CommonBook *)book pageContent:(UIViewController *)pageContent willMoveAtIndex:(NSInteger)index
+{
+    DebugLog(@"willMoveAtIndex %@", @(index));
+    //CommonBookContentViewController *pc = (CommonBookContentViewController *)pageContent;
+    //[pc showAnimation:YES];
+}
+
 - (void)book:(CommonBook *)book pageContent:(id)pageContent didPresentAtIndex:(NSInteger)index
 {
-    DebugLog(@"currentPage %@", @(index));
+    DebugLog(@"didPresentAtIndex %@", @(index));
+    //CommonBookContentViewController *pc = (CommonBookContentViewController *)pageContent;
+    //[pc showAnimation:YES];
 }
 
 - (void)book:(CommonBook *)book pageContent:(id)pageContent didSelectAtIndex:(NSInteger)index

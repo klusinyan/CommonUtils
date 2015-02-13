@@ -2,6 +2,7 @@
 
 #import "AppDelegate.h"
 #import "TestViewController.h"
+#import "Appirater.h"
 
 @implementation AppDelegate
 
@@ -11,6 +12,15 @@
     self.window.backgroundColor = [UIColor clearColor];
     self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[TestViewController alloc] init]];
     [self.window makeKeyAndVisible];
+    
+    [Appirater setAppId:@"770699556"];                  //iTunes ID
+    [Appirater setDaysUntilPrompt:0];                   //days after first prompt
+    [Appirater setUsesUntilPrompt:5];                   //number of times for next visualizzation
+    [Appirater setSignificantEventsUntilPrompt:-1];     //set significant event by calling userDidSignificantEvent:
+    [Appirater setTimeBeforeReminding:0];               //value in days
+    [Appirater setDebug:NO];                            //for production use always NO
+    [Appirater appLaunched:YES];                        //start launching rater
+    
     return YES;
 }
 							
@@ -29,6 +39,7 @@
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
+    [Appirater appEnteredForeground:YES];
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application

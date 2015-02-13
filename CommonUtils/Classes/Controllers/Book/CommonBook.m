@@ -34,6 +34,7 @@
         self.transitionStyle = UIPageViewControllerTransitionStyleScroll;
         self.presentationStyle = PresentationStyleFullScreen;
         self.presented = NO;
+        self.pageControlHidden = NO;
     }
     return self;
 }
@@ -315,7 +316,7 @@
 
 - (NSInteger)presentationIndexForPageViewController:(UIPageViewController *)pageViewController
 {
-    if (self.pageControl) {
+    if (self.pageControl || self.isPageControlHidden) {
         return -1;
     }
     NSInteger index = 0;

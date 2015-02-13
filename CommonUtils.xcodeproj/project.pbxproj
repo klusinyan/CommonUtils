@@ -87,6 +87,8 @@
 		9CE7A8A719542CCF00E699E4 /* DirectoryUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CE7A8A519542CCF00E699E4 /* DirectoryUtils.h */; };
 		9CE7A8A819542CCF00E699E4 /* DirectoryUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CE7A8A619542CCF00E699E4 /* DirectoryUtils.m */; };
 		9CF9663818FD3ADC00E265A1 /* CallBackProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CF9663618FD3ADC00E265A1 /* CallBackProtocol.h */; };
+		9CFCFD881A8E443E00B847D2 /* CommonPageContent.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CFCFD861A8E443E00B847D2 /* CommonPageContent.h */; };
+		9CFCFD891A8E443E00B847D2 /* CommonPageContent.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CFCFD871A8E443E00B847D2 /* CommonPageContent.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -187,6 +189,8 @@
 		9CE7A8A519542CCF00E699E4 /* DirectoryUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DirectoryUtils.h; sourceTree = "<group>"; };
 		9CE7A8A619542CCF00E699E4 /* DirectoryUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DirectoryUtils.m; sourceTree = "<group>"; };
 		9CF9663618FD3ADC00E265A1 /* CallBackProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CallBackProtocol.h; sourceTree = "<group>"; };
+		9CFCFD861A8E443E00B847D2 /* CommonPageContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonPageContent.h; sourceTree = "<group>"; };
+		9CFCFD871A8E443E00B847D2 /* CommonPageContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonPageContent.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -212,6 +216,8 @@
 			children = (
 				9C01920E19D2CBD600E8E9E3 /* CommonBook.h */,
 				9C01920F19D2CBD600E8E9E3 /* CommonBook.m */,
+				9CFCFD861A8E443E00B847D2 /* CommonPageContent.h */,
+				9CFCFD871A8E443E00B847D2 /* CommonPageContent.m */,
 			);
 			path = Book;
 			sourceTree = "<group>";
@@ -617,6 +623,7 @@
 				9C20BE5E1949EF830077C6E8 /* ZoomAnimationController.h in Headers */,
 				9C1192021A7BE0AB000B6090 /* CommonSpinner.h in Headers */,
 				9CB4800D19558E8400A5AC1B /* UIColor+Utils.h in Headers */,
+				9CFCFD881A8E443E00B847D2 /* CommonPageContent.h in Headers */,
 				9C20BE5B1949EF830077C6E8 /* ADVAnimationController.h in Headers */,
 				9C2AC5E119EA96F900588538 /* CommonProgress.h in Headers */,
 				9C90FF6B19377DEC004CE056 /* NSDate+Utils.h in Headers */,
@@ -756,6 +763,7 @@
 				9C1192031A7BE0AB000B6090 /* CommonSpinner.m in Sources */,
 				9C46A59A19766A840018B109 /* ImageDownloader.m in Sources */,
 				9CB1FC9A19759B6A0080534F /* SelectedListController.m in Sources */,
+				9CFCFD891A8E443E00B847D2 /* CommonPageContent.m in Sources */,
 				9CA09777191133A000605020 /* TransitionManager.m in Sources */,
 				9C01921719D2CBD600E8E9E3 /* CommonBook.m in Sources */,
 				9C8C0AFC1934A1780033D2A9 /* UIImage+Resize.m in Sources */,
