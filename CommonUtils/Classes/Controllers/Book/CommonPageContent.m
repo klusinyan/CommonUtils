@@ -83,7 +83,9 @@
     self.scrollView = [[UIScrollView alloc] initWithFrame:self.view.bounds];
     self.scrollView.autoresizingMask = [self autoresizingMaskFlexibleAll];
     
-    //self.scrollView.backgroundColor = [UIColor greenColor];
+    self.scrollView.backgroundColor = [UIColor greenColor];
+    self.scrollView.showsHorizontalScrollIndicator = NO;
+    self.scrollView.showsVerticalScrollIndicator = NO;
     self.scrollView.minimumZoomScale = 1.0f;
     self.scrollView.maximumZoomScale = (self.isZoomEnabled) ? 2.0f : 1.0f;
     self.scrollView.delegate = self;
@@ -106,9 +108,8 @@
     self.doubleTapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleDoubleTap:)];
     self.doubleTapGestureRecognizer.numberOfTapsRequired = 2;
     self.doubleTapGestureRecognizer.numberOfTouchesRequired = 1;
-    self.doubleTapGestureRecognizer.cancelsTouchesInView = YES;
-    [self.imageView addGestureRecognizer:self.doubleTapGestureRecognizer];
-    
+    [self.scrollView addGestureRecognizer:self.doubleTapGestureRecognizer];
+
     /*
      //-----------TODO-----------//
      self.singleTapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showHideNavigationBar)];
@@ -128,6 +129,15 @@
     
     self.imageView.image = self.image;
 }
+
+/*
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    self.scrollView.contentSize = self.image.size;
+}
+//*/
 
 - (void)viewDidDisappear:(BOOL)animated
 {
@@ -158,6 +168,19 @@
 
 - (void)handleDoubleTap:(UITapGestureRecognizer *)tapGestureRecognizer
 {
+    CGPoint center = [tapGestureRecognizer locationInView:self.scrollView];
+    
+    CGFloat scale = (self.scrollView.zoomScale == self.scrollView.minimumZoomScale) ?
+    self.scrollView.maximumZoomScale :
+    self.scrollView.minimumZoomScale;
+    
+    CGRect rect = [self zoomRectForScrollView:self.scrollView
+                                    withScale:scale
+                                   withCenter:center];
+    
+    [self.scrollView zoomToRect:rect animated:YES];
+    
+    /*
     if (self.scrollView.zoomScale == self.scrollView.minimumZoomScale) {
         
         //---------------ZOOM IN---------------//
@@ -174,15 +197,17 @@
         [self.scrollView zoomToRect:rect animated:YES];
     }
     else {
+        
         //---------------ZOOM OUT---------------//
         [self.scrollView zoomToRect:self.scrollView.bounds animated:YES];
     }
+    //*/
 }
 
-
-//not used
 //Apples's sample code
-- (CGRect)zoomRectForScrollView:(UIScrollView *)scrollView withScale:(float)scale withCenter:(CGPoint)center
+- (CGRect)zoomRectForScrollView:(UIScrollView *)scrollView
+                      withScale:(float)scale
+                     withCenter:(CGPoint)center
 {
     CGRect zoomRect;
     
