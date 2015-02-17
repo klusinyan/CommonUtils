@@ -8,4 +8,5 @@
 
 + (NSString *)hexStringFromColor:(UIColor *)color;
 
++ (UIColor *) colorWithHexString: (NSString *) hexString;
 @end

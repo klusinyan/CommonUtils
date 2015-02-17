@@ -130,7 +130,6 @@
 		9C46A59819766A840018B109 /* ImageDownloader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageDownloader.m; sourceTree = "<group>"; };
 		9C6DD7D219F130670013D333 /* UIImage+Color.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Color.h"; sourceTree = "<group>"; };
 		9C6DD7D319F130670013D333 /* UIImage+Color.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Color.m"; sourceTree = "<group>"; };
-		9C8A6AF019D16A09000062F7 /* CommonUtilsBeta.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CommonUtilsBeta.podspec; sourceTree = "<group>"; };
 		9C8A6AF219D17151000062F7 /* RELEASE_INFO.md */ = {isa = PBXFileReference; lastKnownFileType = text; path = RELEASE_INFO.md; sourceTree = "<group>"; };
 		9C90FF5F19374DD3004CE056 /* UITableView+Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableView+Utils.h"; sourceTree = "<group>"; };
 		9C90FF6019374DD3004CE056 /* UITableView+Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableView+Utils.m"; sourceTree = "<group>"; };
@@ -462,7 +461,6 @@
 			isa = PBXGroup;
 			children = (
 				9CD9F762196E8AAF00EBBD85 /* CommonUtils.podspec */,
-				9C8A6AF019D16A09000062F7 /* CommonUtilsBeta.podspec */,
 				9C8A6AF219D17151000062F7 /* RELEASE_INFO.md */,
 				9CB81FD718FD375300C918FB /* Classes */,
 				9CB81FDC18FD378100C918FB /* Resources */,
