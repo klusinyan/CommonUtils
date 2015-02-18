@@ -2,6 +2,8 @@
 
 #import <AVFoundation/AVFoundation.h>
 
+extern NSString * const CommonBarcodeErrorDomain;
+
 @protocol CommonBarcodeDelegate <NSObject>
 
 @required
@@ -24,6 +26,7 @@
 @property (readonly,  nonatomic, strong) NSString *capturedCode;        //defualt nil
 @property (readwrite, nonatomic, assign) BOOL EAN13ZeroPadding;         //default NO
 
+
 //add more configurations...
 @property (readonly, nonatomic, strong) AVCaptureDevice *captureDevice;
 @property (readonly, nonatomic, strong) AVCaptureSession *captureSession;
@@ -40,7 +43,8 @@
 //with xib
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil;
 
-- (void)startCapturing;
+- (void)startCapturing __deprecated_msg("use: startCapturingWithCompletion:");
+- (void)startCapturingWithCompletion:(void (^)(NSError *error))completion;
 
 - (void)stopCapturing;
 

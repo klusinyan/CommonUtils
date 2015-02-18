@@ -2,7 +2,16 @@
 
 #import "CommonBarcode.h"
 
-@interface CommonBarcode () <AVCaptureMetadataOutputObjectsDelegate>
+NSString * const CommonBarcodeErrorDomain = @"commonutils.domain.error";
+
+typedef NS_ENUM(NSInteger, CBErrorCode)
+{
+    commonBarcodeErrorCodeCustom = 0,
+    commonBarcodeErrorCodePermissionDenied,
+    commonBarcodeErrorCodeSimulator,
+};
+
+@interface CommonBarcode () <AVCaptureMetadataOutputObjectsDelegate, UIAlertViewDelegate>
 
 //avcapture...
 @property (readwrite, nonatomic, strong) AVCaptureDevice *captureDevice;
@@ -43,7 +52,7 @@
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-
+    
     if (self) {
         
         //setup defaults
@@ -72,7 +81,7 @@
             [self.captureDevice setFlashMode:AVCaptureFlashModeOff];
             [self.captureDevice setTorchMode:AVCaptureTorchModeOff];
             [self.captureDevice unlockForConfiguration];
-
+            
             self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Flash"
                                                                                       style:UIBarButtonItemStyleBordered
                                                                                      target:self
@@ -112,7 +121,7 @@
     //line
     self.line.frame = CGRectMake(0, 0, factorWidth+20, 2);
     self.line.position = _previewLayer.position;
-
+    
     //set rect of interest to cropRect
     self.metadataOutput.rectOfInterest = self.cropLayer.bounds;
 }
@@ -141,19 +150,69 @@
 
 - (void)startCapturing
 {
-    if (TARGET_IPHONE_SIMULATOR) return;
-    
-    if (![self.captureSession isRunning]) {
-        [self.captureSession startRunning];
-        [self adjustOrientationWithInterfaceOrientation:self.interfaceOrientation];
-        self.alreadyScanned = NO;
-        if (self.captureDevice.isFlashAvailable || self.captureDevice.isTorchAvailable) {
-            [self.captureDevice lockForConfiguration:nil];
-            [self.captureDevice setFlashMode:AVCaptureFlashModeAuto];
-            [self.captureDevice setTorchMode:AVCaptureTorchModeAuto];
-            [self.captureDevice unlockForConfiguration];
+    [self startCapturingWithCompletion:nil];
+}
+
+- (void)startCapturingWithCompletion:(void (^)(NSError *error))completion
+{
+    if (TARGET_IPHONE_SIMULATOR){
+        
+        NSError *error = [[NSError alloc] initWithDomain:CommonBarcodeErrorDomain
+                                                    code:commonBarcodeErrorCodeSimulator
+                                                userInfo:@{
+                                                           NSLocalizedDescriptionKey:NSLocalizedString(@"CommonBarcode_simulator_not_working", nil)
+                                                           }];
+        
+        if (completion) {
+            completion(error);
         }
+        return;
     }
+    
+    
+    [AVCaptureDevice requestAccessForMediaType:AVMediaTypeVideo completionHandler:^(BOOL granted) {
+        // Will get here on both iOS 7 & 8 even though camera permissions weren't required
+        // until iOS 8. So for iOS 7 permission will always be granted.
+        if (granted) {
+            // Permission has been granted. Use dispatch_async for any UI updating
+            // code because this block may be executed in a thread.
+            dispatch_async(dispatch_get_main_queue(), ^{
+                
+                //[self doStuff];
+                DebugLog(@"GRANTED");
+                if (![self.captureSession isRunning]) {
+                    [self.captureSession startRunning];
+                    [self adjustOrientationWithInterfaceOrientation:self.interfaceOrientation];
+                    self.alreadyScanned = NO;
+                    if (self.captureDevice.isFlashAvailable || self.captureDevice.isTorchAvailable) {
+                        [self.captureDevice lockForConfiguration:nil];
+                        [self.captureDevice setFlashMode:AVCaptureFlashModeAuto];
+                        [self.captureDevice setTorchMode:AVCaptureTorchModeAuto];
+                        [self.captureDevice unlockForConfiguration];
+                    }
+                }
+                
+                if (completion) {
+                    completion(nil);
+                }
+                
+            });
+        } else {
+            // Permission has been denied.
+            DebugLog(@"PERMISSION DENIED");
+            NSError *error = [[NSError alloc] initWithDomain:CommonBarcodeErrorDomain
+                                                        code:commonBarcodeErrorCodePermissionDenied
+                                                    userInfo:@{
+                                                               NSLocalizedDescriptionKey:NSLocalizedString(@"CommonBarcode_simulator_permission_denied", nil)
+                                                               }];
+            
+            if (completion) {
+                completion(error);
+            }
+        }
+    }];
+    
+    
 }
 
 - (void)stopCapturing
@@ -219,13 +278,14 @@
 {
     if (!_captureSession) {
         _captureSession = [[AVCaptureSession alloc] init];
+        
         [_captureSession addInput:self.videoInput];
         [_captureSession addOutput:self.metadataOutput];
-
+        
         //set supported bar code
         [self.metadataOutput setMetadataObjectsDelegate:self queue:dispatch_get_main_queue()];
         [self.metadataOutput setMetadataObjectTypes:self.supportedBarcodes];
-
+        
         //add sublayer to prviewContainer
         [self.previewContainer.layer addSublayer:self.previewLayer];
     }
@@ -235,7 +295,7 @@
 
 - (AVCaptureVideoPreviewLayer *)previewLayer
 {
-    if (!_previewLayer) {
+    if (!_previewLayer && self.captureSession) {
         _previewLayer = [[AVCaptureVideoPreviewLayer alloc] initWithSession:self.captureSession];
         //_previewLayer.cornerRadius = self.cornerRadius;
         [_previewLayer setVideoGravity:AVLayerVideoGravityResizeAspectFill];
@@ -249,27 +309,27 @@
         self.line = [CALayer layer];
         self.line.backgroundColor = self.themeColor.CGColor;
         [_previewLayer addSublayer:self.line];
-
+        
         [self adjustFrames];
-
+        
         /*
-        CGFloat margin = 40.0f;
-        CGFloat factorX = 2;
-        CGFloat factorY = 0.5;
-        
-        CGMutablePathRef path = CGPathCreateMutable();
-        CGPathMoveToPoint(path, NULL, margin/factorX, margin/factorY);
-        CGPathAddLineToPoint(path, NULL, _previewLayer.bounds.size.width-margin/factorX, margin/factorY);
-        CGPathAddLineToPoint(path, NULL, _previewLayer.bounds.size.width-margin/factorX, _previewLayer.bounds.size.height-margin/factorY);
-        CGPathAddLineToPoint(path, NULL, margin/factorX, _previewLayer.bounds.size.height-margin/factorY);
-        CGPathCloseSubpath(path);
-        
-        CAShapeLayer *cropShapeLayer = [CAShapeLayer layer];
-        cropShapeLayer.fillColor = [UIColor whiteColor].CGColor;
-        cropShapeLayer.opacity = 0.1;
-        cropShapeLayer.path = path;
-        [_previewLayer addSublayer:cropShapeLayer];
-        //*/
+         CGFloat margin = 40.0f;
+         CGFloat factorX = 2;
+         CGFloat factorY = 0.5;
+         
+         CGMutablePathRef path = CGPathCreateMutable();
+         CGPathMoveToPoint(path, NULL, margin/factorX, margin/factorY);
+         CGPathAddLineToPoint(path, NULL, _previewLayer.bounds.size.width-margin/factorX, margin/factorY);
+         CGPathAddLineToPoint(path, NULL, _previewLayer.bounds.size.width-margin/factorX, _previewLayer.bounds.size.height-margin/factorY);
+         CGPathAddLineToPoint(path, NULL, margin/factorX, _previewLayer.bounds.size.height-margin/factorY);
+         CGPathCloseSubpath(path);
+         
+         CAShapeLayer *cropShapeLayer = [CAShapeLayer layer];
+         cropShapeLayer.fillColor = [UIColor whiteColor].CGColor;
+         cropShapeLayer.opacity = 0.1;
+         cropShapeLayer.path = path;
+         [_previewLayer addSublayer:cropShapeLayer];
+         //*/
     }
     return _previewLayer;
 }
@@ -290,10 +350,10 @@
     for (AVMetadataObject *metadata in metadataObjects) {
         for (NSString *type in self.supportedBarcodes) {
             if ([metadata.type isEqualToString:type]) {
-
+                
                 if (!self.alreadyScanned) {
                     self.alreadyScanned = YES;
-                
+                    
                     //stop running scanner
                     [self stopCapturing];
                     
@@ -340,6 +400,12 @@
 - (void)capturedCode:(NSString *)code
 {
     //override
+}
+
+#pragma mark - Alert View
+-(void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
+{
+    
 }
 
 @end
