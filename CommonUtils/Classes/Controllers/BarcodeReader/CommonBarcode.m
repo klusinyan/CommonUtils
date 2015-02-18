@@ -74,12 +74,11 @@ typedef NS_ENUM(NSInteger, CBErrorCode)
     [super viewDidLoad];
     
     if (self.flashEnabled) {
-        if (self.captureDevice.hasFlash || self.captureDevice.hasTorch) {
+        if (self.captureDevice.hasFlash) {
             
             //switch off on-start
             [self.captureDevice lockForConfiguration:nil];
             [self.captureDevice setFlashMode:AVCaptureFlashModeOff];
-            [self.captureDevice setTorchMode:AVCaptureTorchModeOff];
             [self.captureDevice unlockForConfiguration];
             
             self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Flash"
@@ -93,16 +92,14 @@ typedef NS_ENUM(NSInteger, CBErrorCode)
 //handle flash
 - (void)flash:(id)sender
 {
-    if (self.captureDevice.isFlashActive || self.captureDevice.isTorchActive) {
+    if (self.captureDevice.isFlashActive) {
         [self.captureDevice lockForConfiguration:nil];
         [self.captureDevice setFlashMode:AVCaptureFlashModeOff];
-        [self.captureDevice setTorchMode:AVCaptureTorchModeOff];
         [self.captureDevice unlockForConfiguration];
     }
     else {
         [self.captureDevice lockForConfiguration:nil];
         [self.captureDevice setFlashMode:AVCaptureFlashModeOn];
-        [self.captureDevice setTorchMode:AVCaptureTorchModeOn];
         [self.captureDevice unlockForConfiguration];
     }
 }
