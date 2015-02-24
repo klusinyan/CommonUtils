@@ -34,7 +34,7 @@ typedef NS_ENUM(NSInteger, CBErrorCode) {
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [self stopCapturing];
+    [self stopCapturingWithCompletion:nil];
 }
 
 - (id)init
@@ -394,7 +394,7 @@ typedef NS_ENUM(NSInteger, CBErrorCode) {
                     self.alreadyScanned = YES;
                     
                     //stop running scanner
-                    [self stopCapturing];
+                    [self stopCapturingWithCompletion:nil];
                     
                     //sound if needed
                     if (self.soundOn) {
