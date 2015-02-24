@@ -26,7 +26,8 @@ static BOOL IDLogging = NO;
     dispatch_once(&oncePredicate, ^{
         sharedImageCache = [[NSCache alloc] init];
         [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidReceiveMemoryWarningNotification
-                                                          object:nil queue:[NSOperationQueue mainQueue]
+                                                          object:nil
+                                                           queue:[NSOperationQueue mainQueue]
                                                       usingBlock:^(NSNotification * __unused notification) {
                                                           [sharedImageCache removeAllObjects];
                                                       }];

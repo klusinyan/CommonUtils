@@ -30,8 +30,8 @@ extern NSString * const CommonBarcodeErrorDomain;
 //add more configurations...
 @property (readonly, nonatomic, strong) AVCaptureDevice *captureDevice;
 @property (readonly, nonatomic, strong) AVCaptureSession *captureSession;
-@property (readonly, nonatomic, strong) AVCaptureDeviceInput *videoInput;
-@property (readonly, nonatomic, strong) AVCaptureMetadataOutput *metadataOutput;
+@property (readonly, nonatomic, strong) AVCaptureDeviceInput *deviceInput;
+@property (readonly, nonatomic, strong) AVCaptureMetadataOutput *captureMetadataOutput;
 
 //preview container
 //should be set in subclasses
@@ -44,8 +44,11 @@ extern NSString * const CommonBarcodeErrorDomain;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil;
 
 - (void)startCapturing __deprecated_msg("use: startCapturingWithCompletion:");
+
 - (void)startCapturingWithCompletion:(void (^)(NSError *error))completion;
 
-- (void)stopCapturing;
+- (void)stopCapturing __deprecated_msg("use: stopCapturingWithCompletion:");;
+
+- (void)stopCapturingWithCompletion:(void (^)(NSError *error))completion;
 
 @end

@@ -24,8 +24,6 @@ static dispatch_once_t * once_token;
 - (void)dealloc
 {
     self.delegate = nil;
-    [self stopCapturing];
-    *once_token = 0;
 }
 
 - (void)didReceiveMemoryWarning
@@ -79,12 +77,24 @@ static dispatch_once_t * once_token;
 - (void)viewDidLayoutSubviews
 {
     [super viewDidLayoutSubviews];
-    
+
+    /*
     static dispatch_once_t pred = 0;
     once_token = &pred;
     dispatch_once(&pred, ^{
-        [self startCapturing];
+        [self startCapturingWithCompletion:^(NSError *error) {
+            DebugLog(@"error %@", error);
+        }];
     });
+    //*/
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    [self startCapturingWithCompletion:^(NSError *error) {
+        DebugLog(@"error %@", error);
+    }];
 }
 
 #pragma mark -
@@ -128,7 +138,9 @@ static dispatch_once_t * once_token;
 
 - (IBAction)actionRetry:(id)sender
 {
-    [self startCapturing];
+    [self startCapturingWithCompletion:^(NSError *error) {
+        DebugLog(@"error %@", error);\
+    }];
 }
 
 @end
