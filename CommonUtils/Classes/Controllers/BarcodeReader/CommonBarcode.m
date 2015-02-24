@@ -186,7 +186,7 @@ typedef NS_ENUM(NSInteger, CBErrorCode) {
         }];
     }
     else {
-        if (completion) completion(-1);
+        if (completion) completion(NO);
     }
 }
 
