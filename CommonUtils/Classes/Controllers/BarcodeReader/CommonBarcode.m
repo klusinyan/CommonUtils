@@ -160,6 +160,16 @@ typedef NS_ENUM(NSInteger, CBErrorCode) {
     }
 }
 
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    
+    //switch-off torch if it's on
+    if (self.captureDevice.isTorchAvailable) {
+        [self swithOffTorch:YES];
+    }
+}
+
 //handle flash
 - (void)flash:(id)sender
 {
@@ -380,11 +390,6 @@ typedef NS_ENUM(NSInteger, CBErrorCode) {
             self.sessionStarted = NO;
             if ([self.captureSession isRunning]) {
                 [self.captureSession stopRunning];
-            }
-            
-            //switch-off torch if it's on
-            if (self.captureDevice.isTorchAvailable) {
-                [self swithOffTorch:YES];
             }
             
             //reset
