@@ -133,14 +133,14 @@ static NSMutableDictionary *appearance = nil;
 {
     [CommonSpinner sharedSpinner].title = title;
     [CommonSpinner sharedSpinner].progressLayer.hidden = NO;
-    [[CommonSpinner sharedSpinner] layoutSubviews];
+    [[CommonSpinner sharedSpinner] setNeedsLayout];
 }
 
 + (void)setTitleOnly:(NSString *)title
 {
     [CommonSpinner sharedSpinner].title = title;
     [CommonSpinner sharedSpinner].progressLayer.hidden = YES;
-    [[CommonSpinner sharedSpinner] layoutSubviews];
+    [[CommonSpinner sharedSpinner] setNeedsLayout];
 }
 
 + (void)setHidesWhenStopped:(BOOL)hidesWhenStopped
@@ -256,14 +256,13 @@ static NSMutableDictionary *appearance = nil;
 
 + (void)hideWithCompletion:(CommonSpinnerHideCompletionHandler)completion;
 {
-    [CommonSpinner sharedSpinner].hideCompetion = completion;
-    [[CommonSpinner sharedSpinner] stopAnimating];
+    CommonSpinner *sharedSpinner = [CommonSpinner sharedSpinner];
+    sharedSpinner.hideCompetion = completion;
+    [sharedSpinner stopAnimating];
 }
 
 - (void)layoutSubviews
 {
-    [super layoutSubviews];
-    
     /*-----LABEL----*/
     UIFont *font = [UIFont fontWithName:self.titleFont size:self.titleFontSize];
     CGSize size = [self.titleLayer.string sizeWithAttributes:@{NSFontAttributeName : font}];

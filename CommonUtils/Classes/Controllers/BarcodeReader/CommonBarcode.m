@@ -90,7 +90,8 @@ typedef NS_ENUM(NSInteger, CBErrorCode) {
 {
     [super viewDidLoad];
     
-    if (self.captureDevice.isTorchActive && self.flashEnabled) {
+    [self setupDevice];
+    if (self.captureDevice.isTorchAvailable && self.flashEnabled) {
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Flash"
                                                                                   style:UIBarButtonItemStyleBordered
                                                                                  target:self
@@ -121,7 +122,7 @@ typedef NS_ENUM(NSInteger, CBErrorCode) {
                                                       DebugLog(@"applicationDidEnterBackground");
                                                   }];
     
-    if (!self.initialMsgOff) {
+    if (!self.manualStart) {
         self.previewContainer.backgroundColor = [UIColor blackColor];
         
         [CommonSpinner setTintColor:[UIColor grayColor]];
@@ -381,13 +382,17 @@ typedef NS_ENUM(NSInteger, CBErrorCode) {
                 [self.captureSession stopRunning];
             }
             
+            //switch-off torch if it's on
+            if (self.captureDevice.isTorchAvailable) {
+                [self swithOffTorch:YES];
+            }
+            
             //reset
             self.captureDevice = nil;
             self.deviceInput = nil;
             self.captureMetadataOutput = nil;
             self.captureSession = nil;
             self.previewLayer = nil;
-            
         }
         else DebugLog(@"Session is already stopped");
     }
