@@ -2,12 +2,17 @@
 
 #import <AVFoundation/AVFoundation.h>
 
-extern NSString * const CommonBarcodeErrorDomain;
+UIKIT_EXTERN NSString * const CBErrorUnknwon;            //code -1001
+UIKIT_EXTERN NSString * const CBErrorTargetSimulator;    //code -1002
+UIKIT_EXTERN NSString * const CBErrorPermissionDenied;   //code -1003
+
+@class CommonBarcode;
 
 @protocol CommonBarcodeDelegate <NSObject>
 
 @required
-- (void)capturedCode:(NSString *)code;
+- (void)barcode:(CommonBarcode *)barcode didFinishCapturingWithCode:(NSString *)code;
+- (void)barcode:(CommonBarcode *)barcode didFailCapturingWithError:(NSError *)error;
 
 @end
 
@@ -22,6 +27,7 @@ extern NSString * const CommonBarcodeErrorDomain;
 @property (readwrite, nonatomic, assign) CGFloat cornerRadius;          //default 0.0f
 @property (readwrite, nonatomic, assign) BOOL soundOn;                  //default YES
 @property (readwrite, nonatomic, assign) BOOL flashEnabled;             //defualt NO
+@property (readwrite, nonatomic, assign) BOOL initialMsgOff;            //defualt NO
 @property (readwrite, nonatomic, assign) unsigned int sound;            //default 1109
 @property (readonly,  nonatomic, strong) NSString *capturedCode;        //defualt nil
 @property (readwrite, nonatomic, assign) BOOL EAN13ZeroPadding;         //default NO
