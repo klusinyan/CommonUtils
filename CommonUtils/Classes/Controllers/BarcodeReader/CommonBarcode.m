@@ -99,13 +99,13 @@ typedef NS_ENUM(NSInteger, CBErrorCode) {
     
     //TODO
     /*
-     [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidChangeStatusBarOrientationNotification
-     object:nil
-     queue:[NSOperationQueue mainQueue]
-     usingBlock:^(NSNotification * __unused notification) {
-     [self adjustFrames];
-     [self adjustOrientationWithInterfaceOrientation:self.interfaceOrientation];
-     }];
+    [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidChangeStatusBarOrientationNotification
+                                                      object:nil
+                                                       queue:[NSOperationQueue mainQueue]
+                                                  usingBlock:^(NSNotification * __unused notification) {
+                                                      [self adjustFrames];
+                                                      [self adjustOrientationWithInterfaceOrientation:self.interfaceOrientation];
+                                                  }];
      //*/
     
     [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillEnterForegroundNotification
