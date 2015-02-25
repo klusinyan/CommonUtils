@@ -3,6 +3,8 @@
 #import "DirectoryUtils.h"
 #import "UIImage+Resize.h"
 
+#define kCommonUtilsBundleName @"CommonUtilsBundle.bundle"
+
 @implementation DirectoryUtils
 
 + (NSString *)moduleCacheDirectoryPath:(NSString *)moduleName
@@ -91,6 +93,35 @@
 + (UIImage *)placeholderImage
 {
     return kCommonImagePNGWithName(@"placeholder");
+}
+
++ (NSString *)commonUtilsBundle:(NSString *)bundleName
+{
+    return [NSString stringWithFormat:@"%@/%@", kCommonUtilsBundleName, bundleName];
+}
+
++ (NSBundle *)bundleWithName:(NSString *)bundleName
+{
+    NSBundle *bundle = [NSBundle mainBundle];
+    
+    if (bundleName) {
+        NSString *bundlePath = [[bundle resourcePath] stringByAppendingPathComponent:[self commonUtilsBundle:bundleName]];
+        bundle = [NSBundle bundleWithPath:bundlePath];
+    }
+    
+    return bundle;
+}
+
++ (NSString *)filePathWithName:(NSString *)fileName bundleName:(NSString *)bundleName
+{
+    NSBundle *bundle = [self bundleWithName:bundleName];
+    return [[bundle resourcePath] stringByAppendingPathComponent:fileName];
+}
+
++ (NSString *)localizedStringForKey:(NSString *)key bundleName:(NSString *)bundleName
+{
+    NSBundle *bundle = [self bundleWithName:bundleName];
+    return [bundle localizedStringForKey:key value:nil table:nil];
 }
 
 @end

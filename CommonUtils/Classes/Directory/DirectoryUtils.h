@@ -47,4 +47,7 @@ typedef NS_ENUM(NSInteger, UIImageRepresentation) {
 //shoud be removed from header if not used from outside
 + (UIImage *)placeholderImage;
 
+//localizable string from bundle
++ (NSString *)localizedStringForKey:(NSString *)key bundleName:(NSString *)bundleName;
+
 @end

@@ -208,7 +208,8 @@ typedef NS_ENUM(NSInteger, RowType) {
         case RowTypeBarcodeReader: {
             CommonBarcodeController *barcodeReader = [CommonBarcodeController barcodeReader];
             //barcodeReader.supportedBarcodes = @[AVMetadataObjectTypeEAN13Code, AVMetadataObjectTypeQRCode];
-            barcodeReader.UIInterfaceType = UIInterfaceTypeFull;
+            barcodeReader.UIInterfaceType = UIInterfaceTypeSimple;
+            //barcodeReader.UIInterfaceType = UIInterfaceTypeFull;
             barcodeReader.themeColor = [UIColor redColor];
             barcodeReader.delegate = self;
             barcodeReader.buttonDoneTitle = @"Procedi";

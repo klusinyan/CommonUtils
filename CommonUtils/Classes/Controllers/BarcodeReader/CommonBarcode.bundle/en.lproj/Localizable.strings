@@ -1,0 +1,12 @@
+/* 
+  Localize.strings
+  CommonUtils
+
+  Created by Karen Lusinyan on 25/02/15.
+  Copyright (c) 2015 Karen Lusinyan. All rights reserved.
+*/
+
+"initializing_message" = "Initializing, please wait";
+"camera_is_unavailable" = "Camera is unavailable";
+"target_simulator" = "Camera is unavailable on simulator";
+"permission_denied" = "Camera permssion is denied";

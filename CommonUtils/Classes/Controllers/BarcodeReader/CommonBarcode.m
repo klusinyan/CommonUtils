@@ -1,6 +1,10 @@
 //  Created by Karen Lusinyan on 12/05/14.
 
 #import "CommonBarcode.h"
+#import "CommonSpinner.h"
+#import "DirectoryUtils.h"
+
+#define kBundleName @"CommonBarcode.bundle"
 
 NSString * const CommonBarcodeErrorDomain = @"commonutils.domain.error";
 
@@ -110,6 +114,26 @@ typedef NS_ENUM(NSInteger, CBErrorCode) {
                                                   usingBlock:^(NSNotification * __unused notification) {
                                                       DebugLog(@"applicationDidEnterBackground");
                                                   }];
+    
+    self.previewContainer.backgroundColor = [UIColor blackColor];
+    
+    [CommonSpinner setTintColor:[UIColor grayColor]];
+    [CommonSpinner setHidesWhenStopped:YES];
+    [CommonSpinner setNetworkActivityIndicatorVisible:NO];
+    [CommonSpinner setTitle:[DirectoryUtils localizedStringForKey:@"initializing_message" bundleName:kBundleName]];
+    
+    [CommonSpinner showWithTaregt:self completion:^{
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self startCapturingWithCompletion:^(NSError *error) {
+                if (error.code == CommonBarcodeErrorCodeSimulator || error.code == CommonBarcodeErrorCodePermissionDenied) {
+                    [CommonSpinner setTitleOnly:[DirectoryUtils localizedStringForKey:@"camera_is_unavailable" bundleName:kBundleName]];
+                }
+                else {
+                    [CommonSpinner hideWithCompletion:nil];
+                }
+            }];
+        });
+    }];
 }
 
 //handle flash
@@ -201,7 +225,8 @@ typedef NS_ENUM(NSInteger, CBErrorCode) {
     if (TARGET_IPHONE_SIMULATOR) {
         error = [[NSError alloc] initWithDomain:CommonBarcodeErrorDomain
                                            code:CommonBarcodeErrorCodeSimulator
-                                       userInfo:@{NSLocalizedDescriptionKey : NSLocalizedString(@"CommonBarcode_simulator_not_working", nil)}];
+                                       userInfo:@{NSLocalizedDescriptionKey :
+                                                      [DirectoryUtils localizedStringForKey:@"target_simulator" bundleName:kBundleName]}];
         if (completion) completion(error);
     }
     else {
@@ -212,7 +237,8 @@ typedef NS_ENUM(NSInteger, CBErrorCode) {
             else {
                 error = [[NSError alloc] initWithDomain:CommonBarcodeErrorDomain
                                                    code:CommonBarcodeErrorCodePermissionDenied
-                                               userInfo:@{NSLocalizedDescriptionKey : NSLocalizedString(@"CommonBarcode_simulator_permission_denied", nil)}];
+                                               userInfo:@{NSLocalizedDescriptionKey :
+                                                              [DirectoryUtils localizedStringForKey:@"permission_denied" bundleName:kBundleName]}];
             }
             if (completion) completion(error);
         }];
@@ -230,7 +256,7 @@ typedef NS_ENUM(NSInteger, CBErrorCode) {
     if (TARGET_IPHONE_SIMULATOR) {
         error = [[NSError alloc] initWithDomain:CommonBarcodeErrorDomain
                                            code:CommonBarcodeErrorCodeSimulator
-                                       userInfo:@{NSLocalizedDescriptionKey : NSLocalizedString(@"CommonBarcode_simulator_not_working", nil)}];
+                                       userInfo:@{NSLocalizedDescriptionKey : [DirectoryUtils localizedStringForKey:@"target_simulator" bundleName:kBundleName]}];
         
         if (completion) completion(error);
     }
@@ -242,7 +268,7 @@ typedef NS_ENUM(NSInteger, CBErrorCode) {
             else {
                 error = [[NSError alloc] initWithDomain:CommonBarcodeErrorDomain
                                                    code:CommonBarcodeErrorCodePermissionDenied
-                                               userInfo:@{NSLocalizedDescriptionKey : NSLocalizedString(@"CommonBarcode_simulator_permission_denied", nil)}];
+                                               userInfo:@{NSLocalizedDescriptionKey : [DirectoryUtils localizedStringForKey:@"permission_denied" bundleName:kBundleName]}];
             }
             if (completion) completion(error);
         }];

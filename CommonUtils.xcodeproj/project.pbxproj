@@ -124,6 +124,7 @@
 		9C2AC5DE19EA96F900588538 /* CommonProgress.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = CommonProgress.bundle; sourceTree = "<group>"; };
 		9C2AC5DF19EA96F900588538 /* CommonProgress.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonProgress.h; sourceTree = "<group>"; };
 		9C2AC5E019EA96F900588538 /* CommonProgress.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonProgress.m; sourceTree = "<group>"; };
+		9C3297A81A9DE2F000AFFBEA /* CommonBarcode.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = CommonBarcode.bundle; sourceTree = "<group>"; };
 		9C34F7CE192CAFF9001B8D6D /* ProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProgressView.h; sourceTree = "<group>"; };
 		9C34F7CF192CAFF9001B8D6D /* ProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProgressView.m; sourceTree = "<group>"; };
 		9C46A59719766A840018B109 /* ImageDownloader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageDownloader.h; sourceTree = "<group>"; };
@@ -515,6 +516,7 @@
 		9CCDD9181A4040130003EAF3 /* BarcodeReader */ = {
 			isa = PBXGroup;
 			children = (
+				9C3297A81A9DE2F000AFFBEA /* CommonBarcode.bundle */,
 				9CCDD91A1A4040130003EAF3 /* CommonBarcode.h */,
 				9CCDD91B1A4040130003EAF3 /* CommonBarcode.m */,
 			);

@@ -3,7 +3,7 @@
 #import "CommonBarcodeController.h"
 #import "DirectoryUtils.h"
 
-static dispatch_once_t * once_token;
+//static dispatch_once_t * once_token;
 
 @interface CommonBarcodeController ()
 
@@ -87,14 +87,6 @@ static dispatch_once_t * once_token;
         }];
     });
     //*/
-}
-
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-    [self startCapturingWithCompletion:^(NSError *error) {
-        DebugLog(@"error %@", error);
-    }];
 }
 
 #pragma mark -

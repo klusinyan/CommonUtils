@@ -4,10 +4,17 @@
 #import "CommonSpinner.h"
 #import "NetworkUtils.h"
 
-#define kMaxWidth 300
-#define kOffset 5
+#define kMaxWidth 300.0f
+#define kOffset 5.0f
+
+NSString * const kCommonSpinnerKeyTintColor     = @"kCommonSpinnerKeyTintColor";
+NSString * const kCommonSpinnerKeySize          = @"kCommonSpinnerKeySize";
+NSString * const kCommonSpinnerKeyLineWidth     = @"kCommonSpinnerKeyLineWidth";
 
 static NSString *kLLARingSpinnerAnimationKey = @"llaringspinnerview.rotation";
+
+//TODO::
+static NSMutableDictionary *appearance = nil;
 
 @interface CommonSpinner ()
 
@@ -16,6 +23,7 @@ static NSString *kLLARingSpinnerAnimationKey = @"llaringspinnerview.rotation";
 @property (readwrite, nonatomic, strong) CATextLayer *titleLayer;
 @property (readwrite, nonatomic, strong) CAShapeLayer *progressLayer;
 @property (readwrite, nonatomic, assign) BOOL isAnimating;
+@property (readwrite, nonatomic, getter=isTitleOnly) BOOL titleOnly;
 @property (readwrite, nonatomic, assign) id target;
 
 //bg execution
@@ -91,11 +99,16 @@ static NSString *kLLARingSpinnerAnimationKey = @"llaringspinnerview.rotation";
     _titleFontSize = 20.0f;
     _title = nil;
 
-    //tint color setup separately
+    //tint color setups separately
     self.tintColor = [UIColor grayColor];
     
     [self.layer addSublayer:self.progressLayer];
     [self.layer addSublayer:self.titleLayer];
+}
+
++ (instancetype)instance
+{
+    return [[self alloc] init];
 }
 
 + (instancetype)sharedSpinner
@@ -108,6 +121,63 @@ static NSString *kLLARingSpinnerAnimationKey = @"llaringspinnerview.rotation";
     return _sharedObject;
 }
 
+#pragma mark -
+#pragma mark static configuration
+
++ (void)setTintColor:(UIColor *)tintColor
+{
+    [CommonSpinner sharedSpinner].tintColor = tintColor;
+}
+
++ (void)setTitle:(NSString *)title
+{
+    [CommonSpinner sharedSpinner].title = title;
+    [CommonSpinner sharedSpinner].progressLayer.hidden = NO;
+    [[CommonSpinner sharedSpinner] layoutSubviews];
+}
+
++ (void)setTitleOnly:(NSString *)title
+{
+    [CommonSpinner sharedSpinner].title = title;
+    [CommonSpinner sharedSpinner].progressLayer.hidden = YES;
+    [[CommonSpinner sharedSpinner] layoutSubviews];
+}
+
++ (void)setHidesWhenStopped:(BOOL)hidesWhenStopped
+{
+    [CommonSpinner sharedSpinner].hidesWhenStopped = hidesWhenStopped;
+}
+
++ (void)setRunInBackground:(BOOL)runInBackgroud
+{
+    [CommonSpinner sharedSpinner].runInBackgroud = runInBackgroud;
+}
+
++ (void)setNetworkActivityIndicatorVisible:(BOOL)networkActivityIndicatorVisible
+{
+    [CommonSpinner sharedSpinner].networkActivityIndicatorVisible = networkActivityIndicatorVisible;
+}
+
++ (void)setTimingFunction:(CAMediaTimingFunction *)timingFunction
+{
+    [CommonSpinner sharedSpinner].timingFunction = timingFunction;
+}
+
++ (void)setSize:(CGSize)size
+{
+    [CommonSpinner sharedSpinner].size = size;
+}
+
++ (void)setLineWidth:(CGFloat)lineWidth
+{
+    [CommonSpinner sharedSpinner].lineWidth = lineWidth;
+}
+
++ (BOOL)isAnimating
+{
+   return [CommonSpinner sharedSpinner].isAnimating;
+}
+
 + (void)showWithTaregt:(id)target completion:(CommonSpinnerShowCompletionHandler)completion
 {
     //hides the old one
@@ -118,6 +188,7 @@ static NSString *kLLARingSpinnerAnimationKey = @"llaringspinnerview.rotation";
         sharedSpinner.translatesAutoresizingMaskIntoConstraints = NO;
         sharedSpinner.target = target;
         sharedSpinner.showCompetion = completion;
+        sharedSpinner.progressLayer.hidden = NO;
         
         if (!target) {
             NSLog(@"Warning: please provide valid target for common progress");
@@ -174,7 +245,7 @@ static NSString *kLLARingSpinnerAnimationKey = @"llaringspinnerview.rotation";
         
         // Start the long-running task and return immediately.
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            dispatch_async(dispatch_get_main_queue(), ^{
                 [sharedSpinner startAnimating];
             });
             [application endBackgroundTask:[CommonSpinner sharedSpinner].bgTask];
@@ -223,6 +294,7 @@ static NSString *kLLARingSpinnerAnimationKey = @"llaringspinnerview.rotation";
         animation.toValue = @(2 * M_PI);
         animation.repeatCount = INFINITY;
         animation.timingFunction = self.timingFunction;
+        animation.delegate = self;
         
         [self.progressLayer addAnimation:animation forKey:kLLARingSpinnerAnimationKey];
         self.isAnimating = true;
@@ -234,6 +306,13 @@ static NSString *kLLARingSpinnerAnimationKey = @"llaringspinnerview.rotation";
         if (self.hidesWhenStopped) {
             self.hidden = NO;
         }
+    }
+}
+
+- (void)animationDidStart:(CAAnimation *)anim
+{
+    if (anim == [self.progressLayer animationForKey:kLLARingSpinnerAnimationKey]) {
+        if (self.showCompetion) self.showCompetion();
     }
 }
 
@@ -272,6 +351,7 @@ static NSString *kLLARingSpinnerAnimationKey = @"llaringspinnerview.rotation";
 {
     self.titleLayer.font = (__bridge CFTypeRef)(self.titleFont);
     self.titleLayer.fontSize = self.titleFontSize;
+    self.titleLayer.foregroundColor = self.tintColor.CGColor;
     self.titleLayer.string = self.title;
 }
 
@@ -333,6 +413,17 @@ static NSString *kLLARingSpinnerAnimationKey = @"llaringspinnerview.rotation";
         [self stopAnimating];
         [self startAnimating];
     }
+}
+
+#pragma mark -
+#pragma mark TODO list
+
++ (id)sharedAppearance
+{
+    if (!appearance) {
+        appearance = [[NSMutableDictionary alloc] init];
+    }
+    return appearance;
 }
 
 @end
