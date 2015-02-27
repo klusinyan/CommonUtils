@@ -14,8 +14,8 @@
 @property (nonatomic, strong) IBOutlet UIScrollView *scrollView;
 @property (nonatomic, strong) IBOutlet UIImageView *imageView;
 
-@property (nonatomic, strong) IBOutlet NSLayoutConstraint *leadingInset;
-@property (nonatomic, strong) IBOutlet NSLayoutConstraint *topInset;
+@property (nonatomic, strong) IBOutlet NSLayoutConstraint *leadingSpace;
+@property (nonatomic, strong) IBOutlet NSLayoutConstraint *topSpace;
 
 - (CGRect)zoomRectForScale:(float)scale withCenter:(CGPoint)center;
 
@@ -23,11 +23,18 @@
 
 @implementation CommonPageContent
 
+- (void)dealloc
+{
+    self.scrollView.delegate = nil;
+}
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
-        self.horizontalSpace = IMAGE_DISTANCE;
-        self.verticalSpace = 0;
+        self.horizontalSpaceWhenPortrait = IMAGE_DISTANCE;
+        self.horizontalSpaceWhenLandscape = 0;
+        self.verticalSpaceWhenPortrait = 0;
+        self.verticalSpaceWhenLandscape = 0;
         self.backgroundColor = [UIColor clearColor];
         self.zoomEnabled = NO;
         
@@ -37,7 +44,7 @@
     return self;
 }
 
-+ (instancetype)instance
++ (instancetype)pageContent
 {
     return [[self alloc] initWithNibName:NSStringFromClass([self class]) bundle:[DirectoryUtils commonUtilsBundle]];
 }
@@ -74,10 +81,6 @@
     self.view.backgroundColor = self.backgroundColor;
 
     self.imageView.image = self.image;
-    
-    self.leadingInset.constant = self.horizontalSpace;
-    
-    self.topInset.constant = self.verticalSpace;
 }
 
 - (void)viewWillLayoutSubviews
@@ -85,6 +88,15 @@
     [super viewWillLayoutSubviews];
     
     [self.scrollView setZoomScale:self.scrollView.minimumZoomScale animated:YES];
+    
+    if (UIInterfaceOrientationIsPortrait([[UIApplication sharedApplication] statusBarOrientation])) {
+        self.leadingSpace.constant = self.horizontalSpaceWhenPortrait;
+        self.topSpace.constant = self.verticalSpaceWhenPortrait;
+    }
+    else {
+        self.leadingSpace.constant = self.horizontalSpaceWhenLandscape;
+        self.topSpace.constant = self.verticalSpaceWhenLandscape;
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated

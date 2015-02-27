@@ -7,7 +7,7 @@
 #import "CommonBook.h"
 #import "CommonPageContent.h"
 
-#define kPageBackgroundColor [UIColor greenColor]
+#define kPageBackgroundColor [UIColor blackColor]
 
 @interface CommonBookViewController () <CommonBookDelegate, CommonBookDataSource>
 
@@ -59,7 +59,7 @@
 
 - (CommonPageContent *)fabriquePageContent
 {
-    return [CommonPageContent instance];
+    return [CommonPageContent pageContent];
 }
 
 - (void)viewDidLoad
@@ -185,8 +185,8 @@
     NSString *imageName = [prefix stringByAppendingFormat:@"_%@", @(index % 7)];
     pageContent.image = [UIImage imageNamed:imageName];
     pageContent.zoomEnabled = YES;
-    pageContent.horizontalSpace = 5;
-    pageContent.verticalSpace = 5;
+    pageContent.horizontalSpaceWhenPortrait = 5;
+    pageContent.verticalSpaceWhenPortrait = 5;
     pageContent.backgroundColor = kPageBackgroundColor;
     return pageContent;
     //*/

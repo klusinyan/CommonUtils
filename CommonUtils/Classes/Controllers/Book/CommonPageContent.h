@@ -3,12 +3,19 @@
 
 @interface CommonPageContent : UIViewController
 
-@property (nonatomic, strong) UIImage *image;
-@property (nonatomic) CGFloat horizontalSpace;                  //defualt 5
-@property (nonatomic) CGFloat verticalSpace;                    //defualt 0
-@property (nonatomic) UIColor *backgroundColor;                 //default NO
-@property (nonatomic, getter=isZoomEnabled) BOOL zoomEnabled;   //defualt NO
+@property (nonatomic) UIColor *backgroundColor;
 
-+ (instancetype)instance;
+@property (nonatomic, getter=isZoomEnabled) BOOL zoomEnabled;       //defualt NO
+
+@property (nonatomic) UIImage *image;
+
+@property (readonly, nonatomic) UIImageView *imageView;
+
+@property (nonatomic) CGFloat horizontalSpaceWhenPortrait;
+@property (nonatomic) CGFloat verticalSpaceWhenPortrait;
+@property (nonatomic) CGFloat horizontalSpaceWhenLandscape;
+@property (nonatomic) CGFloat verticalSpaceWhenLandscape;
+
++ (instancetype)pageContent;
 
 @end
