@@ -27,7 +27,7 @@
                         <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" maximumZoomScale="2" translatesAutoresizingMaskIntoConstraints="NO" id="8">
                             <rect key="frame" x="0.0" y="0.0" width="320" height="460"/>
                             <subviews>
-                                <imageView contentMode="scaleAspectFit" image="WeCanDoIt.png" translatesAutoresizingMaskIntoConstraints="NO" id="9" userLabel="ImageView">
+                                <imageView contentMode="scaleAspectFit" translatesAutoresizingMaskIntoConstraints="NO" id="9" userLabel="ImageView">
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="460"/>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </imageView>
@@ -66,9 +66,6 @@
             <point key="canvasLocation" x="66" y="173"/>
         </view>
     </objects>
-    <resources>
-        <image name="WeCanDoIt.png" width="1730" height="2430"/>
-    </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>

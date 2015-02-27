@@ -29,6 +29,9 @@
         self.imageDistance = IMAGE_DISTANCE;
         self.backgroundColor = [UIColor clearColor];
         self.zoomEnabled = NO;
+        
+        //defualt is nil for memory
+        //self.image = [UIImage imageNamed:@"CommonUtils.bundle/CommonProgress.bundle/WeCanDoIt"];
     }
     return self;
 }
