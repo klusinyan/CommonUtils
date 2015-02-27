@@ -6,7 +6,7 @@
 
 #define ZOOM_VIEW_TAG 100
 #define ZOOM_STEP 1.5
-#define IMAGE_DISTANCE 2
+#define IMAGE_DISTANCE 5
 
 @interface CommonPageContent () <UIScrollViewDelegate>
 
@@ -15,7 +15,6 @@
 @property (nonatomic, strong) IBOutlet UIImageView *imageView;
 
 @property (nonatomic, strong) IBOutlet NSLayoutConstraint *leadingInset;
-@property (nonatomic, strong) IBOutlet NSLayoutConstraint *topInset;
 
 - (CGRect)zoomRectForScale:(float)scale withCenter:(CGPoint)center;
 
