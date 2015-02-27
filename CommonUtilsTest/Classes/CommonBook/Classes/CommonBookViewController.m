@@ -9,7 +9,7 @@
 
 #define kPageBackgroundColor [UIColor blackColor]
 
-@interface CommonBookViewController () <CommonBookDelegate, CommonBookDataSource>
+@interface CommonBookViewController () <CommonBookDelegate, CommonBookDataSource, CommonPageContentDelegate>
 
 @property (readwrite, nonatomic, strong) IBOutlet UIView *container0;
 @property (readwrite, nonatomic, strong) IBOutlet UIView *container1;
@@ -185,9 +185,10 @@
     NSString *imageName = [prefix stringByAppendingFormat:@"_%@", @(index % 7)];
     pageContent.image = [UIImage imageNamed:imageName];
     pageContent.zoomEnabled = YES;
-    pageContent.horizontalSpaceWhenPortrait = 5;
-    pageContent.verticalSpaceWhenPortrait = 5;
+    pageContent.leadingSpaceWhenPortrait = 5;
+    pageContent.topSpaceWhenPortrait = 5;
     pageContent.backgroundColor = kPageBackgroundColor;
+    pageContent.delegate = self;
     return pageContent;
     //*/
     
@@ -211,14 +212,14 @@
     //[pc showAnimation:YES];
 }
 
-- (void)book:(CommonBook *)book pageContent:(id)pageContent didPresentAtIndex:(NSInteger)index
+- (void)book:(CommonBook *)book pageContent:(UIViewController *)pageContent didPresentAtIndex:(NSInteger)index
 {
     DebugLog(@"didPresentAtIndex %@", @(index));
     //CommonBookContentViewController *pc = (CommonBookContentViewController *)pageContent;
     //[pc showAnimation:YES];
 }
 
-- (void)book:(CommonBook *)book pageContent:(id)pageContent didSelectAtIndex:(NSInteger)index
+- (void)book:(CommonBook *)book pageContent:(UIViewController *)pageContent didSelectAtIndex:(NSInteger)index
 {
     DebugLog(@"pageContent tapped at index %@", @(index));
 }
@@ -233,5 +234,21 @@
                             }];
 }
 //*/
+
+#pragma mark -
+#pragma mark CommonPageContentDeelegate protocol
+
+- (void)pageContentWillAppear:(CommonPageContent *)content
+{
+    if (!content.isAnimated) {
+        //animated
+        content.animationView.type = CSAnimationTypeMorph;
+        content.animationView.delay = 0.4;
+        content.animationView.duration = 0.4;
+        [content.animationView startCanvasAnimation];
+        //set animated YES
+        content.animated = YES;
+    }
+}
 
 @end

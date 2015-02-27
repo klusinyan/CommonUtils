@@ -10,6 +10,7 @@
 
 @interface CommonPageContent () <UIScrollViewDelegate>
 
+@property (nonatomic, strong) IBOutlet CSAnimationView *animationView;
 @property (nonatomic, strong) IBOutlet UIView *container;
 @property (nonatomic, strong) IBOutlet UIScrollView *scrollView;
 @property (nonatomic, strong) IBOutlet UIImageView *imageView;
@@ -31,10 +32,10 @@
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
-        self.horizontalSpaceWhenPortrait = IMAGE_DISTANCE;
-        self.horizontalSpaceWhenLandscape = 0;
-        self.verticalSpaceWhenPortrait = 0;
-        self.verticalSpaceWhenLandscape = 0;
+        self.leadingSpaceWhenPortrait = IMAGE_DISTANCE;
+        self.leadingSpaceWhenLandscape = 0;
+        self.topSpaceWhenPortrait = 0;
+        self.topSpaceWhenLandscape = 0;
         self.backgroundColor = [UIColor clearColor];
         self.zoomEnabled = NO;
         
@@ -74,6 +75,7 @@
     [self.scrollView setZoomScale:minimumScale];
 }
 
+/****************SEQ[1]****************/
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -81,8 +83,36 @@
     self.view.backgroundColor = self.backgroundColor;
 
     self.imageView.image = self.image;
+    
+    if (self.delegate && [self.delegate respondsToSelector:@selector(pageContentDidLoad:)]) {
+        [self.delegate pageContentDidLoad:self];
+    }
 }
+/****************SEQ[1]****************/
 
+/****************SEQ[2]****************/
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    if (self.delegate && [self.delegate respondsToSelector:@selector(pageContentWillAppear:)]) {
+        [self.delegate pageContentWillAppear:self];
+    }
+}
+/****************SEQ[2]****************/
+
+/****************SEQ[3]****************/
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
+    if (self.delegate && [self.delegate respondsToSelector:@selector(pageContentDidAppear:)]) {
+        [self.delegate pageContentDidAppear:self];
+    }
+}
+/****************SEQ[3]****************/
+
+/****************SEQ[4]****************/
 - (void)viewWillLayoutSubviews
 {
     [super viewWillLayoutSubviews];
@@ -90,21 +120,43 @@
     [self.scrollView setZoomScale:self.scrollView.minimumZoomScale animated:YES];
     
     if (UIInterfaceOrientationIsPortrait([[UIApplication sharedApplication] statusBarOrientation])) {
-        self.leadingSpace.constant = self.horizontalSpaceWhenPortrait;
-        self.topSpace.constant = self.verticalSpaceWhenPortrait;
+        self.leadingSpace.constant = self.leadingSpaceWhenPortrait;
+        self.topSpace.constant = self.topSpaceWhenPortrait;
     }
     else {
-        self.leadingSpace.constant = self.horizontalSpaceWhenLandscape;
-        self.topSpace.constant = self.verticalSpaceWhenLandscape;
+        self.leadingSpace.constant = self.leadingSpaceWhenLandscape;
+        self.topSpace.constant = self.topSpaceWhenLandscape;
     }
 }
+/****************SEQ[4]****************/
+
+/****************SEQ[5]****************/
+- (void)viewDidLayoutSubviews
+{
+    [super viewDidLayoutSubviews];
+}
+/****************SEQ[5]****************/
 
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
     
     [self.scrollView setZoomScale:self.scrollView.minimumZoomScale animated:YES];
+    
+    if (self.delegate && [self.delegate respondsToSelector:@selector(pageContentWillDisappear:)]) {
+        [self.delegate pageContentWillDisappear:self];
+    }
 }
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+
+    if (self.delegate && [self.delegate respondsToSelector:@selector(pageContentDidDisappear:)]) {
+        [self.delegate pageContentDidDisappear:self];
+    }
+}
+
 
 #pragma mark UIScrollViewDelegate methods
 
@@ -157,4 +209,5 @@
     
     return zoomRect;
 }
+
 @end
