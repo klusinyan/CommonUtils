@@ -4,7 +4,8 @@
 #import "CommonSpinner.h"
 #import "DirectoryUtils.h"
 
-#define kBundleName @"CommonBarcode.bundle"
+#define kBundleName [DirectoryUtils commonUtilsBundlePathWithName:@"CommonBarcode.bundle"]
+
 NSString * const CBLocalizedStringInitializingMsg = @"CBLocalizedStringInitializingMsg";
 
 NSString * const CommonBarcodeErrorDomain = @"commonutils.domain.error";
@@ -260,7 +261,8 @@ typedef NS_ENUM(NSInteger, CBErrorCode) {
         error = [[NSError alloc] initWithDomain:CommonBarcodeErrorDomain
                                            code:CBErrorCodeTargetSimulator
                                        userInfo:@{NSLocalizedDescriptionKey :
-                                                      [DirectoryUtils localizedStringForKey:CBErrorTargetSimulator bundleName:kBundleName]}];
+                                                      [DirectoryUtils localizedStringForKey:CBErrorTargetSimulator
+                                                                                 bundleName:kBundleName]}];
         if (completion) completion(error);
     }
     else {

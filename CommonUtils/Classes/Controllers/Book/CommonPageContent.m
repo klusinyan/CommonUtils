@@ -3,8 +3,11 @@
 
 #import "CommonPageContent.h"
 
+#define ZOOM_STEP 1.5
+
 @interface CommonPageContent () <UIScrollViewDelegate>
 
+@property (readwrite, nonatomic, strong) UIView *contentView;
 @property (readwrite, nonatomic, strong) UIScrollView *scrollView;
 @property (readwrite, nonatomic, strong) UIImageView *imageView;
 
@@ -75,8 +78,22 @@
     self.contentInset = UIEdgeInsetsMake(0, 5, 0, 5);
 }
 
+- (void)setContentInset:(UIEdgeInsets)contentInset toView:(UIView *)view
+{
+    CGRect rect = view.bounds;
+    rect.origin.x += self.contentInset.left;
+    rect.origin.y += self.contentInset.top;
+    rect.size.width -= 2*self.contentInset.right;
+    rect.size.height -= 2*self.contentInset.bottom;
+    view.frame = rect;
+}
+
 - (void)loadView
 {
+    self.view= [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    self.view.backgroundColor = self.backgroundColor;
+    
+    /*
     self.view = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
     self.view.backgroundColor = self.backgroundColor;
     
@@ -109,7 +126,8 @@
     self.doubleTapGestureRecognizer.numberOfTapsRequired = 2;
     self.doubleTapGestureRecognizer.numberOfTouchesRequired = 1;
     [self.scrollView addGestureRecognizer:self.doubleTapGestureRecognizer];
-
+    //*/
+    
     /*
      //-----------TODO-----------//
      self.singleTapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showHideNavigationBar)];
@@ -121,23 +139,103 @@
      //*/
 }
 
+- (NSDictionary *)bindings
+{
+    return @{@"contentView" : self.contentView,
+             @"scrollView" : self.scrollView,
+             @"imageView" : self.imageView};
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
     self.view.backgroundColor = self.backgroundColor;
+    self.edgesForExtendedLayout = UIRectEdgeNone;
     
+    self.scrollView = [[UIScrollView alloc] init];
+    //self.scrollView.backgroundColor = [UIColor greenColor];
+    self.scrollView.translatesAutoresizingMaskIntoConstraints = NO;
+    self.scrollView.minimumZoomScale = 1.0f;
+    self.scrollView.maximumZoomScale = (self.isZoomEnabled) ? 2.0f : 1.0f;
+    self.scrollView.delegate = self;
+    self.scrollView.multipleTouchEnabled = YES;
+    self.scrollView.delaysContentTouches = YES;
+    self.scrollView.canCancelContentTouches = YES;
+    [self.view addSubview:self.scrollView];
+    
+    self.contentView = [[UIView alloc] init];
+    self.contentView.backgroundColor = [UIColor blueColor];
+    self.contentView.translatesAutoresizingMaskIntoConstraints = NO;
+    self.contentView.userInteractionEnabled = YES;
+    [self.scrollView addSubview:self.contentView];
+    
+    self.imageView = [[UIImageView alloc] init];
+    self.imageView.backgroundColor = [UIColor redColor];
+    self.imageView.translatesAutoresizingMaskIntoConstraints = NO;
+    self.imageView.contentMode = UIViewContentModeScaleAspectFit;
     self.imageView.image = self.image;
-}
+    self.imageView.userInteractionEnabled = YES;
+    [self.contentView addSubview:self.imageView];
 
-/*
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
+    UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSingleTap:)];
+    UITapGestureRecognizer *doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleDoubleTap:)];
+    UITapGestureRecognizer *twoFingerTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTwoFingerTap:)];
     
-    self.scrollView.contentSize = self.image.size;
+    [doubleTap setNumberOfTapsRequired:2];
+    [twoFingerTap setNumberOfTouchesRequired:2];
+    
+    [self.imageView addGestureRecognizer:singleTap];
+    [self.imageView addGestureRecognizer:doubleTap];
+    [self.imageView addGestureRecognizer:twoFingerTap];
+    
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[scrollView]|"
+                                                                      options:0
+                                                                      metrics:nil
+                                                                        views:[self bindings]]];
+    
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[scrollView]|"
+                                                                      options:0
+                                                                      metrics:nil
+                                                                        views:[self bindings]]];
+    
+    [self.scrollView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[contentView]|"
+                                                                            options:0
+                                                                            metrics:0
+                                                                              views:[self bindings]]];
+    
+    [self.scrollView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[contentView]|"
+                                                                            options:0
+                                                                            metrics:0
+                                                                              views:[self bindings]]];
+    
+    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[imageView]|"
+                                                                             options:0
+                                                                             metrics:nil
+                                                                               views:[self bindings]]];
+    
+    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[imageView]|"
+                                                                             options:0
+                                                                             metrics:nil
+                                                                               views:[self bindings]]];
+    
+    NSLayoutConstraint *c1 = [NSLayoutConstraint constraintWithItem:self.contentView
+                                                          attribute:NSLayoutAttributeWidth
+                                                          relatedBy:NSLayoutRelationEqual
+                                                             toItem:self.view
+                                                          attribute:NSLayoutAttributeWidth
+                                                         multiplier:1
+                                                           constant:0];
+    
+    NSLayoutConstraint *c2 = [NSLayoutConstraint constraintWithItem:self.contentView
+                                                          attribute:NSLayoutAttributeHeight
+                                                          relatedBy:NSLayoutRelationEqual
+                                                             toItem:self.view
+                                                          attribute:NSLayoutAttributeHeight
+                                                         multiplier:1
+                                                           constant:0];
+    
+    [self.view addConstraints:@[c1, c2]];
 }
-//*/
 
 - (void)viewDidDisappear:(BOOL)animated
 {
@@ -160,15 +258,52 @@
 
 - (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView
 {
-    return self.imageView;
+    return self.contentView;
 }
 
 #pragma mark
 #pragma mark - Private methods
 
+- (void)handleSingleTap:(UIGestureRecognizer *)gestureRecognizer
+{
+    // single tap does nothing for now
+}
+
+
+//- (void)handleDoubleTap:(UIGestureRecognizer *)gestureRecognizer
+//{
+//    // double tap zooms in
+//    //float newScale = [self.scrollView zoomScale] * ZOOM_STEP;
+//    
+//    ///*
+//    CGFloat newScale = (self.scrollView.zoomScale == self.scrollView.minimumZoomScale) ?
+//    self.scrollView.maximumZoomScale :
+//    self.scrollView.minimumZoomScale;
+//    //*/
+//
+//    CGRect zoomRect = [self zoomRectForScale:newScale withCenter:[gestureRecognizer locationInView:gestureRecognizer.view]];
+//    [self.scrollView zoomToRect:zoomRect animated:YES];
+//}
+//
+//- (void)handleTwoFingerTap:(UIGestureRecognizer *)gestureRecognizer
+//{
+//    // two-finger tap zooms out
+//    //float newScale = [self.scrollView zoomScale] / ZOOM_STEP;
+//    
+//    ///*
+//    CGFloat newScale = (self.scrollView.zoomScale == self.scrollView.minimumZoomScale) ?
+//    self.scrollView.maximumZoomScale :
+//    self.scrollView.minimumZoomScale;
+//    //*/
+//    
+//    CGRect zoomRect = [self zoomRectForScale:newScale withCenter:[gestureRecognizer locationInView:gestureRecognizer.view]];
+//    [self.scrollView zoomToRect:zoomRect animated:YES];
+//}
+
 - (void)handleDoubleTap:(UITapGestureRecognizer *)tapGestureRecognizer
 {
-    CGPoint center = [tapGestureRecognizer locationInView:self.scrollView];
+    ///*
+    CGPoint center = [tapGestureRecognizer locationInView:[tapGestureRecognizer view]];
     
     CGFloat scale = (self.scrollView.zoomScale == self.scrollView.minimumZoomScale) ?
     self.scrollView.maximumZoomScale :
@@ -179,7 +314,8 @@
                                    withCenter:center];
     
     [self.scrollView zoomToRect:rect animated:YES];
-    
+    //*/
+     
     /*
     if (self.scrollView.zoomScale == self.scrollView.minimumZoomScale) {
         
@@ -202,6 +338,23 @@
         [self.scrollView zoomToRect:self.scrollView.bounds animated:YES];
     }
     //*/
+}
+
+- (CGRect)zoomRectForScale:(float)scale withCenter:(CGPoint)center
+{
+    CGRect zoomRect;
+    
+    // the zoom rect is in the content view's coordinates.
+    //    At a zoom scale of 1.0, it would be the size of the imageScrollView's bounds.
+    //    As the zoom scale decreases, so more content is visible, the size of the rect grows.
+    zoomRect.size.height = [self.scrollView frame].size.height / scale;
+    zoomRect.size.width  = [self.scrollView frame].size.width  / scale;
+    
+    // choose an origin so as to get the right center.
+    zoomRect.origin.x    = center.x - (zoomRect.size.width  / 2.0);
+    zoomRect.origin.y    = center.y - (zoomRect.size.height / 2.0);
+    
+    return zoomRect;
 }
 
 //Apples's sample code

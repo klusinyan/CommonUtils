@@ -6,6 +6,7 @@
 //library
 #import "CommonBook.h"
 #import "CommonPageContent.h"
+#import "CommonPageContent2.h"
 
 #define kPageBackgroundColor [UIColor blackColor]
 
@@ -68,6 +69,11 @@
     //*/
 }
 
+- (CommonPageContent2 *)fabriquePageContent2
+{
+    return [CommonPageContent2 instance];
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -82,7 +88,7 @@
     //*/
     
     for (int i = 0; i < 10; i++) {
-        [self.items addObject:[self fabriquePageContent]];
+        [self.items addObject:[self fabriquePageContent2]];
     }
     
     /*
@@ -185,9 +191,16 @@
 
 - (UIViewController *)book:(CommonBook *)book pageContentAtIndex:(NSInteger)index
 {
+    CommonPageContent2 *vc = [self.items objectAtIndex:index];
+    NSString *prefix = (iPhone) ? @"iPhone" : @"iPad";
+    NSString *imageName = [prefix stringByAppendingFormat:@"_%@", @(index % 7)];
+    vc.image = [UIImage imageNamed:imageName];
+    return vc;
+    
+    /*
     CommonPageContent *pageContent = [[CommonPageContent alloc] init];
     pageContent.zoomEnabled = YES;
-    pageContent.backgroundColor = kPageBackgroundColor;
+    pageContent.backgroundColor = [UIColor greenColor];//kPageBackgroundColor;
     pageContent.contentInset = UIEdgeInsetsMake(0, 10, 0, 10);
 
     NSString *prefix = (iPhone) ? @"iPhone" : @"iPad";
@@ -196,6 +209,7 @@
     DebugLog(@"imageName %@", imageName);
     
     return pageContent;
+    //*/
     
     /*
     CommonBookContentViewController *pageContent = [self.items objectAtIndex:index];
