@@ -7,7 +7,7 @@
 #import "CommonBook.h"
 #import "CommonPageContent.h"
 
-#define kPageBackgroundColor [UIColor blackColor]
+#define kPageBackgroundColor [UIColor greenColor]
 
 @interface CommonBookViewController () <CommonBookDelegate, CommonBookDataSource>
 
@@ -187,6 +187,7 @@
     pageContent.zoomEnabled = YES;
     pageContent.horizontalSpace = 5;
     pageContent.verticalSpace = 5;
+    pageContent.backgroundColor = kPageBackgroundColor;
     return pageContent;
     //*/
     
