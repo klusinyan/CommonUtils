@@ -185,6 +185,8 @@
     NSString *imageName = [prefix stringByAppendingFormat:@"_%@", @(index % 7)];
     pageContent.image = [UIImage imageNamed:imageName];
     pageContent.zoomEnabled = YES;
+    pageContent.horizontalSpace = 5;
+    pageContent.verticalSpace = 5;
     return pageContent;
     //*/
     

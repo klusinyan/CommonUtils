@@ -12,6 +12,7 @@
                 <outlet property="imageView" destination="9" id="11"/>
                 <outlet property="leadingInset" destination="gt7-1j-Apa" id="Pr5-JV-AwL"/>
                 <outlet property="scrollView" destination="8" id="zT9-es-rkZ"/>
+                <outlet property="topInset" destination="YpR-ls-uVz" id="twR-Bo-RaF"/>
                 <outlet property="view" destination="6" id="7"/>
             </connections>
         </placeholder>

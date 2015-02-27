@@ -15,6 +15,7 @@
 @property (nonatomic, strong) IBOutlet UIImageView *imageView;
 
 @property (nonatomic, strong) IBOutlet NSLayoutConstraint *leadingInset;
+@property (nonatomic, strong) IBOutlet NSLayoutConstraint *topInset;
 
 - (CGRect)zoomRectForScale:(float)scale withCenter:(CGPoint)center;
 
@@ -25,7 +26,8 @@
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
-        self.imageDistance = IMAGE_DISTANCE;
+        self.horizontalSpace = IMAGE_DISTANCE;
+        self.verticalSpace = 0;
         self.backgroundColor = [UIColor clearColor];
         self.zoomEnabled = NO;
         
@@ -73,7 +75,9 @@
 
     self.imageView.image = self.image;
     
-    self.leadingInset.constant = self.imageDistance;
+    self.leadingInset.constant = self.horizontalSpace;
+    
+    self.topInset.constant = self.verticalSpace;
 }
 
 - (void)viewWillLayoutSubviews

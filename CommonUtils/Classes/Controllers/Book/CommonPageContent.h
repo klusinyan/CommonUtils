@@ -4,9 +4,10 @@
 @interface CommonPageContent : UIViewController
 
 @property (nonatomic, strong) UIImage *image;
-@property (nonatomic) CGFloat imageDistance;;
-@property (nonatomic) UIColor *backgroundColor;                  //default NO
-@property (nonatomic, getter=isZoomEnabled) BOOL zoomEnabled;    //defualt NO
+@property (nonatomic) CGFloat horizontalSpace;                  //defualt 5
+@property (nonatomic) CGFloat verticalSpace;                    //defualt 0
+@property (nonatomic) UIColor *backgroundColor;                 //default NO
+@property (nonatomic, getter=isZoomEnabled) BOOL zoomEnabled;   //defualt NO
 
 + (instancetype)instance;
 
