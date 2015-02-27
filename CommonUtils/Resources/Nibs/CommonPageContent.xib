@@ -6,7 +6,7 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CommonPageContent2">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CommonPageContent">
             <connections>
                 <outlet property="container" destination="gqL-JQ-y3U" id="aXi-p7-Vcm"/>
                 <outlet property="imageView" destination="9" id="11"/>

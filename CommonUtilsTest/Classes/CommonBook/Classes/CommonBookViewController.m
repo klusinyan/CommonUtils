@@ -6,7 +6,6 @@
 //library
 #import "CommonBook.h"
 #import "CommonPageContent.h"
-#import "CommonPageContent2.h"
 
 #define kPageBackgroundColor [UIColor blackColor]
 
@@ -60,18 +59,7 @@
 
 - (CommonPageContent *)fabriquePageContent
 {
-    return [[CommonPageContent alloc] init];
-    
-    /*
-    return
-    [[TGRImageViewController alloc] initWithNibName:NSStringFromClass([TGRImageViewController class])
-                                             bundle:nil];
-    //*/
-}
-
-- (CommonPageContent2 *)fabriquePageContent2
-{
-    return [CommonPageContent2 instance];
+    return [CommonPageContent instance];
 }
 
 - (void)viewDidLoad
@@ -88,7 +76,7 @@
     //*/
     
     for (int i = 0; i < 10; i++) {
-        [self.items addObject:[self fabriquePageContent2]];
+        [self.items addObject:[self fabriquePageContent]];
     }
     
     /*
@@ -191,34 +179,21 @@
 
 - (UIViewController *)book:(CommonBook *)book pageContentAtIndex:(NSInteger)index
 {
-    CommonPageContent2 *vc = [self.items objectAtIndex:index];
-    NSString *prefix = (iPhone) ? @"iPhone" : @"iPad";
-    NSString *imageName = [prefix stringByAppendingFormat:@"_%@", @(index % 7)];
-    vc.image = [UIImage imageNamed:imageName];
-    return vc;
-    
-    /*
-    CommonPageContent *pageContent = [[CommonPageContent alloc] init];
-    pageContent.zoomEnabled = YES;
-    pageContent.backgroundColor = [UIColor greenColor];//kPageBackgroundColor;
-    pageContent.contentInset = UIEdgeInsetsMake(0, 10, 0, 10);
-
+    ///*
+    CommonPageContent *pageContent = [self.items objectAtIndex:index];
     NSString *prefix = (iPhone) ? @"iPhone" : @"iPad";
     NSString *imageName = [prefix stringByAppendingFormat:@"_%@", @(index % 7)];
     pageContent.image = [UIImage imageNamed:imageName];
-    DebugLog(@"imageName %@", imageName);
-    
+    pageContent.zoomEnabled = YES;
     return pageContent;
     //*/
     
     /*
     CommonBookContentViewController *pageContent = [self.items objectAtIndex:index];
-    
     NSString *prefix = (iPhone) ? @"iPhone" : @"iPad";
     NSString *imageName = [prefix stringByAppendingFormat:@"_%@", @(index)];
     pageContent.image = [UIImage imageNamed:imageName];
     DebugLog(@"imageName %@", imageName);
-    
     return pageContent;
     //*/
 }
