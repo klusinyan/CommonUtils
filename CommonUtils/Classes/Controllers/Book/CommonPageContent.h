@@ -1,35 +1,42 @@
 //  Created by Karen Lusinyan on 27/02/15.
 //  Copyright (c) 2015 Karen Lusinyan. All rights reserved.
 
-#import "CSAnimationView.h"
+#import "CommonAnimation.h"
 
 @protocol CommonPageContentDelegate;
 
-@interface CommonPageContent : UIViewController
+@interface CommonPageContent : UIViewController <CommonAnimationDelegate>
 
 @property (nonatomic) UIColor *backgroundColor;
 
 @property (nonatomic, getter=isZoomEnabled) BOOL zoomEnabled;       //defualt NO
 
-@property (nonatomic, getter=isAnimated) BOOL animated;
-
 @property (nonatomic) UIImage *image;
 
 @property (readonly, nonatomic) UIImageView *imageView;
 
-@property (readonly, nonatomic) CSAnimationView *animationView;
+@property (nonatomic) NSArray *animations;
 
 @property (nonatomic) CGFloat leadingSpaceWhenPortrait;
 @property (nonatomic) CGFloat topSpaceWhenPortrait;
 @property (nonatomic) CGFloat leadingSpaceWhenLandscape;
 @property (nonatomic) CGFloat topSpaceWhenLandscape;
 
+#pragma CommonAnimationDelegate
+
+@property (nonatomic) CommonAnimationRule animationRule;
+
+@property (nonatomic, getter=isAnimated) BOOL animated;
+
+//not used
 @property (nonatomic) id<CommonPageContentDelegate> delegate;
 
 + (instancetype)pageContent;
 
 @end
 
+
+//not used
 @protocol CommonPageContentDelegate <NSObject>
 
 @optional

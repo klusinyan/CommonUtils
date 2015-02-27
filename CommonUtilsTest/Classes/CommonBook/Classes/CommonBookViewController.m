@@ -189,6 +189,15 @@
     pageContent.topSpaceWhenPortrait = 5;
     pageContent.backgroundColor = kPageBackgroundColor;
     pageContent.delegate = self;
+
+    CommonAnimation *anim1 = [CommonAnimation animation];
+    anim1.type = CSAnimationTypeMorph;
+    anim1.delay = 0.4;
+    anim1.duration = 0.4;
+    pageContent.animationRule = CommonAnimationRuleShowOnce;
+
+    pageContent.animations = @[anim1];
+    
     return pageContent;
     //*/
     
@@ -234,21 +243,5 @@
                             }];
 }
 //*/
-
-#pragma mark -
-#pragma mark CommonPageContentDeelegate protocol
-
-- (void)pageContentWillAppear:(CommonPageContent *)content
-{
-    if (!content.isAnimated) {
-        //animated
-        content.animationView.type = CSAnimationTypeMorph;
-        content.animationView.delay = 0.4;
-        content.animationView.duration = 0.4;
-        [content.animationView startCanvasAnimation];
-        //set animated YES
-        content.animated = YES;
-    }
-}
 
 @end

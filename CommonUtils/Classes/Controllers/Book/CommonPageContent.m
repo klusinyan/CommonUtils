@@ -95,6 +95,25 @@
 {
     [super viewWillAppear:animated];
     
+    for (int i = 0; i < [self.animations count]; i++) {
+        CommonAnimation *anim = [self.animations objectAtIndex:i];
+        if (self.animationRule == CommonAnimationRuleNone) {
+            continue;
+        }
+        if (self.animationRule == CommonAnimationRuleShowOnce) {
+            if (self.animated) {
+                continue;
+            }
+            if (i == [self.animations count] - 1) {
+                self.animated = YES;
+            }
+        }
+        self.animationView.type = anim.type;
+        self.animationView.delay = anim.delay;
+        self.animationView.duration = anim.duration;
+        [self.animationView startCanvasAnimation];
+    }
+    
     if (self.delegate && [self.delegate respondsToSelector:@selector(pageContentWillAppear:)]) {
         [self.delegate pageContentWillAppear:self];
     }
