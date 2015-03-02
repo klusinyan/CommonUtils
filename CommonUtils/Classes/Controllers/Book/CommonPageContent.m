@@ -18,6 +18,8 @@
 @property (nonatomic, strong) IBOutlet NSLayoutConstraint *leadingSpace;
 @property (nonatomic, strong) IBOutlet NSLayoutConstraint *topSpace;
 
+@property (nonatomic, getter=isAnimated) BOOL animated;
+
 - (CGRect)zoomRectForScale:(float)scale withCenter:(CGPoint)center;
 
 @end
@@ -97,10 +99,10 @@
     
     for (int i = 0; i < [self.animations count]; i++) {
         CommonAnimation *anim = [self.animations objectAtIndex:i];
-        if (self.animationRule == CommonAnimationRuleNone) {
+        if (self.animationRule == CommonPageAnimationRuleNone) {
             continue;
         }
-        if (self.animationRule == CommonAnimationRuleShowOnce) {
+        if (self.animationRule == CommonPageAnimationRuleShowOnce) {
             if (self.animated) {
                 continue;
             }

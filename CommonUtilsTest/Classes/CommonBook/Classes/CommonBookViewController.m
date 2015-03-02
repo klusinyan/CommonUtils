@@ -190,13 +190,14 @@
     pageContent.backgroundColor = kPageBackgroundColor;
     pageContent.delegate = self;
 
-    CommonAnimation *anim1 = [CommonAnimation animation];
-    anim1.type = CSAnimationTypeMorph;
-    anim1.delay = 0.4;
-    anim1.duration = 0.4;
-    pageContent.animationRule = CommonAnimationRuleShowOnce;
+    //create animations
+    CommonAnimation *anim = [CommonAnimation animation];
+    anim.type = CSAnimationTypeMorph;
+    anim.delay = 0.4;
+    anim.duration = 0.4;
 
-    pageContent.animations = @[anim1];
+    pageContent.animationRule = CommonPageAnimationRuleShowOnce;
+    pageContent.animations = @[anim];
     
     return pageContent;
     //*/

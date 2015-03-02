@@ -3,9 +3,15 @@
 
 #import "CommonAnimation.h"
 
+typedef NS_ENUM(NSInteger, CommonPageAnimationRule) {
+    CommonPageAnimationRuleNone=0,
+    CommonPageAnimationRuleShowOnce,
+    CommonPageAnimationRuleShowAlways,
+};
+
 @protocol CommonPageContentDelegate;
 
-@interface CommonPageContent : UIViewController <CommonAnimationDelegate>
+@interface CommonPageContent : UIViewController
 
 @property (nonatomic) UIColor *backgroundColor;
 
@@ -15,28 +21,21 @@
 
 @property (readonly, nonatomic) UIImageView *imageView;
 
-@property (nonatomic) NSArray *animations;
-
 @property (nonatomic) CGFloat leadingSpaceWhenPortrait;
 @property (nonatomic) CGFloat topSpaceWhenPortrait;
 @property (nonatomic) CGFloat leadingSpaceWhenLandscape;
 @property (nonatomic) CGFloat topSpaceWhenLandscape;
 
-#pragma CommonAnimationDelegate
+//animations
+@property (nonatomic) NSArray *animations;
+@property (nonatomic) CommonPageAnimationRule animationRule;
 
-@property (nonatomic) CommonAnimationRule animationRule;
-
-@property (nonatomic, getter=isAnimated) BOOL animated;
-
-//not used
 @property (nonatomic) id<CommonPageContentDelegate> delegate;
 
 + (instancetype)pageContent;
 
 @end
 
-
-//not used
 @protocol CommonPageContentDelegate <NSObject>
 
 @optional
