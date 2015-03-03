@@ -3,7 +3,7 @@
 #import "DirectoryUtils.h"
 #import "UIImage+Resize.h"
 
-#define kCommonUtilsBundleName @"CommonUtilsBundle.bundle"
+#define kCommonUtilsBundleName @"CommonUtils.bundle"
 
 @implementation DirectoryUtils
 
