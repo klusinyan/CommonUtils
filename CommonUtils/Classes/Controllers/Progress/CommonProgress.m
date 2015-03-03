@@ -180,6 +180,13 @@
         UIView *targetView = nil;
         if ([target isKindOfClass:[UIViewController class]]) {
             targetView = ((UIViewController *)target).view;
+            
+        }else if ([target isKindOfClass:[UIView class]]){
+            targetView = target;
+        }
+        
+        if (targetView) {
+            
             [targetView addSubview:sharedProgress];
             [targetView addConstraint:[NSLayoutConstraint constraintWithItem:sharedProgress
                                                                    attribute:NSLayoutAttributeCenterX
@@ -196,7 +203,6 @@
                                                                    attribute:NSLayoutAttributeCenterY
                                                                   multiplier:1
                                                                     constant:0]];
-            
         }
         
         [sharedProgress startAnimating];
