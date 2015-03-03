@@ -24,7 +24,7 @@ static NSMutableDictionary *appearance = nil;
 @property (readwrite, nonatomic, strong) CAShapeLayer *progressLayer;
 @property (readwrite, nonatomic, assign) BOOL isAnimating;
 @property (readwrite, nonatomic, getter=isTitleOnly) BOOL titleOnly;
-@property (readwrite, nonatomic, assign) id target;
+@property (readwrite, nonatomic, assign) UIView *view;
 
 //bg execution
 @property (readwrite, nonatomic, assign)  UIBackgroundTaskIdentifier bgTask;
@@ -178,7 +178,7 @@ static NSMutableDictionary *appearance = nil;
    return [CommonSpinner sharedSpinner].isAnimating;
 }
 
-+ (void)showWithTaregt:(id)target completion:(CommonSpinnerShowCompletionHandler)completion
++ (void)showInView:(UIView *)view completion:(CommonSpinnerShowCompletionHandler)completion
 {
     //hides the old one
     [CommonSpinner hideWithCompletion:^{
@@ -186,54 +186,48 @@ static NSMutableDictionary *appearance = nil;
         //shows the new one
         CommonSpinner *sharedSpinner = [CommonSpinner sharedSpinner];
         sharedSpinner.translatesAutoresizingMaskIntoConstraints = NO;
-        sharedSpinner.target = target;
+        sharedSpinner.view = view;
         sharedSpinner.showCompetion = completion;
         sharedSpinner.progressLayer.hidden = NO;
         
-        if (!target) {
+        if (!view) {
             NSLog(@"Warning: please provide valid target for common progress");
             return;
         }
         
-        //use NSAutoLayout to position in target view
-        UIView *targetView = nil;
-        if ([target isKindOfClass:[UIViewController class]]) {
-            targetView = ((UIViewController *)target).view;
-            [targetView addSubview:sharedSpinner];
-            [targetView addConstraint:[NSLayoutConstraint constraintWithItem:sharedSpinner
-                                                                   attribute:NSLayoutAttributeWidth
-                                                                   relatedBy:NSLayoutRelationEqual
-                                                                      toItem:nil
-                                                                   attribute:NSLayoutAttributeNotAnAttribute
-                                                                  multiplier:1
-                                                                    constant:[CommonSpinner sharedSpinner].size.width]];
-            [targetView addConstraint:[NSLayoutConstraint constraintWithItem:sharedSpinner
-                                                                   attribute:NSLayoutAttributeHeight
-                                                                   relatedBy:NSLayoutRelationEqual
-                                                                      toItem:nil
-                                                                   attribute:NSLayoutAttributeNotAnAttribute
-                                                                  multiplier:1
-                                                                    constant:[CommonSpinner sharedSpinner].size.height]];
-            [targetView addConstraint:[NSLayoutConstraint constraintWithItem:sharedSpinner
-                                                                   attribute:NSLayoutAttributeCenterX
-                                                                   relatedBy:NSLayoutRelationEqual
-                                                                      toItem:[sharedSpinner superview]
-                                                                   attribute:NSLayoutAttributeCenterX
-                                                                  multiplier:1
-                                                                    constant:0]];
-            CGFloat offset = 0;
-            if ([CommonSpinner sharedSpinner].title) {
-                offset = -([CommonSpinner sharedSpinner].titleFontSize+kOffset);
-            }
-            [targetView addConstraint:[NSLayoutConstraint constraintWithItem:sharedSpinner
-                                                                   attribute:NSLayoutAttributeCenterY
-                                                                   relatedBy:NSLayoutRelationEqual
-                                                                      toItem:[sharedSpinner superview]
-                                                                   attribute:NSLayoutAttributeCenterY
-                                                                  multiplier:1
-                                                                    constant:offset]];
-            
+        [view addSubview:sharedSpinner];
+        [view addConstraint:[NSLayoutConstraint constraintWithItem:sharedSpinner
+                                                         attribute:NSLayoutAttributeWidth
+                                                         relatedBy:NSLayoutRelationEqual
+                                                            toItem:nil
+                                                         attribute:NSLayoutAttributeNotAnAttribute
+                                                        multiplier:1
+                                                          constant:[CommonSpinner sharedSpinner].size.width]];
+        [view addConstraint:[NSLayoutConstraint constraintWithItem:sharedSpinner
+                                                         attribute:NSLayoutAttributeHeight
+                                                         relatedBy:NSLayoutRelationEqual
+                                                            toItem:nil
+                                                         attribute:NSLayoutAttributeNotAnAttribute
+                                                        multiplier:1
+                                                          constant:[CommonSpinner sharedSpinner].size.height]];
+        [view addConstraint:[NSLayoutConstraint constraintWithItem:sharedSpinner
+                                                         attribute:NSLayoutAttributeCenterX
+                                                         relatedBy:NSLayoutRelationEqual
+                                                            toItem:[sharedSpinner superview]
+                                                         attribute:NSLayoutAttributeCenterX
+                                                        multiplier:1
+                                                          constant:0]];
+        CGFloat offset = 0;
+        if ([CommonSpinner sharedSpinner].title) {
+            offset = -([CommonSpinner sharedSpinner].titleFontSize+kOffset);
         }
+        [view addConstraint:[NSLayoutConstraint constraintWithItem:sharedSpinner
+                                                         attribute:NSLayoutAttributeCenterY
+                                                         relatedBy:NSLayoutRelationEqual
+                                                            toItem:[sharedSpinner superview]
+                                                         attribute:NSLayoutAttributeCenterY
+                                                        multiplier:1
+                                                          constant:offset]];
         
         UIApplication *application = [UIApplication sharedApplication];
         [CommonSpinner sharedSpinner].bgTask = [application beginBackgroundTaskWithName:@"bgTask" expirationHandler:^{

@@ -131,7 +131,7 @@ typedef NS_ENUM(NSInteger, CBErrorCode) {
         [CommonSpinner setNetworkActivityIndicatorVisible:NO];
         [CommonSpinner setTitle:[DirectoryUtils localizedStringForKey:CBLocalizedStringInitializingMsg bundleName:kBundleName]];
         
-        [CommonSpinner showWithTaregt:self completion:^{
+        [CommonSpinner showInView:self.view completion:^{
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                 [self startCapturingWithCompletion:^(NSError *error) {
                     if (error) {

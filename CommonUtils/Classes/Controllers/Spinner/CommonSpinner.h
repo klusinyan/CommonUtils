@@ -38,7 +38,7 @@ typedef void(^CommonSpinnerHideCompletionHandler)(void);
 
 + (BOOL)isAnimating;
 
-+ (void)showWithTaregt:(id)target completion:(CommonSpinnerShowCompletionHandler)completion;
++ (void)showInView:(UIView *)view completion:(CommonSpinnerShowCompletionHandler)completion;
 
 + (void)hideWithCompletion:(CommonSpinnerHideCompletionHandler)completion;
 
