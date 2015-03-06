@@ -2,7 +2,11 @@
 //  Copyright (c) 2015 Karen Lusinyan. All rights reserved.
 
 #import "CommonPageContent.h"
+#import "CommonSpinner.h"
+#import "ImageDownloader.h"
 #import "DirectoryUtils.h"
+
+#define kBundleName [DirectoryUtils commonUtilsBundlePathWithName:@"CommonBook.bundle"]
 
 #define ZOOM_VIEW_TAG 100
 #define ZOOM_STEP 1.5
@@ -19,6 +23,7 @@
 @property (nonatomic, strong) IBOutlet NSLayoutConstraint *topSpace;
 
 @property (nonatomic, getter=isAnimated) BOOL animated;
+@property (nonatomic, strong) CommonSpinner *spinner;
 
 - (CGRect)zoomRectForScale:(float)scale withCenter:(CGPoint)center;
 
@@ -29,6 +34,10 @@
 - (void)dealloc
 {
     self.scrollView.delegate = nil;
+    
+    [self.spinner hideWithCompletion:^{
+        [self.imageView cancelImageRequestOperation];
+    }];
 }
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -52,6 +61,29 @@
     return [[self alloc] initWithNibName:NSStringFromClass([self class]) bundle:[DirectoryUtils commonUtilsBundle]];
 }
 
+- (void)animateIfNeeded
+{
+    for (int i = 0; i < [self.animations count]; i++) {
+        CommonAnimation *anim = [self.animations objectAtIndex:i];
+        if (self.animationRule == CommonPageAnimationRuleNone) {
+            continue;
+        }
+        if (self.animationRule == CommonPageAnimationRuleShowOnce) {
+            if (self.animated) {
+                continue;
+            }
+            if (i == [self.animations count] - 1) {
+                self.animated = YES;
+            }
+        }
+        self.animationView.type = anim.type;
+        self.animationView.delay = anim.delay;
+        self.animationView.duration = anim.duration;
+        [self.animationView startCanvasAnimation];
+    }
+}
+
+/****************SEQ[0]****************/
 - (void)loadView
 {
     [super loadView];
@@ -84,7 +116,9 @@
     
     self.view.backgroundColor = self.backgroundColor;
 
-    self.imageView.image = self.image;
+    if (self.image) {
+        self.imageView.image = self.image;
+    }
     
     if (self.delegate && [self.delegate respondsToSelector:@selector(pageContentDidLoad:)]) {
         [self.delegate pageContentDidLoad:self];
@@ -97,23 +131,29 @@
 {
     [super viewWillAppear:animated];
     
-    for (int i = 0; i < [self.animations count]; i++) {
-        CommonAnimation *anim = [self.animations objectAtIndex:i];
-        if (self.animationRule == CommonPageAnimationRuleNone) {
-            continue;
-        }
-        if (self.animationRule == CommonPageAnimationRuleShowOnce) {
-            if (self.animated) {
-                continue;
-            }
-            if (i == [self.animations count] - 1) {
-                self.animated = YES;
-            }
-        }
-        self.animationView.type = anim.type;
-        self.animationView.delay = anim.delay;
-        self.animationView.duration = anim.duration;
-        [self.animationView startCanvasAnimation];
+    if (self.image) {
+        self.imageView.image = self.image;
+        [self animateIfNeeded];
+    }
+    else if ([self.imageUrl length] > 0) {
+        self.spinner = [CommonSpinner instance];
+        [self.spinner setHidesWhenStopped:YES];
+        [self.spinner setNetworkActivityIndicatorVisible:YES];
+        [self.spinner showInView:self.imageView completion:^{
+            NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:self.imageUrl]];
+            __weak typeof(self) weakSelf = self;
+            [self.imageView setImageWithURLRequest:request
+                                  placeholderImage:nil
+                                           success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+                                               [weakSelf.spinner hideWithCompletion:^{
+                                                   weakSelf.imageView.image = image;
+                                               }];
+                                           }
+                                           failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
+                                               [weakSelf.spinner setTitleOnly: [DirectoryUtils localizedStringForKey:@"CSLocalizedStringImageNotAvailable"
+                                                                                                          bundleName:kBundleName]];
+                                           }];
+        }];
     }
     
     if (self.delegate && [self.delegate respondsToSelector:@selector(pageContentWillAppear:)]) {
@@ -162,6 +202,10 @@
 {
     [super viewWillDisappear:animated];
     
+    [self.spinner hideWithCompletion:^{
+        [self.imageView cancelImageRequestOperation];
+    }];
+
     [self.scrollView setZoomScale:self.scrollView.minimumZoomScale animated:YES];
     
     if (self.delegate && [self.delegate respondsToSelector:@selector(pageContentWillDisappear:)]) {
@@ -172,7 +216,7 @@
 - (void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
-
+    
     if (self.delegate && [self.delegate respondsToSelector:@selector(pageContentDidDisappear:)]) {
         [self.delegate pageContentDidDisappear:self];
     }

@@ -53,6 +53,14 @@ typedef void(^CommonSpinnerHideCompletionHandler)(void);
 
 + (instancetype)instance;
 
+- (void)setTitle:(NSString *)title;
+
+- (void)setTitleOnly:(NSString *)title;
+
+- (void)showInView:(UIView *)view completion:(CommonSpinnerShowCompletionHandler)completion;
+
+- (void)hideWithCompletion:(CommonSpinnerHideCompletionHandler)completion;
+
 - (void)startAnimating;
 
 - (void)stopAnimating;

@@ -6,6 +6,7 @@
 //library
 #import "CommonBook.h"
 #import "CommonPageContent.h"
+#import "UIColor+Utils.h"
 
 #define kPageBackgroundColor [UIColor blackColor]
 
@@ -181,9 +182,25 @@
 {
     ///*
     CommonPageContent *pageContent = [self.items objectAtIndex:index];
-    NSString *prefix = (iPhone) ? @"iPhone" : @"iPad";
-    NSString *imageName = [prefix stringByAppendingFormat:@"_%@", @(index % 7)];
-    pageContent.image = [UIImage imageNamed:imageName];
+    
+    BOOL fixedImage = NO;
+    
+    if (fixedImage) {
+        NSString *prefix = (iPhone) ? @"iPhone" : @"iPad";
+        NSString *imageName = [prefix stringByAppendingFormat:@"_%@", @(index % 7)];
+        pageContent.image = [UIImage imageNamed:imageName];
+    }
+    else {
+        UIColor *color = [UIColor colorWithHue:index/100.0f saturation:1 brightness:1 alpha:1];
+        int upperBound = 2048;
+        int lowerBound = 512;
+//        int rndWidth = lowerBound + arc4random() % (upperBound - lowerBound);
+//        int rndHeight = lowerBound + arc4random() % (upperBound - lowerBound);
+        NSString *hexColor = [UIColor hexStringFromColor:color];
+        NSString *imageUrl = [NSString stringWithFormat:@"http://placehold.it/%@x%@/%@/&text=image%@", @(upperBound), @(lowerBound), hexColor, @(index)];
+        pageContent.imageUrl = imageUrl;
+    }
+    
     pageContent.zoomEnabled = YES;
     pageContent.leadingSpaceWhenPortrait = 5;
     pageContent.topSpaceWhenPortrait = 5;
@@ -192,7 +209,7 @@
 
     //create animations
     CommonAnimation *anim = [CommonAnimation animation];
-    anim.type = CSAnimationTypeMorph;
+    anim.type = CSAnimationTypeFadeIn;
     anim.delay = 0.4;
     anim.duration = 0.4;
 

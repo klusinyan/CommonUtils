@@ -19,6 +19,8 @@ typedef NS_ENUM(NSInteger, CommonPageAnimationRule) {
 
 @property (nonatomic) UIImage *image;
 
+@property (nonatomic) NSString *imageUrl;
+
 @property (readonly, nonatomic) UIImageView *imageView;
 
 @property (nonatomic) CGFloat leadingSpaceWhenPortrait;

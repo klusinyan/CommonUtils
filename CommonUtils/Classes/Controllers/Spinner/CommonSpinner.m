@@ -23,7 +23,6 @@ static NSMutableDictionary *appearance = nil;
 @property (readwrite, nonatomic, strong) CATextLayer *titleLayer;
 @property (readwrite, nonatomic, strong) CAShapeLayer *progressLayer;
 @property (readwrite, nonatomic, assign) BOOL isAnimating;
-@property (readwrite, nonatomic, getter=isTitleOnly) BOOL titleOnly;
 @property (readwrite, nonatomic, assign) UIView *view;
 
 //bg execution
@@ -131,16 +130,12 @@ static NSMutableDictionary *appearance = nil;
 
 + (void)setTitle:(NSString *)title
 {
-    [CommonSpinner sharedSpinner].title = title;
-    [CommonSpinner sharedSpinner].progressLayer.hidden = NO;
-    [[CommonSpinner sharedSpinner] setNeedsLayout];
+    [[CommonSpinner sharedSpinner] setTitle:title];
 }
 
 + (void)setTitleOnly:(NSString *)title
 {
-    [CommonSpinner sharedSpinner].title = title;
-    [CommonSpinner sharedSpinner].progressLayer.hidden = YES;
-    [[CommonSpinner sharedSpinner] setNeedsLayout];
+    [[CommonSpinner sharedSpinner] setTitleOnly:title];
 }
 
 + (void)setHidesWhenStopped:(BOOL)hidesWhenStopped
@@ -180,79 +175,101 @@ static NSMutableDictionary *appearance = nil;
 
 + (void)showInView:(UIView *)view completion:(CommonSpinnerShowCompletionHandler)completion
 {
+    [[CommonSpinner sharedSpinner] showInView:view completion:completion];
+}
+
++ (void)hideWithCompletion:(CommonSpinnerHideCompletionHandler)completion;
+{
+    [[CommonSpinner sharedSpinner] hideWithCompletion:completion];
+}
+
+- (void)setTitle:(NSString *)title
+{
+    _title = title;
+    self.progressLayer.hidden = NO;
+    [self setNeedsLayout];
+}
+
+- (void)setTitleOnly:(NSString *)title
+{
+    _title = title;
+    self.progressLayer.hidden = YES;
+    [self setNeedsLayout];
+}
+
+- (void)showInView:(UIView *)view completion:(CommonSpinnerShowCompletionHandler)completion
+{
     //hides the old one
-    [CommonSpinner hideWithCompletion:^{
+    [self hideWithCompletion:^{
         
         //shows the new one
-        CommonSpinner *sharedSpinner = [CommonSpinner sharedSpinner];
-        sharedSpinner.translatesAutoresizingMaskIntoConstraints = NO;
-        sharedSpinner.view = view;
-        sharedSpinner.showCompetion = completion;
-        sharedSpinner.progressLayer.hidden = NO;
+        self.translatesAutoresizingMaskIntoConstraints = NO;
+        self.view = view;
+        self.showCompetion = completion;
+        self.progressLayer.hidden = NO;
         
         if (!view) {
             NSLog(@"Warning: please provide valid target for common progress");
             return;
         }
         
-        [view addSubview:sharedSpinner];
-        [view addConstraint:[NSLayoutConstraint constraintWithItem:sharedSpinner
+        [view addSubview:self];
+        [view addConstraint:[NSLayoutConstraint constraintWithItem:self
                                                          attribute:NSLayoutAttributeWidth
                                                          relatedBy:NSLayoutRelationEqual
                                                             toItem:nil
                                                          attribute:NSLayoutAttributeNotAnAttribute
                                                         multiplier:1
-                                                          constant:[CommonSpinner sharedSpinner].size.width]];
-        [view addConstraint:[NSLayoutConstraint constraintWithItem:sharedSpinner
+                                                          constant:self.size.width]];
+        [view addConstraint:[NSLayoutConstraint constraintWithItem:self
                                                          attribute:NSLayoutAttributeHeight
                                                          relatedBy:NSLayoutRelationEqual
                                                             toItem:nil
                                                          attribute:NSLayoutAttributeNotAnAttribute
                                                         multiplier:1
-                                                          constant:[CommonSpinner sharedSpinner].size.height]];
-        [view addConstraint:[NSLayoutConstraint constraintWithItem:sharedSpinner
+                                                          constant:self.size.height]];
+        [view addConstraint:[NSLayoutConstraint constraintWithItem:self
                                                          attribute:NSLayoutAttributeCenterX
                                                          relatedBy:NSLayoutRelationEqual
-                                                            toItem:[sharedSpinner superview]
+                                                            toItem:[self superview]
                                                          attribute:NSLayoutAttributeCenterX
                                                         multiplier:1
                                                           constant:0]];
         CGFloat offset = 0;
-        if ([CommonSpinner sharedSpinner].title) {
-            offset = -([CommonSpinner sharedSpinner].titleFontSize+kOffset);
+        if (self.title) {
+            offset = -(self.titleFontSize+kOffset);
         }
-        [view addConstraint:[NSLayoutConstraint constraintWithItem:sharedSpinner
+        [view addConstraint:[NSLayoutConstraint constraintWithItem:self
                                                          attribute:NSLayoutAttributeCenterY
                                                          relatedBy:NSLayoutRelationEqual
-                                                            toItem:[sharedSpinner superview]
+                                                            toItem:[self superview]
                                                          attribute:NSLayoutAttributeCenterY
                                                         multiplier:1
                                                           constant:offset]];
         
         UIApplication *application = [UIApplication sharedApplication];
-        [CommonSpinner sharedSpinner].bgTask = [application beginBackgroundTaskWithName:@"bgTask" expirationHandler:^{
+        self.bgTask = [application beginBackgroundTaskWithName:@"bgTask" expirationHandler:^{
             // Clean up any unfinished task business by marking where you
             // stopped or ending the task outright.
-            [application endBackgroundTask:[CommonSpinner sharedSpinner].bgTask];
-            [CommonSpinner sharedSpinner].bgTask = UIBackgroundTaskInvalid;
+            [application endBackgroundTask:self.bgTask];
+            self.bgTask = UIBackgroundTaskInvalid;
         }];
         
         // Start the long-running task and return immediately.
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             dispatch_async(dispatch_get_main_queue(), ^{
-                [sharedSpinner startAnimating];
+                [self startAnimating];
             });
-            [application endBackgroundTask:[CommonSpinner sharedSpinner].bgTask];
-            [CommonSpinner sharedSpinner].bgTask = UIBackgroundTaskInvalid;
+            [application endBackgroundTask:self.bgTask];
+            self.bgTask = UIBackgroundTaskInvalid;
         });
     }];
 }
 
-+ (void)hideWithCompletion:(CommonSpinnerHideCompletionHandler)completion;
+- (void)hideWithCompletion:(CommonSpinnerHideCompletionHandler)completion;
 {
-    CommonSpinner *sharedSpinner = [CommonSpinner sharedSpinner];
-    sharedSpinner.hideCompetion = completion;
-    [sharedSpinner stopAnimating];
+    self.hideCompetion = completion;
+    [self stopAnimating];
 }
 
 - (void)layoutSubviews
