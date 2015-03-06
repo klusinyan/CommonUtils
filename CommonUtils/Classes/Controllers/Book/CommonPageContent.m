@@ -15,12 +15,14 @@
 @interface CommonPageContent () <UIScrollViewDelegate>
 
 @property (nonatomic, strong) IBOutlet CSAnimationView *animationView;
-@property (nonatomic, strong) IBOutlet UIView *container;
 @property (nonatomic, strong) IBOutlet UIScrollView *scrollView;
 @property (nonatomic, strong) IBOutlet UIImageView *imageView;
 
+/*************AUTOLAYOUT ONLY*************/
+@property (nonatomic, strong) IBOutlet UIView *container;
 @property (nonatomic, strong) IBOutlet NSLayoutConstraint *leadingSpace;
 @property (nonatomic, strong) IBOutlet NSLayoutConstraint *topSpace;
+/*************AUTOLAYOUT ONLY*************/
 
 @property (nonatomic, getter=isAnimated) BOOL animated;
 @property (nonatomic, strong) CommonSpinner *spinner;
@@ -50,6 +52,10 @@
         self.backgroundColor = [UIColor clearColor];
         self.zoomEnabled = NO;
         
+        /*************AUTORESIZING ONLY*************/
+        self.contentInset = UIEdgeInsetsMake(0, 5, 0, 5);
+        /*************AUTORESIZING ONLY*************/
+
         //defualt is nil for memory
         //self.image = [UIImage imageNamed:@"CommonUtils.bundle/CommonProgress.bundle/WeCanDoIt"];
     }
@@ -107,6 +113,15 @@
     float minimumScale = [self.scrollView frame].size.width  / [self.imageView frame].size.width;
     [self.scrollView setMinimumZoomScale:minimumScale];
     [self.scrollView setZoomScale:minimumScale];
+    
+    /*************AUTORESIZING ONLY*************/
+    CGRect rect = self.animationView.bounds;
+    rect.origin.x += self.contentInset.left;
+    rect.origin.y += self.contentInset.top;
+    rect.size.width -= 2*self.contentInset.right;
+    rect.size.height -= 2*self.contentInset.bottom;
+    self.animationView.frame = rect;
+    /*************AUTORESIZING ONLY*************/
 }
 
 /****************SEQ[1]****************/
@@ -180,6 +195,8 @@
     
     [self.scrollView setZoomScale:self.scrollView.minimumZoomScale animated:YES];
     
+    /*************AUTOLAYOUT ONLY*************/
+    /*
     if (UIInterfaceOrientationIsPortrait([[UIApplication sharedApplication] statusBarOrientation])) {
         self.leadingSpace.constant = self.leadingSpaceWhenPortrait;
         self.topSpace.constant = self.topSpaceWhenPortrait;
@@ -188,6 +205,8 @@
         self.leadingSpace.constant = self.leadingSpaceWhenLandscape;
         self.topSpace.constant = self.topSpaceWhenLandscape;
     }
+    //*/
+    /*************AUTOLAYOUT ONLY*************/
 }
 /****************SEQ[4]****************/
 

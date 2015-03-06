@@ -76,7 +76,7 @@
     }
     //*/
     
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 1000; i++) {
         [self.items addObject:[self fabriquePageContent]];
     }
     
@@ -194,16 +194,24 @@
         UIColor *color = [UIColor colorWithHue:index/100.0f saturation:1 brightness:1 alpha:1];
         int upperBound = 2048;
         int lowerBound = 512;
-//        int rndWidth = lowerBound + arc4random() % (upperBound - lowerBound);
-//        int rndHeight = lowerBound + arc4random() % (upperBound - lowerBound);
+        int rndWidth = lowerBound + arc4random() % (upperBound - lowerBound);
+        int rndHeight = lowerBound + arc4random() % (upperBound - lowerBound);
         NSString *hexColor = [UIColor hexStringFromColor:color];
-        NSString *imageUrl = [NSString stringWithFormat:@"http://placehold.it/%@x%@/%@/&text=image%@", @(upperBound), @(lowerBound), hexColor, @(index)];
+        NSString *imageUrl = [NSString stringWithFormat:@"http://placehold.it/%@x%@/%@/&text=image%@", @(rndWidth), @(rndHeight), hexColor, @(index+1)];
         pageContent.imageUrl = imageUrl;
     }
     
     pageContent.zoomEnabled = YES;
-    pageContent.leadingSpaceWhenPortrait = 5;
-    pageContent.topSpaceWhenPortrait = 5;
+    
+    /*************AUTORESIZING ONLY*************/
+    pageContent.contentInset = UIEdgeInsetsMake(0, 20, 0, 20);
+    /*************AUTORESIZING ONLY*************/
+
+    /*************AUTOLAYOUT ONLY*************/
+    pageContent.leadingSpaceWhenPortrait = 20;
+    pageContent.topSpaceWhenPortrait = 20;
+    /*************AUTOLAYOUT ONLY*************/
+    
     pageContent.backgroundColor = kPageBackgroundColor;
     pageContent.delegate = self;
 
@@ -241,6 +249,7 @@
 
 - (void)book:(CommonBook *)book pageContent:(UIViewController *)pageContent didPresentAtIndex:(NSInteger)index
 {
+    self.title = [NSString stringWithFormat:@"%@/%@", @(index+1), @([self.items count])];
     DebugLog(@"didPresentAtIndex %@", @(index));
     //CommonBookContentViewController *pc = (CommonBookContentViewController *)pageContent;
     //[pc showAnimation:YES];
