@@ -104,12 +104,11 @@
 #pragma mark -
 #pragma mark - BarcodeReaderDelegate Protocol
 
-//override
-- (void)capturedCode:(NSString *)code
+- (void)barcode:(CommonBarcode *)barcode didFinishCapturingWithCode:(NSString *)code
 {
     //save code
     self.code = code;
-
+    
     if (self.UIInterfaceType == UIInterfaceTypeSimple) {
         [self actionDone:nil];
     }
@@ -121,10 +120,19 @@
     }
 }
 
+- (void)barcode:(CommonBarcode *)barcode didFailCapturingWithError:(NSError *)error
+{
+    if (self.delegate && [self.delegate respondsToSelector:@selector(barcode:didFailCapturingWithError:)]) {
+        [self.delegate barcode:barcode didFailCapturingWithError:error];
+    }
+}
+
+#pragma ibactions
+
 - (IBAction)actionDone:(id)sender
 {
-    if (self.delegate && [self.delegate respondsToSelector:@selector(selectedBarcodeCode:withTarget:)]) {
-        [self.delegate selectedBarcodeCode:self.code withTarget:self];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(barcode:didFinishCapturingWithCode:)]) {
+        [self.delegate barcode:self didFinishCapturingWithCode:self.code];
     }
 }
 

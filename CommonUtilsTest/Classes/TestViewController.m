@@ -30,7 +30,9 @@ typedef NS_ENUM(NSInteger, RowType) {
     RowCount,
 };
 
-@interface TestViewController () <CommonBarcodeControllerDelegate>
+@interface TestViewController () <CommonBarcodeDelegate> {
+    CommonBarcodeController *_barcodeReader;
+}
 
 @end
 
@@ -206,20 +208,20 @@ typedef NS_ENUM(NSInteger, RowType) {
             break;
         }
         case RowTypeBarcodeReader: {
-            CommonBarcodeController *barcodeReader = [CommonBarcodeController barcodeReader];
-            //barcodeReader.supportedBarcodes = @[AVMetadataObjectTypeEAN13Code, AVMetadataObjectTypeQRCode];
-            barcodeReader.UIInterfaceType = UIInterfaceTypeSimple;
-            //barcodeReader.UIInterfaceType = UIInterfaceTypeFull;
-            barcodeReader.themeColor = [UIColor redColor];
-            barcodeReader.delegate = self;
-            barcodeReader.buttonDoneTitle = @"Procedi";
-            barcodeReader.buttonRetryTitle = @"Riprova";
+            _barcodeReader = [CommonBarcodeController barcodeReader];
+            //_barcodeReader.supportedBarcodes = @[AVMetadataObjectTypeEAN13Code, AVMetadataObjectTypeQRCode];
+            //_barcodeReader.UIInterfaceType = UIInterfaceTypeSimple;
+            _barcodeReader.UIInterfaceType = UIInterfaceTypeFull;
+            _barcodeReader.themeColor = [UIColor redColor];
+            _barcodeReader.delegate = self;
+            _barcodeReader.buttonDoneTitle = @"Procedi";
+            _barcodeReader.buttonRetryTitle = @"Riprova";
 
-            barcodeReader.cornerRadius = 8.0f;
-            barcodeReader.flashEnabled = YES;
-            barcodeReader.soundOn = NO;
+            _barcodeReader.cornerRadius = 8.0f;
+            _barcodeReader.flashEnabled = YES;
+            _barcodeReader.soundOn = NO;
             
-            [self.navigationController pushViewController:barcodeReader animated:YES];
+            [self.navigationController pushViewController:_barcodeReader animated:YES];
             
             break;
         }
@@ -266,14 +268,29 @@ typedef NS_ENUM(NSInteger, RowType) {
     }
 }
 
-- (void)selectedBarcodeCode:(NSString *)selectedCode withTarget:(id)target
+- (void)barcode:(CommonBarcode *)barcode didFinishCapturingWithCode:(NSString *)code
 {
-    UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Selected code"
-                                                 message:selectedCode
-                                                delegate:nil
-                                       cancelButtonTitle:@"Ok"
-                                       otherButtonTitles:nil];
-    [av show];
+    DebugLog(@"%@", NSStringFromSelector(_cmd));
+    
+    [UIAlertView showConfirmationDialogWithTitle:@"Seleced code, continue..."
+                                         message:code
+                                         handler:^(UIAlertView *alertView, NSInteger buttonIndex) {
+                                             if (buttonIndex == 0) {
+                                                 [_barcodeReader startCapturingWithCompletion:^(NSError *error) {
+                                                     DebugLog(@"startCapturingWithCompletion");
+                                                 }];
+                                             }
+                                             else if (buttonIndex == 1) {
+                                                 [self.navigationController popViewControllerAnimated:YES];
+                                             }
+                                         }];
 }
+
+///*
+- (void)barcode:(CommonBarcode *)barcode didFailCapturingWithError:(NSError *)error
+{
+    DebugLog(@"%@", NSStringFromSelector(_cmd));
+}
+//*/
 
 @end
