@@ -133,9 +133,9 @@ static NSMutableDictionary *appearance = nil;
     [[CommonSpinner sharedSpinner] setTitle:title];
 }
 
-+ (void)setTitleOnly:(NSString *)title
++ (void)setTitleOnly:(NSString *)title activityIndicatorVisible:(BOOL)activityIndicatorVisible
 {
-    [[CommonSpinner sharedSpinner] setTitleOnly:title];
+    [[CommonSpinner sharedSpinner] setTitleOnly:title activityIndicatorVisible:activityIndicatorVisible];
 }
 
 + (void)setHidesWhenStopped:(BOOL)hidesWhenStopped
@@ -190,8 +190,10 @@ static NSMutableDictionary *appearance = nil;
     [self setNeedsLayout];
 }
 
-- (void)setTitleOnly:(NSString *)title
+- (void)setTitleOnly:(NSString *)title activityIndicatorVisible:(BOOL)activityIndicatorVisible
 {
+    [NetworkUtils setNetworkActivityIndicatorVisible:activityIndicatorVisible];
+    
     _title = title;
     self.progressLayer.hidden = YES;
     [self setNeedsLayout];

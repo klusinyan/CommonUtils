@@ -2,9 +2,13 @@
 
 #import <AVFoundation/AVFoundation.h>
 
-UIKIT_EXTERN NSString * const CBErrorUnknwon;            //code -1001
-UIKIT_EXTERN NSString * const CBErrorTargetSimulator;    //code -1002
-UIKIT_EXTERN NSString * const CBErrorPermissionDenied;   //code -1003
+UIKIT_EXTERN NSString * const CBErrorDomain;
+
+typedef NS_ENUM(NSInteger, CBErrorCode) {
+    CBErrorCodeUnknown          = -1001,
+    CBErrorCodeTargetSimulator  = -1002,
+    CBErrorCodePermissionDenied = -1003,
+};
 
 @class CommonBarcode;
 

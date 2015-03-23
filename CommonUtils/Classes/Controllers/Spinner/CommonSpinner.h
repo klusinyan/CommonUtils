@@ -22,7 +22,7 @@ typedef void(^CommonSpinnerHideCompletionHandler)(void);
 
 + (void)setTitle:(NSString *)title;
 
-+ (void)setTitleOnly:(NSString *)title;
++ (void)setTitleOnly:(NSString *)title activityIndicatorVisible:(BOOL)activityIndicatorVisible;
 
 + (void)setHidesWhenStopped:(BOOL)hidesWhenStopped;
 
@@ -55,7 +55,7 @@ typedef void(^CommonSpinnerHideCompletionHandler)(void);
 
 - (void)setTitle:(NSString *)title;
 
-- (void)setTitleOnly:(NSString *)title;
+- (void)setTitleOnly:(NSString *)title activityIndicatorVisible:(BOOL)activityIndicatorVisible;
 
 - (void)showInView:(UIView *)view completion:(CommonSpinnerShowCompletionHandler)completion;
 

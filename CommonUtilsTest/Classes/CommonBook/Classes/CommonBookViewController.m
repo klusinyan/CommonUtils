@@ -204,7 +204,7 @@
     pageContent.zoomEnabled = YES;
     
     /*************AUTORESIZING ONLY*************/
-    pageContent.contentInset = UIEdgeInsetsMake(0, 20, 0, 20);
+    pageContent.contentInset = UIEdgeInsetsMake(0, 5, 0, 5);
     /*************AUTORESIZING ONLY*************/
 
     /*************AUTOLAYOUT ONLY*************/

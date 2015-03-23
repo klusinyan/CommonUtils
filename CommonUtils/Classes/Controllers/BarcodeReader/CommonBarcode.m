@@ -6,20 +6,13 @@
 
 #define kBundleName [DirectoryUtils commonUtilsBundlePathWithName:@"CommonBarcode.bundle"]
 
-NSString * const CBLocalizedStringInitializingMsg = @"CBLocalizedStringInitializingMsg";
-
-NSString * const CommonBarcodeErrorDomain = @"commonutils.domain.error";
+NSString * const CBErrorDomain = @"commonutils.commonbarcode.domain.error";
 
 //value are corresponding to localized strings's keys
-NSString * const CBErrorUnknwon = @"CBLocalizedStringUnknownError";
-NSString * const CBErrorTargetSimulator = @"CBLocalizedStringTargetSimulator";
-NSString * const CBErrorPermissionDenied = @"CBLocalizedStringPermissionDenied";
-
-typedef NS_ENUM(NSInteger, CBErrorCode) {
-    CBErrorCodeCustom           = -1001,
-    CBErrorCodeTargetSimulator  = -1002,
-    CBErrorCodePermissionDenied = -1003,
-};
+NSString * const CBLocalizedStringInitializingMsg = @"CBLocalizedStringInitializingMsg";
+NSString * const CBErrorUnknwon             = @"CBLocalizedStringUnknownError";
+NSString * const CBErrorTargetSimulator     = @"CBLocalizedStringTargetSimulator";
+NSString * const CBErrorPermissionDenied    = @"CBLocalizedStringPermissionDenied";
 
 @interface CommonBarcode () <AVCaptureMetadataOutputObjectsDelegate, UIAlertViewDelegate>
 
@@ -147,7 +140,8 @@ typedef NS_ENUM(NSInteger, CBErrorCode) {
                                 errMessage = CBErrorUnknwon;
                                 break;
                         }
-                        [CommonSpinner setTitleOnly:[DirectoryUtils localizedStringForKey:errMessage bundleName:kBundleName]];
+                        NSString *localizedString = [DirectoryUtils localizedStringForKey:errMessage bundleName:kBundleName];
+                        [CommonSpinner setTitleOnly:localizedString activityIndicatorVisible:NO];
                         if ([self respondsToSelector:@selector(barcode:didFailCapturingWithError:)]) {
                             [self barcode:self didFailCapturingWithError:error];
                         }
@@ -258,7 +252,7 @@ typedef NS_ENUM(NSInteger, CBErrorCode) {
 {
     __block NSError *error = nil;
     if (TARGET_IPHONE_SIMULATOR) {
-        error = [[NSError alloc] initWithDomain:CommonBarcodeErrorDomain
+        error = [[NSError alloc] initWithDomain:CBErrorDomain
                                            code:CBErrorCodeTargetSimulator
                                        userInfo:@{NSLocalizedDescriptionKey :
                                                       [DirectoryUtils localizedStringForKey:CBErrorTargetSimulator
@@ -271,7 +265,7 @@ typedef NS_ENUM(NSInteger, CBErrorCode) {
                 [self startSession];
             }
             else {
-                error = [[NSError alloc] initWithDomain:CommonBarcodeErrorDomain
+                error = [[NSError alloc] initWithDomain:CBErrorDomain
                                                    code:CBErrorCodePermissionDenied
                                                userInfo:@{NSLocalizedDescriptionKey :
                                                               [DirectoryUtils localizedStringForKey:CBErrorPermissionDenied bundleName:kBundleName]}];
@@ -290,7 +284,7 @@ typedef NS_ENUM(NSInteger, CBErrorCode) {
 {
     __block NSError *error = nil;
     if (TARGET_IPHONE_SIMULATOR) {
-        error = [[NSError alloc] initWithDomain:CommonBarcodeErrorDomain
+        error = [[NSError alloc] initWithDomain:CBErrorDomain
                                            code:CBErrorCodeTargetSimulator
                                        userInfo:@{NSLocalizedDescriptionKey : [DirectoryUtils localizedStringForKey:CBErrorTargetSimulator bundleName:kBundleName]}];
         
@@ -302,7 +296,7 @@ typedef NS_ENUM(NSInteger, CBErrorCode) {
                 [self stopSession];
             }
             else {
-                error = [[NSError alloc] initWithDomain:CommonBarcodeErrorDomain
+                error = [[NSError alloc] initWithDomain:CBErrorDomain
                                                    code:CBErrorCodePermissionDenied
                                                userInfo:@{NSLocalizedDescriptionKey : [DirectoryUtils localizedStringForKey:CBErrorPermissionDenied bundleName:kBundleName]}];
             }

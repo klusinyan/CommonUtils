@@ -5,11 +5,14 @@
 #import "CommonSpinner.h"
 #import "ImageDownloader.h"
 #import "DirectoryUtils.h"
+#import "NetworkUtils.h"
+
+#define AUTO_LAYOUT 1
 
 #define kBundleName [DirectoryUtils commonUtilsBundlePathWithName:@"CommonBook.bundle"]
 
 #define ZOOM_VIEW_TAG 100
-#define ZOOM_STEP 1.5
+#define ZOOM_STEP 1.2
 #define IMAGE_DISTANCE 5
 
 @interface CommonPageContent () <UIScrollViewDelegate>
@@ -18,11 +21,15 @@
 @property (nonatomic, strong) IBOutlet UIScrollView *scrollView;
 @property (nonatomic, strong) IBOutlet UIImageView *imageView;
 
+@property (nonatomic, getter=isLoaded) BOOL loaded;
+
+#if AUTO_LAYOUT
 /*************AUTOLAYOUT ONLY*************/
 @property (nonatomic, strong) IBOutlet UIView *container;
 @property (nonatomic, strong) IBOutlet NSLayoutConstraint *leadingSpace;
 @property (nonatomic, strong) IBOutlet NSLayoutConstraint *topSpace;
 /*************AUTOLAYOUT ONLY*************/
+#endif
 
 @property (nonatomic, getter=isAnimated) BOOL animated;
 @property (nonatomic, strong) CommonSpinner *spinner;
@@ -45,16 +52,20 @@
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
+        self.backgroundColor = [UIColor clearColor];
+        self.zoomEnabled = NO;
+        self.twoFingersTapEnabled = YES;
+    
+        /*************AUTORESIZING ONLY*************/
+        self.contentInset = UIEdgeInsetsMake(0, 5, 0, 5);
+        /*************AUTORESIZING ONLY*************/
+
+#if AUTO_LAYOUT
         self.leadingSpaceWhenPortrait = IMAGE_DISTANCE;
         self.leadingSpaceWhenLandscape = 0;
         self.topSpaceWhenPortrait = 0;
         self.topSpaceWhenLandscape = 0;
-        self.backgroundColor = [UIColor clearColor];
-        self.zoomEnabled = NO;
-        
-        /*************AUTORESIZING ONLY*************/
-        self.contentInset = UIEdgeInsetsMake(0, 5, 0, 5);
-        /*************AUTORESIZING ONLY*************/
+#endif
 
         //defualt is nil for memory
         //self.image = [UIImage imageNamed:@"CommonUtils.bundle/CommonProgress.bundle/WeCanDoIt"];
@@ -107,8 +118,9 @@
     
     [self.imageView addGestureRecognizer:singleTap];
     [self.imageView addGestureRecognizer:doubleTap];
-    [self.imageView addGestureRecognizer:twoFingerTap];
-
+    
+    if (self.isTwoFingersTapEnabled) [self.imageView addGestureRecognizer:twoFingerTap];
+    
     // calculate minimum scale to perfectly fit image width, and begin at that scale
     float minimumScale = [self.scrollView frame].size.width  / [self.imageView frame].size.width;
     [self.scrollView setMinimumZoomScale:minimumScale];
@@ -150,10 +162,11 @@
         self.imageView.image = self.image;
         [self animateIfNeeded];
     }
-    else if ([self.imageUrl length] > 0) {
+    else if ([self.imageUrl length] > 0 && !self.isLoaded) {
         self.spinner = [CommonSpinner instance];
         [self.spinner setHidesWhenStopped:YES];
         [self.spinner setNetworkActivityIndicatorVisible:YES];
+        //[self.spinner setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
         [self.spinner showInView:self.imageView completion:^{
             NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:self.imageUrl]];
             __weak typeof(self) weakSelf = self;
@@ -162,11 +175,12 @@
                                            success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
                                                [weakSelf.spinner hideWithCompletion:^{
                                                    weakSelf.imageView.image = image;
+                                                   weakSelf.loaded = YES;
                                                }];
                                            }
                                            failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
-                                               [weakSelf.spinner setTitleOnly: [DirectoryUtils localizedStringForKey:@"CSLocalizedStringImageNotAvailable"
-                                                                                                          bundleName:kBundleName]];
+                                               NSString *localizedString = [DirectoryUtils localizedStringForKey:@"CSLocalizedStringImageNotAvailable" bundleName:kBundleName];
+                                               [weakSelf.spinner setTitleOnly:localizedString activityIndicatorVisible:NO];
                                            }];
         }];
     }
@@ -195,8 +209,8 @@
     
     [self.scrollView setZoomScale:self.scrollView.minimumZoomScale animated:YES];
     
+#if AUTO_LAYOUT
     /*************AUTOLAYOUT ONLY*************/
-    /*
     if (UIInterfaceOrientationIsPortrait([[UIApplication sharedApplication] statusBarOrientation])) {
         self.leadingSpace.constant = self.leadingSpaceWhenPortrait;
         self.topSpace.constant = self.topSpaceWhenPortrait;
@@ -205,8 +219,8 @@
         self.leadingSpace.constant = self.leadingSpaceWhenLandscape;
         self.topSpace.constant = self.topSpaceWhenLandscape;
     }
-    //*/
     /*************AUTOLAYOUT ONLY*************/
+#endif
 }
 /****************SEQ[4]****************/
 
@@ -246,7 +260,7 @@
 
 - (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView
 {
-    if (self.zoomEnabled) {
+    if (self.zoomEnabled && self.isLoaded) {
         return [self.scrollView viewWithTag:ZOOM_VIEW_TAG];
     }
     return nil;
@@ -263,16 +277,24 @@
 {
     // double tap zooms in
     float newScale = [self.scrollView zoomScale] * ZOOM_STEP;
+    if (newScale > self.scrollView.maximumZoomScale) {
+        [self.scrollView setZoomScale:self.scrollView.minimumZoomScale animated:YES];
+        return;
+    }
     CGRect zoomRect = [self zoomRectForScale:newScale withCenter:[gestureRecognizer locationInView:gestureRecognizer.view]];
     [self.scrollView zoomToRect:zoomRect animated:YES];
 }
 
 - (void)handleTwoFingerTap:(UIGestureRecognizer *)gestureRecognizer
 {
+    [self.scrollView setZoomScale:self.scrollView.minimumZoomScale animated:YES];
+    
+    /*************PROGRESSIVE ZOOM OUT*************/
     // two-finger tap zooms out
-    float newScale = [self.scrollView zoomScale] / ZOOM_STEP;
-    CGRect zoomRect = [self zoomRectForScale:newScale withCenter:[gestureRecognizer locationInView:gestureRecognizer.view]];
-    [self.scrollView zoomToRect:zoomRect animated:YES];
+    //float newScale = [self.scrollView zoomScale] / ZOOM_STEP;
+    //CGRect zoomRect = [self zoomRectForScale:newScale withCenter:[gestureRecognizer locationInView:gestureRecognizer.view]];
+    //[self.scrollView zoomToRect:zoomRect animated:YES];
+    /*************PROGRESSIVE ZOOM OUT*************/
 }
 
 #pragma mark Utility methods
