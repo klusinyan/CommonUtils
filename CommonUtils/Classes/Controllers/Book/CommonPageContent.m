@@ -21,7 +21,7 @@
 @property (nonatomic, strong) IBOutlet UIScrollView *scrollView;
 @property (nonatomic, strong) IBOutlet UIImageView *imageView;
 
-@property (nonatomic, getter=isLoaded) BOOL loaded;
+@property (nonatomic, getter=isImageAvailable) BOOL imageAvailable;
 
 #if AUTO_LAYOUT
 /*************AUTOLAYOUT ONLY*************/
@@ -162,7 +162,7 @@
         self.imageView.image = self.image;
         [self animateIfNeeded];
     }
-    else if ([self.imageUrl length] > 0 && !self.isLoaded) {
+    else if ([self.imageUrl length] > 0 && !self.isImageAvailable) {
         self.spinner = [CommonSpinner instance];
         [self.spinner setHidesWhenStopped:YES];
         [self.spinner setNetworkActivityIndicatorVisible:YES];
@@ -175,7 +175,7 @@
                                            success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
                                                [weakSelf.spinner hideWithCompletion:^{
                                                    weakSelf.imageView.image = image;
-                                                   weakSelf.loaded = YES;
+                                                   weakSelf.imageAvailable = YES;
                                                }];
                                            }
                                            failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
@@ -260,7 +260,7 @@
 
 - (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView
 {
-    if (self.zoomEnabled && self.isLoaded) {
+    if (self.zoomEnabled && self.isImageAvailable) {
         return [self.scrollView viewWithTag:ZOOM_VIEW_TAG];
     }
     return nil;
