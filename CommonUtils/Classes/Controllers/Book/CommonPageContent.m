@@ -7,6 +7,10 @@
 #import "DirectoryUtils.h"
 #import "NetworkUtils.h"
 
+#import <AFNetworkReachabilityManager.h>
+
+#define kDebugLog 1
+
 #define AUTO_LAYOUT 1
 
 #define kBundleName [DirectoryUtils commonUtilsBundlePathWithName:@"CommonBook.bundle"]
@@ -22,6 +26,7 @@
 @property (nonatomic, strong) IBOutlet UIImageView *imageView;
 
 @property (nonatomic, getter=isImageAvailable) BOOL imageAvailable;
+@property (nonatomic) BOOL shouldRetry;
 
 #if AUTO_LAYOUT
 /*************AUTOLAYOUT ONLY*************/
@@ -42,6 +47,8 @@
 
 - (void)dealloc
 {
+    [[AFNetworkReachabilityManager sharedManager] stopMonitoring];
+    
     self.scrollView.delegate = nil;
     
     [self.spinner hideWithCompletion:^{
@@ -69,6 +76,8 @@
 
         //defualt is nil for memory
         //self.image = [UIImage imageNamed:@"CommonUtils.bundle/CommonProgress.bundle/WeCanDoIt"];
+        
+        [[AFNetworkReachabilityManager sharedManager] startMonitoring];
     }
     return self;
 }
@@ -97,6 +106,44 @@
         self.animationView.delay = anim.delay;
         self.animationView.duration = anim.duration;
         [self.animationView startCanvasAnimation];
+    }
+}
+
+- (void)downloadImage
+{
+    void (^run)(void) = ^{
+        self.spinner = [CommonSpinner instance];
+        [self.spinner setHidesWhenStopped:YES];
+        [self.spinner setNetworkActivityIndicatorVisible:YES];
+        //[self.spinner setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
+        [self.spinner showInView:self.imageView completion:^{
+            NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:self.imageUrl]];
+            __weak typeof(self) weakSelf = self;
+            [self.imageView setImageWithURLRequest:request
+                                  placeholderImage:nil
+                                           success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+                                               [weakSelf.spinner hideWithCompletion:^{
+                                                   weakSelf.imageView.image = image;
+                                                   weakSelf.imageAvailable = YES;
+                                                   weakSelf.shouldRetry = NO;
+                                               }];
+                                           }
+                                           failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
+                                               NSString *localizedString = [DirectoryUtils localizedStringForKey:@"CSLocalizedStringImageNotAvailable" bundleName:kBundleName];
+                                               [weakSelf.spinner setTitleOnly:localizedString activityIndicatorVisible:NO];
+                                               
+                                               weakSelf.shouldRetry = YES;
+                                           }];
+        }];
+    };
+    
+    if (self.spinner) {
+        [self.spinner hideWithCompletion:^{
+            run();
+        }];
+    }
+    else {
+        run();
     }
 }
 
@@ -163,31 +210,19 @@
         [self animateIfNeeded];
     }
     else if ([self.imageUrl length] > 0 && !self.isImageAvailable) {
-        self.spinner = [CommonSpinner instance];
-        [self.spinner setHidesWhenStopped:YES];
-        [self.spinner setNetworkActivityIndicatorVisible:YES];
-        //[self.spinner setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
-        [self.spinner showInView:self.imageView completion:^{
-            NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:self.imageUrl]];
-            __weak typeof(self) weakSelf = self;
-            [self.imageView setImageWithURLRequest:request
-                                  placeholderImage:nil
-                                           success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
-                                               [weakSelf.spinner hideWithCompletion:^{
-                                                   weakSelf.imageView.image = image;
-                                                   weakSelf.imageAvailable = YES;
-                                               }];
-                                           }
-                                           failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
-                                               NSString *localizedString = [DirectoryUtils localizedStringForKey:@"CSLocalizedStringImageNotAvailable" bundleName:kBundleName];
-                                               [weakSelf.spinner setTitleOnly:localizedString activityIndicatorVisible:NO];
-                                           }];
-        }];
+        [self downloadImage];
     }
     
     if (self.delegate && [self.delegate respondsToSelector:@selector(pageContentWillAppear:)]) {
         [self.delegate pageContentWillAppear:self];
     }
+    
+    [[AFNetworkReachabilityManager sharedManager] setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
+        if (kDebugLog) DebugLog(@"status :%@, shouldRetry :%@", @(status), self.shouldRetry ? @"Y" : @"N");
+        if (status != AFNetworkReachabilityStatusNotReachable && self.shouldRetry) {
+            [self downloadImage];
+        }
+    }];
 }
 /****************SEQ[2]****************/
 
