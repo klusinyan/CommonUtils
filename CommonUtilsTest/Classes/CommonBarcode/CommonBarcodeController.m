@@ -3,6 +3,8 @@
 #import "CommonBarcodeController.h"
 #import "DirectoryUtils.h"
 
+#import <CommonBanner.h>
+
 //static dispatch_once_t * once_token;
 
 @interface CommonBarcodeController ()
@@ -52,6 +54,8 @@
 {
     [super viewDidLoad];
     
+    self.canDisplayAds = NO;
+
     if (self.UIInterfaceType == UIInterfaceTypeSimple) {
         self.buttonContainer.hidden = YES;
         self.btnDone.hidden = YES;
@@ -72,6 +76,11 @@
     
     self.btnDone.layer.cornerRadius = 5.0f;
     self.btnRetry.layer.cornerRadius = 5.0f;
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
 }
 
 - (void)viewDidLayoutSubviews

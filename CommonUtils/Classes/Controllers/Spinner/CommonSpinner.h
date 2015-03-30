@@ -42,7 +42,7 @@ typedef void(^CommonSpinnerHideCompletionHandler)(void);
 
 + (void)hideWithCompletion:(CommonSpinnerHideCompletionHandler)completion;
 
-@property (nonatomic) NSString *title;                                  //default nil
+@property (nonatomic, copy) NSString *title;                            //default nil
 @property (nonatomic) BOOL hidesWhenStopped;                            //defualt NO
 @property (nonatomic) BOOL runInBackgroud;                              //defualt NO
 @property (nonatomic) BOOL networkActivityIndicatorVisible;             //default YES

@@ -4,13 +4,32 @@
 #import "TestViewController.h"
 #import "Appirater.h"
 
+#import <CommonCrash.h>
+#import <CommonBanner.h>
+
+@interface AppDelegate () <CommonCrashDelegate>
+
+@end
+
 @implementation AppDelegate
+
+#pragma CommonCrashDelegate protocol
+
+- (void)crashWithExceptionInfo:(NSString *)info
+{
+    DebugLog(@"info %@", info);
+}
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    [CommonCrash startManagingCrashes];
+    [CommonCrash setCommonCrashDelegate:self];
+    
+    TestViewController *rootViewController = [[TestViewController alloc] init];
+    
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.window.backgroundColor = [UIColor clearColor];
-    self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[TestViewController alloc] init]];
+    self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:rootViewController];
     [self.window makeKeyAndVisible];
     
     [Appirater setAppId:@"770699556"];                  //iTunes ID

@@ -30,12 +30,12 @@
 		9C2AC5E219EA96F900588538 /* CommonProgress.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C2AC5E019EA96F900588538 /* CommonProgress.m */; };
 		9C34F7D0192CAFF9001B8D6D /* ProgressView.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C34F7CE192CAFF9001B8D6D /* ProgressView.h */; };
 		9C34F7D1192CAFF9001B8D6D /* ProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C34F7CF192CAFF9001B8D6D /* ProgressView.m */; };
+		9C42A7341AC98D2600DD524F /* CommonBanner.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C42A7321AC98D2600DD524F /* CommonBanner.h */; };
+		9C42A7351AC98D2600DD524F /* CommonBanner.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C42A7331AC98D2600DD524F /* CommonBanner.m */; };
+		9C42A7391AC9975600DD524F /* CommonCrash.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C42A7371AC9975600DD524F /* CommonCrash.h */; };
+		9C42A73A1AC9975600DD524F /* CommonCrash.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C42A7381AC9975600DD524F /* CommonCrash.m */; };
 		9C46A59919766A840018B109 /* ImageDownloader.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C46A59719766A840018B109 /* ImageDownloader.h */; };
 		9C46A59A19766A840018B109 /* ImageDownloader.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C46A59819766A840018B109 /* ImageDownloader.m */; };
-		9C4FCB4D1AC07F1000266FC2 /* CommonBanner.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C4FCB491AC07F1000266FC2 /* CommonBanner.h */; };
-		9C4FCB4E1AC07F1000266FC2 /* CommonBanner.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C4FCB4A1AC07F1000266FC2 /* CommonBanner.m */; };
-		9C4FCB4F1AC07F1000266FC2 /* CommonBannerViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C4FCB4B1AC07F1000266FC2 /* CommonBannerViewController.h */; };
-		9C4FCB501AC07F1000266FC2 /* CommonBannerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C4FCB4C1AC07F1000266FC2 /* CommonBannerViewController.m */; };
 		9C5ADFEE1AA4A38800CD5215 /* CommonAnimation.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C5ADFEC1AA4A38800CD5215 /* CommonAnimation.h */; };
 		9C5ADFEF1AA4A38800CD5215 /* CommonAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C5ADFED1AA4A38800CD5215 /* CommonAnimation.m */; };
 		9C6DD7D419F130670013D333 /* UIImage+Color.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C6DD7D219F130670013D333 /* UIImage+Color.h */; };
@@ -124,12 +124,12 @@
 		9C3297A81A9DE2F000AFFBEA /* CommonBarcode.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = CommonBarcode.bundle; sourceTree = "<group>"; };
 		9C34F7CE192CAFF9001B8D6D /* ProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProgressView.h; sourceTree = "<group>"; };
 		9C34F7CF192CAFF9001B8D6D /* ProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProgressView.m; sourceTree = "<group>"; };
+		9C42A7321AC98D2600DD524F /* CommonBanner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonBanner.h; sourceTree = "<group>"; };
+		9C42A7331AC98D2600DD524F /* CommonBanner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonBanner.m; sourceTree = "<group>"; };
+		9C42A7371AC9975600DD524F /* CommonCrash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonCrash.h; sourceTree = "<group>"; };
+		9C42A7381AC9975600DD524F /* CommonCrash.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonCrash.m; sourceTree = "<group>"; };
 		9C46A59719766A840018B109 /* ImageDownloader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageDownloader.h; sourceTree = "<group>"; };
 		9C46A59819766A840018B109 /* ImageDownloader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageDownloader.m; sourceTree = "<group>"; };
-		9C4FCB491AC07F1000266FC2 /* CommonBanner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonBanner.h; sourceTree = "<group>"; };
-		9C4FCB4A1AC07F1000266FC2 /* CommonBanner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonBanner.m; sourceTree = "<group>"; };
-		9C4FCB4B1AC07F1000266FC2 /* CommonBannerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonBannerViewController.h; sourceTree = "<group>"; };
-		9C4FCB4C1AC07F1000266FC2 /* CommonBannerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonBannerViewController.m; sourceTree = "<group>"; };
 		9C5ADFEC1AA4A38800CD5215 /* CommonAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonAnimation.h; sourceTree = "<group>"; };
 		9C5ADFED1AA4A38800CD5215 /* CommonAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonAnimation.m; sourceTree = "<group>"; };
 		9C6DD7D219F130670013D333 /* UIImage+Color.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Color.h"; sourceTree = "<group>"; };
@@ -307,13 +307,20 @@
 			path = Network;
 			sourceTree = "<group>";
 		};
+		9C42A7361AC9975600DD524F /* Crash */ = {
+			isa = PBXGroup;
+			children = (
+				9C42A7371AC9975600DD524F /* CommonCrash.h */,
+				9C42A7381AC9975600DD524F /* CommonCrash.m */,
+			);
+			path = Crash;
+			sourceTree = "<group>";
+		};
 		9C4FCB481AC07F1000266FC2 /* Banner */ = {
 			isa = PBXGroup;
 			children = (
-				9C4FCB491AC07F1000266FC2 /* CommonBanner.h */,
-				9C4FCB4A1AC07F1000266FC2 /* CommonBanner.m */,
-				9C4FCB4B1AC07F1000266FC2 /* CommonBannerViewController.h */,
-				9C4FCB4C1AC07F1000266FC2 /* CommonBannerViewController.m */,
+				9C42A7321AC98D2600DD524F /* CommonBanner.h */,
+				9C42A7331AC98D2600DD524F /* CommonBanner.m */,
 			);
 			path = Banner;
 			sourceTree = "<group>";
@@ -517,6 +524,7 @@
 		9CB81FD718FD375300C918FB /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				9C42A7361AC9975600DD524F /* Crash */,
 				9CD9F75C196E876000EBBD85 /* Lib-Prefix.pch */,
 				9C5ADFEB1AA4A37C00CD5215 /* Animations */,
 				9CB1FC81197598D00080534F /* Controllers */,
@@ -633,6 +641,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9CF9663818FD3ADC00E265A1 /* CallBackProtocol.h in Headers */,
+				9C42A7341AC98D2600DD524F /* CommonBanner.h in Headers */,
 				9CD7023E193388790066FFC0 /* UIImage+Alpha.h in Headers */,
 				9C90FF7919377EBB004CE056 /* NSDictionary+Utils.h in Headers */,
 				9CE7A8A719542CCF00E699E4 /* DirectoryUtils.h in Headers */,
@@ -657,13 +666,12 @@
 				9C2AC5E119EA96F900588538 /* CommonProgress.h in Headers */,
 				9C90FF6B19377DEC004CE056 /* NSDate+Utils.h in Headers */,
 				9C94A99119EBC911003DF554 /* CommonSegmentedViewController.h in Headers */,
+				9C42A7391AC9975600DD524F /* CommonCrash.h in Headers */,
 				9C01921619D2CBD600E8E9E3 /* CommonBook.h in Headers */,
 				9CA4F69D19790E7D000BCFCC /* ViewPagerController.h in Headers */,
-				9C4FCB4F1AC07F1000266FC2 /* CommonBannerViewController.h in Headers */,
 				9C01921A19D2CBD600E8E9E3 /* CommonPicker.h in Headers */,
 				9C46A59919766A840018B109 /* ImageDownloader.h in Headers */,
 				9CD9F772196E907900EBBD85 /* NSString+HTML.h in Headers */,
-				9C4FCB4D1AC07F1000266FC2 /* CommonBanner.h in Headers */,
 				9CD9F770196E907900EBBD85 /* GTMNSString+HTML.h in Headers */,
 				9C01921819D2CBD600E8E9E3 /* CommonKeyboard.h in Headers */,
 				9C01921F19D2CC0300E8E9E3 /* BlurView.h in Headers */,
@@ -737,7 +745,6 @@
 				9C90FF8319377F7F004CE056 /* NSMutableArray+Utils.m in Sources */,
 				9C0802621A1F4B7B00040153 /* UIViewController+ChildrenHandler.m in Sources */,
 				9C90FF6719377D33004CE056 /* NSFileManager-Utilities.m in Sources */,
-				9C4FCB4E1AC07F1000266FC2 /* CommonBanner.m in Sources */,
 				9C90FF6C19377DEC004CE056 /* NSDate+Utils.m in Sources */,
 				9C34F7D1192CAFF9001B8D6D /* ProgressView.m in Sources */,
 				9C01921919D2CBD600E8E9E3 /* CommonKeyboard.m in Sources */,
@@ -745,9 +752,9 @@
 				9CB4800E19558E8400A5AC1B /* UIColor+Utils.m in Sources */,
 				9C1E3932198E42F600EA933D /* UIAlertView+Blocks.m in Sources */,
 				9C8F99E11AA0642500F34B57 /* CommonPageContent.m in Sources */,
+				9C42A73A1AC9975600DD524F /* CommonCrash.m in Sources */,
 				9C90FF7A19377EBB004CE056 /* NSDictionary+Utils.m in Sources */,
 				9C6DD7D519F130670013D333 /* UIImage+Color.m in Sources */,
-				9C4FCB501AC07F1000266FC2 /* CommonBannerViewController.m in Sources */,
 				9CD9F773196E907900EBBD85 /* NSString+HTML.m in Sources */,
 				9CCB62DF19ED156F0061D0C1 /* CommonSystem.m in Sources */,
 				9C8C0AFE1934A1800033D2A9 /* UIImage+RoundedCorner.m in Sources */,
@@ -762,6 +769,7 @@
 				9C01922019D2CC0300E8E9E3 /* BlurView.m in Sources */,
 				9C2AC5E219EA96F900588538 /* CommonProgress.m in Sources */,
 				9C90FF6219374DD3004CE056 /* UITableView+Utils.m in Sources */,
+				9C42A7351AC98D2600DD524F /* CommonBanner.m in Sources */,
 				9C8C0AFD1934A17C0033D2A9 /* UIImage+Alpha.m in Sources */,
 				9CA10B621953521400DC3C5B /* NSIndexPath+Utils.m in Sources */,
 				9C5ADFEF1AA4A38800CD5215 /* CommonAnimation.m in Sources */,

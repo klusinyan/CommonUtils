@@ -18,6 +18,8 @@
 #import "NetworkUtils.h"
 #import "UIAlertView+Blocks.h"
 
+#import "CommonBanner.h"
+
 typedef NS_ENUM(NSInteger, RowType) {
     RowTypeSegementController,
     RowTypeBarcodeReader,
@@ -30,7 +32,8 @@ typedef NS_ENUM(NSInteger, RowType) {
     RowCount,
 };
 
-@interface TestViewController () <CommonBarcodeDelegate> {
+@interface TestViewController () <CommonBarcodeDelegate>
+{
     CommonBarcodeController *_barcodeReader;
 }
 
@@ -42,7 +45,6 @@ typedef NS_ENUM(NSInteger, RowType) {
 {
     self = [super initWithStyle:style];
     if (self) {
-        // Custom initialization
     }
     return self;
 }
@@ -72,6 +74,20 @@ typedef NS_ENUM(NSInteger, RowType) {
     [NetworkUtils setNetworkActivityIndicatorVisible:NO];
     //[NetworkUtils setNetworkActivityIndicatorVisible:NO];
     //[NetworkUtils setNetworkActivityIndicatorVisible:NO];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
+    self.canDisplayAds = YES;
+    self.animated = YES;
+    self.shouldResizeContent = arc4random_uniform(2);
 }
 
 - (void)didReceiveMemoryWarning

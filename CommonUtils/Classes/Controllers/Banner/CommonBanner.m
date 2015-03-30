@@ -2,209 +2,168 @@
 //  Copyright (c) 2014 Karen Lusinyan. All rights reserved.
 
 #import "CommonBanner.h"
+#import <objc/runtime.h>
 
 NSString * const BannerViewActionWillBegin = @"BannerViewActionWillBegin";
 NSString * const BannerViewActionDidFinish = @"BannerViewActionDidFinish";
 
 @interface CommonBanner () <ADBannerViewDelegate>
 
-@property (readwrite, nonatomic, retain) ADBannerView *bannerView;
-@property (readwrite, nonatomic, assign) BOOL bannerDidShown;
+@property (nonatomic, strong) ADBannerView *bannerView;
+@property (nonatomic, strong) UIViewController *contentController;
+
+@property (readwrite, nonatomic, assign) id <CommonBannerPrototype> prototype;
 
 @end
 
+#pragma mark -
+
 @implementation CommonBanner
 
-- (void)dealloc
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
-
-//desired private initalizer
-- (instancetype)init
+- (id)init
 {
     self = [super init];
     if (self) {
-        self.animated = YES;
-        self.position = BannerPositionBottom;
+        //do something
     }
     return self;
 }
 
-//public initializer
 + (instancetype)sharedInstance
 {
     static dispatch_once_t pred = 0;
-    __strong static id _sharedObject = nil;
+    __strong static id sharedInstance = nil;
     dispatch_once(&pred, ^{
-        _sharedObject = [[self alloc] init];
-    });
-    return _sharedObject;
-}
-
-- (void)addBannerWithDelegate:(id<CommonBannerDelegate>)delegate
-{
-    static dispatch_once_t pred = 0;
-    __strong static ADBannerView *sharedBanner = nil;
-    dispatch_once(&pred, ^{
-        // On iOS 6 ADBannerView introduces a new initializer, use it when available.
-        if ([ADBannerView instancesRespondToSelector:@selector(initWithAdType:)]) {
-            sharedBanner = [[ADBannerView alloc] initWithAdType:ADAdTypeBanner];
-        } else {
-            sharedBanner = [[ADBannerView alloc] init];
-        }
-        sharedBanner.delegate = self;
-        sharedBanner.backgroundColor = [UIColor clearColor];
+        sharedInstance = [[self alloc] init];
+        [sharedInstance setupBanner];
     });
     
-    self.bannerView = sharedBanner;
-    self.delegate = delegate;
-
-    if ([self.delegate isKindOfClass:[UIViewController class]]) {
-        UIViewController *contentController = (UIViewController *)delegate;
-        [contentController.view addSubview:self.bannerView];
-        
-        CGRect contentFrame = contentController.view.bounds;
-        CGRect bannerFrame = self.bannerView.frame;
-        
-        if (self.position == BannerPositionBottom) {
-            bannerFrame.origin.y = CGRectGetMaxY([UIScreen mainScreen].bounds);
-        }
-        else if (self.position == BannerPositionTop) {
-            bannerFrame.origin.y = CGRectGetMinY([UIScreen mainScreen].bounds)-50;
-        }
-        bannerFrame.size = [self.bannerView sizeThatFits:contentFrame.size];
-        self.bannerView.frame = bannerFrame;
-        
-        if (self.bannerView.bannerLoaded) {
-            [self showBannerAnimated:self.animated completion:^(BOOL finished) {
-                //do something
-            }];
-        }
-    }
+    return sharedInstance;
 }
 
-- (void)removeBannerWithDelegate:(id<CommonBannerDelegate>)contentController
+- (void)setupBannerLayout
 {
-    [self hideBannerAnimated:self.animated completion:^(BOOL finished) {
-        //do something
+    static dispatch_once_t pred = 0;
+    dispatch_once(&pred, ^{
+        [self setupBanner];
+        [self setupBannerController];
+    });
+}
+
+- (void)setupBanner
+{
+    // On iOS 6 ADBannerView introduces a new initializer, use it when available.
+    if ([ADBannerView instancesRespondToSelector:@selector(initWithAdType:)]) {
+        self.bannerView = [[ADBannerView alloc] initWithAdType:ADAdTypeBanner];
+    } else {
+        self.bannerView = [[ADBannerView alloc] init];
+    }
+    self.bannerView.delegate = self;
+    
+    [self.view addSubview:self.bannerView];
+}
+
+- (void)setupBannerController
+{
+    UIViewController *rootViewController = [[[UIApplication sharedApplication] keyWindow] rootViewController];
+    rootViewController.view.frame = self.view.frame;
+    [self.view addSubview:rootViewController.view];
+    [self addChildViewController:rootViewController];
+    
+    [[UIApplication sharedApplication] keyWindow].rootViewController = self;
+}
+
+- (void)loadView
+{
+    self.view = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    self.view.backgroundColor = [UIColor whiteColor];
+    
+    [self setupBannerLayout];
+}
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    
+    self.contentController = self.childViewControllers[0];
+}
+
+- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation
+{
+    return [self.contentController preferredInterfaceOrientationForPresentation];
+}
+
+- (NSUInteger)supportedInterfaceOrientations
+{
+    return [self.contentController supportedInterfaceOrientations];
+}
+
+- (void)viewDidLayoutSubviews
+{
+    CGRect contentFrame = self.view.bounds, bannerFrame = CGRectZero;
+    
+    // All we need to do is ask the banner for a size that fits into the layout area we are using.
+    // At this point in this method contentFrame=self.view.bounds, so we'll use that size for the layout.
+    bannerFrame.size = [self.bannerView sizeThatFits:contentFrame.size];
+    
+    DebugLog(@"prototype [%@] canDisplayAds [%@]", NSStringFromClass([self.prototype class]), [self.prototype canDisplayAds] ? @"Y" : @"N");
+    
+    BOOL canDisplayAds = YES;
+    if (self.prototype && [self.prototype respondsToSelector:@selector(canDisplayAds)]) {
+        canDisplayAds = [self.prototype canDisplayAds];
+    }
+    
+    if (self.bannerView.isBannerLoaded && canDisplayAds) {
+        contentFrame.size.height -= bannerFrame.size.height;
+        bannerFrame.origin.y = contentFrame.size.height;
+    } else {
+        bannerFrame.origin.y = contentFrame.size.height;
+    }
+    
+    if (self.prototype && [self.prototype respondsToSelector:@selector(shouldResizeContent)]) {
+        if (![self.prototype shouldResizeContent]) {
+            contentFrame = self.view.bounds;
+        }
+    }
+    
+    self.contentController.view.frame = contentFrame;
+    self.bannerView.frame = bannerFrame;
+}
+
+- (void)displayBanner:(BOOL)display
+{
+    DebugLog(@"isBannerLoaded=[%@] display=[%@]", self.bannerView.isBannerLoaded ? @"Y" : @"N", display ? @"Y" : @"N");
+    
+    BOOL animted = YES;
+    if (self.prototype && [self.prototype respondsToSelector:@selector(animated)]) {
+        animted = [self.prototype animated];
+    }
+    
+    [UIView animateWithDuration:animted ? 0.25f : 0.0f animations:^{
+        
+        // viewDidLayoutSubviews will handle positioning the banner view so that it is visible.
+        // You must not call [self.view layoutSubviews] directly.  However, you can flag the view
+        // as requiring layout...
+        [self.view setNeedsLayout];
+        // ... then ask it to lay itself out immediately if it is flagged as requiring layout...
+        [self.view layoutIfNeeded];
+        // ... which has the same effect.
     }];
 }
 
-- (void)showBannerAnimated:(BOOL)animated completion:(void (^)(BOOL finished))completion
-{
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (!self.bannerDidShown) {
-                //resize banner
-                CGRect bannerFrame = self.bannerView.frame;
-                if (self.position == BannerPositionBottom) {
-                    bannerFrame.origin.y -= bannerFrame.size.height;
-                }
-                else if (self.position == BannerPositionTop) {
-                    bannerFrame.origin.y += bannerFrame.size.height;
-                }
-                
-                //resize content
-                UIView *content = nil;
-                CGRect contentFrame = CGRectZero;
-                if (self.dataSource && [self.dataSource respondsToSelector:@selector(content)]) {
-                    content = [self.dataSource content];
-                    contentFrame = content.frame;
-                    contentFrame.size.height -= bannerFrame.size.height;
-                }
-                [UIView animateWithDuration:animated ? 0.25f : 0.0f
-                                      delay:0.0
-                                    options:UIViewAnimationOptionCurveLinear
-                                 animations:^{
-                                     self.bannerView.frame = bannerFrame;
-                                     if (content) {
-                                         content.frame = contentFrame;
-                                     }
-                                 } completion:^(BOOL finished) {
-                                     if (completion) completion(finished);
-                                     self.bannerDidShown = YES;
-                                     DebugLog(@"banner.frame when shown = %@", NSStringFromCGRect(self.bannerView.frame));
-                                     if (content) {
-                                         DebugLog(@"content.ftame when shown = %@", NSStringFromCGRect(content.frame));
-                                     }
-                                 }];
-            }
-        });
-    });
-}
 
-- (void)hideBannerAnimated:(BOOL)animated completion:(void (^)(BOOL finished))completion
-{
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (self.bannerDidShown) {
-                //resize banner
-                CGRect bannerFrame = self.bannerView.frame;
-                if (self.position == BannerPositionBottom) {
-                    bannerFrame.origin.y += bannerFrame.size.height;
-                }
-                else if (self.position == BannerPositionTop) {
-                    bannerFrame.origin.y -= bannerFrame.size.height;
-
-                }
-                
-                //resize content
-                UIView *content = nil;
-                CGRect contentFrame = CGRectZero;
-                if (self.dataSource && [self.dataSource respondsToSelector:@selector(content)]) {
-                    content = [self.dataSource content];
-                    contentFrame = content.frame;
-                    contentFrame.size.height += bannerFrame.size.height;
-                }
-                [UIView animateWithDuration:animated ? 0.25f : 0.0f
-                                      delay:0
-                                    options:UIViewAnimationOptionCurveLinear
-                                 animations:^{
-                                     self.bannerView.frame = bannerFrame;
-                                     if (content) {
-                                         content.frame = contentFrame;
-                                     }
-                                 } completion:^(BOOL finished) {
-                                     if (completion) completion(finished);
-                                     self.bannerDidShown = NO;
-                                     DebugLog(@"banner.frame when hidden = %@", NSStringFromCGRect(self.bannerView.frame));
-                                     if (content) {
-                                         DebugLog(@"content.ftame when hidden = %@", NSStringFromCGRect(content.frame));
-                                     }
-                                 }];
-            }
-        });
-    });
-}
-
-#pragma mark -
-#pragma mark ADBannerViewDelegate methods
+#pragma ADBannerViewDelegate protocol
 
 - (void)bannerViewDidLoadAd:(ADBannerView *)banner
 {
-    if ([self.delegate canDisplayAds]) {
-        [self showBannerAnimated:self.animated completion:^(BOOL finished) {
-            //do something
-        }];
-    }
-
-    if (self.delegate && [self.delegate respondsToSelector:@selector(bannerDidShow:)]) {
-        [self.delegate bannerDidShow:self.bannerView];
-    }
+    [self displayBanner:YES];
 }
 
 - (void)bannerView:(ADBannerView *)banner didFailToReceiveAdWithError:(NSError *)error
 {
-    if ([self.delegate canDisplayAds]) {
-        [self hideBannerAnimated:self.animated completion:^(BOOL finished) {
-            //do something
-        }];
-    }
-    
-    if (self.delegate && [self.delegate respondsToSelector:@selector(bannerDidHide:)]) {
-        [self.delegate bannerDidHide:self.bannerView];
-    }
+    [self displayBanner:NO];
+
+    DebugLog(@"error %@", [error localizedDescription]);
 }
 
 - (BOOL)bannerViewActionShouldBegin:(ADBannerView *)banner willLeaveApplication:(BOOL)willLeave
@@ -216,6 +175,84 @@ NSString * const BannerViewActionDidFinish = @"BannerViewActionDidFinish";
 - (void)bannerViewActionDidFinish:(ADBannerView *)banner
 {
     [[NSNotificationCenter defaultCenter] postNotificationName:BannerViewActionDidFinish object:self];
+}
+
+@end
+
+@implementation UIViewController (Prototype)
+@dynamic canDisplayAds, shouldResizeContent, animated;
+
+- (BOOL)canDisplayAds
+{
+    return [objc_getAssociatedObject(self, @selector(canDisplayAds)) boolValue];
+}
+
+- (void)setCanDisplayAds:(BOOL)canDisplayAds
+{
+    objc_setAssociatedObject(self, @selector(canDisplayAds), @(canDisplayAds), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    
+    [[CommonBanner sharedInstance] setPrototype:self];
+    
+    [[CommonBanner sharedInstance] displayBanner:canDisplayAds];
+}
+
+- (BOOL)shouldResizeContent
+{
+    return [objc_getAssociatedObject(self, @selector(shouldResizeContent)) boolValue];
+}
+
+- (void)setShouldResizeContent:(BOOL)shouldResizeContent
+{
+    objc_setAssociatedObject(self, @selector(shouldResizeContent), @(shouldResizeContent), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (BOOL)animated
+{
+    return [objc_getAssociatedObject(self, @selector(animated)) boolValue];
+}
+
+- (void)setAnimated:(BOOL)animated
+{
+    objc_setAssociatedObject(self, @selector(animated), @(animated), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+@end
+
+@implementation UITableViewController (Prototype)
+@dynamic canDisplayAds, shouldResizeContent, animated;
+
+- (BOOL)canDisplayAds
+{
+    return [objc_getAssociatedObject(self, @selector(canDisplayAds)) boolValue];
+}
+
+- (void)setCanDisplayAds:(BOOL)canDisplayAds
+{
+    objc_setAssociatedObject(self, @selector(canDisplayAds), @(canDisplayAds), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    
+    [[CommonBanner sharedInstance] setPrototype:self];
+    
+    [[CommonBanner sharedInstance] displayBanner:canDisplayAds];
+}
+
+- (BOOL)shouldResizeContent
+{
+    return [objc_getAssociatedObject(self, @selector(shouldResizeContent)) boolValue];
+}
+
+- (void)setShouldResizeContent:(BOOL)shouldResizeContent
+{
+    objc_setAssociatedObject(self, @selector(shouldResizeContent), @(shouldResizeContent), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (BOOL)animated
+{
+    return [objc_getAssociatedObject(self, @selector(animated)) boolValue];
+}
+
+- (void)setAnimated:(BOOL)animated
+{
+    objc_setAssociatedObject(self, @selector(animated), @(animated), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 @end

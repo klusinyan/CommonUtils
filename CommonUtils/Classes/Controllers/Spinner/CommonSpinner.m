@@ -237,17 +237,13 @@ static NSMutableDictionary *appearance = nil;
                                                          attribute:NSLayoutAttributeCenterX
                                                         multiplier:1
                                                           constant:0]];
-        CGFloat offset = 0;
-        if (self.title) {
-            offset = -(self.titleFontSize+kOffset);
-        }
         [view addConstraint:[NSLayoutConstraint constraintWithItem:self
                                                          attribute:NSLayoutAttributeCenterY
                                                          relatedBy:NSLayoutRelationEqual
                                                             toItem:[self superview]
                                                          attribute:NSLayoutAttributeCenterY
                                                         multiplier:1
-                                                          constant:offset]];
+                                                          constant:0]];
         
         UIApplication *application = [UIApplication sharedApplication];
         self.bgTask = [application beginBackgroundTaskWithName:@"bgTask" expirationHandler:^{

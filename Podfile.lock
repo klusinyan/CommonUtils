@@ -1,32 +1,32 @@
 PODS:
-  - AFNetworking (2.5.1):
-    - AFNetworking/NSURLConnection (= 2.5.1)
-    - AFNetworking/NSURLSession (= 2.5.1)
-    - AFNetworking/Reachability (= 2.5.1)
-    - AFNetworking/Security (= 2.5.1)
-    - AFNetworking/Serialization (= 2.5.1)
-    - AFNetworking/UIKit (= 2.5.1)
-  - AFNetworking/NSURLConnection (2.5.1):
+  - AFNetworking (2.5.2):
+    - AFNetworking/NSURLConnection (= 2.5.2)
+    - AFNetworking/NSURLSession (= 2.5.2)
+    - AFNetworking/Reachability (= 2.5.2)
+    - AFNetworking/Security (= 2.5.2)
+    - AFNetworking/Serialization (= 2.5.2)
+    - AFNetworking/UIKit (= 2.5.2)
+  - AFNetworking/NSURLConnection (2.5.2):
     - AFNetworking/Reachability
     - AFNetworking/Security
     - AFNetworking/Serialization
-  - AFNetworking/NSURLSession (2.5.1):
+  - AFNetworking/NSURLSession (2.5.2):
     - AFNetworking/Reachability
     - AFNetworking/Security
     - AFNetworking/Serialization
-  - AFNetworking/Reachability (2.5.1)
-  - AFNetworking/Security (2.5.1)
-  - AFNetworking/Serialization (2.5.1)
-  - AFNetworking/UIKit (2.5.1):
+  - AFNetworking/Reachability (2.5.2)
+  - AFNetworking/Security (2.5.2)
+  - AFNetworking/Serialization (2.5.2)
+  - AFNetworking/UIKit (2.5.2):
     - AFNetworking/NSURLConnection
     - AFNetworking/NSURLSession
   - Appirater (2.0.4)
   - Canvas (0.1.2)
-  - CommonUtils (1.5.0-beta6):
+  - CommonUtils (1.5.0-beta8):
     - AFNetworking
     - Canvas
-    - CommonUtils/no-arc (= 1.5.0-beta6)
-  - CommonUtils/no-arc (1.5.0-beta6):
+    - CommonUtils/no-arc (= 1.5.0-beta8)
+  - CommonUtils/no-arc (1.5.0-beta8):
     - AFNetworking
     - Canvas
 
@@ -39,9 +39,9 @@ EXTERNAL SOURCES:
     :path: .
 
 SPEC CHECKSUMS:
-  AFNetworking: 8bee59492a6ff15d69130efa4d0dc67e0094a52a
-  Appirater: cbdb7f305562cfde585300bfff86da01ae559deb
-  Canvas: ae2faca05a15c4d6659fb3ae5e2a14817df4449a
-  CommonUtils: 9b8420e9bee1f80b811c260a082669a45490b2ab
+  AFNetworking: fefbce9660acb17f48ae0011292d4da0f457bf36
+  Appirater: 8783318c36414e8de3ea023443028df94c1b784b
+  Canvas: eb861e3b555d032648146c8ffda1a5dea40059ca
+  CommonUtils: c6dd8a6c9eaeb721a51cd0977ee0868518e4e267
 
 COCOAPODS: 0.35.0
