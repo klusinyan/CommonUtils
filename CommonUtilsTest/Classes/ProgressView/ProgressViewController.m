@@ -30,6 +30,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    self.canDisplayAds = YES;
+    self.animated = YES;
+    
     ProgressView *progressView = [ProgressView defaultHUDWithSize:CGSizeMake(100, 100)];
     [progressView setActivityIndicatorOn:YES];
     [progressView showInView:self.view];

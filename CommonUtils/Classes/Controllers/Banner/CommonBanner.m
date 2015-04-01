@@ -9,9 +9,11 @@
 @property (nonatomic, strong) UIViewController *contentController;
 @property (nonatomic, strong) ADBannerView *bannerView;
 
-@property (nonatomic) id <CommonBannerAdapter> adapter;
-
+@property (nonatomic, getter=isDisplayed) BOOL displayed;
 @property (nonatomic, getter=isStopped) BOOL stopped;
+
+@property (nonatomic) id <CommonBannerAdapter> adapter;
+@property (nonatomic) CommonBannerPosition bannerPosition;
 
 @end
 
@@ -52,6 +54,14 @@
 + (void)stopManaging
 {
     [self sharedInstance].stopped = YES;
+}
+
++ (void)setBannerPosition:(CommonBannerPosition)bannerPosition
+{
+    static dispatch_once_t pred = 0;
+    dispatch_once(&pred, ^{
+        [self sharedInstance].bannerPosition = bannerPosition;
+    });
 }
 
 - (void)setup
@@ -116,8 +126,6 @@
 
 - (void)viewDidLayoutSubviews
 {
-    if (![self.adapter canDisplayAds]) return;
-    
     CGRect contentFrame = self.view.bounds, bannerFrame = CGRectZero;
     
     // All we need to do is ask the banner for a size that fits into the layout area we are using.
@@ -126,11 +134,25 @@
     
     DebugLog(@"adapter [%@] canDisplayAds [%@]", NSStringFromClass([self.adapter class]), [self.adapter canDisplayAds] ? @"Y" : @"N");
     
-    if (self.bannerView.isBannerLoaded) {
-        contentFrame.size.height -= bannerFrame.size.height;
-        bannerFrame.origin.y = contentFrame.size.height;
-    } else {
-        bannerFrame.origin.y = contentFrame.size.height;
+    if (self.bannerView.isBannerLoaded && [self.adapter canDisplayAds]) {
+        if (self.bannerPosition == CommonBannerPositionBottom) {
+            contentFrame.size.height -= bannerFrame.size.height;
+            bannerFrame.origin.y = contentFrame.size.height;
+        }
+        else if (self.bannerPosition == CommonBannerPositionTop) {
+            bannerFrame.origin.y = 0;
+            contentFrame.origin.y += bannerFrame.size.height;
+            contentFrame.size.height -= bannerFrame.size.height;
+        }
+    }
+    else {
+        if (self.bannerPosition == CommonBannerPositionBottom) {
+            bannerFrame.origin.y = contentFrame.size.height;
+        }
+        else if (self.bannerPosition == CommonBannerPositionTop) {
+            bannerFrame.origin.y -= bannerFrame.size.height;
+            contentFrame = self.view.bounds;
+        }
     }
     
     if ([self.adapter shouldCoverContent]) {
@@ -155,23 +177,26 @@
 
 - (void)displayBanner:(BOOL)display completion:(void (^)(BOOL finished))completion
 {
-    //wait a few seconds to other parameters to be set: ex. animated
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.01 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        DebugLog(@"isBannerLoaded=[%@] display=[%@]", self.bannerView.isBannerLoaded ? @"Y" : @"N", display ? @"Y" : @"N");
-        
-        [UIView animateWithDuration:[self.adapter animated] ? 0.25f : 0.0f animations:^{
+    @synchronized(self) {
+        //wait a few seconds to other parameters to be set: ex. animated
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.01 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            DebugLog(@"isBannerLoaded=[%@] display=[%@]", self.bannerView.isBannerLoaded ? @"Y" : @"N", display ? @"Y" : @"N");
             
-            // viewDidLayoutSubviews will handle positioning the banner view so that it is visible.
-            // You must not call [self.view layoutSubviews] directly.  However, you can flag the view
-            // as requiring layout...
-            [self.view setNeedsLayout];
-            // ... then ask it to lay itself out immediately if it is flagged as requiring layout...
-            [self.view layoutIfNeeded];
-            // ... which has the same effect.
-        } completion:^(BOOL finished) {
-            if (completion) completion(finished);
-        }];
-    });
+            [UIView animateWithDuration:[self.adapter animated] ? 0.25f : 0.0f animations:^{
+                
+                // viewDidLayoutSubviews will handle positioning the banner view so that it is visible.
+                // You must not call [self.view layoutSubviews] directly.  However, you can flag the view
+                // as requiring layout...
+                [self.view setNeedsLayout];
+                // ... then ask it to lay itself out immediately if it is flagged as requiring layout...
+                [self.view layoutIfNeeded];
+                // ... which has the same effect.
+            } completion:^(BOOL finished) {
+                if (completion) completion(finished);
+                self.displayed = display;
+            }];
+        });
+    }
 }
 
 
@@ -188,7 +213,9 @@
 
 - (void)bannerView:(ADBannerView *)banner didFailToReceiveAdWithError:(NSError *)error
 {
-    [self displayBanner:NO completion:nil];
+    if (self.isDisplayed) {
+        [self displayBanner:NO completion:nil];
+    }
     
     if (self.adapter && [self.adapter respondsToSelector:@selector(bannerView:didFailToReceiveAdWithError:)]) {
         [self.adapter bannerView:banner didFailToReceiveAdWithError:error];

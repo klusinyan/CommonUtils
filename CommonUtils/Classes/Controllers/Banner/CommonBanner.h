@@ -4,6 +4,11 @@
 #import <UIKit/UIKit.h>
 #import <iAd/iAd.h>
 
+typedef NS_ENUM(NSInteger, CommonBannerPosition) {
+    CommonBannerPositionBottom=0,
+    CommonBannerPositionTop
+};
+
 @protocol CommonBannerAdapter <NSObject>
 
 @required
@@ -11,7 +16,7 @@
 
 @optional
 @property (readwrite, nonatomic, assign) BOOL shouldCoverContent;
-@property (readwrite, nonatomic, assign) BOOL animated;             
+@property (readwrite, nonatomic, assign) BOOL animated;
 
 @optional
 - (void)bannerViewDidLoadAd:(ADBannerView *)banner;
@@ -32,6 +37,13 @@
  *  @brief  Call this method to stop managing banners
  */
 + (void)stopManaging;
+
+/*!
+ *  @brief  Call this method to set banner position
+ *
+ *  @param bannerPosition set type defined by CommonBannerPosition, default value is CommonBannerPositionBottom
+ */
++ (void)setBannerPosition:(CommonBannerPosition)bannerPosition;
 
 @end
 
