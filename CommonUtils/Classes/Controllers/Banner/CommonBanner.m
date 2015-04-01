@@ -158,25 +158,32 @@ NSString * const BannerViewActionDidFinish = @"BannerViewActionDidFinish";
 
 - (void)displayBanner:(BOOL)display completion:(void (^)(BOOL finished))completion
 {
-    @synchronized(self.adapter) {
-        //wait a few seconds to other parameters to be set: ex. animated
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.01 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            DebugLog(@"isBannerLoaded=[%@] display=[%@]", self.bannerView.isBannerLoaded ? @"Y" : @"N", display ? @"Y" : @"N");
+    //wait a few seconds to other parameters to be set: ex. animated
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.01 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        DebugLog(@"isBannerLoaded=[%@] display=[%@]", self.bannerView.isBannerLoaded ? @"Y" : @"N", display ? @"Y" : @"N");
+        
+        [UIView animateWithDuration:[self.adapter animated] ? 0.25f : 0.0f animations:^{
             
-            [UIView animateWithDuration:[self.adapter animated] ? 0.25f : 0.0f animations:^{
-                
-                // viewDidLayoutSubviews will handle positioning the banner view so that it is visible.
-                // You must not call [self.view layoutSubviews] directly.  However, you can flag the view
-                // as requiring layout...
-                [self.view setNeedsLayout];
-                // ... then ask it to lay itself out immediately if it is flagged as requiring layout...
-                [self.view layoutIfNeeded];
-                // ... which has the same effect.
-            } completion:^(BOOL finished) {
-                if (completion) completion(finished);
-            }];
-        });
-    }
+            // viewDidLayoutSubviews will handle positioning the banner view so that it is visible.
+            // You must not call [self.view layoutSubviews] directly.  However, you can flag the view
+            // as requiring layout...
+            [self.view setNeedsLayout];
+            // ... then ask it to lay itself out immediately if it is flagged as requiring layout...
+            [self.view layoutIfNeeded];
+            // ... which has the same effect.
+        } completion:^(BOOL finished) {
+            if (completion) completion(finished);
+            
+            if (self.adapter) {
+                if (display && [self.adapter respondsToSelector:@selector(bannerDidShow:)]) {
+                    [self.adapter bannerDidShow:self.bannerView];
+                }
+                else if (!display && [self.adapter respondsToSelector:@selector(bannerDidHide:)]) {
+                    [self.adapter bannerDidHide:self.bannerView];
+                }
+            }
+        }];
+    });
 }
 
 

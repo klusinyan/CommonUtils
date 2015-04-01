@@ -24,8 +24,14 @@ extern NSString * const BannerViewActionDidFinish;
 
 @interface CommonBanner : UIViewController
 
+/*!
+ *  @brief  Call this method to start managing banners
+ */
 + (void)startManaging;
 
+/*!
+ *  @brief  Call this method to stop managing banners
+ */
 + (void)stopManaging;
 
 @end

@@ -40,6 +40,16 @@ typedef NS_ENUM(NSInteger, RowType) {
 
 @implementation TestViewController
 
+- (void)bannerDidShow:(ADBannerView *)bannerView
+{
+    
+}
+
+- (void)bannerDidHide:(ADBannerView *)bannerView
+{
+    
+}
+
 - (id)initWithStyle:(UITableViewStyle)style
 {
     self = [super initWithStyle:style];
