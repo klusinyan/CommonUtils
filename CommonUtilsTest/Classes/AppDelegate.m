@@ -25,13 +25,20 @@
     [CommonCrash startManagingCrashes];
     [CommonCrash setCommonCrashDelegate:self];
     
-    TestViewController *rootViewController = [[TestViewController alloc] init];
+    [CommonBanner startManaging];
+    [CommonBanner stopManaging];
+    [CommonBanner startManaging];
+    
+    /*
+    TestViewController *vc = [[TestViewController alloc] init];
+    UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:vc];
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.window.backgroundColor = [UIColor clearColor];
-    self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:rootViewController];
+    self.window.rootViewController = vc;
     [self.window makeKeyAndVisible];
-    
+    //*/
+     
     [Appirater setAppId:@"770699556"];                  //iTunes ID
     [Appirater setDaysUntilPrompt:0];                   //days after first prompt
     [Appirater setUsesUntilPrompt:5];                   //number of times for next visualizzation

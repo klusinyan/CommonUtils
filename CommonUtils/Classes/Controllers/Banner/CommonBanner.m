@@ -9,10 +9,12 @@ NSString * const BannerViewActionDidFinish = @"BannerViewActionDidFinish";
 
 @interface CommonBanner () <ADBannerViewDelegate>
 
-@property (nonatomic, strong) ADBannerView *bannerView;
 @property (nonatomic, strong) UIViewController *contentController;
+@property (nonatomic, strong) ADBannerView *bannerView;
 
-@property (readwrite, nonatomic, assign) id <CommonBannerPrototype> prototype;
+@property (nonatomic) id <CommonBannerAdapter> adapter;
+
+@property (nonatomic, getter=isStopped) BOOL stopped;
 
 @end
 
@@ -20,73 +22,129 @@ NSString * const BannerViewActionDidFinish = @"BannerViewActionDidFinish";
 
 @implementation CommonBanner
 
-- (id)init
-{
-    self = [super init];
-    if (self) {
-        //do something
-    }
-    return self;
-}
-
-+ (instancetype)sharedInstance
++ (CommonBanner *)sharedInstance
 {
     static dispatch_once_t pred = 0;
     __strong static id sharedInstance = nil;
     dispatch_once(&pred, ^{
         sharedInstance = [[self alloc] init];
-        [sharedInstance setupBanner];
     });
     
     return sharedInstance;
 }
 
-- (void)setupBannerLayout
++ (void)startManaging
 {
-    static dispatch_once_t pred = 0;
-    dispatch_once(&pred, ^{
-        [self setupBanner];
-        [self setupBannerController];
-    });
+    @synchronized(self) {
+        static dispatch_once_t pred = 0;
+        dispatch_once(&pred, ^{
+            [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidFinishLaunchingNotification
+                                                              object:nil
+                                                               queue:[NSOperationQueue mainQueue]
+                                                          usingBlock:^(NSNotification *note) {
+                                                              [[self sharedInstance] setup];
+                                                              [[self sharedInstance] start];
+                                                          }];
+        });
+        if ([self sharedInstance].isStopped) {
+            [[self sharedInstance] start];
+        }
+    }
 }
 
-- (void)setupBanner
++ (void)stopManaging
 {
-    // On iOS 6 ADBannerView introduces a new initializer, use it when available.
+    [self sharedInstance].stopped = YES;
+}
+
+- (void)setup
+{
+    //****************SETUP COMMON BANNER****************//
+    self.contentController = [[[UIApplication sharedApplication] keyWindow] rootViewController];
+    [self.view addSubview:self.contentController.view];
+    [self addChildViewController:self.contentController];
+    
+    // switch root view controller
+    [[UIApplication sharedApplication] keyWindow].rootViewController = self;
+    //****************SETUP COMMON BANNER****************//
+    
+    //****************SETUP BANNER VIEW****************//
+    // on iOS 6 ADBannerView introduces a new initializer, use it when available.
     if ([ADBannerView instancesRespondToSelector:@selector(initWithAdType:)]) {
         self.bannerView = [[ADBannerView alloc] initWithAdType:ADAdTypeBanner];
-    } else {
+    }
+    else {
         self.bannerView = [[ADBannerView alloc] init];
     }
-    self.bannerView.delegate = self;
     
+    // add banner to view
     [self.view addSubview:self.bannerView];
 }
 
-- (void)setupBannerController
+- (void)start
 {
-    UIViewController *rootViewController = [[[UIApplication sharedApplication] keyWindow] rootViewController];
-    rootViewController.view.frame = self.view.frame;
-    [self.view addSubview:rootViewController.view];
-    [self addChildViewController:rootViewController];
-    
-    [[UIApplication sharedApplication] keyWindow].rootViewController = self;
+    self.stopped = NO;
+
+    // ready to receive banners
+    self.bannerView.delegate = self;
 }
 
 - (void)loadView
 {
-    self.view = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
-    self.view.backgroundColor = [UIColor whiteColor];
+    // call in case if initialized from XIB
+    [super loadView];
     
-    [self setupBannerLayout];
+    // create view if not initialized from XIB
+    if (self.view == nil) {
+        self.view = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+        self.view.backgroundColor = [UIColor clearColor];
+    }
 }
 
-- (void)viewDidLoad
+#pragma getter/setter
+
+- (void)setStopped:(BOOL)stopped
 {
-    [super viewDidLoad];
-    
-    self.contentController = self.childViewControllers[0];
+    @synchronized(self) {
+        if (stopped) {
+            if ([self.bannerView isBannerLoaded] && [self.adapter canDisplayAds]) {                
+                [self displayBanner:NO completion:^(BOOL finished) {
+                    self.bannerView.delegate = nil;
+                }];
+            }
+        }
+        _stopped = stopped;
+    }
 }
+
+- (void)viewDidLayoutSubviews
+{
+    if (![self.adapter canDisplayAds]) return;
+    
+    CGRect contentFrame = self.view.bounds, bannerFrame = CGRectZero;
+    
+    // All we need to do is ask the banner for a size that fits into the layout area we are using.
+    // At this point in this method contentFrame=self.view.bounds, so we'll use that size for the layout.
+    bannerFrame.size = [self.bannerView sizeThatFits:contentFrame.size];
+    
+    DebugLog(@"adapter [%@] canDisplayAds [%@]", NSStringFromClass([self.adapter class]), [self.adapter canDisplayAds] ? @"Y" : @"N");
+    
+    if (self.bannerView.isBannerLoaded) {
+        contentFrame.size.height -= bannerFrame.size.height;
+        bannerFrame.origin.y = contentFrame.size.height;
+    } else {
+        bannerFrame.origin.y = contentFrame.size.height;
+    }
+    
+    if ([self.adapter shouldCoverContent]) {
+        contentFrame = self.view.bounds;
+    }
+    
+    self.contentController.view.frame = contentFrame;
+    self.bannerView.frame = bannerFrame;
+}
+
+#pragma orientation
 
 - (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation
 {
@@ -98,57 +156,27 @@ NSString * const BannerViewActionDidFinish = @"BannerViewActionDidFinish";
     return [self.contentController supportedInterfaceOrientations];
 }
 
-- (void)viewDidLayoutSubviews
+- (void)displayBanner:(BOOL)display completion:(void (^)(BOOL finished))completion
 {
-    CGRect contentFrame = self.view.bounds, bannerFrame = CGRectZero;
-    
-    // All we need to do is ask the banner for a size that fits into the layout area we are using.
-    // At this point in this method contentFrame=self.view.bounds, so we'll use that size for the layout.
-    bannerFrame.size = [self.bannerView sizeThatFits:contentFrame.size];
-    
-    DebugLog(@"prototype [%@] canDisplayAds [%@]", NSStringFromClass([self.prototype class]), [self.prototype canDisplayAds] ? @"Y" : @"N");
-    
-    BOOL canDisplayAds = YES;
-    if (self.prototype && [self.prototype respondsToSelector:@selector(canDisplayAds)]) {
-        canDisplayAds = [self.prototype canDisplayAds];
+    @synchronized(self.adapter) {
+        //wait a few seconds to other parameters to be set: ex. animated
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.01 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            DebugLog(@"isBannerLoaded=[%@] display=[%@]", self.bannerView.isBannerLoaded ? @"Y" : @"N", display ? @"Y" : @"N");
+            
+            [UIView animateWithDuration:[self.adapter animated] ? 0.25f : 0.0f animations:^{
+                
+                // viewDidLayoutSubviews will handle positioning the banner view so that it is visible.
+                // You must not call [self.view layoutSubviews] directly.  However, you can flag the view
+                // as requiring layout...
+                [self.view setNeedsLayout];
+                // ... then ask it to lay itself out immediately if it is flagged as requiring layout...
+                [self.view layoutIfNeeded];
+                // ... which has the same effect.
+            } completion:^(BOOL finished) {
+                if (completion) completion(finished);
+            }];
+        });
     }
-    
-    if (self.bannerView.isBannerLoaded && canDisplayAds) {
-        contentFrame.size.height -= bannerFrame.size.height;
-        bannerFrame.origin.y = contentFrame.size.height;
-    } else {
-        bannerFrame.origin.y = contentFrame.size.height;
-    }
-    
-    if (self.prototype && [self.prototype respondsToSelector:@selector(shouldResizeContent)]) {
-        if (![self.prototype shouldResizeContent]) {
-            contentFrame = self.view.bounds;
-        }
-    }
-    
-    self.contentController.view.frame = contentFrame;
-    self.bannerView.frame = bannerFrame;
-}
-
-- (void)displayBanner:(BOOL)display
-{
-    DebugLog(@"isBannerLoaded=[%@] display=[%@]", self.bannerView.isBannerLoaded ? @"Y" : @"N", display ? @"Y" : @"N");
-    
-    BOOL animted = YES;
-    if (self.prototype && [self.prototype respondsToSelector:@selector(animated)]) {
-        animted = [self.prototype animated];
-    }
-    
-    [UIView animateWithDuration:animted ? 0.25f : 0.0f animations:^{
-        
-        // viewDidLayoutSubviews will handle positioning the banner view so that it is visible.
-        // You must not call [self.view layoutSubviews] directly.  However, you can flag the view
-        // as requiring layout...
-        [self.view setNeedsLayout];
-        // ... then ask it to lay itself out immediately if it is flagged as requiring layout...
-        [self.view layoutIfNeeded];
-        // ... which has the same effect.
-    }];
 }
 
 
@@ -156,13 +184,13 @@ NSString * const BannerViewActionDidFinish = @"BannerViewActionDidFinish";
 
 - (void)bannerViewDidLoadAd:(ADBannerView *)banner
 {
-    [self displayBanner:YES];
+    [self displayBanner:YES completion:nil];
 }
 
 - (void)bannerView:(ADBannerView *)banner didFailToReceiveAdWithError:(NSError *)error
 {
-    [self displayBanner:NO];
-
+    [self displayBanner:NO completion:nil];
+    
     DebugLog(@"error %@", [error localizedDescription]);
 }
 
@@ -179,8 +207,8 @@ NSString * const BannerViewActionDidFinish = @"BannerViewActionDidFinish";
 
 @end
 
-@implementation UIViewController (Prototype)
-@dynamic canDisplayAds, shouldResizeContent, animated;
+@implementation UIViewController (BannerAdapter)
+@dynamic canDisplayAds, shouldCoverContent, animated;
 
 - (BOOL)canDisplayAds
 {
@@ -191,19 +219,19 @@ NSString * const BannerViewActionDidFinish = @"BannerViewActionDidFinish";
 {
     objc_setAssociatedObject(self, @selector(canDisplayAds), @(canDisplayAds), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     
-    [[CommonBanner sharedInstance] setPrototype:self];
-    
-    [[CommonBanner sharedInstance] displayBanner:canDisplayAds];
+    [[CommonBanner sharedInstance] setAdapter:self];
+
+    [[CommonBanner sharedInstance] displayBanner:canDisplayAds completion:nil];
 }
 
-- (BOOL)shouldResizeContent
+- (BOOL)shouldCoverContent
 {
-    return [objc_getAssociatedObject(self, @selector(shouldResizeContent)) boolValue];
+    return [objc_getAssociatedObject(self, @selector(shouldCoverContent)) boolValue];
 }
 
-- (void)setShouldResizeContent:(BOOL)shouldResizeContent
+- (void)setShouldCoverContent:(BOOL)shouldCoverContent
 {
-    objc_setAssociatedObject(self, @selector(shouldResizeContent), @(shouldResizeContent), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    objc_setAssociatedObject(self, @selector(shouldCoverContent), @(shouldCoverContent), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 - (BOOL)animated
@@ -218,8 +246,8 @@ NSString * const BannerViewActionDidFinish = @"BannerViewActionDidFinish";
 
 @end
 
-@implementation UITableViewController (Prototype)
-@dynamic canDisplayAds, shouldResizeContent, animated;
+@implementation UITableViewController (BannerAdapter)
+@dynamic canDisplayAds, shouldCoverContent, animated;
 
 - (BOOL)canDisplayAds
 {
@@ -230,19 +258,19 @@ NSString * const BannerViewActionDidFinish = @"BannerViewActionDidFinish";
 {
     objc_setAssociatedObject(self, @selector(canDisplayAds), @(canDisplayAds), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     
-    [[CommonBanner sharedInstance] setPrototype:self];
-    
-    [[CommonBanner sharedInstance] displayBanner:canDisplayAds];
+    [[CommonBanner sharedInstance] setAdapter:self];
+
+    [[CommonBanner sharedInstance] displayBanner:canDisplayAds completion:nil];
 }
 
-- (BOOL)shouldResizeContent
+- (BOOL)shouldCoverContent
 {
-    return [objc_getAssociatedObject(self, @selector(shouldResizeContent)) boolValue];
+    return [objc_getAssociatedObject(self, @selector(shouldCoverContent)) boolValue];
 }
 
-- (void)setShouldResizeContent:(BOOL)shouldResizeContent
+- (void)setShouldCoverContent:(BOOL)shouldCoverContent
 {
-    objc_setAssociatedObject(self, @selector(shouldResizeContent), @(shouldResizeContent), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    objc_setAssociatedObject(self, @selector(shouldCoverContent), @(shouldCoverContent), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 - (BOOL)animated

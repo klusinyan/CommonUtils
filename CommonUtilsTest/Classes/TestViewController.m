@@ -32,8 +32,7 @@ typedef NS_ENUM(NSInteger, RowType) {
     RowCount,
 };
 
-@interface TestViewController () <CommonBarcodeDelegate>
-{
+@interface TestViewController () <CommonBarcodeDelegate> {
     CommonBarcodeController *_barcodeReader;
 }
 
@@ -55,8 +54,9 @@ typedef NS_ENUM(NSInteger, RowType) {
     self.title = @"Common Test";
     self.navigationController.navigationBar.translucent = NO;
 
-    self.tableView.rowHeight = 60;
+    self.tableView.rowHeight = 100;
     
+    /*
     [CommonSystem networkInfoWithCompletion:^(NSDictionary *networkInfo) {
         DebugLog(@"networkInfo %@", networkInfo);
     }];
@@ -64,6 +64,7 @@ typedef NS_ENUM(NSInteger, RowType) {
     [CommonSystem networkInfoWithCompletion:^(NSDictionary *networkInfo) {
         DebugLog(@"networkInfo %@", networkInfo);
     }];
+    //*/
     
     //TEST network activity indicator
     [NetworkUtils setNetworkActivityIndicatorVisible:YES];
@@ -86,8 +87,6 @@ typedef NS_ENUM(NSInteger, RowType) {
     [super viewDidAppear:animated];
     
     self.canDisplayAds = YES;
-    self.animated = YES;
-    self.shouldResizeContent = arc4random_uniform(2);
 }
 
 - (void)didReceiveMemoryWarning
@@ -243,7 +242,10 @@ typedef NS_ENUM(NSInteger, RowType) {
         }
         case RowTypeProgressView: {
             ProgressViewController *vc = [[ProgressViewController alloc] init];
-            [self.navigationController pushViewController:vc animated:YES];
+            UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:vc];
+            nc.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+            [self presentViewController:nc animated:YES completion:nil];
+            
             break;
         }
         case RowTypeSplitController: {

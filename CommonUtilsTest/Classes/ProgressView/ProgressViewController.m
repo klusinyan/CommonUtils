@@ -4,6 +4,8 @@
 #import "ProgressViewController.h"
 #import "ProgressView.h"
 
+#import <CommonBanner.h>
+
 @interface ProgressViewController ()
 
 @end
@@ -35,6 +37,20 @@
     //appearance
     progressView.borderColor = [UIColor whiteColor];
     progressView.borderWidth = 2;
+    
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone
+                                                                                           target:self
+                                                                                           action:@selector(dismiss)];
+}
+
+- (void)dismiss
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
 }
 
 @end

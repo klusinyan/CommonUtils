@@ -7,14 +7,14 @@
 extern NSString * const BannerViewActionWillBegin;
 extern NSString * const BannerViewActionDidFinish;
 
-@protocol CommonBannerPrototype <NSObject>
+@protocol CommonBannerAdapter <NSObject>
 
 @required
-@property (readwrite, nonatomic, assign) BOOL canDisplayAds;        // default YES
+@property (readwrite, nonatomic, assign) BOOL canDisplayAds;
 
 @optional
-@property (readwrite, nonatomic, assign) BOOL shouldResizeContent;  // default YES
-@property (readwrite, nonatomic, assign) BOOL animated;             // default YES
+@property (readwrite, nonatomic, assign) BOOL shouldCoverContent;
+@property (readwrite, nonatomic, assign) BOOL animated;             
 
 @optional
 - (void)bannerDidShow:(ADBannerView *)bannerView;
@@ -24,12 +24,16 @@ extern NSString * const BannerViewActionDidFinish;
 
 @interface CommonBanner : UIViewController
 
++ (void)startManaging;
+
++ (void)stopManaging;
+
 @end
 
-@interface UIViewController (Prototype) <CommonBannerPrototype>
+@interface UIViewController (BannerAdapter) <CommonBannerAdapter>
 
 @end
 
-@interface UITableViewController (Prototype) <CommonBannerPrototype>
+@interface UITableViewController (BannerAdapter) <CommonBannerAdapter>
 
 @end
