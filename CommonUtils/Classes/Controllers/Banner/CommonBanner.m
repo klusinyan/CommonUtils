@@ -4,6 +4,8 @@
 #import "CommonBanner.h"
 #import <objc/runtime.h>
 
+NSString * const CommonBannerDidCompleteSetup = @"CommonBannerDidCompleteSetup";
+
 @interface CommonBanner () <ADBannerViewDelegate>
 
 @property (nonatomic, strong) UIViewController *contentController;
@@ -68,6 +70,9 @@
 {
     //****************SETUP COMMON BANNER****************//
     self.contentController = [[[UIApplication sharedApplication] keyWindow] rootViewController];
+    if ([self.contentController isKindOfClass:[UINavigationController class]]) {
+        self.bannerPosition = CommonBannerPositionBottom;
+    }
     [self.view addSubview:self.contentController.view];
     [self addChildViewController:self.contentController];
     
@@ -86,6 +91,9 @@
     
     // add banner to view
     [self.view addSubview:self.bannerView];
+    
+    // setup did compete
+    [[NSNotificationCenter defaultCenter] postNotificationName:CommonBannerDidCompleteSetup object:nil];
 }
 
 - (void)start

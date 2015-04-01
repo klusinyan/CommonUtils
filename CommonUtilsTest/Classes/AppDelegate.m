@@ -31,7 +31,7 @@
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.window.backgroundColor = [UIColor clearColor];
-    self.window.rootViewController = nc;
+    self.window.rootViewController = vc;
     [self.window makeKeyAndVisible];
     //*/
      

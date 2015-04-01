@@ -4,6 +4,8 @@
 #import <UIKit/UIKit.h>
 #import <iAd/iAd.h>
 
+extern NSString * const CommonBannerDidCompleteSetup;
+
 typedef NS_ENUM(NSInteger, CommonBannerPosition) {
     CommonBannerPositionBottom=0,
     CommonBannerPositionTop
@@ -41,8 +43,10 @@ typedef NS_ENUM(NSInteger, CommonBannerPosition) {
 /*!
  *  @brief  Call this method to set banner position
  *
- *  @param bannerPosition set type defined by CommonBannerPosition, default value is CommonBannerPositionBottom
- *  @warning setup once
+ *  @param bannerPosition Default value is CommonBannerPositionBottom.
+ *  @warning Setup once
+ *  @warning If window.rootViewController is kind of UINavigationController class then banner position forced to CommonBannerPositionBottom
+ *  for usability issues.
  */
 + (void)setBannerPosition:(CommonBannerPosition)bannerPosition;
 
