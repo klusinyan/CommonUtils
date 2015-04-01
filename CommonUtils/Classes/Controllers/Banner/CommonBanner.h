@@ -4,9 +4,6 @@
 #import <UIKit/UIKit.h>
 #import <iAd/iAd.h>
 
-extern NSString * const BannerViewActionWillBegin;
-extern NSString * const BannerViewActionDidFinish;
-
 @protocol CommonBannerAdapter <NSObject>
 
 @required
@@ -17,8 +14,10 @@ extern NSString * const BannerViewActionDidFinish;
 @property (readwrite, nonatomic, assign) BOOL animated;             
 
 @optional
-- (void)bannerDidShow:(ADBannerView *)bannerView;
-- (void)bannerDidHide:(ADBannerView *)bannerView;
+- (void)bannerViewDidLoadAd:(ADBannerView *)banner;
+- (void)bannerView:(ADBannerView *)banner didFailToReceiveAdWithError:(NSError *)error;
+- (BOOL)bannerViewActionShouldBegin:(ADBannerView *)banner willLeaveApplication:(BOOL)willLeave;
+- (void)bannerViewActionDidFinish:(ADBannerView *)banner;
 
 @end
 

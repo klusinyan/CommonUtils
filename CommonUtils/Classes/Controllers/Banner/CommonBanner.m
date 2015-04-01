@@ -4,9 +4,6 @@
 #import "CommonBanner.h"
 #import <objc/runtime.h>
 
-NSString * const BannerViewActionWillBegin = @"BannerViewActionWillBegin";
-NSString * const BannerViewActionDidFinish = @"BannerViewActionDidFinish";
-
 @interface CommonBanner () <ADBannerViewDelegate>
 
 @property (nonatomic, strong) UIViewController *contentController;
@@ -173,15 +170,6 @@ NSString * const BannerViewActionDidFinish = @"BannerViewActionDidFinish";
             // ... which has the same effect.
         } completion:^(BOOL finished) {
             if (completion) completion(finished);
-            
-            if (self.adapter) {
-                if (display && [self.adapter respondsToSelector:@selector(bannerDidShow:)]) {
-                    [self.adapter bannerDidShow:self.bannerView];
-                }
-                else if (!display && [self.adapter respondsToSelector:@selector(bannerDidHide:)]) {
-                    [self.adapter bannerDidHide:self.bannerView];
-                }
-            }
         }];
     });
 }
@@ -192,24 +180,35 @@ NSString * const BannerViewActionDidFinish = @"BannerViewActionDidFinish";
 - (void)bannerViewDidLoadAd:(ADBannerView *)banner
 {
     [self displayBanner:YES completion:nil];
+    
+    if (self.adapter && [self.adapter respondsToSelector:@selector(bannerViewDidLoadAd:)]) {
+        [self.adapter bannerViewDidLoadAd:banner];
+    }
 }
 
 - (void)bannerView:(ADBannerView *)banner didFailToReceiveAdWithError:(NSError *)error
 {
     [self displayBanner:NO completion:nil];
     
-    DebugLog(@"error %@", [error localizedDescription]);
+    if (self.adapter && [self.adapter respondsToSelector:@selector(bannerView:didFailToReceiveAdWithError:)]) {
+        [self.adapter bannerView:banner didFailToReceiveAdWithError:error];
+    }
 }
 
 - (BOOL)bannerViewActionShouldBegin:(ADBannerView *)banner willLeaveApplication:(BOOL)willLeave
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:BannerViewActionWillBegin object:self];
+    if (self.adapter && [self.adapter respondsToSelector:@selector(bannerViewActionShouldBegin:willLeaveApplication:)]) {
+        [self.adapter bannerViewActionShouldBegin:banner willLeaveApplication:willLeave];
+    }
+    
     return YES;
 }
 
 - (void)bannerViewActionDidFinish:(ADBannerView *)banner
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:BannerViewActionDidFinish object:self];
+    if (self.adapter && [self.adapter respondsToSelector:@selector(bannerViewActionDidFinish:)]) {
+        [self.adapter bannerViewActionDidFinish:banner];
+    }
 }
 
 @end
