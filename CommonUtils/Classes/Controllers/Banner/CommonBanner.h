@@ -42,6 +42,7 @@ typedef NS_ENUM(NSInteger, CommonBannerPosition) {
  *  @brief  Call this method to set banner position
  *
  *  @param bannerPosition set type defined by CommonBannerPosition, default value is CommonBannerPositionBottom
+ *  @warning setup once
  */
 + (void)setBannerPosition:(CommonBannerPosition)bannerPosition;
 

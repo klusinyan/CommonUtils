@@ -108,6 +108,7 @@
     }
 }
 
+
 #pragma getter/setter
 
 - (void)setStopped:(BOOL)stopped
@@ -163,6 +164,7 @@
     self.bannerView.frame = bannerFrame;
 }
 
+
 #pragma orientation
 
 - (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation
@@ -213,6 +215,7 @@
 
 - (void)bannerView:(ADBannerView *)banner didFailToReceiveAdWithError:(NSError *)error
 {
+    // optimization: not called viewDidLayoutSubview if banner receiving did fail
     if (self.isDisplayed) {
         [self displayBanner:NO completion:nil];
     }
