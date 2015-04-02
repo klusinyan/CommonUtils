@@ -95,6 +95,10 @@
 		9CE7A8A719542CCF00E699E4 /* DirectoryUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CE7A8A519542CCF00E699E4 /* DirectoryUtils.h */; };
 		9CE7A8A819542CCF00E699E4 /* DirectoryUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CE7A8A619542CCF00E699E4 /* DirectoryUtils.m */; };
 		9CF9663818FD3ADC00E265A1 /* CallBackProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CF9663618FD3ADC00E265A1 /* CallBackProtocol.h */; };
+		9CFDEC781ACD30F0001D1E62 /* CommonGameCenter.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CFDEC761ACD30F0001D1E62 /* CommonGameCenter.h */; };
+		9CFDEC791ACD30F0001D1E62 /* CommonGameCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CFDEC771ACD30F0001D1E62 /* CommonGameCenter.m */; };
+		9CFDEC811ACD31DF001D1E62 /* CommonSerilizer.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CFDEC7F1ACD31DF001D1E62 /* CommonSerilizer.h */; };
+		9CFDEC821ACD31DF001D1E62 /* CommonSerilizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CFDEC801ACD31DF001D1E62 /* CommonSerilizer.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -195,6 +199,10 @@
 		9CE7A8A519542CCF00E699E4 /* DirectoryUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DirectoryUtils.h; sourceTree = "<group>"; };
 		9CE7A8A619542CCF00E699E4 /* DirectoryUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DirectoryUtils.m; sourceTree = "<group>"; };
 		9CF9663618FD3ADC00E265A1 /* CallBackProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CallBackProtocol.h; sourceTree = "<group>"; };
+		9CFDEC761ACD30F0001D1E62 /* CommonGameCenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonGameCenter.h; sourceTree = "<group>"; };
+		9CFDEC771ACD30F0001D1E62 /* CommonGameCenter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonGameCenter.m; sourceTree = "<group>"; };
+		9CFDEC7F1ACD31DF001D1E62 /* CommonSerilizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonSerilizer.h; sourceTree = "<group>"; };
+		9CFDEC801ACD31DF001D1E62 /* CommonSerilizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonSerilizer.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -524,6 +532,8 @@
 		9CB81FD718FD375300C918FB /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				9CFDEC7E1ACD31DF001D1E62 /* Serilizer */,
+				9CFDEC751ACD30C4001D1E62 /* GameCenter */,
 				9C42A7361AC9975600DD524F /* Crash */,
 				9CD9F75C196E876000EBBD85 /* Lib-Prefix.pch */,
 				9C5ADFEB1AA4A37C00CD5215 /* Animations */,
@@ -633,6 +643,24 @@
 			path = Categories;
 			sourceTree = "<group>";
 		};
+		9CFDEC751ACD30C4001D1E62 /* GameCenter */ = {
+			isa = PBXGroup;
+			children = (
+				9CFDEC761ACD30F0001D1E62 /* CommonGameCenter.h */,
+				9CFDEC771ACD30F0001D1E62 /* CommonGameCenter.m */,
+			);
+			path = GameCenter;
+			sourceTree = "<group>";
+		};
+		9CFDEC7E1ACD31DF001D1E62 /* Serilizer */ = {
+			isa = PBXGroup;
+			children = (
+				9CFDEC7F1ACD31DF001D1E62 /* CommonSerilizer.h */,
+				9CFDEC801ACD31DF001D1E62 /* CommonSerilizer.m */,
+			);
+			path = Serilizer;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -664,6 +692,8 @@
 				9CB4800D19558E8400A5AC1B /* UIColor+Utils.h in Headers */,
 				9C20BE5B1949EF830077C6E8 /* ADVAnimationController.h in Headers */,
 				9C2AC5E119EA96F900588538 /* CommonProgress.h in Headers */,
+				9CFDEC781ACD30F0001D1E62 /* CommonGameCenter.h in Headers */,
+				9CFDEC811ACD31DF001D1E62 /* CommonSerilizer.h in Headers */,
 				9C90FF6B19377DEC004CE056 /* NSDate+Utils.h in Headers */,
 				9C94A99119EBC911003DF554 /* CommonSegmentedViewController.h in Headers */,
 				9C42A7391AC9975600DD524F /* CommonCrash.h in Headers */,
@@ -759,6 +789,7 @@
 				9CCB62DF19ED156F0061D0C1 /* CommonSystem.m in Sources */,
 				9C8C0AFE1934A1800033D2A9 /* UIImage+RoundedCorner.m in Sources */,
 				9C8C0AFF1934A1830033D2A9 /* UIImage+FixOrientation.m in Sources */,
+				9CFDEC821ACD31DF001D1E62 /* CommonSerilizer.m in Sources */,
 				9CB1FC9C19759B960080534F /* SegmentedViewController.m in Sources */,
 				9CE7A8A819542CCF00E699E4 /* DirectoryUtils.m in Sources */,
 				9C20BE5D1949EF830077C6E8 /* DropAnimationController.m in Sources */,
@@ -768,6 +799,7 @@
 				9CBCB45A1A079EBC00E6BC7C /* NetworkUtils.m in Sources */,
 				9C01922019D2CC0300E8E9E3 /* BlurView.m in Sources */,
 				9C2AC5E219EA96F900588538 /* CommonProgress.m in Sources */,
+				9CFDEC791ACD30F0001D1E62 /* CommonGameCenter.m in Sources */,
 				9C90FF6219374DD3004CE056 /* UITableView+Utils.m in Sources */,
 				9C42A7351AC98D2600DD524F /* CommonBanner.m in Sources */,
 				9C8C0AFD1934A17C0033D2A9 /* UIImage+Alpha.m in Sources */,
