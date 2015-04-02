@@ -124,6 +124,12 @@ static void handleSignal(int signal)
     return self;
 }
 
+// start managing crashes always
++ (void)load
+{
+    [self startManagingCrashes];
+}
+
 + (CommonCrash *)sharedInstance
 {
     static CommonCrash *instance = nil;
@@ -134,7 +140,6 @@ static void handleSignal(int signal)
     
     return instance;
 }
-
 
 + (void)setCommonCrashDelegate:(id<CommonCrashDelegate>)delegate
 {
@@ -192,19 +197,22 @@ static void handleSignal(int signal)
 
 - (void)handleException:(NSException *)exception
 {
-    NSString *info = [NSString stringWithFormat:@"Date:%@\nApp: %@\nVersion: %@\n%@: %@\%@",
-                      [NSDate date],
-                      [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleName"],
-                      [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"],
-                      [exception name],
-                      [exception reason],
-                      [exception callStackSymbols]];
+    NSString *crashInfo = [NSString stringWithFormat:@"Date:%@\nApp: %@\nVersion: %@\n%@: %@\%@",
+                           [NSDate date],
+                           [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleName"],
+                           [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"],
+                           [exception name],
+                           [exception reason],
+                           [exception callStackSymbols]];
     
     if (errorReportPath != nil) {
-        [info writeToFile:errorReportPath atomically:YES encoding:NSUTF8StringEncoding error:nil];
+        [crashInfo writeToFile:errorReportPath atomically:YES encoding:NSUTF8StringEncoding error:nil];
     }
     
-    [self.delegate crashWithExceptionInfo:info];
+    [self.delegate crashWithExceptionInfo:crashInfo];
+    
+    // log crash info always
+    NSLog(@"%@", crashInfo);
 }
 
 @end

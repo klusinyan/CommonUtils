@@ -17,15 +17,15 @@
 
 - (void)crashWithExceptionInfo:(NSString *)info
 {
-    DebugLog(@"info %@", info);
+//    DebugLog(@"info %@", info);
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    [CommonCrash startManagingCrashes];
-    [CommonCrash setCommonCrashDelegate:self];
+//    [CommonCrash startManagingCrashes];
+//    [CommonCrash setCommonCrashDelegate:self];
     
-    ///*
+    /*
     TestViewController *vc = [[TestViewController alloc] init];
     UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:vc];
     
@@ -44,7 +44,7 @@
     [Appirater appLaunched:YES];                        //start launching rater
     
     [CommonBanner startManaging];
-    [CommonBanner setBannerPosition:CommonBannerPositionTop];
+//    [CommonBanner setBannerPosition:CommonBannerPositionTop];
 
     return YES;
 }
