@@ -23,6 +23,11 @@ NSString * const CommonBannerDidCompleteSetup = @"CommonBannerDidCompleteSetup";
 
 @implementation CommonBanner
 
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 + (CommonBanner *)sharedInstance
 {
     static dispatch_once_t pred = 0;
@@ -45,6 +50,14 @@ NSString * const CommonBannerDidCompleteSetup = @"CommonBannerDidCompleteSetup";
                                                           usingBlock:^(NSNotification *note) {
                                                               [[self sharedInstance] setup];
                                                               [[self sharedInstance] start];
+                                                          }];
+            [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillEnterForegroundNotification
+                                                              object:nil
+                                                               queue:[NSOperationQueue mainQueue]
+                                                          usingBlock:^(NSNotification *note) {
+                                                              if (![self sharedInstance].bannerView.isBannerLoaded) {
+                                                                  [[self sharedInstance] displayBanner:NO completion:nil];
+                                                              }
                                                           }];
         });
         if ([self sharedInstance].isStopped) {
