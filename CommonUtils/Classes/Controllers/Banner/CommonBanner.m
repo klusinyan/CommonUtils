@@ -13,6 +13,7 @@ NSString * const CommonBannerDidCompleteSetup = @"CommonBannerDidCompleteSetup";
 
 @property (nonatomic, getter=isDisplayed) BOOL displayed;
 @property (nonatomic, getter=isStopped) BOOL stopped;
+@property (nonatomic, getter=isForcedHidden) BOOL forceHide;
 
 @property (nonatomic) id <CommonBannerAdapter> adapter;
 @property (nonatomic) CommonBannerPosition bannerPosition;
@@ -51,13 +52,19 @@ NSString * const CommonBannerDidCompleteSetup = @"CommonBannerDidCompleteSetup";
                                                               [[self sharedInstance] setup];
                                                               [[self sharedInstance] start];
                                                           }];
+            [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidEnterBackgroundNotification
+                                                              object:nil
+                                                               queue:[NSOperationQueue mainQueue]
+                                                          usingBlock:^(NSNotification *note) {
+                                                              [[self sharedInstance] setForceHide:YES];
+                                                              [[self sharedInstance] displayBanner:NO completion:nil];
+                                                          }];
             [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillEnterForegroundNotification
                                                               object:nil
                                                                queue:[NSOperationQueue mainQueue]
                                                           usingBlock:^(NSNotification *note) {
-                                                              if (![self sharedInstance].bannerView.isBannerLoaded) {
-                                                                  [[self sharedInstance] displayBanner:NO completion:nil];
-                                                              }
+                                                              [[self sharedInstance] setForceHide:NO];
+                                                              [[self sharedInstance] displayBanner:YES completion:nil];
                                                           }];
         });
         if ([self sharedInstance].isStopped) {
@@ -156,7 +163,7 @@ NSString * const CommonBannerDidCompleteSetup = @"CommonBannerDidCompleteSetup";
     
     DebugLog(@"adapter [%@] canDisplayAds [%@]", NSStringFromClass([self.adapter class]), [self.adapter canDisplayAds] ? @"Y" : @"N");
     
-    if (self.bannerView.isBannerLoaded && [self.adapter canDisplayAds]) {
+    if (self.bannerView.isBannerLoaded && [self.adapter canDisplayAds] && !self.isForcedHidden) {
         if (self.bannerPosition == CommonBannerPositionBottom) {
             contentFrame.size.height -= bannerFrame.size.height;
             bannerFrame.origin.y = contentFrame.size.height;
