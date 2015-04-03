@@ -33,39 +33,6 @@ typedef void(^CompletionWhenGameViewControllerDisappeared)(void);
 
 @implementation CommonGameCenter
 
-- (void)dealloc
-{
-    [self removeObservers];
-}
-
-- (void)addObservers
-{
-    /*
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(authenticationDidChange:)
-                                                 name:GKPlayerAuthenticationDidChangeNotificationName
-                                               object:nil];
-    //*/
-
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(applicationWillEnterForeground:)
-                                                 name:UIApplicationWillEnterForegroundNotification
-                                               object:nil];
-}
-
-- (void)removeObservers
-{
-    /*
-    [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                    name:GKPlayerAuthenticationDidChangeNotificationName
-                                                  object:nil];
-    //*/
-    
-    [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                    name:UIApplicationWillEnterForegroundNotification
-                                                  object:nil];
-}
-
 - (id)init
 {
     self = [super init];
@@ -92,12 +59,18 @@ typedef void(^CompletionWhenGameViewControllerDisappeared)(void);
 
 + (void)startWithCompletion:(void (^)(BOOL authenticated, NSError *error))completion
 {
-    [[self sharedInstance] startWithCompletion:completion];
+    static dispatch_once_t pred = 0;
+    dispatch_once(&pred, ^{
+        [[self sharedInstance] startWithCompletion:completion];
+    });
 }
 
 + (void)stopWithCompletion:(void (^)(void))completion
 {
-    [[self sharedInstance] stopWithCompletion:completion];
+    static dispatch_once_t pred = 0;
+    dispatch_once(&pred, ^{
+        [[self sharedInstance] stopWithCompletion:completion];
+    });
 }
 
 + (BOOL)userAuthenticated
@@ -145,14 +118,10 @@ typedef void(^CompletionWhenGameViewControllerDisappeared)(void);
 - (void)startWithCompletion:(void (^)(BOOL authenticated, NSError *error))completion
 {
     [self startAuthenticationWithCompletion:completion];
-
-    [self addObservers];
 }
 
 - (void)stopWithCompletion:(void (^)(void))completion
 {
-    [self removeObservers];
-    
     if (completion) completion();
 }
 
@@ -239,52 +208,54 @@ typedef void(^CompletionWhenGameViewControllerDisappeared)(void);
     __block NSInteger syncCount = 0;
     
     for (int i = 0; i < [self.leaderboards count]; i++) {
-        GKLeaderboard *leaderboard = [self.leaderboards objectAtIndex:i];
-        DebugLog(@"start sync leaderboard at index=[%@]", @(i));
-        [leaderboard loadScoresWithCompletionHandler:^(NSArray *scores, NSError *error) {
-            if (error) {
-                [self synchronizationDidFinish];
-            }
-            else {
-                //if local score exists
-                if ([self.scores objectForKey:leaderboard.identifier]) {
-                    GKScore *local = [self.scores objectForKey:leaderboard.identifier];
-                    //if remote score exists
-                    if (leaderboard.localPlayerScore) {
-                        //if remote score higher than local score then save it
-                        if (leaderboard.localPlayerScore.value > local.value) {
-                            [self.scores setObject:leaderboard.localPlayerScore forKeyedSubscript:leaderboard.identifier];
-                            [CommonSerilizer saveObject:self.scores forKey:keyScores];
+        @autoreleasepool {
+            GKLeaderboard *leaderboard = [self.leaderboards objectAtIndex:i];
+            DebugLog(@"start sync leaderboard at index=[%@]", @(i));
+            [leaderboard loadScoresWithCompletionHandler:^(NSArray *scores, NSError *error) {
+                if (error) {
+                    [self synchronizationDidFinish];
+                }
+                else {
+                    //if local score exists
+                    if ([self.scores objectForKey:leaderboard.identifier]) {
+                        GKScore *local = [self.scores objectForKey:leaderboard.identifier];
+                        //if remote score exists
+                        if (leaderboard.localPlayerScore) {
+                            //if remote score higher than local score then save it
+                            if (leaderboard.localPlayerScore.value > local.value) {
+                                [self.scores setObject:leaderboard.localPlayerScore forKeyedSubscript:leaderboard.identifier];
+                                [CommonSerilizer saveObject:self.scores forKey:keyScores];
+                            }
+                            //if local score higher than remote score then send it
+                            else if (leaderboard.localPlayerScore.value < local.value) {
+                                GKScore *remote = [[GKScore alloc] initWithLeaderboardIdentifier:leaderboard.identifier];
+                                remote.value = local.value;
+                                [GKScore reportScores:@[remote] withCompletionHandler:^(NSError *error) {
+                                    DebugLog(@"Uploading score did finish with error %@", [error localizedDescription]);
+                                }];
+                            }
                         }
-                        //if local score higher than remote score then send it
-                        else if (leaderboard.localPlayerScore.value < local.value) {
-                            GKScore *remote = [[GKScore alloc] initWithLeaderboardIdentifier:leaderboard.identifier];
-                            remote.value = local.value;
-                            [GKScore reportScores:@[remote] withCompletionHandler:^(NSError *error) {
-                                DebugLog(@"Uploading score did finish with error %@", [error localizedDescription]);
-                            }];
+                        
+                        DebugLog(@"finish sync leaderboard at index=[%@]", @(i));
+                        syncCount++;
+                        if (syncCount == [self.leaderboards count]) {
+                            [self synchronizationDidFinish];
                         }
                     }
-                    
-                    DebugLog(@"finish sync leaderboard at index=[%@]", @(i));
-                    syncCount++;
-                    if (syncCount == [self.leaderboards count]) {
-                        [self synchronizationDidFinish];
+                    //if local score does not exists and it remote score exists then save it
+                    else if (leaderboard.localPlayerScore) {
+                        [self.scores setObject:leaderboard.localPlayerScore forKey:leaderboard.identifier];
+                        [CommonSerilizer saveObject:self.scores forKey:keyScores];
+                        
+                        DebugLog(@"finish sync leaderboard at index=[%@]", @(i));
+                        syncCount++;
+                        if (syncCount == [self.leaderboards count]) {
+                            [self synchronizationDidFinish];
+                        }
                     }
                 }
-                //if local score does not exists and it remote score exists then save it
-                else if (leaderboard.localPlayerScore) {
-                    [self.scores setObject:leaderboard.localPlayerScore forKey:leaderboard.identifier];
-                    [CommonSerilizer saveObject:self.scores forKey:keyScores];
-                    
-                    DebugLog(@"finish sync leaderboard at index=[%@]", @(i));
-                    syncCount++;
-                    if (syncCount == [self.leaderboards count]) {
-                        [self synchronizationDidFinish];
-                    }
-                }
-            }
-        }];
+            }];
+        }
     }
 }
 
@@ -382,15 +353,6 @@ typedef void(^CompletionWhenGameViewControllerDisappeared)(void);
     [gameCenterViewController dismissViewControllerAnimated:YES completion:^{
         if (self.controllerDismissed) self.controllerDismissed();
     }];
-}
-
-#pragma notification
-
-- (void)applicationWillEnterForeground:(NSNotification *)notification
-{
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self startWithCompletion:nil];
-    });
 }
 
 - (void)synchronizationWillStart
