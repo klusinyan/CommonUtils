@@ -216,17 +216,17 @@ typedef void(^CompletionWhenGameViewControllerDisappeared)(void);
                     [self synchronizationDidFinish];
                 }
                 else {
-                    //if local score exists
+                    // if local score exists
                     if ([self.scores objectForKey:leaderboard.identifier]) {
                         GKScore *local = [self.scores objectForKey:leaderboard.identifier];
-                        //if remote score exists
+                        // if remote score exists
                         if (leaderboard.localPlayerScore) {
                             //if remote score higher than local score then save it
                             if (leaderboard.localPlayerScore.value > local.value) {
                                 [self.scores setObject:leaderboard.localPlayerScore forKeyedSubscript:leaderboard.identifier];
                                 [CommonSerilizer saveObject:self.scores forKey:keyScores];
                             }
-                            //if local score higher than remote score then send it
+                            // if local score higher than remote score then send it
                             else if (leaderboard.localPlayerScore.value < local.value) {
                                 GKScore *remote = [[GKScore alloc] initWithLeaderboardIdentifier:leaderboard.identifier];
                                 remote.value = local.value;
@@ -242,7 +242,7 @@ typedef void(^CompletionWhenGameViewControllerDisappeared)(void);
                             [self synchronizationDidFinish];
                         }
                     }
-                    //if local score does not exists and it remote score exists then save it
+                    // if local score does not exists and it remote score exists then save it
                     else if (leaderboard.localPlayerScore) {
                         [self.scores setObject:leaderboard.localPlayerScore forKey:leaderboard.identifier];
                         [CommonSerilizer saveObject:self.scores forKey:keyScores];
@@ -252,6 +252,10 @@ typedef void(^CompletionWhenGameViewControllerDisappeared)(void);
                         if (syncCount == [self.leaderboards count]) {
                             [self synchronizationDidFinish];
                         }
+                    }
+                    else {
+                        // proceed in any case
+                        [self synchronizationDidFinish];
                     }
                 }
             }];
