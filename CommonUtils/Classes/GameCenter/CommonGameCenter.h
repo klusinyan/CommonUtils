@@ -5,6 +5,7 @@
 
 extern NSString * const NotificationGameCenterWillStartSynchronizing;
 extern NSString * const NotificationGameCenterDidFinishSynchronizing;
+extern NSString * const NotificationGameCenterLocalPlayerDidChange;
 
 @interface CommonGameCenter : NSObject
 

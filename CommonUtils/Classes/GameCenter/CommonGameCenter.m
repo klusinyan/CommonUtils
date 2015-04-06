@@ -12,6 +12,9 @@ typedef NS_ENUM(NSInteger, GameCenterRequestChoice) {
 
 NSString * const NotificationGameCenterWillStartSynchronizing = @"NotificationGameCenterWillStartSynchronizing";
 NSString * const NotificationGameCenterDidFinishSynchronizing = @"NotificationGameCenterDidFinishSynchronizing";
+NSString * const NotificationGameCenterLocalPlayerDidChange   = @"NotificationGameCenterLocalPlayerDidChange";
+
+#define kUnsignedPlayerID @"unsignedPlayer"
 
 #define keyPlayerScores @"playerScores"
 #define keyGameCenterRequestChoice @"gameCenterRequestChoice"
@@ -35,9 +38,13 @@ typedef void(^CompletionWhenGameViewControllerDisappeared)(void);
 @property (nonatomic, copy) CompletionWhenGameViewControllerDisappeared controllerDismissed;
 @property (nonatomic) id target;
 
+// volatile variable saves local player's ID
+@property (nonatomic, copy) NSString *localPlayerID;
+
 @end
 
 @implementation CommonGameCenter
+@synthesize localPlayerID = _localPlayerID;
 
 - (id)init
 {
@@ -58,20 +65,35 @@ typedef void(^CompletionWhenGameViewControllerDisappeared)(void);
 
 - (NSString *)localPlayerID
 {
-    if ([GKLocalPlayer localPlayer].isAuthenticated) {
-        return [GKLocalPlayer localPlayer].playerID;
+    if (_localPlayerID == nil) {
+        _localPlayerID = kUnsignedPlayerID;
     }
-    return @"unsingnedPlayer";
+    return _localPlayerID;
+}
+
+- (NSMutableDictionary *)scores
+{
+    if (_scores == nil) {
+        _scores = [NSMutableDictionary dictionary];
+    }
+    return _scores;
 }
 
 - (void)playerDidChange:(NSNotification *)notification
 {
-    self.scores = [self.playerScores objectForKey:[self localPlayerID]];
-    if (self.scores == nil) {
-        self.scores = [NSMutableDictionary dictionary];
+    NSString *playerID = [[notification object] playerID];
+    
+    if ((playerID != nil && [self.localPlayerID isEqualToString:kUnsignedPlayerID]) ||
+        (playerID == nil && ![self.localPlayerID isEqualToString:kUnsignedPlayerID])) {
+        
+        // send notification when local player did change
+        [[NSNotificationCenter defaultCenter] postNotificationName:NotificationGameCenterLocalPlayerDidChange object:nil];
     }
     
-    [self synchronizeLeaderboards];
+    // save new player
+    self.localPlayerID = playerID;
+    
+    self.scores = [self.playerScores objectForKey:[self localPlayerID]];
 }
 
 #pragma public methods
