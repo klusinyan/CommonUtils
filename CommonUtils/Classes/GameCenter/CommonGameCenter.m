@@ -51,7 +51,7 @@ typedef void(^CompletionWhenGameViewControllerDisappeared)(void);
     self = [super init];
     if (self) {
         self.playerScores = [CommonSerilizer loadObjectForKey:keyPlayerScores];
-        if (!self.playerScores) {
+        if (self.playerScores == nil) {
             self.playerScores = [NSMutableDictionary dictionary];
         }
         
@@ -75,6 +75,11 @@ typedef void(^CompletionWhenGameViewControllerDisappeared)(void);
 {
     if (_scores == nil) {
         _scores = [NSMutableDictionary dictionary];
+        if ([self.playerScores objectForKey:[self localPlayerID]] != nil) {
+            _scores = [self.playerScores objectForKey:[self localPlayerID]];
+        }
+        [self.playerScores setObject:_scores forKey:[self localPlayerID]];
+        [CommonSerilizer saveObject:self.playerScores forKey:keyPlayerScores];
     }
     return _scores;
 }
@@ -89,11 +94,12 @@ typedef void(^CompletionWhenGameViewControllerDisappeared)(void);
         // send notification when local player did change
         [[NSNotificationCenter defaultCenter] postNotificationName:NotificationGameCenterLocalPlayerDidChange object:nil];
     }
-    
+
     // save new player
     self.localPlayerID = playerID;
-    
-    self.scores = [self.playerScores objectForKey:[self localPlayerID]];
+
+    // reset all scores for previous player
+    self.scores = nil;
 }
 
 #pragma public methods
@@ -180,13 +186,13 @@ typedef void(^CompletionWhenGameViewControllerDisappeared)(void);
 {
     [self authenticateUserWithCompletion:^(UIViewController *viewController, NSError *error) {
         if (viewController) {   //needs login to game center
-
+            
             /*
-            [[self rootViewController] presentViewController:self.viewController
-                                                    animated:YES
-                                                  completion:nil];
-
-            //*/
+             [[self rootViewController] presentViewController:self.viewController
+             animated:YES
+             completion:nil];
+             
+             //*/
             
             //**********************HANDLE USER ACCESS TO GAMECENTER ACCOUNT**********************//
             self.viewController = viewController;
@@ -199,7 +205,7 @@ typedef void(^CompletionWhenGameViewControllerDisappeared)(void);
             }
             [self askForGameCenterAccess];
             //**********************HANDLE USER ACCESS TO GAMECENTER ACCOUNT**********************//
-
+            
             if (completion) completion(NO, error);
         }
         else if (!error && [GKLocalPlayer localPlayer].isAuthenticated) {
@@ -214,7 +220,7 @@ typedef void(^CompletionWhenGameViewControllerDisappeared)(void);
 }
 
 - (void)authenticateUserWithCompletion:(void (^)(UIViewController *viewController, NSError *error))completion
-{   
+{
     GKLocalPlayer *localPlayer = [GKLocalPlayer localPlayer];
     if (localPlayer.authenticated == NO) {
         [localPlayer setAuthenticateHandler:^(UIViewController *viewController, NSError *error) {
