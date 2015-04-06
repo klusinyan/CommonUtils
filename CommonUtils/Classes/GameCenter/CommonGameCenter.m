@@ -13,7 +13,7 @@ typedef NS_ENUM(NSInteger, GameCenterRequestChoice) {
 NSString * const NotificationGameCenterWillStartSynchronizing = @"NotificationGameCenterWillStartSynchronizing";
 NSString * const NotificationGameCenterDidFinishSynchronizing = @"NotificationGameCenterDidFinishSynchronizing";
 
-#define keyScores @"scores"
+#define keyPlayerScores @"playerScores"
 #define keyGameCenterRequestChoice @"gameCenterRequestChoice"
 
 typedef void(^CompletionWhenGameViewControllerDisappeared)(void);
@@ -23,8 +23,14 @@ typedef void(^CompletionWhenGameViewControllerDisappeared)(void);
 @property (nonatomic, strong) NSArray *leaderboards;
 @property (nonatomic, assign) UIViewController *viewController;
 
-//key:      (GK)Leaderboard.identifier
-//value:    (GK)Score.value
+// persistent
+// key:      (NSString)playerId
+// value:    (NSDictionary)scores
+@property (nonatomic, strong) NSMutableDictionary *playerScores;
+
+// volatile
+// key:      (GK)Leaderboard.identifier
+// value:    (GK)Score.value
 @property (nonatomic, strong) NSMutableDictionary *scores;
 @property (nonatomic, copy) CompletionWhenGameViewControllerDisappeared controllerDismissed;
 @property (nonatomic) id target;
@@ -37,12 +43,35 @@ typedef void(^CompletionWhenGameViewControllerDisappeared)(void);
 {
     self = [super init];
     if (self) {
-        self.scores = [CommonSerilizer loadObjectForKey:keyScores];
-        if (!self.scores) {
-            self.scores = [NSMutableDictionary dictionary];
+        self.playerScores = [CommonSerilizer loadObjectForKey:keyPlayerScores];
+        if (!self.playerScores) {
+            self.playerScores = [NSMutableDictionary dictionary];
         }
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(playerDidChange:)
+                                                     name:GKPlayerDidChangeNotificationName
+                                                   object:nil];
     }
     return self;
+}
+
+- (NSString *)localPlayerID
+{
+    if ([GKLocalPlayer localPlayer].isAuthenticated) {
+        return [GKLocalPlayer localPlayer].playerID;
+    }
+    return @"unsingnedPlayer";
+}
+
+- (void)playerDidChange:(NSNotification *)notification
+{
+    self.scores = [self.playerScores objectForKey:[self localPlayerID]];
+    if (self.scores == nil) {
+        self.scores = [NSMutableDictionary dictionary];
+    }
+    
+    [self synchronizeLeaderboards];
 }
 
 #pragma public methods
@@ -198,9 +227,10 @@ typedef void(^CompletionWhenGameViewControllerDisappeared)(void);
     for (GKLeaderboard *leaderboard in self.leaderboards) {
         if ([self.scores objectForKey:leaderboard.identifier]) {
             [self.scores removeObjectForKey:leaderboard.identifier];
-            [CommonSerilizer saveObject:self.scores forKey:keyScores];
         }
     }
+    [self.playerScores setObject:self.scores forKey:[self localPlayerID]];
+    [CommonSerilizer saveObject:self.playerScores forKey:keyPlayerScores];
 }
 
 - (void)synchronizeLeaderboards
@@ -224,7 +254,8 @@ typedef void(^CompletionWhenGameViewControllerDisappeared)(void);
                             //if remote score higher than local score then save it
                             if (leaderboard.localPlayerScore.value > local.value) {
                                 [self.scores setObject:leaderboard.localPlayerScore forKeyedSubscript:leaderboard.identifier];
-                                [CommonSerilizer saveObject:self.scores forKey:keyScores];
+                                [self.playerScores setObject:self.scores forKey:[self localPlayerID]];
+                                [CommonSerilizer saveObject:self.playerScores forKey:keyPlayerScores];
                             }
                             // if local score higher than remote score then send it
                             else if (leaderboard.localPlayerScore.value < local.value) {
@@ -245,7 +276,8 @@ typedef void(^CompletionWhenGameViewControllerDisappeared)(void);
                     // if local score does not exists and it remote score exists then save it
                     else if (leaderboard.localPlayerScore) {
                         [self.scores setObject:leaderboard.localPlayerScore forKey:leaderboard.identifier];
-                        [CommonSerilizer saveObject:self.scores forKey:keyScores];
+                        [self.playerScores setObject:self.scores forKey:[self localPlayerID]];
+                        [CommonSerilizer saveObject:self.playerScores forKey:keyPlayerScores];
                         
                         DebugLog(@"finish sync leaderboard at index=[%@]", @(i));
                         syncCount++;
@@ -296,7 +328,8 @@ typedef void(^CompletionWhenGameViewControllerDisappeared)(void);
         [self.scores setObject:local forKey:identifier];
     }
     
-    [CommonSerilizer saveObject:self.scores forKey:keyScores];
+    [self.playerScores setObject:self.scores forKey:[self localPlayerID]];
+    [CommonSerilizer saveObject:self.playerScores forKey:keyPlayerScores];
 }
 
 - (GKScore *)obtainScoreForLeaderboard:(NSString *)identifier
@@ -304,9 +337,10 @@ typedef void(^CompletionWhenGameViewControllerDisappeared)(void);
     if (![self.scores objectForKey:identifier]) {
         GKScore *local = [[GKScore alloc] initWithLeaderboardIdentifier:identifier];
         [self.scores setObject:local forKey:identifier];
-        [CommonSerilizer saveObject:self.scores forKey:keyScores];
+        [self.playerScores setObject:self.scores forKey:[self localPlayerID]];
+        [CommonSerilizer saveObject:self.playerScores forKey:keyPlayerScores];
     }
-
+    
     return [self.scores objectForKey:identifier];
 }
 
@@ -318,7 +352,8 @@ typedef void(^CompletionWhenGameViewControllerDisappeared)(void);
             [score setValuesForKeysWithDictionary:attributes];
         }
         [self.scores setObject:score forKey:identifier];
-        [CommonSerilizer saveObject:self.scores forKey:keyScores];
+        [self.playerScores setObject:self.scores forKey:[self localPlayerID]];
+        [CommonSerilizer saveObject:self.playerScores forKey:keyPlayerScores];
     }
 }
 
@@ -334,7 +369,7 @@ typedef void(^CompletionWhenGameViewControllerDisappeared)(void);
 - (void)showLeaderboard:(NSString *)identifier withTarget:(id)target completionWhenDismissed:(void (^)(void))completion
 {
     self.target = target;
-
+    
     if ([GKLocalPlayer localPlayer].isAuthenticated) {
         GKGameCenterViewController *gameCenterController = [[GKGameCenterViewController alloc] init];
         if (gameCenterController != nil) {

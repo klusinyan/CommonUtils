@@ -56,15 +56,19 @@ NSString * const CommonBannerDidCompleteSetup = @"CommonBannerDidCompleteSetup";
                                                               object:nil
                                                                queue:[NSOperationQueue mainQueue]
                                                           usingBlock:^(NSNotification *note) {
-                                                              [[self sharedInstance] setForceHide:YES];
-                                                              [[self sharedInstance] displayBanner:NO completion:nil];
+                                                              if ([self sharedInstance].isDisplayed) {
+                                                                  [[self sharedInstance] setForceHide:YES];
+                                                                  [[self sharedInstance] displayBanner:NO completion:nil];
+                                                              }
                                                           }];
             [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillEnterForegroundNotification
                                                               object:nil
                                                                queue:[NSOperationQueue mainQueue]
                                                           usingBlock:^(NSNotification *note) {
-                                                              [[self sharedInstance] setForceHide:NO];
-                                                              [[self sharedInstance] displayBanner:YES completion:nil];
+                                                              if ([self sharedInstance].bannerView.isBannerLoaded) {
+                                                                  [[self sharedInstance] setForceHide:NO];
+                                                                  [[self sharedInstance] displayBanner:YES completion:nil];
+                                                              }
                                                           }];
         });
         if ([self sharedInstance].isStopped) {
@@ -234,6 +238,8 @@ NSString * const CommonBannerDidCompleteSetup = @"CommonBannerDidCompleteSetup";
 
 - (void)bannerViewDidLoadAd:(ADBannerView *)banner
 {
+    if (self.isForcedHidden) self.forceHide = NO;
+    
     [self displayBanner:YES completion:nil];
     
     if (self.adapter && [self.adapter respondsToSelector:@selector(bannerViewDidLoadAd:)]) {
