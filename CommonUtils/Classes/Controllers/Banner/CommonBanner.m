@@ -211,26 +211,25 @@ NSString * const CommonBannerDidCompleteSetup = @"CommonBannerDidCompleteSetup";
 
 - (void)displayBanner:(BOOL)display completion:(void (^)(BOOL finished))completion
 {
-    @synchronized(self) {
-        //wait a few seconds to other parameters to be set: ex. animated
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.01 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            DebugLog(@"isBannerLoaded=[%@] display=[%@]", self.bannerView.isBannerLoaded ? @"Y" : @"N", display ? @"Y" : @"N");
-            
-            [UIView animateWithDuration:[self.adapter animated] ? 0.25f : 0.0f animations:^{
-                
-                // viewDidLayoutSubviews will handle positioning the banner view so that it is visible.
-                // You must not call [self.view layoutSubviews] directly.  However, you can flag the view
-                // as requiring layout...
-                [self.view setNeedsLayout];
-                // ... then ask it to lay itself out immediately if it is flagged as requiring layout...
-                [self.view layoutIfNeeded];
-                // ... which has the same effect.
-            } completion:^(BOOL finished) {
-                if (completion) completion(finished);
-                self.displayed = display;
-            }];
-        });
-    }
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.00001 * NSEC_PER_SEC)),
+                   dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                       dispatch_async(dispatch_get_main_queue(), ^{
+                           DebugLog(@"isBannerLoaded=[%@] display=[%@]", self.bannerView.isBannerLoaded ? @"Y" : @"N", display ? @"Y" : @"N");
+                           
+                           [UIView animateWithDuration:[self.adapter animated] ? 0.25f : 0.0f animations:^{
+                               // viewDidLayoutSubviews will handle positioning the banner view so that it is visible.
+                               // You must not call [self.view layoutSubviews] directly.  However, you can flag the view
+                               // as requiring layout...
+                               [self.view setNeedsLayout];
+                               // ... then ask it to lay itself out immediately if it is flagged as requiring layout...
+                               [self.view layoutIfNeeded];
+                               // ... which has the same effect.
+                           } completion:^(BOOL finished) {
+                               if (completion) completion(finished);
+                               self.displayed = display;
+                           }];
+                       });
+                   });
 }
 
 
