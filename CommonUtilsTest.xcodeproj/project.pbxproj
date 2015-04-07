@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		0562DFD0B35442A38D252468 /* libPods-CommonUtilsTest.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BA801513D4DF4D82AFF30164 /* libPods-CommonUtilsTest.a */; };
 		9C01923419D2E5D000E8E9E3 /* CommonBookViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9C01923319D2E5D000E8E9E3 /* CommonBookViewController.xib */; };
+		9C06AD3A1ACBFD3E00B72F6C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9C06AD391ACBFD3E00B72F6C /* Main.storyboard */; };
 		9C1191FA1A7BE033000B6090 /* ChildViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C1191F91A7BE033000B6090 /* ChildViewController.m */; };
 		9C597DF319D1C71B000AE471 /* RDVKeyboardAvoidingScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C597DF219D1C71B000AE471 /* RDVKeyboardAvoidingScrollView.m */; };
 		9C72DF8919C719AB007E67A8 /* CommonBookContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C72DF8519C719AB007E67A8 /* CommonBookContentViewController.m */; };
@@ -65,11 +66,13 @@
 		9CD9F812196EAA5500EBBD85 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9CD9F80E196EAA5500EBBD85 /* Images.xcassets */; };
 		9CD9F813196EAA5500EBBD85 /* placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = 9CD9F80F196EAA5500EBBD85 /* placeholder.png */; };
 		9CD9F814196EAA5500EBBD85 /* segmented.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9CD9F810196EAA5500EBBD85 /* segmented.xcassets */; };
+		9CEF22761A9F6B77009CF266 /* WeCanDoIt.png in Resources */ = {isa = PBXBuildFile; fileRef = 9CEF22751A9F6B77009CF266 /* WeCanDoIt.png */; };
 		9CFCFD8D1A8E501900B847D2 /* CommonLoadingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CFCFD8B1A8E501900B847D2 /* CommonLoadingViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		9C01923319D2E5D000E8E9E3 /* CommonBookViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CommonBookViewController.xib; sourceTree = "<group>"; };
+		9C06AD391ACBFD3E00B72F6C /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		9C1191F81A7BE033000B6090 /* ChildViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChildViewController.h; sourceTree = "<group>"; };
 		9C1191F91A7BE033000B6090 /* ChildViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChildViewController.m; sourceTree = "<group>"; };
 		9C3297AC1A9DECFE00AFFBEA /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -155,6 +158,7 @@
 		9CD9F80E196EAA5500EBBD85 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		9CD9F80F196EAA5500EBBD85 /* placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = placeholder.png; sourceTree = "<group>"; };
 		9CD9F810196EAA5500EBBD85 /* segmented.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = segmented.xcassets; sourceTree = "<group>"; };
+		9CEF22751A9F6B77009CF266 /* WeCanDoIt.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = WeCanDoIt.png; sourceTree = "<group>"; };
 		9CFCFD8A1A8E501900B847D2 /* CommonLoadingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonLoadingViewController.h; sourceTree = "<group>"; };
 		9CFCFD8B1A8E501900B847D2 /* CommonLoadingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonLoadingViewController.m; sourceTree = "<group>"; };
 		9E65652A1EB25D3AEF5972DF /* Pods-CommonUtilsTest.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CommonUtilsTest.release.xcconfig"; path = "Pods/Target Support Files/Pods-CommonUtilsTest/Pods-CommonUtilsTest.release.xcconfig"; sourceTree = "<group>"; };
@@ -439,11 +443,13 @@
 		9CD9F80B196EAA5500EBBD85 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				9CEF22751A9F6B77009CF266 /* WeCanDoIt.png */,
 				9C75FC0E19CB3F7B004FA3C9 /* apple.png */,
 				9CD9F80F196EAA5500EBBD85 /* placeholder.png */,
 				9CD9F80C196EAA5500EBBD85 /* InfoPlist.strings */,
 				9CD9F80E196EAA5500EBBD85 /* Images.xcassets */,
 				9CD9F810196EAA5500EBBD85 /* segmented.xcassets */,
+				9C06AD391ACBFD3E00B72F6C /* Main.storyboard */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -523,6 +529,7 @@
 				9C72DF9E19C71A90007E67A8 /* iPad_2.png in Resources */,
 				9C72DFA019C71A90007E67A8 /* iPad_4.png in Resources */,
 				9C72DFA619C71A90007E67A8 /* iPhone_3.png in Resources */,
+				9C06AD3A1ACBFD3E00B72F6C /* Main.storyboard in Resources */,
 				9C72DF9F19C71A90007E67A8 /* iPad_3.png in Resources */,
 				9CC719FA1A1B5F4A00CC0DF2 /* SFLoginTextFieldCell.xib in Resources */,
 				9C01923419D2E5D000E8E9E3 /* CommonBookViewController.xib in Resources */,
@@ -542,6 +549,7 @@
 				9CC831D519E2805B005A10A8 /* CommonProgressViewController.xib in Resources */,
 				9C75FC0F19CB3F7B004FA3C9 /* apple.png in Resources */,
 				9C72DFA819C71A90007E67A8 /* iPhone_5.png in Resources */,
+				9CEF22761A9F6B77009CF266 /* WeCanDoIt.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -680,6 +688,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				OTHER_CFLAGS = "$(inherited)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -736,6 +745,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				OTHER_CFLAGS = "$(inherited)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;

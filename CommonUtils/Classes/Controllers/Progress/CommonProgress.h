@@ -126,7 +126,7 @@ typedef NS_ENUM(NSInteger, CommonProgressActivityIndicatorViewStyle) {
 /**
  Shows shared common prpgress, with default CommonProgressActivityIndicatorViewStyleNormal
  */
-+ (void)showWithTaregt:(id)target completion:(ShowCompletionHandler)completion;
++ (void)showWithTarget:(id)target completion:(ShowCompletionHandler)completion;
 
 /**
  Hides shared common prpgress

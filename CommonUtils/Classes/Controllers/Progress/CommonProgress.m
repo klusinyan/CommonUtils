@@ -160,7 +160,7 @@
     return _sharedObject;
 }
 
-+ (void)showWithTaregt:(id)target completion:(ShowCompletionHandler)completion
++ (void)showWithTarget:(id)target completion:(ShowCompletionHandler)completion
 {
     //hides the old one
     [CommonProgress hideWithCompletion:^{

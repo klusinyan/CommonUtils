@@ -30,14 +30,22 @@
 		9C2AC5E219EA96F900588538 /* CommonProgress.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C2AC5E019EA96F900588538 /* CommonProgress.m */; };
 		9C34F7D0192CAFF9001B8D6D /* ProgressView.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C34F7CE192CAFF9001B8D6D /* ProgressView.h */; };
 		9C34F7D1192CAFF9001B8D6D /* ProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C34F7CF192CAFF9001B8D6D /* ProgressView.m */; };
+		9C42A7341AC98D2600DD524F /* CommonBanner.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C42A7321AC98D2600DD524F /* CommonBanner.h */; };
+		9C42A7351AC98D2600DD524F /* CommonBanner.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C42A7331AC98D2600DD524F /* CommonBanner.m */; };
+		9C42A7391AC9975600DD524F /* CommonCrash.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C42A7371AC9975600DD524F /* CommonCrash.h */; };
+		9C42A73A1AC9975600DD524F /* CommonCrash.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C42A7381AC9975600DD524F /* CommonCrash.m */; };
 		9C46A59919766A840018B109 /* ImageDownloader.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C46A59719766A840018B109 /* ImageDownloader.h */; };
 		9C46A59A19766A840018B109 /* ImageDownloader.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C46A59819766A840018B109 /* ImageDownloader.m */; };
+		9C5ADFEE1AA4A38800CD5215 /* CommonAnimation.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C5ADFEC1AA4A38800CD5215 /* CommonAnimation.h */; };
+		9C5ADFEF1AA4A38800CD5215 /* CommonAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C5ADFED1AA4A38800CD5215 /* CommonAnimation.m */; };
 		9C6DD7D419F130670013D333 /* UIImage+Color.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C6DD7D219F130670013D333 /* UIImage+Color.h */; };
 		9C6DD7D519F130670013D333 /* UIImage+Color.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C6DD7D319F130670013D333 /* UIImage+Color.m */; };
 		9C8C0AFC1934A1780033D2A9 /* UIImage+Resize.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD70236193388600066FFC0 /* UIImage+Resize.m */; };
 		9C8C0AFD1934A17C0033D2A9 /* UIImage+Alpha.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD70230193388600066FFC0 /* UIImage+Alpha.m */; };
 		9C8C0AFE1934A1800033D2A9 /* UIImage+RoundedCorner.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD70238193388600066FFC0 /* UIImage+RoundedCorner.m */; };
 		9C8C0AFF1934A1830033D2A9 /* UIImage+FixOrientation.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD70232193388600066FFC0 /* UIImage+FixOrientation.m */; };
+		9C8F99E01AA0642500F34B57 /* CommonPageContent.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C8F99DD1AA0642500F34B57 /* CommonPageContent.h */; };
+		9C8F99E11AA0642500F34B57 /* CommonPageContent.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C8F99DE1AA0642500F34B57 /* CommonPageContent.m */; };
 		9C90FF6119374DD3004CE056 /* UITableView+Utils.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C90FF5F19374DD3004CE056 /* UITableView+Utils.h */; };
 		9C90FF6219374DD3004CE056 /* UITableView+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C90FF6019374DD3004CE056 /* UITableView+Utils.m */; };
 		9C90FF6619377D33004CE056 /* NSFileManager-Utilities.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C90FF6419377D33004CE056 /* NSFileManager-Utilities.h */; };
@@ -87,19 +95,11 @@
 		9CE7A8A719542CCF00E699E4 /* DirectoryUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CE7A8A519542CCF00E699E4 /* DirectoryUtils.h */; };
 		9CE7A8A819542CCF00E699E4 /* DirectoryUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CE7A8A619542CCF00E699E4 /* DirectoryUtils.m */; };
 		9CF9663818FD3ADC00E265A1 /* CallBackProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CF9663618FD3ADC00E265A1 /* CallBackProtocol.h */; };
-		9CFCFD881A8E443E00B847D2 /* CommonPageContent.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CFCFD861A8E443E00B847D2 /* CommonPageContent.h */; };
-		9CFCFD891A8E443E00B847D2 /* CommonPageContent.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CFCFD871A8E443E00B847D2 /* CommonPageContent.m */; };
+		9CFDEC781ACD30F0001D1E62 /* CommonGameCenter.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CFDEC761ACD30F0001D1E62 /* CommonGameCenter.h */; };
+		9CFDEC791ACD30F0001D1E62 /* CommonGameCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CFDEC771ACD30F0001D1E62 /* CommonGameCenter.m */; };
+		9CFDEC811ACD31DF001D1E62 /* CommonSerilizer.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CFDEC7F1ACD31DF001D1E62 /* CommonSerilizer.h */; };
+		9CFDEC821ACD31DF001D1E62 /* CommonSerilizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CFDEC801ACD31DF001D1E62 /* CommonSerilizer.m */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		9CB81F9518FD2F6300C918FB /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 9CB81F0018FD2BDC00C918FB /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 9CB81F4618FD2C9C00C918FB;
-			remoteInfo = Parrocchia;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		9C01920E19D2CBD600E8E9E3 /* CommonBook.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonBook.h; sourceTree = "<group>"; };
@@ -121,17 +121,28 @@
 		9C20BE581949EF830077C6E8 /* DropAnimationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DropAnimationController.m; sourceTree = "<group>"; };
 		9C20BE591949EF830077C6E8 /* ZoomAnimationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZoomAnimationController.h; sourceTree = "<group>"; };
 		9C20BE5A1949EF830077C6E8 /* ZoomAnimationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZoomAnimationController.m; sourceTree = "<group>"; };
+		9C27EEA01AAA295A004EB522 /* CommonPageContent_AutoLayout.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CommonPageContent_AutoLayout.xib; sourceTree = "<group>"; };
 		9C2AC5DE19EA96F900588538 /* CommonProgress.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = CommonProgress.bundle; sourceTree = "<group>"; };
 		9C2AC5DF19EA96F900588538 /* CommonProgress.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonProgress.h; sourceTree = "<group>"; };
 		9C2AC5E019EA96F900588538 /* CommonProgress.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonProgress.m; sourceTree = "<group>"; };
 		9C3297A81A9DE2F000AFFBEA /* CommonBarcode.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = CommonBarcode.bundle; sourceTree = "<group>"; };
 		9C34F7CE192CAFF9001B8D6D /* ProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProgressView.h; sourceTree = "<group>"; };
 		9C34F7CF192CAFF9001B8D6D /* ProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProgressView.m; sourceTree = "<group>"; };
+		9C42A7321AC98D2600DD524F /* CommonBanner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonBanner.h; sourceTree = "<group>"; };
+		9C42A7331AC98D2600DD524F /* CommonBanner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonBanner.m; sourceTree = "<group>"; };
+		9C42A7371AC9975600DD524F /* CommonCrash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonCrash.h; sourceTree = "<group>"; };
+		9C42A7381AC9975600DD524F /* CommonCrash.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonCrash.m; sourceTree = "<group>"; };
 		9C46A59719766A840018B109 /* ImageDownloader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageDownloader.h; sourceTree = "<group>"; };
 		9C46A59819766A840018B109 /* ImageDownloader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageDownloader.m; sourceTree = "<group>"; };
+		9C5ADFEC1AA4A38800CD5215 /* CommonAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonAnimation.h; sourceTree = "<group>"; };
+		9C5ADFED1AA4A38800CD5215 /* CommonAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonAnimation.m; sourceTree = "<group>"; };
 		9C6DD7D219F130670013D333 /* UIImage+Color.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Color.h"; sourceTree = "<group>"; };
 		9C6DD7D319F130670013D333 /* UIImage+Color.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Color.m"; sourceTree = "<group>"; };
 		9C8A6AF219D17151000062F7 /* RELEASE_INFO.md */ = {isa = PBXFileReference; lastKnownFileType = text; path = RELEASE_INFO.md; sourceTree = "<group>"; };
+		9C8F99DD1AA0642500F34B57 /* CommonPageContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonPageContent.h; sourceTree = "<group>"; };
+		9C8F99DE1AA0642500F34B57 /* CommonPageContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonPageContent.m; sourceTree = "<group>"; };
+		9C8F99F11AA0894200F34B57 /* CommonPageContent.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CommonPageContent.xib; sourceTree = "<group>"; };
+		9C8F99F21AA0AE4800F34B57 /* CommonBook.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = CommonBook.bundle; sourceTree = "<group>"; };
 		9C90FF5F19374DD3004CE056 /* UITableView+Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableView+Utils.h"; sourceTree = "<group>"; };
 		9C90FF6019374DD3004CE056 /* UITableView+Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableView+Utils.m"; sourceTree = "<group>"; };
 		9C90FF6419377D33004CE056 /* NSFileManager-Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSFileManager-Utilities.h"; sourceTree = "<group>"; };
@@ -163,7 +174,6 @@
 		9CB4800B19558E8400A5AC1B /* UIColor+Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+Utils.h"; sourceTree = "<group>"; };
 		9CB4800C19558E8400A5AC1B /* UIColor+Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Utils.m"; sourceTree = "<group>"; };
 		9CB81F4718FD2C9C00C918FB /* libCommonUtils.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libCommonUtils.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		9CB81F8618FD2EFB00C918FB /* CommonUtils.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CommonUtils.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		9CBCB4571A079EBC00E6BC7C /* NetworkUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkUtils.h; sourceTree = "<group>"; };
 		9CBCB4581A079EBC00E6BC7C /* NetworkUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NetworkUtils.m; sourceTree = "<group>"; };
 		9CCB62DC19ED156F0061D0C1 /* CommonSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonSystem.h; sourceTree = "<group>"; };
@@ -189,19 +199,14 @@
 		9CE7A8A519542CCF00E699E4 /* DirectoryUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DirectoryUtils.h; sourceTree = "<group>"; };
 		9CE7A8A619542CCF00E699E4 /* DirectoryUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DirectoryUtils.m; sourceTree = "<group>"; };
 		9CF9663618FD3ADC00E265A1 /* CallBackProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CallBackProtocol.h; sourceTree = "<group>"; };
-		9CFCFD861A8E443E00B847D2 /* CommonPageContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonPageContent.h; sourceTree = "<group>"; };
-		9CFCFD871A8E443E00B847D2 /* CommonPageContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonPageContent.m; sourceTree = "<group>"; };
+		9CFDEC761ACD30F0001D1E62 /* CommonGameCenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonGameCenter.h; sourceTree = "<group>"; };
+		9CFDEC771ACD30F0001D1E62 /* CommonGameCenter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonGameCenter.m; sourceTree = "<group>"; };
+		9CFDEC7F1ACD31DF001D1E62 /* CommonSerilizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonSerilizer.h; sourceTree = "<group>"; };
+		9CFDEC801ACD31DF001D1E62 /* CommonSerilizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonSerilizer.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		9CB81F4418FD2C9C00C918FB /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		9CB81F8318FD2EFB00C918FB /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -214,10 +219,11 @@
 		9C01920D19D2CBD600E8E9E3 /* Book */ = {
 			isa = PBXGroup;
 			children = (
+				9C8F99F21AA0AE4800F34B57 /* CommonBook.bundle */,
 				9C01920E19D2CBD600E8E9E3 /* CommonBook.h */,
 				9C01920F19D2CBD600E8E9E3 /* CommonBook.m */,
-				9CFCFD861A8E443E00B847D2 /* CommonPageContent.h */,
-				9CFCFD871A8E443E00B847D2 /* CommonPageContent.m */,
+				9C8F99DD1AA0642500F34B57 /* CommonPageContent.h */,
+				9C8F99DE1AA0642500F34B57 /* CommonPageContent.m */,
 			);
 			path = Book;
 			sourceTree = "<group>";
@@ -307,6 +313,51 @@
 				9C34F7CF192CAFF9001B8D6D /* ProgressView.m */,
 			);
 			path = Network;
+			sourceTree = "<group>";
+		};
+		9C42A7361AC9975600DD524F /* Crash */ = {
+			isa = PBXGroup;
+			children = (
+				9C42A7371AC9975600DD524F /* CommonCrash.h */,
+				9C42A7381AC9975600DD524F /* CommonCrash.m */,
+			);
+			path = Crash;
+			sourceTree = "<group>";
+		};
+		9C4FCB481AC07F1000266FC2 /* Banner */ = {
+			isa = PBXGroup;
+			children = (
+				9C42A7321AC98D2600DD524F /* CommonBanner.h */,
+				9C42A7331AC98D2600DD524F /* CommonBanner.m */,
+			);
+			path = Banner;
+			sourceTree = "<group>";
+		};
+		9C5ADFEB1AA4A37C00CD5215 /* Animations */ = {
+			isa = PBXGroup;
+			children = (
+				9C5ADFEC1AA4A38800CD5215 /* CommonAnimation.h */,
+				9C5ADFED1AA4A38800CD5215 /* CommonAnimation.m */,
+			);
+			path = Animations;
+			sourceTree = "<group>";
+		};
+		9C8F99EF1AA0894200F34B57 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				9C8F99F01AA0894200F34B57 /* Nibs */,
+			);
+			name = Resources;
+			path = CommonUtils/Resources;
+			sourceTree = "<group>";
+		};
+		9C8F99F01AA0894200F34B57 /* Nibs */ = {
+			isa = PBXGroup;
+			children = (
+				9C8F99F11AA0894200F34B57 /* CommonPageContent.xib */,
+				9C27EEA01AAA295A004EB522 /* CommonPageContent_AutoLayout.xib */,
+			);
+			path = Nibs;
 			sourceTree = "<group>";
 		};
 		9C90FF5E19374DBE004CE056 /* UITableView */ = {
@@ -415,6 +466,7 @@
 		9CB1FC81197598D00080534F /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				9C4FCB481AC07F1000266FC2 /* Banner */,
 				9C1191FF1A7BE0A2000B6090 /* Spinner */,
 				9CF5403A19E2AC3D006297AE /* Progress */,
 				9C01920D19D2CBD600E8E9E3 /* Book */,
@@ -464,7 +516,7 @@
 				9CD9F762196E8AAF00EBBD85 /* CommonUtils.podspec */,
 				9C8A6AF219D17151000062F7 /* RELEASE_INFO.md */,
 				9CB81FD718FD375300C918FB /* Classes */,
-				9CB81FDC18FD378100C918FB /* Resources */,
+				9C8F99EF1AA0894200F34B57 /* Resources */,
 				9CB81F0918FD2BDC00C918FB /* Products */,
 			);
 			sourceTree = "<group>";
@@ -473,7 +525,6 @@
 			isa = PBXGroup;
 			children = (
 				9CB81F4718FD2C9C00C918FB /* libCommonUtils.a */,
-				9CB81F8618FD2EFB00C918FB /* CommonUtils.bundle */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -481,7 +532,11 @@
 		9CB81FD718FD375300C918FB /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				9CFDEC7E1ACD31DF001D1E62 /* Serilizer */,
+				9CFDEC751ACD30C4001D1E62 /* GameCenter */,
+				9C42A7361AC9975600DD524F /* Crash */,
 				9CD9F75C196E876000EBBD85 /* Lib-Prefix.pch */,
+				9C5ADFEB1AA4A37C00CD5215 /* Animations */,
 				9CB1FC81197598D00080534F /* Controllers */,
 				9CCB62DB19ED156F0061D0C1 /* System */,
 				9CE7A89819541A5000E699E4 /* Directory */,
@@ -495,14 +550,6 @@
 			name = Classes;
 			path = CommonUtils/Classes;
 			sourceTree = SOURCE_ROOT;
-		};
-		9CB81FDC18FD378100C918FB /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Resources;
-			path = CommonUtils/Resources;
-			sourceTree = "<group>";
 		};
 		9CCB62DB19ED156F0061D0C1 /* System */ = {
 			isa = PBXGroup;
@@ -596,6 +643,24 @@
 			path = Categories;
 			sourceTree = "<group>";
 		};
+		9CFDEC751ACD30C4001D1E62 /* GameCenter */ = {
+			isa = PBXGroup;
+			children = (
+				9CFDEC761ACD30F0001D1E62 /* CommonGameCenter.h */,
+				9CFDEC771ACD30F0001D1E62 /* CommonGameCenter.m */,
+			);
+			path = GameCenter;
+			sourceTree = "<group>";
+		};
+		9CFDEC7E1ACD31DF001D1E62 /* Serilizer */ = {
+			isa = PBXGroup;
+			children = (
+				9CFDEC7F1ACD31DF001D1E62 /* CommonSerilizer.h */,
+				9CFDEC801ACD31DF001D1E62 /* CommonSerilizer.m */,
+			);
+			path = Serilizer;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -604,6 +669,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9CF9663818FD3ADC00E265A1 /* CallBackProtocol.h in Headers */,
+				9C42A7341AC98D2600DD524F /* CommonBanner.h in Headers */,
 				9CD7023E193388790066FFC0 /* UIImage+Alpha.h in Headers */,
 				9C90FF7919377EBB004CE056 /* NSDictionary+Utils.h in Headers */,
 				9CE7A8A719542CCF00E699E4 /* DirectoryUtils.h in Headers */,
@@ -611,6 +677,7 @@
 				9C1E3931198E42F600EA933D /* UIAlertView+Blocks.h in Headers */,
 				9CA10B611953521400DC3C5B /* NSIndexPath+Utils.h in Headers */,
 				9CD7023F193388790066FFC0 /* UIImage+FixOrientation.h in Headers */,
+				9C5ADFEE1AA4A38800CD5215 /* CommonAnimation.h in Headers */,
 				9C6DD7D419F130670013D333 /* UIImage+Color.h in Headers */,
 				9C90FF8219377F7F004CE056 /* NSMutableArray+Utils.h in Headers */,
 				9CBCB4591A079EBC00E6BC7C /* NetworkUtils.h in Headers */,
@@ -623,11 +690,13 @@
 				9C20BE5E1949EF830077C6E8 /* ZoomAnimationController.h in Headers */,
 				9C1192021A7BE0AB000B6090 /* CommonSpinner.h in Headers */,
 				9CB4800D19558E8400A5AC1B /* UIColor+Utils.h in Headers */,
-				9CFCFD881A8E443E00B847D2 /* CommonPageContent.h in Headers */,
 				9C20BE5B1949EF830077C6E8 /* ADVAnimationController.h in Headers */,
 				9C2AC5E119EA96F900588538 /* CommonProgress.h in Headers */,
+				9CFDEC781ACD30F0001D1E62 /* CommonGameCenter.h in Headers */,
+				9CFDEC811ACD31DF001D1E62 /* CommonSerilizer.h in Headers */,
 				9C90FF6B19377DEC004CE056 /* NSDate+Utils.h in Headers */,
 				9C94A99119EBC911003DF554 /* CommonSegmentedViewController.h in Headers */,
+				9C42A7391AC9975600DD524F /* CommonCrash.h in Headers */,
 				9C01921619D2CBD600E8E9E3 /* CommonBook.h in Headers */,
 				9CA4F69D19790E7D000BCFCC /* ViewPagerController.h in Headers */,
 				9C01921A19D2CBD600E8E9E3 /* CommonPicker.h in Headers */,
@@ -636,6 +705,7 @@
 				9CD9F770196E907900EBBD85 /* GTMNSString+HTML.h in Headers */,
 				9C01921819D2CBD600E8E9E3 /* CommonKeyboard.h in Headers */,
 				9C01921F19D2CC0300E8E9E3 /* BlurView.h in Headers */,
+				9C8F99E01AA0642500F34B57 /* CommonPageContent.h in Headers */,
 				9CD9F75D196E876000EBBD85 /* Lib-Prefix.pch in Headers */,
 				9C34F7D0192CAFF9001B8D6D /* ProgressView.h in Headers */,
 				9CCDD91E1A4040130003EAF3 /* CommonBarcode.h in Headers */,
@@ -669,24 +739,6 @@
 			productReference = 9CB81F4718FD2C9C00C918FB /* libCommonUtils.a */;
 			productType = "com.apple.product-type.library.static";
 		};
-		9CB81F8518FD2EFB00C918FB /* CommonUtilsResources */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 9CB81F9018FD2EFB00C918FB /* Build configuration list for PBXNativeTarget "CommonUtilsResources" */;
-			buildPhases = (
-				9CB81F8218FD2EFB00C918FB /* Sources */,
-				9CB81F8318FD2EFB00C918FB /* Frameworks */,
-				9CB81F8418FD2EFB00C918FB /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				9CB81F9618FD2F6300C918FB /* PBXTargetDependency */,
-			);
-			name = CommonUtilsResources;
-			productName = ParrocchiaResources;
-			productReference = 9CB81F8618FD2EFB00C918FB /* CommonUtils.bundle */;
-			productType = "com.apple.product-type.bundle";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -710,20 +762,9 @@
 			projectRoot = "";
 			targets = (
 				9CB81F4618FD2C9C00C918FB /* CommonUtils */,
-				9CB81F8518FD2EFB00C918FB /* CommonUtilsResources */,
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXResourcesBuildPhase section */
-		9CB81F8418FD2EFB00C918FB /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		9CB81F4318FD2C9C00C918FB /* Sources */ = {
@@ -740,12 +781,15 @@
 				9C94A99219EBC911003DF554 /* CommonSegmentedViewController.m in Sources */,
 				9CB4800E19558E8400A5AC1B /* UIColor+Utils.m in Sources */,
 				9C1E3932198E42F600EA933D /* UIAlertView+Blocks.m in Sources */,
+				9C8F99E11AA0642500F34B57 /* CommonPageContent.m in Sources */,
+				9C42A73A1AC9975600DD524F /* CommonCrash.m in Sources */,
 				9C90FF7A19377EBB004CE056 /* NSDictionary+Utils.m in Sources */,
 				9C6DD7D519F130670013D333 /* UIImage+Color.m in Sources */,
 				9CD9F773196E907900EBBD85 /* NSString+HTML.m in Sources */,
 				9CCB62DF19ED156F0061D0C1 /* CommonSystem.m in Sources */,
 				9C8C0AFE1934A1800033D2A9 /* UIImage+RoundedCorner.m in Sources */,
 				9C8C0AFF1934A1830033D2A9 /* UIImage+FixOrientation.m in Sources */,
+				9CFDEC821ACD31DF001D1E62 /* CommonSerilizer.m in Sources */,
 				9CB1FC9C19759B960080534F /* SegmentedViewController.m in Sources */,
 				9CE7A8A819542CCF00E699E4 /* DirectoryUtils.m in Sources */,
 				9C20BE5D1949EF830077C6E8 /* DropAnimationController.m in Sources */,
@@ -755,15 +799,17 @@
 				9CBCB45A1A079EBC00E6BC7C /* NetworkUtils.m in Sources */,
 				9C01922019D2CC0300E8E9E3 /* BlurView.m in Sources */,
 				9C2AC5E219EA96F900588538 /* CommonProgress.m in Sources */,
+				9CFDEC791ACD30F0001D1E62 /* CommonGameCenter.m in Sources */,
 				9C90FF6219374DD3004CE056 /* UITableView+Utils.m in Sources */,
+				9C42A7351AC98D2600DD524F /* CommonBanner.m in Sources */,
 				9C8C0AFD1934A17C0033D2A9 /* UIImage+Alpha.m in Sources */,
 				9CA10B621953521400DC3C5B /* NSIndexPath+Utils.m in Sources */,
+				9C5ADFEF1AA4A38800CD5215 /* CommonAnimation.m in Sources */,
 				9C01921B19D2CBD600E8E9E3 /* CommonPicker.m in Sources */,
 				9C20BE5F1949EF830077C6E8 /* ZoomAnimationController.m in Sources */,
 				9C1192031A7BE0AB000B6090 /* CommonSpinner.m in Sources */,
 				9C46A59A19766A840018B109 /* ImageDownloader.m in Sources */,
 				9CB1FC9A19759B6A0080534F /* SelectedListController.m in Sources */,
-				9CFCFD891A8E443E00B847D2 /* CommonPageContent.m in Sources */,
 				9CA09777191133A000605020 /* TransitionManager.m in Sources */,
 				9C01921719D2CBD600E8E9E3 /* CommonBook.m in Sources */,
 				9C8C0AFC1934A1780033D2A9 /* UIImage+Resize.m in Sources */,
@@ -772,22 +818,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		9CB81F8218FD2EFB00C918FB /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		9CB81F9618FD2F6300C918FB /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 9CB81F4618FD2C9C00C918FB /* CommonUtils */;
-			targetProxy = 9CB81F9518FD2F6300C918FB /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		9CB81F3B18FD2BDC00C918FB /* Debug */ = {
@@ -911,59 +942,6 @@
 			};
 			name = Release;
 		};
-		9CB81F9118FD2EFB00C918FB /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COMBINE_HIDPI_IMAGES = YES;
-				CONFIGURATION_BUILD_DIR = "${PROJECT_DIR}";
-				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				GCC_PRECOMPILE_PREFIX_HEADER = NO;
-				GCC_PREFIX_HEADER = "Common/Supporting Files/Common-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
-				);
-				INFOPLIST_FILE = "";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
-				ONLY_ACTIVE_ARCH = NO;
-				PRODUCT_NAME = CommonUtils;
-				SDKROOT = iphoneos;
-				VALIDATE_PRODUCT = YES;
-				VALID_ARCHS = "arm64 armv7 armv7s i386 x86_64";
-				WRAPPER_EXTENSION = bundle;
-			};
-			name = Debug;
-		};
-		9CB81F9218FD2EFB00C918FB /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COMBINE_HIDPI_IMAGES = YES;
-				CONFIGURATION_BUILD_DIR = "${PROJECT_DIR}";
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				GCC_PRECOMPILE_PREFIX_HEADER = NO;
-				GCC_PREFIX_HEADER = "Common/Supporting Files/Common-Prefix.pch";
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
-				);
-				INFOPLIST_FILE = "";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
-				ONLY_ACTIVE_ARCH = NO;
-				PRODUCT_NAME = CommonUtils;
-				SDKROOT = iphoneos;
-				VALIDATE_PRODUCT = YES;
-				VALID_ARCHS = "arm64 armv7 armv7s i386 x86_64";
-				WRAPPER_EXTENSION = bundle;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -981,15 +959,6 @@
 			buildConfigurations = (
 				9CB81F6418FD2C9D00C918FB /* Debug */,
 				9CB81F6518FD2C9D00C918FB /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		9CB81F9018FD2EFB00C918FB /* Build configuration list for PBXNativeTarget "CommonUtilsResources" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				9CB81F9118FD2EFB00C918FB /* Debug */,
-				9CB81F9218FD2EFB00C918FB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

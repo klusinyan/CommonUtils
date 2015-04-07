@@ -9,9 +9,9 @@
 
 - (UIImage *)croppedImage:(CGRect)bounds;
 
-- (UIImage *)thumbnailImage:(NSInteger)thumbnailSize
-          transparentBorder:(NSUInteger)borderSize
-               cornerRadius:(NSUInteger)cornerRadius
+- (UIImage *)thumbnailImage:(CGFloat)thumbnailSize
+          transparentBorder:(CGFloat)borderSize
+               cornerRadius:(CGFloat)cornerRadius
        interpolationQuality:(CGInterpolationQuality)quality;
 
 - (UIImage *)resizedImage:(CGSize)newSize

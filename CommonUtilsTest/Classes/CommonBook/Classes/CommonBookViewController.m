@@ -6,10 +6,11 @@
 //library
 #import "CommonBook.h"
 #import "CommonPageContent.h"
+#import "UIColor+Utils.h"
 
 #define kPageBackgroundColor [UIColor blackColor]
 
-@interface CommonBookViewController () <CommonBookDelegate, CommonBookDataSource>
+@interface CommonBookViewController () <CommonBookDelegate, CommonBookDataSource, CommonPageContentDelegate>
 
 @property (readwrite, nonatomic, strong) IBOutlet UIView *container0;
 @property (readwrite, nonatomic, strong) IBOutlet UIView *container1;
@@ -59,13 +60,7 @@
 
 - (CommonPageContent *)fabriquePageContent
 {
-    return [[CommonPageContent alloc] init];
-    
-    /*
-    return
-    [[TGRImageViewController alloc] initWithNibName:NSStringFromClass([TGRImageViewController class])
-                                             bundle:nil];
-    //*/
+    return [CommonPageContent pageContent];
 }
 
 - (void)viewDidLoad
@@ -81,7 +76,7 @@
     }
     //*/
     
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 1000; i++) {
         [self.items addObject:[self fabriquePageContent]];
     }
     
@@ -185,26 +180,59 @@
 
 - (UIViewController *)book:(CommonBook *)book pageContentAtIndex:(NSInteger)index
 {
-    CommonPageContent *pageContent = [[CommonPageContent alloc] init];
+    ///*
+    CommonPageContent *pageContent = [self.items objectAtIndex:index];
+    
+    BOOL fixedImage = NO;
+    
+    if (fixedImage) {
+        NSString *prefix = (iPhone) ? @"iPhone" : @"iPad";
+        NSString *imageName = [prefix stringByAppendingFormat:@"_%@", @(index % 7)];
+        pageContent.image = [UIImage imageNamed:imageName];
+    }
+    else {
+        UIColor *color = [UIColor colorWithHue:index/100.0f saturation:1 brightness:1 alpha:1];
+        int upperBound = 2048;
+        int lowerBound = 512;
+        int rndWidth = lowerBound + arc4random() % (upperBound - lowerBound);
+        int rndHeight = lowerBound + arc4random() % (upperBound - lowerBound);
+        NSString *hexColor = [UIColor hexStringFromColor:color];
+        NSString *imageUrl = [NSString stringWithFormat:@"http://placehold.it/%@x%@/%@/&text=image%@", @(rndWidth), @(rndHeight), hexColor, @(index+1)];
+        pageContent.imageUrl = imageUrl;
+    }
+    
     pageContent.zoomEnabled = YES;
-    pageContent.backgroundColor = kPageBackgroundColor;
-    pageContent.contentInset = UIEdgeInsetsMake(0, 10, 0, 10);
+    
+    /*************AUTORESIZING ONLY*************/
+    pageContent.contentInset = UIEdgeInsetsMake(0, 5, 0, 5);
+    /*************AUTORESIZING ONLY*************/
 
-    NSString *prefix = (iPhone) ? @"iPhone" : @"iPad";
-    NSString *imageName = [prefix stringByAppendingFormat:@"_%@", @(index % 7)];
-    pageContent.image = [UIImage imageNamed:imageName];
-    DebugLog(@"imageName %@", imageName);
+    /*************AUTOLAYOUT ONLY*************/
+    pageContent.leadingSpaceWhenPortrait = 20;
+    pageContent.topSpaceWhenPortrait = 20;
+    /*************AUTOLAYOUT ONLY*************/
+    
+    pageContent.backgroundColor = kPageBackgroundColor;
+    pageContent.delegate = self;
+
+    //create animations
+    CommonAnimation *anim = [CommonAnimation animation];
+    anim.type = CSAnimationTypeFadeIn;
+    anim.delay = 0.4;
+    anim.duration = 0.4;
+
+    pageContent.animationRule = CommonPageAnimationRuleShowOnce;
+    pageContent.animations = @[anim];
     
     return pageContent;
+    //*/
     
     /*
     CommonBookContentViewController *pageContent = [self.items objectAtIndex:index];
-    
     NSString *prefix = (iPhone) ? @"iPhone" : @"iPad";
     NSString *imageName = [prefix stringByAppendingFormat:@"_%@", @(index)];
     pageContent.image = [UIImage imageNamed:imageName];
     DebugLog(@"imageName %@", imageName);
-    
     return pageContent;
     //*/
 }
@@ -219,14 +247,15 @@
     //[pc showAnimation:YES];
 }
 
-- (void)book:(CommonBook *)book pageContent:(id)pageContent didPresentAtIndex:(NSInteger)index
+- (void)book:(CommonBook *)book pageContent:(UIViewController *)pageContent didPresentAtIndex:(NSInteger)index
 {
+    self.title = [NSString stringWithFormat:@"%@/%@", @(index+1), @([self.items count])];
     DebugLog(@"didPresentAtIndex %@", @(index));
     //CommonBookContentViewController *pc = (CommonBookContentViewController *)pageContent;
     //[pc showAnimation:YES];
 }
 
-- (void)book:(CommonBook *)book pageContent:(id)pageContent didSelectAtIndex:(NSInteger)index
+- (void)book:(CommonBook *)book pageContent:(UIViewController *)pageContent didSelectAtIndex:(NSInteger)index
 {
     DebugLog(@"pageContent tapped at index %@", @(index));
 }

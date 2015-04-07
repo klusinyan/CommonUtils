@@ -94,8 +94,8 @@
     //[CommonSpinner setHidesWhenStopped:YES];
     //[CommonSpinner setTitle:@"iCoop Mobile"];
     //[CommonSpinner sharedSpinner].timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-    /*dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [CommonSpinner showWithTaregt:self completion:^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [CommonSpinner showInView:self.view completion:^{
             DebugLog(@"Loading");
         }];
     });
@@ -188,7 +188,7 @@
         [self animate:NO];
     }
     else {
-        [CommonSpinner showWithTaregt:self
+        [CommonSpinner showInView:self.view
                             completion:^{
                                 DebugLog(@"common progress did start");
                             }];

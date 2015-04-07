@@ -22,6 +22,8 @@ typedef NS_ENUM(NSInteger, UIImageRepresentation) {
 
 @interface DirectoryUtils : NSObject
 
+#pragma image
+
 + (NSString *)moduleCacheDirectoryPath:(NSString *)moduleName;
 
 + (NSString *)moduleDocumentDirectoryPath:(NSString *)moduleName;
@@ -47,7 +49,20 @@ typedef NS_ENUM(NSInteger, UIImageRepresentation) {
 //shoud be removed from header if not used from outside
 + (UIImage *)placeholderImage;
 
-//localizable string from bundle
+#pragma bundle
+
+//gives commonutils bunlde for XIB
++ (NSBundle *)commonUtilsBundle;
+
++ (NSString *)commonUtilsBundlePathWithName:(NSString *)bundleName;
+
+//bundle with given bundle
++ (NSBundle *)bundleWithName:(NSString *)bundleName;
+
+//file path with from given bundle
++ (NSString *)filePathWithName:(NSString *)fileName bundleName:(NSString *)bundleName;
+
+//localizable string from given bundle
 + (NSString *)localizedStringForKey:(NSString *)key bundleName:(NSString *)bundleName;
 
 @end
