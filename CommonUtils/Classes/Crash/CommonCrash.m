@@ -82,7 +82,7 @@ static void handleException(NSException *exception)
     internal_handleException(exception, YES);
 }
 
-NSString *signalName(int signal)
+NSString *signal_name(int signal)
 {
     switch(signal) {
         case SIGABRT:
@@ -105,7 +105,7 @@ NSString *signalName(int signal)
 static void handleSignal(int signal)
 {
     NSException* exception = [NSException exceptionWithName:kSignalRaisedExceptionName
-                                                     reason:signalName(signal)
+                                                     reason:signal_name(signal)
                                                    userInfo:nil];
     internal_handleException(exception, NO);
 }

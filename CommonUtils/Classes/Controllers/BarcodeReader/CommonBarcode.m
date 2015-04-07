@@ -30,6 +30,7 @@ NSString * const CBErrorPermissionDenied    = @"CBLocalizedStringPermissionDenie
 @property (readwrite, nonatomic, assign) BOOL alreadyScanned;
 @property (readwrite, nonatomic, getter=isSessionStarted) BOOL sessionStarted;
 @property (readwrite, nonatomic, getter=isRunning) BOOL running;
+@property (readwrite, nonatomic, strong) CommonSpinner *commonSpinner;
 
 @end
 
@@ -94,13 +95,13 @@ NSString * const CBErrorPermissionDenied    = @"CBLocalizedStringPermissionDenie
     
     //TODO
     /*
-    [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidChangeStatusBarOrientationNotification
-                                                      object:nil
-                                                       queue:[NSOperationQueue mainQueue]
-                                                  usingBlock:^(NSNotification * __unused notification) {
-                                                      [self adjustFrames];
-                                                      [self adjustOrientationWithInterfaceOrientation:self.interfaceOrientation];
-                                                  }];
+     [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidChangeStatusBarOrientationNotification
+     object:nil
+     queue:[NSOperationQueue mainQueue]
+     usingBlock:^(NSNotification * __unused notification) {
+     [self adjustFrames];
+     [self adjustOrientationWithInterfaceOrientation:self.interfaceOrientation];
+     }];
      //*/
     
     [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillEnterForegroundNotification
@@ -119,12 +120,17 @@ NSString * const CBErrorPermissionDenied    = @"CBLocalizedStringPermissionDenie
     if (!self.manualStart) {
         self.previewContainer.backgroundColor = [UIColor blackColor];
         
-        [CommonSpinner setTintColor:[UIColor grayColor]];
-        [CommonSpinner setHidesWhenStopped:YES];
-        [CommonSpinner setNetworkActivityIndicatorVisible:NO];
-        [CommonSpinner setTitle:[DirectoryUtils localizedStringForKey:CBLocalizedStringInitializingMsg bundleName:kBundleName]];
+        if (self.commonSpinner != nil) {
+            [self.commonSpinner hideWithCompletion:nil];
+        }
         
-        [CommonSpinner showInView:self.view completion:^{
+        self.commonSpinner = [CommonSpinner instance];
+        [self.commonSpinner setTintColor:[UIColor grayColor]];
+        [self.commonSpinner setHidesWhenStopped:YES];
+        [self.commonSpinner setNetworkActivityIndicatorVisible:NO];
+        [self.commonSpinner setTitle:[DirectoryUtils localizedStringForKey:CBLocalizedStringInitializingMsg bundleName:kBundleName]];
+        
+        [self.commonSpinner showInView:self.view completion:^{
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                 [self startCapturingWithCompletion:^(NSError *error) {
                     if (error) {
@@ -141,13 +147,13 @@ NSString * const CBErrorPermissionDenied    = @"CBLocalizedStringPermissionDenie
                                 break;
                         }
                         NSString *localizedString = [DirectoryUtils localizedStringForKey:errMessage bundleName:kBundleName];
-                        [CommonSpinner setTitleOnly:localizedString activityIndicatorVisible:NO];
+                        [self.commonSpinner setTitleOnly:localizedString activityIndicatorVisible:NO];
                         if ([self respondsToSelector:@selector(barcode:didFailCapturingWithError:)]) {
                             [self barcode:self didFailCapturingWithError:error];
                         }
                     }
                     else {
-                        [CommonSpinner hideWithCompletion:nil];
+                        [self.commonSpinner hideWithCompletion:nil];
                     }
                 }];
             });
