@@ -81,9 +81,9 @@
      [CommonProgress sharedProgress].indicatorImageColor = [UIColor greenColor];
      [CommonProgress sharedProgress].networkActivityIndicatorVisible = YES;
      
-     
-     [CommonProgress showWithTaregt:self completion:^{
-     DebugLog(@"common progress did start");
+     /*
+     [CommonProgress showWithTarget:self.view completion:^{
+         DebugLog(@"common progress did start");
      }];
      //*/
     
@@ -99,7 +99,6 @@
             DebugLog(@"Loading");
         }];
     });
-     */
     
     /*
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
