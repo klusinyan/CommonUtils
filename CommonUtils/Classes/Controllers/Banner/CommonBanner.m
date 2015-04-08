@@ -52,23 +52,13 @@ NSString * const CommonBannerDidCompleteSetup = @"CommonBannerDidCompleteSetup";
                                                               [[self sharedInstance] setup];
                                                               [[self sharedInstance] start];
                                                           }];
-            [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidEnterBackgroundNotification
-                                                              object:nil
-                                                               queue:[NSOperationQueue mainQueue]
-                                                          usingBlock:^(NSNotification *note) {
-                                                              if ([self sharedInstance].isDisplayed) {
-                                                                  [[self sharedInstance] setForceHide:YES];
-                                                                  [[self sharedInstance] displayBanner:NO completion:nil];
-                                                              }
-                                                          }];
             [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillEnterForegroundNotification
                                                               object:nil
                                                                queue:[NSOperationQueue mainQueue]
                                                           usingBlock:^(NSNotification *note) {
-                                                              if ([self sharedInstance].bannerView.isBannerLoaded) {
-                                                                  [[self sharedInstance] setForceHide:NO];
-                                                                  [[self sharedInstance] displayBanner:YES completion:nil];
-                                                              }
+                                                              BOOL flag = [self sharedInstance].bannerView.isBannerLoaded;
+                                                              [[self sharedInstance] setForceHide:!flag];
+                                                              [[self sharedInstance] displayBanner:flag completion:nil];
                                                           }];
         });
         if ([self sharedInstance].isStopped) {
