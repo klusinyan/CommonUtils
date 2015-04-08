@@ -56,9 +56,18 @@ NSString * const CommonBannerDidCompleteSetup = @"CommonBannerDidCompleteSetup";
                                                               object:nil
                                                                queue:[NSOperationQueue mainQueue]
                                                           usingBlock:^(NSNotification *note) {
-                                                              BOOL flag = [self sharedInstance].bannerView.isBannerLoaded;
-                                                              [[self sharedInstance] setForceHide:!flag];
-                                                              [[self sharedInstance] displayBanner:flag completion:nil];
+                                                              
+                                                              // hide banner if loaded immediately
+                                                              if ([self sharedInstance].bannerView.isBannerLoaded) {
+                                                                  [[self sharedInstance] displayBanner:NO completion:nil];
+                                                                  
+                                                                  // show banner if loaded after delay 4 sec
+                                                                  dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(4 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                                                                      if ([self sharedInstance].bannerView.isBannerLoaded) {
+                                                                          [[self sharedInstance] displayBanner:YES completion:nil];
+                                                                      }
+                                                                  });
+                                                              }
                                                           }];
         });
         if ([self sharedInstance].isStopped) {
@@ -113,7 +122,7 @@ NSString * const CommonBannerDidCompleteSetup = @"CommonBannerDidCompleteSetup";
 - (void)start
 {
     self.stopped = NO;
-
+    
     // ready to receive banners
     self.bannerView.delegate = self;
 }
@@ -137,7 +146,7 @@ NSString * const CommonBannerDidCompleteSetup = @"CommonBannerDidCompleteSetup";
 {
     @synchronized(self) {
         if (stopped) {
-            if ([self.bannerView isBannerLoaded] && [self.adapter canDisplayAds]) {                
+            if ([self.bannerView isBannerLoaded] && [self.adapter canDisplayAds]) {
                 [self displayBanner:NO completion:^(BOOL finished) {
                     self.bannerView.delegate = nil;
                 }];
@@ -201,6 +210,8 @@ NSString * const CommonBannerDidCompleteSetup = @"CommonBannerDidCompleteSetup";
 
 - (void)displayBanner:(BOOL)display completion:(void (^)(BOOL finished))completion
 {
+    self.forceHide = !display;
+
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.00001 * NSEC_PER_SEC)),
                    dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                        dispatch_async(dispatch_get_main_queue(), ^{
@@ -227,8 +238,6 @@ NSString * const CommonBannerDidCompleteSetup = @"CommonBannerDidCompleteSetup";
 
 - (void)bannerViewDidLoadAd:(ADBannerView *)banner
 {
-    if (self.isForcedHidden) self.forceHide = NO;
-    
     [self displayBanner:YES completion:nil];
     
     if (self.adapter && [self.adapter respondsToSelector:@selector(bannerViewDidLoadAd:)]) {
@@ -279,7 +288,7 @@ NSString * const CommonBannerDidCompleteSetup = @"CommonBannerDidCompleteSetup";
     objc_setAssociatedObject(self, @selector(canDisplayAds), @(canDisplayAds), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     
     [[CommonBanner sharedInstance] setAdapter:self];
-
+    
     [[CommonBanner sharedInstance] displayBanner:canDisplayAds completion:nil];
 }
 
@@ -318,7 +327,7 @@ NSString * const CommonBannerDidCompleteSetup = @"CommonBannerDidCompleteSetup";
     objc_setAssociatedObject(self, @selector(canDisplayAds), @(canDisplayAds), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     
     [[CommonBanner sharedInstance] setAdapter:self];
-
+    
     [[CommonBanner sharedInstance] displayBanner:canDisplayAds completion:nil];
 }
 
