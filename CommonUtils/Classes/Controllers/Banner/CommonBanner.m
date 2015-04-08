@@ -52,22 +52,60 @@ NSString * const CommonBannerDidCompleteSetup = @"CommonBannerDidCompleteSetup";
                                                               [[self sharedInstance] setup];
                                                               [[self sharedInstance] start];
                                                           }];
+            [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidEnterBackgroundNotification
+                                                              object:nil
+                                                               queue:[NSOperationQueue mainQueue]
+                                                          usingBlock:^(NSNotification *note) {
+                                                              
+                                                              //**********BACKGROUND HANDLER**********//
+                                                              UIApplication *application = [UIApplication sharedApplication];
+                                                              __block UIBackgroundTaskIdentifier bgTask = [application beginBackgroundTaskWithExpirationHandler:^{
+                                                                  //Clean up any task
+                                                                  [application endBackgroundTask:bgTask];
+                                                                  bgTask = UIBackgroundTaskInvalid;
+                                                              }];
+                                                              
+                                                              // Start the long-running task and return immediately.
+                                                              dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                                                                  
+                                                                  //**********START BACKGROUND TAST**********//
+                                                                  if ([self sharedInstance].isDisplayed) {
+                                                                      [[self sharedInstance] displayBanner:NO completion:nil];
+                                                                  }
+                                                                  //**********START BACKGROUND TAST**********//
+                                                                  
+                                                                  [application endBackgroundTask:bgTask];
+                                                                  bgTask = UIBackgroundTaskInvalid;
+                                                              });
+                                                              //**********BACKGROUND HANDLER**********//
+                                                          }];
+            
             [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillEnterForegroundNotification
                                                               object:nil
                                                                queue:[NSOperationQueue mainQueue]
                                                           usingBlock:^(NSNotification *note) {
                                                               
-                                                              // hide banner if loaded immediately
-                                                              if ([self sharedInstance].bannerView.isBannerLoaded) {
-                                                                  [[self sharedInstance] displayBanner:NO completion:nil];
+                                                              //**********BACKGROUND HANDLER**********//
+                                                              UIApplication *application = [UIApplication sharedApplication];
+                                                              __block UIBackgroundTaskIdentifier bgTask = [application beginBackgroundTaskWithExpirationHandler:^{
+                                                                  //Clean up any task
+                                                                  [application endBackgroundTask:bgTask];
+                                                                  bgTask = UIBackgroundTaskInvalid;
+                                                              }];
+                                                              
+                                                              // Start the long-running task and return immediately.
+                                                              dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                                                                   
-                                                                  // show banner if loaded after delay 4 sec
-                                                                  dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(4 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                                                                      if ([self sharedInstance].bannerView.isBannerLoaded) {
-                                                                          [[self sharedInstance] displayBanner:YES completion:nil];
-                                                                      }
-                                                                  });
-                                                              }
+                                                                  //**********START BACKGROUND TAST**********//
+                                                                  if (![self sharedInstance].isDisplayed) {
+                                                                      [[self sharedInstance] displayBanner:YES completion:nil];
+                                                                  }
+                                                                  //**********START BACKGROUND TAST**********//
+                                                                  
+                                                                  [application endBackgroundTask:bgTask];
+                                                                  bgTask = UIBackgroundTaskInvalid;
+                                                              });
+                                                              //**********BACKGROUND HANDLER**********//
                                                           }];
         });
         if ([self sharedInstance].isStopped) {
@@ -176,6 +214,8 @@ NSString * const CommonBannerDidCompleteSetup = @"CommonBannerDidCompleteSetup";
             contentFrame.origin.y += bannerFrame.size.height;
             contentFrame.size.height -= bannerFrame.size.height;
         }
+        
+        self.displayed = YES;
     }
     else {
         if (self.bannerPosition == CommonBannerPositionBottom) {
@@ -185,6 +225,8 @@ NSString * const CommonBannerDidCompleteSetup = @"CommonBannerDidCompleteSetup";
             bannerFrame.origin.y -= bannerFrame.size.height;
             contentFrame = self.view.bounds;
         }
+        
+        self.displayed = NO;
     }
     
     if ([self.adapter shouldCoverContent]) {
@@ -211,13 +253,13 @@ NSString * const CommonBannerDidCompleteSetup = @"CommonBannerDidCompleteSetup";
 - (void)displayBanner:(BOOL)display completion:(void (^)(BOOL finished))completion
 {
     self.forceHide = !display;
-
+    
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.00001 * NSEC_PER_SEC)),
                    dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                        dispatch_async(dispatch_get_main_queue(), ^{
                            DebugLog(@"isBannerLoaded=[%@] display=[%@]", self.bannerView.isBannerLoaded ? @"Y" : @"N", display ? @"Y" : @"N");
                            
-                           [UIView animateWithDuration:[self.adapter animated] ? 0.25f : 0.0f animations:^{
+                           [UIView animateWithDuration:[self.adapter animated] && display ? 0.25f : 0.0f animations:^{
                                // viewDidLayoutSubviews will handle positioning the banner view so that it is visible.
                                // You must not call [self.view layoutSubviews] directly.  However, you can flag the view
                                // as requiring layout...
@@ -227,7 +269,6 @@ NSString * const CommonBannerDidCompleteSetup = @"CommonBannerDidCompleteSetup";
                                // ... which has the same effect.
                            } completion:^(BOOL finished) {
                                if (completion) completion(finished);
-                               self.displayed = display;
                            }];
                        });
                    });
@@ -238,7 +279,10 @@ NSString * const CommonBannerDidCompleteSetup = @"CommonBannerDidCompleteSetup";
 
 - (void)bannerViewDidLoadAd:(ADBannerView *)banner
 {
-    [self displayBanner:YES completion:nil];
+    // optimization: not called viewDidLayoutSubview if banner did load again
+    if (!self.isDisplayed) {
+        [self displayBanner:YES completion:nil];
+    }
     
     if (self.adapter && [self.adapter respondsToSelector:@selector(bannerViewDidLoadAd:)]) {
         [self.adapter bannerViewDidLoadAd:banner];
