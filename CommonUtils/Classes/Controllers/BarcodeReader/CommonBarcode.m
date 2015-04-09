@@ -93,16 +93,14 @@ NSString * const CBErrorPermissionDenied    = @"CBLocalizedStringPermissionDenie
                                                                                  action:@selector(flash:)];
     }
     
-    //TODO
-    /*
-     [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidChangeStatusBarOrientationNotification
-     object:nil
-     queue:[NSOperationQueue mainQueue]
-     usingBlock:^(NSNotification * __unused notification) {
-     [self adjustFrames];
-     [self adjustOrientationWithInterfaceOrientation:self.interfaceOrientation];
-     }];
-     //*/
+    [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidChangeStatusBarOrientationNotification
+                                                      object:nil
+                                                       queue:[NSOperationQueue mainQueue]
+                                                  usingBlock:^(NSNotification * __unused notification) {
+                                                      //TODO
+                                                      //[self adjustFrames];
+                                                      //[self adjustOrientationWithInterfaceOrientation:self.interfaceOrientation];
+                                                  }];
     
     [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillEnterForegroundNotification
                                                       object:nil
@@ -131,32 +129,30 @@ NSString * const CBErrorPermissionDenied    = @"CBLocalizedStringPermissionDenie
         [self.commonSpinner setTitle:[DirectoryUtils localizedStringForKey:CBLocalizedStringInitializingMsg bundleName:kBundleName]];
         
         [self.commonSpinner showInView:self.view completion:^{
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [self startCapturingWithCompletion:^(NSError *error) {
-                    if (error) {
-                        NSString *errMessage = nil;
-                        switch (error.code) {
-                            case CBErrorCodeTargetSimulator:
-                                errMessage = CBErrorTargetSimulator;
-                                break;
-                            case CBErrorCodePermissionDenied:
-                                errMessage = CBErrorPermissionDenied;
-                                break;
-                            default:
-                                errMessage = CBErrorUnknwon;
-                                break;
-                        }
-                        NSString *localizedString = [DirectoryUtils localizedStringForKey:errMessage bundleName:kBundleName];
-                        [self.commonSpinner setTitleOnly:localizedString activityIndicatorVisible:NO];
-                        if ([self respondsToSelector:@selector(barcode:didFailCapturingWithError:)]) {
-                            [self barcode:self didFailCapturingWithError:error];
-                        }
+            [self startCapturingWithCompletion:^(NSError *error) {
+                if (error) {
+                    NSString *errMessage = nil;
+                    switch (error.code) {
+                        case CBErrorCodeTargetSimulator:
+                            errMessage = CBErrorTargetSimulator;
+                            break;
+                        case CBErrorCodePermissionDenied:
+                            errMessage = CBErrorPermissionDenied;
+                            break;
+                        default:
+                            errMessage = CBErrorUnknwon;
+                            break;
                     }
-                    else {
-                        [self.commonSpinner hideWithCompletion:nil];
+                    NSString *localizedString = [DirectoryUtils localizedStringForKey:errMessage bundleName:kBundleName];
+                    [self.commonSpinner setTitleOnly:localizedString activityIndicatorVisible:NO];
+                    if ([self respondsToSelector:@selector(barcode:didFailCapturingWithError:)]) {
+                        [self barcode:self didFailCapturingWithError:error];
                     }
-                }];
-            });
+                }
+                else {
+                    [self.commonSpinner hideWithCompletion:nil];
+                }
+            }];
         }];
     }
 }
