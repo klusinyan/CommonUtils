@@ -1,9 +1,9 @@
 //  Created by Yasuhiro Inami on 2012/10/14.
 //  Copyright (c) 2012年 Yasuhiro Inami. All rights reserved.
 
-#import "YIInnerShadowTableView.h"
+#import "YIInnerShadowButton.h"
 
-@implementation YIInnerShadowTableView
+@implementation YIInnerShadowButton
 
 //+ (Class)layerClass
 //{

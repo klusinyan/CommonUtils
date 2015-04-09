@@ -5,7 +5,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import "YIInnerShadowLayer.h"
 
-@interface YIInnerShadowView : UIView
+@interface YIInnerShadowButton : UIView
 
 @property (nonatomic, strong, readonly) YIInnerShadowLayer* innerShadowLayer;
 
