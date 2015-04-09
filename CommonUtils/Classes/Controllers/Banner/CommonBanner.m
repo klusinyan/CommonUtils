@@ -242,8 +242,7 @@ NSString * const CommonBannerDidCompleteSetup = @"CommonBannerDidCompleteSetup";
 
 - (void)bannerViewDidLoadAd:(ADBannerView *)banner
 {
-    // optimization: not called viewDidLayoutSubview if banner did load again
-    if (!self.isDisplayed) {
+    if (self.displayed) {
         [self displayBanner:YES completion:nil];
     }
     
@@ -254,7 +253,6 @@ NSString * const CommonBannerDidCompleteSetup = @"CommonBannerDidCompleteSetup";
 
 - (void)bannerView:(ADBannerView *)banner didFailToReceiveAdWithError:(NSError *)error
 {
-    // optimization: not called viewDidLayoutSubview if banner receiving did fail
     if (self.isDisplayed) {
         [self displayBanner:NO completion:nil];
     }

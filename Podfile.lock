@@ -22,11 +22,11 @@ PODS:
     - AFNetworking/NSURLSession
   - Appirater (2.0.4)
   - Canvas (0.1.2)
-  - CommonUtils (1.5.0-beta24):
+  - CommonUtils (1.5.0-beta31):
     - AFNetworking
     - Canvas
-    - CommonUtils/no-arc (= 1.5.0-beta24)
-  - CommonUtils/no-arc (1.5.0-beta24):
+    - CommonUtils/no-arc (= 1.5.0-beta31)
+  - CommonUtils/no-arc (1.5.0-beta31):
     - AFNetworking
     - Canvas
 
@@ -42,6 +42,6 @@ SPEC CHECKSUMS:
   AFNetworking: fefbce9660acb17f48ae0011292d4da0f457bf36
   Appirater: 8783318c36414e8de3ea023443028df94c1b784b
   Canvas: eb861e3b555d032648146c8ffda1a5dea40059ca
-  CommonUtils: 05e72ce5afe418d904b58fb45d981b3277b75dcb
+  CommonUtils: 58580f70ee14ee16d936da8f95fa59dec64886c7
 
 COCOAPODS: 0.35.0
