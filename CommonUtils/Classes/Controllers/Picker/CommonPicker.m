@@ -123,7 +123,11 @@ UIPopoverControllerDelegate
 {
     UIToolbar *toolbar = [[UIToolbar alloc] init];
     toolbar.translatesAutoresizingMaskIntoConstraints = NO;
-    //toolbar.barTintColor = [UIColor greenColor];
+    
+    // setup appearance
+    toolbar.backgroundColor = [UIToolbar appearance].backgroundColor;
+    toolbar.barTintColor = [UIToolbar appearance].barTintColor;
+    toolbar.tintColor = [UIToolbar appearance].tintColor;
     
     UIBarButtonItem *cancel = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
                                                                             target:self
@@ -151,7 +155,10 @@ UIPopoverControllerDelegate
     }
     
     label.translatesAutoresizingMaskIntoConstraints = NO;
-    //label.backgroundColor = [UIColor grayColor];
+    
+    // setup appearance
+    label.backgroundColor = [UIColor clearColor];
+    label.textColor = [UIToolbar appearance].tintColor;
     
     UIBarButtonItem *title = [[UIBarButtonItem alloc] initWithCustomView:label];
     
@@ -220,7 +227,6 @@ UIPopoverControllerDelegate
 {
     self.pickerView = (iPad) ? [[UIView alloc] init] : [[BlurView alloc] init];
     self.pickerView.layer.cornerRadius = self.pickerCornerradius;
-    //self.pickerView.backgroundColor = [UIColor greenColor];
     
     if (self.dataSource && [self.dataSource respondsToSelector:@selector(contentForPicker:)]) {
         self.picker = [self.dataSource contentForPicker:self];
