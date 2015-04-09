@@ -298,10 +298,10 @@
 			children = (
 				9C0BC9F01AD6E3F500234AC8 /* YIInnerShadowLayer.h */,
 				9C0BC9F11AD6E3F500234AC8 /* YIInnerShadowLayer.m */,
-				9C0BC9F21AD6E3F500234AC8 /* YIInnerShadowTableView.h */,
-				9C0BC9F31AD6E3F500234AC8 /* YIInnerShadowTableView.m */,
 				9C0BC9F41AD6E3F500234AC8 /* YIInnerShadowView.h */,
 				9C0BC9F51AD6E3F500234AC8 /* YIInnerShadowView.m */,
+				9C0BC9F21AD6E3F500234AC8 /* YIInnerShadowTableView.h */,
+				9C0BC9F31AD6E3F500234AC8 /* YIInnerShadowTableView.m */,
 				9C0BC9FC1AD7008C00234AC8 /* YIInnerShadowButton.h */,
 				9C0BC9FD1AD7008C00234AC8 /* YIInnerShadowButton.m */,
 			);

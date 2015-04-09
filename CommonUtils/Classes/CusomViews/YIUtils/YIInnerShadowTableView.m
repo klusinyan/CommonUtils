@@ -27,7 +27,7 @@
     
     [self.layer addSublayer:_innerShadowLayer];
     self.layer.masksToBounds = YES;
-    self.userInteractionEnabled = NO;
+    self.userInteractionEnabled = YES;
 }
 
 - (id)initWithFrame:(CGRect)frame
