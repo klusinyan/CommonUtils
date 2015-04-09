@@ -125,7 +125,6 @@ UIPopoverControllerDelegate
     toolbar.translatesAutoresizingMaskIntoConstraints = NO;
     
     // setup appearance
-    toolbar.backgroundColor = [UIToolbar appearance].backgroundColor;
     toolbar.barTintColor = [UIToolbar appearance].barTintColor;
     toolbar.tintColor = [UIToolbar appearance].tintColor;
     
