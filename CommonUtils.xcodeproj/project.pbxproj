@@ -68,6 +68,8 @@
 		9CA2B4BF19584AFA00E29A8B /* UICollectionView+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CA2B4BD19584AFA00E29A8B /* UICollectionView+Utils.m */; };
 		9CA4F69D19790E7D000BCFCC /* ViewPagerController.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CA4F69B19790E7D000BCFCC /* ViewPagerController.h */; };
 		9CA4F69E19790E7D000BCFCC /* ViewPagerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CA4F69C19790E7D000BCFCC /* ViewPagerController.m */; };
+		9CAC8F3F1AD6C6B3004C5A75 /* CommonTask.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CAC8F3D1AD6C6B3004C5A75 /* CommonTask.h */; };
+		9CAC8F401AD6C6B3004C5A75 /* CommonTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CAC8F3E1AD6C6B3004C5A75 /* CommonTask.m */; };
 		9CB1FC8C197598D00080534F /* SegmentedViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CB1FC83197598D00080534F /* SegmentedViewController.h */; };
 		9CB1FC8E197598D00080534F /* SelectedElementDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CB1FC86197598D00080534F /* SelectedElementDelegate.h */; };
 		9CB1FC8F197598D00080534F /* SelectedListController.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CB1FC87197598D00080534F /* SelectedListController.h */; };
@@ -166,6 +168,8 @@
 		9CA2B4BD19584AFA00E29A8B /* UICollectionView+Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UICollectionView+Utils.m"; sourceTree = "<group>"; };
 		9CA4F69B19790E7D000BCFCC /* ViewPagerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewPagerController.h; sourceTree = "<group>"; };
 		9CA4F69C19790E7D000BCFCC /* ViewPagerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewPagerController.m; sourceTree = "<group>"; };
+		9CAC8F3D1AD6C6B3004C5A75 /* CommonTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonTask.h; sourceTree = "<group>"; };
+		9CAC8F3E1AD6C6B3004C5A75 /* CommonTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonTask.m; sourceTree = "<group>"; };
 		9CB1FC83197598D00080534F /* SegmentedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SegmentedViewController.h; sourceTree = "<group>"; };
 		9CB1FC86197598D00080534F /* SelectedElementDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectedElementDelegate.h; sourceTree = "<group>"; };
 		9CB1FC87197598D00080534F /* SelectedListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectedListController.h; sourceTree = "<group>"; };
@@ -463,6 +467,15 @@
 			path = TabPageController;
 			sourceTree = "<group>";
 		};
+		9CAC8F3C1AD6C69B004C5A75 /* Task */ = {
+			isa = PBXGroup;
+			children = (
+				9CAC8F3D1AD6C6B3004C5A75 /* CommonTask.h */,
+				9CAC8F3E1AD6C6B3004C5A75 /* CommonTask.m */,
+			);
+			path = Task;
+			sourceTree = "<group>";
+		};
 		9CB1FC81197598D00080534F /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
@@ -532,6 +545,7 @@
 		9CB81FD718FD375300C918FB /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				9CAC8F3C1AD6C69B004C5A75 /* Task */,
 				9CFDEC7E1ACD31DF001D1E62 /* Serilizer */,
 				9CFDEC751ACD30C4001D1E62 /* GameCenter */,
 				9C42A7361AC9975600DD524F /* Crash */,
@@ -689,6 +703,7 @@
 				9CA2B4BE19584AFA00E29A8B /* UICollectionView+Utils.h in Headers */,
 				9C20BE5E1949EF830077C6E8 /* ZoomAnimationController.h in Headers */,
 				9C1192021A7BE0AB000B6090 /* CommonSpinner.h in Headers */,
+				9CAC8F3F1AD6C6B3004C5A75 /* CommonTask.h in Headers */,
 				9CB4800D19558E8400A5AC1B /* UIColor+Utils.h in Headers */,
 				9C20BE5B1949EF830077C6E8 /* ADVAnimationController.h in Headers */,
 				9C2AC5E119EA96F900588538 /* CommonProgress.h in Headers */,
@@ -790,6 +805,7 @@
 				9C8C0AFE1934A1800033D2A9 /* UIImage+RoundedCorner.m in Sources */,
 				9C8C0AFF1934A1830033D2A9 /* UIImage+FixOrientation.m in Sources */,
 				9CFDEC821ACD31DF001D1E62 /* CommonSerilizer.m in Sources */,
+				9CAC8F401AD6C6B3004C5A75 /* CommonTask.m in Sources */,
 				9CB1FC9C19759B960080534F /* SegmentedViewController.m in Sources */,
 				9CE7A8A819542CCF00E699E4 /* DirectoryUtils.m in Sources */,
 				9C20BE5D1949EF830077C6E8 /* DropAnimationController.m in Sources */,

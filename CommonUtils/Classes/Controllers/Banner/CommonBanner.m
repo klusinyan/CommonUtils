@@ -2,6 +2,7 @@
 //  Copyright (c) 2014 Karen Lusinyan. All rights reserved.
 
 #import "CommonBanner.h"
+#import "CommonTask.h"
 #import <objc/runtime.h>
 
 NSString * const CommonBannerDidCompleteSetup = @"CommonBannerDidCompleteSetup";
@@ -56,56 +57,18 @@ NSString * const CommonBannerDidCompleteSetup = @"CommonBannerDidCompleteSetup";
                                                               object:nil
                                                                queue:[NSOperationQueue mainQueue]
                                                           usingBlock:^(NSNotification *note) {
-                                                              
-                                                              //**********BACKGROUND HANDLER**********//
-                                                              UIApplication *application = [UIApplication sharedApplication];
-                                                              __block UIBackgroundTaskIdentifier bgTask = [application beginBackgroundTaskWithExpirationHandler:^{
-                                                                  //Clean up any task
-                                                                  [application endBackgroundTask:bgTask];
-                                                                  bgTask = UIBackgroundTaskInvalid;
+                                                              [CommonTask performBackgroundTask:^{
+                                                                  [[self sharedInstance] displayBanner:NO completion:nil];
                                                               }];
-                                                              
-                                                              // Start the long-running task and return immediately.
-                                                              dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                                                                  
-                                                                  //**********START BACKGROUND TAST**********//
-                                                                  if ([self sharedInstance].isDisplayed) {
-                                                                      [[self sharedInstance] displayBanner:NO completion:nil];
-                                                                  }
-                                                                  //**********START BACKGROUND TAST**********//
-                                                                  
-                                                                  [application endBackgroundTask:bgTask];
-                                                                  bgTask = UIBackgroundTaskInvalid;
-                                                              });
-                                                              //**********BACKGROUND HANDLER**********//
                                                           }];
             
             [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillEnterForegroundNotification
                                                               object:nil
                                                                queue:[NSOperationQueue mainQueue]
                                                           usingBlock:^(NSNotification *note) {
-                                                              
-                                                              //**********BACKGROUND HANDLER**********//
-                                                              UIApplication *application = [UIApplication sharedApplication];
-                                                              __block UIBackgroundTaskIdentifier bgTask = [application beginBackgroundTaskWithExpirationHandler:^{
-                                                                  //Clean up any task
-                                                                  [application endBackgroundTask:bgTask];
-                                                                  bgTask = UIBackgroundTaskInvalid;
+                                                              [CommonTask performBackgroundTask:^{
+                                                                  [[self sharedInstance] displayBanner:YES completion:nil];
                                                               }];
-                                                              
-                                                              // Start the long-running task and return immediately.
-                                                              dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                                                                  
-                                                                  //**********START BACKGROUND TAST**********//
-                                                                  if (![self sharedInstance].isDisplayed) {
-                                                                      [[self sharedInstance] displayBanner:YES completion:nil];
-                                                                  }
-                                                                  //**********START BACKGROUND TAST**********//
-                                                                  
-                                                                  [application endBackgroundTask:bgTask];
-                                                                  bgTask = UIBackgroundTaskInvalid;
-                                                              });
-                                                              //**********BACKGROUND HANDLER**********//
                                                           }];
         });
         if ([self sharedInstance].isStopped) {
