@@ -2,10 +2,10 @@
 //  Copyright (c) 2012年 Yasuhiro Inami. All rights reserved.
 //  Modified by Karen Lusinyan on 2015/04/10
 
-#import "YIInnerShadowLayer.h"
+#import "CommonInnerShadow.h"
 #import <objc/runtime.h>
 
-@implementation YIInnerShadowLayer
+@implementation CommonInnerShadow
 
 - (id)init
 {
@@ -25,7 +25,7 @@
         // Causes the inner region in this example to NOT be filled.
         [self setFillRule:kCAFillRuleEvenOdd];
         
-        self.shadowMask = YIInnerShadowMaskAll;
+        self.shadowMask = CommonInnerShadowMaskAll;
         
     }
     return self;
@@ -35,10 +35,10 @@
 {
     [super layoutSublayers];
     
-    CGFloat top = (self.shadowMask & YIInnerShadowMaskTop ? self.shadowRadius : 0);
-    CGFloat bottom = (self.shadowMask & YIInnerShadowMaskBottom ? self.shadowRadius : 0);
-    CGFloat left = (self.shadowMask & YIInnerShadowMaskLeft ? self.shadowRadius : 0);
-    CGFloat right = (self.shadowMask & YIInnerShadowMaskRight ? self.shadowRadius : 0);
+    CGFloat top = (self.shadowMask & CommonInnerShadowMaskTop ? self.shadowRadius : 0);
+    CGFloat bottom = (self.shadowMask & CommonInnerShadowMaskBottom ? self.shadowRadius : 0);
+    CGFloat left = (self.shadowMask & CommonInnerShadowMaskLeft ? self.shadowRadius : 0);
+    CGFloat right = (self.shadowMask & CommonInnerShadowMaskRight ? self.shadowRadius : 0);
     
     CGRect largerRect = CGRectMake(self.bounds.origin.x - left,
                                    self.bounds.origin.y - top,
@@ -71,7 +71,7 @@
 
 #pragma mark Accessors
 
-- (void)setShadowMask:(YIInnerShadowMask)shadowMask
+- (void)setShadowMask:(CommonInnerShadowMask)shadowMask
 {
     _shadowMask = shadowMask;
     [self setNeedsLayout];
@@ -116,22 +116,22 @@
 
 #pragma mark Accessors
 
-- (YIInnerShadowLayer *)innerShadowLayer
+- (CommonInnerShadow *)innerShadowLayer
 {
     return objc_getAssociatedObject(self, @selector(innerShadowLayer));
 }
 
-- (void)setInnerShadowLayer:(YIInnerShadowLayer *)innerShadowLayer
+- (void)setInnerShadowLayer:(CommonInnerShadow *)innerShadowLayer
 {
     objc_setAssociatedObject(self, @selector(innerShadowLayer), innerShadowLayer, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
-- (YIInnerShadowMask)shadowMask
+- (CommonInnerShadowMask)shadowMask
 {
     return [objc_getAssociatedObject(self, @selector(shadowMask)) integerValue];
 }
 
-- (void)setShadowMask:(YIInnerShadowMask)shadowMask
+- (void)setShadowMask:(CommonInnerShadowMask)shadowMask
 {
     objc_setAssociatedObject(self, @selector(shadowMask), @(shadowMask), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
@@ -189,7 +189,7 @@
 - (void)setupAppearance
 {
     // add as sublayer so that self.backgroundColor will work nicely
-    [self setInnerShadowLayer:[YIInnerShadowLayer layer]];
+    [self setInnerShadowLayer:[CommonInnerShadow layer]];
     [self innerShadowLayer].actions = [NSDictionary dictionaryWithObjectsAndKeys:
                                        [NSNull null], @"position",
                                        [NSNull null], @"bounds",
