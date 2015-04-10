@@ -48,6 +48,7 @@ typedef NS_ENUM(NSInteger, YIInnerShadowMask) {
 
 @end
 
+/*
 @interface UITableView (InnerShadow) <InnerShadowAdapter>
 
 @end
@@ -59,4 +60,5 @@ typedef NS_ENUM(NSInteger, YIInnerShadowMask) {
 @interface SKView (InnerShadow) <InnerShadowAdapter>
 
 @end
+ //*/
 

@@ -212,6 +212,7 @@
 
 @end
 
+/*
 @implementation UITableView (InnerShadow)
 @dynamic innerShadowLayer, shadowMask, shadowColor, shadowOpacity, shadowOffset, shadowRadius, cornerRadius;
 
@@ -520,3 +521,4 @@
 }
 
 @end
+ //*/
