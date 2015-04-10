@@ -456,7 +456,7 @@ typedef void(^CompletionWhenGameViewControllerDisappeared)(void);
                                                  message:[NSString stringWithFormat:@"%@ would like to access your Game Center account", appName]
                                                 delegate:self
                                        cancelButtonTitle:@"No, thanks"
-                                       otherButtonTitles:@"Sign in", @"Decide later", nil];
+                                       otherButtonTitles:@"Decide later", @"Sign in", nil];
     [av show];
 }
 
