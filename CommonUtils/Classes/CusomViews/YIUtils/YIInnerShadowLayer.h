@@ -25,7 +25,6 @@ typedef NS_ENUM(NSInteger, YIInnerShadowMask) {
 
 @end
 
-// protocol adapter
 @protocol InnerShadowAdapter <NSObject>
 
 @required
@@ -43,22 +42,8 @@ typedef NS_ENUM(NSInteger, YIInnerShadowMask) {
 
 @end
 
-// categories
 @interface UIView (InnerShadow) <InnerShadowAdapter>
 
 @end
 
-/*
-@interface UITableView (InnerShadow) <InnerShadowAdapter>
-
-@end
-
-@interface UIButton (InnerShadow) <InnerShadowAdapter>
-
-@end
-
-@interface SKView (InnerShadow) <InnerShadowAdapter>
-
-@end
- //*/
 
