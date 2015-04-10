@@ -8,7 +8,6 @@
 @interface CommonBarcodeController ()
 
 //IBOutlets
-@property (readwrite, nonatomic, strong) IBOutlet UIView *previewContainer;
 @property (readwrite, nonatomic, strong) IBOutlet UIView *buttonContainer;
 @property (readwrite, nonatomic, strong) IBOutlet UIButton *btnDone;
 @property (readwrite, nonatomic, strong) IBOutlet UIButton *btnRetry;

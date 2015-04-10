@@ -525,7 +525,7 @@ NSString * const NotificationMenuDidFinishClosing = @"NotificationMenuDidFinishC
         [UIView animateWithDuration:0.3 animations:^{
             CGRect frame = detailView.frame;
             frame.origin.x = self.menuWidth-self.menuOverlay;
-            if (![panGesture state] == UIGestureRecognizerStateEnded)
+            if ([panGesture state] != UIGestureRecognizerStateEnded)
                 frame.size.width -= (self.menuWidth-self.menuOverlay);
             else
                 frame.size.width = self.view.bounds.size.width-self.menuWidth+self.menuOverlay;
@@ -554,7 +554,7 @@ NSString * const NotificationMenuDidFinishClosing = @"NotificationMenuDidFinishC
         [UIView animateWithDuration:0.1 animations:^{
             CGRect frame = detailView.frame;
             frame.origin.x = 0;
-            if (![panGesture state] == UIGestureRecognizerStateEnded)
+            if ([panGesture state] != UIGestureRecognizerStateEnded)
                 frame.size.width += self.menuWidth-self.menuOverlay;
             else
                 frame.size.width = self.view.bounds.size.width;

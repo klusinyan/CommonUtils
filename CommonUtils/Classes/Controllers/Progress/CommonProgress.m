@@ -293,7 +293,7 @@
 - (void)setProgress:(CGFloat)progress
 {
     if (progress < 0.0f || progress > 1.0f) return;
-    if (fabsf(_progress - progress) < self.minProgressUnit) return;
+    if (fabs(_progress - progress) < self.minProgressUnit) return;
     
     CGFloat fromValue = M_PI * 2 * _progress;
     CGFloat toValue = M_PI * 2 * progress;
@@ -326,7 +326,7 @@
     rotationAnimation.fromValue = [NSNumber numberWithFloat:fromValue];
     rotationAnimation.toValue = [NSNumber numberWithFloat:toValue];
     rotationAnimation.duration = duration;
-    rotationAnimation.RepeatCount = repeatCount;
+    rotationAnimation.repeatCount = repeatCount;
     rotationAnimation.removedOnCompletion = NO;
     rotationAnimation.fillMode = kCAFillModeForwards;
     rotationAnimation.delegate = self;
