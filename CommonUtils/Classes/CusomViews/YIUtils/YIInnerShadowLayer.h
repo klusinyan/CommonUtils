@@ -1,10 +1,10 @@
 //  Created by Yasuhiro Inami on 2012/10/14.
 //  Copyright (c) 2012年 Yasuhiro Inami. All rights reserved.
+//  Modified by Karen Lusinyan on 2015/04/10
 
-#import <UIKit/UIKit.h>
-#import <QuartzCore/QuartzCore.h>
+#import <SpriteKit/SpriteKit.h>
 
-typedef enum {
+typedef NS_ENUM(NSInteger, YIInnerShadowMask) {
     YIInnerShadowMaskNone       = 0,
     YIInnerShadowMaskTop        = 1 << 1,
     YIInnerShadowMaskBottom     = 1 << 2,
@@ -13,7 +13,7 @@ typedef enum {
     YIInnerShadowMaskVertical   = YIInnerShadowMaskTop | YIInnerShadowMaskBottom,
     YIInnerShadowMaskHorizontal = YIInnerShadowMaskLeft | YIInnerShadowMaskRight,
     YIInnerShadowMaskAll        = YIInnerShadowMaskVertical | YIInnerShadowMaskHorizontal
-} YIInnerShadowMask;
+};
 
 //
 // Ideas from Matt Wilding:
@@ -24,3 +24,39 @@ typedef enum {
 @property (nonatomic) YIInnerShadowMask shadowMask;
 
 @end
+
+// protocol adapter
+@protocol InnerShadowAdapter <NSObject>
+
+@required
+@property (nonatomic, strong) YIInnerShadowLayer* innerShadowLayer;
+
+@property (nonatomic) YIInnerShadowMask shadowMask;
+
+@property (nonatomic, strong) UIColor* shadowColor;
+@property (nonatomic)         CGFloat  shadowOpacity;
+@property (nonatomic)         CGSize   shadowOffset;
+@property (nonatomic)         CGFloat  shadowRadius;
+@property (nonatomic)         CGFloat  cornerRadius;
+
+- (void)setupAppearance;
+
+@end
+
+// categories
+@interface UIView (InnerShadow) <InnerShadowAdapter>
+
+@end
+
+@interface UITableView (InnerShadow) <InnerShadowAdapter>
+
+@end
+
+@interface UIButton (InnerShadow) <InnerShadowAdapter>
+
+@end
+
+@interface SKView (InnerShadow) <InnerShadowAdapter>
+
+@end
+

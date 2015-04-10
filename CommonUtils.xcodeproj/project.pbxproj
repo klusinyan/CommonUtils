@@ -19,12 +19,6 @@
 		9C0802621A1F4B7B00040153 /* UIViewController+ChildrenHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C0802601A1F4B7B00040153 /* UIViewController+ChildrenHandler.m */; };
 		9C0BC9F61AD6E3F500234AC8 /* YIInnerShadowLayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C0BC9F01AD6E3F500234AC8 /* YIInnerShadowLayer.h */; };
 		9C0BC9F71AD6E3F500234AC8 /* YIInnerShadowLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C0BC9F11AD6E3F500234AC8 /* YIInnerShadowLayer.m */; };
-		9C0BC9F81AD6E3F500234AC8 /* YIInnerShadowTableView.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C0BC9F21AD6E3F500234AC8 /* YIInnerShadowTableView.h */; };
-		9C0BC9F91AD6E3F500234AC8 /* YIInnerShadowTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C0BC9F31AD6E3F500234AC8 /* YIInnerShadowTableView.m */; };
-		9C0BC9FA1AD6E3F500234AC8 /* YIInnerShadowView.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C0BC9F41AD6E3F500234AC8 /* YIInnerShadowView.h */; };
-		9C0BC9FB1AD6E3F500234AC8 /* YIInnerShadowView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C0BC9F51AD6E3F500234AC8 /* YIInnerShadowView.m */; };
-		9C0BC9FE1AD7008C00234AC8 /* YIInnerShadowButton.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C0BC9FC1AD7008C00234AC8 /* YIInnerShadowButton.h */; };
-		9C0BC9FF1AD7008C00234AC8 /* YIInnerShadowButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C0BC9FD1AD7008C00234AC8 /* YIInnerShadowButton.m */; };
 		9C1192021A7BE0AB000B6090 /* CommonSpinner.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C1192001A7BE0AB000B6090 /* CommonSpinner.h */; };
 		9C1192031A7BE0AB000B6090 /* CommonSpinner.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C1192011A7BE0AB000B6090 /* CommonSpinner.m */; };
 		9C1E3931198E42F600EA933D /* UIAlertView+Blocks.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C1E392F198E42F600EA933D /* UIAlertView+Blocks.h */; };
@@ -124,12 +118,6 @@
 		9C0802601A1F4B7B00040153 /* UIViewController+ChildrenHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+ChildrenHandler.m"; sourceTree = "<group>"; };
 		9C0BC9F01AD6E3F500234AC8 /* YIInnerShadowLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YIInnerShadowLayer.h; sourceTree = "<group>"; };
 		9C0BC9F11AD6E3F500234AC8 /* YIInnerShadowLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YIInnerShadowLayer.m; sourceTree = "<group>"; };
-		9C0BC9F21AD6E3F500234AC8 /* YIInnerShadowTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YIInnerShadowTableView.h; sourceTree = "<group>"; };
-		9C0BC9F31AD6E3F500234AC8 /* YIInnerShadowTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YIInnerShadowTableView.m; sourceTree = "<group>"; };
-		9C0BC9F41AD6E3F500234AC8 /* YIInnerShadowView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YIInnerShadowView.h; sourceTree = "<group>"; };
-		9C0BC9F51AD6E3F500234AC8 /* YIInnerShadowView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YIInnerShadowView.m; sourceTree = "<group>"; };
-		9C0BC9FC1AD7008C00234AC8 /* YIInnerShadowButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YIInnerShadowButton.h; sourceTree = "<group>"; };
-		9C0BC9FD1AD7008C00234AC8 /* YIInnerShadowButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YIInnerShadowButton.m; sourceTree = "<group>"; };
 		9C1192001A7BE0AB000B6090 /* CommonSpinner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonSpinner.h; sourceTree = "<group>"; };
 		9C1192011A7BE0AB000B6090 /* CommonSpinner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonSpinner.m; sourceTree = "<group>"; };
 		9C1E392F198E42F600EA933D /* UIAlertView+Blocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIAlertView+Blocks.h"; sourceTree = "<group>"; };
@@ -298,12 +286,6 @@
 			children = (
 				9C0BC9F01AD6E3F500234AC8 /* YIInnerShadowLayer.h */,
 				9C0BC9F11AD6E3F500234AC8 /* YIInnerShadowLayer.m */,
-				9C0BC9F41AD6E3F500234AC8 /* YIInnerShadowView.h */,
-				9C0BC9F51AD6E3F500234AC8 /* YIInnerShadowView.m */,
-				9C0BC9F21AD6E3F500234AC8 /* YIInnerShadowTableView.h */,
-				9C0BC9F31AD6E3F500234AC8 /* YIInnerShadowTableView.m */,
-				9C0BC9FC1AD7008C00234AC8 /* YIInnerShadowButton.h */,
-				9C0BC9FD1AD7008C00234AC8 /* YIInnerShadowButton.m */,
 			);
 			path = YIUtils;
 			sourceTree = "<group>";
@@ -718,7 +700,6 @@
 				9C42A7341AC98D2600DD524F /* CommonBanner.h in Headers */,
 				9CD7023E193388790066FFC0 /* UIImage+Alpha.h in Headers */,
 				9C90FF7919377EBB004CE056 /* NSDictionary+Utils.h in Headers */,
-				9C0BC9F81AD6E3F500234AC8 /* YIInnerShadowTableView.h in Headers */,
 				9CE7A8A719542CCF00E699E4 /* DirectoryUtils.h in Headers */,
 				9C90FF6619377D33004CE056 /* NSFileManager-Utilities.h in Headers */,
 				9C1E3931198E42F600EA933D /* UIAlertView+Blocks.h in Headers */,
@@ -742,7 +723,6 @@
 				9C2AC5E119EA96F900588538 /* CommonProgress.h in Headers */,
 				9CFDEC781ACD30F0001D1E62 /* CommonGameCenter.h in Headers */,
 				9CFDEC811ACD31DF001D1E62 /* CommonSerilizer.h in Headers */,
-				9C0BC9FA1AD6E3F500234AC8 /* YIInnerShadowView.h in Headers */,
 				9C90FF6B19377DEC004CE056 /* NSDate+Utils.h in Headers */,
 				9C94A99119EBC911003DF554 /* CommonSegmentedViewController.h in Headers */,
 				9C42A7391AC9975600DD524F /* CommonCrash.h in Headers */,
@@ -751,7 +731,6 @@
 				9CA4F69D19790E7D000BCFCC /* ViewPagerController.h in Headers */,
 				9C01921A19D2CBD600E8E9E3 /* CommonPicker.h in Headers */,
 				9C46A59919766A840018B109 /* ImageDownloader.h in Headers */,
-				9C0BC9FE1AD7008C00234AC8 /* YIInnerShadowButton.h in Headers */,
 				9CD9F772196E907900EBBD85 /* NSString+HTML.h in Headers */,
 				9CD9F770196E907900EBBD85 /* GTMNSString+HTML.h in Headers */,
 				9C01921819D2CBD600E8E9E3 /* CommonKeyboard.h in Headers */,
@@ -832,15 +811,12 @@
 				9C01921919D2CBD600E8E9E3 /* CommonKeyboard.m in Sources */,
 				9C94A99219EBC911003DF554 /* CommonSegmentedViewController.m in Sources */,
 				9CB4800E19558E8400A5AC1B /* UIColor+Utils.m in Sources */,
-				9C0BC9F91AD6E3F500234AC8 /* YIInnerShadowTableView.m in Sources */,
 				9C1E3932198E42F600EA933D /* UIAlertView+Blocks.m in Sources */,
 				9C8F99E11AA0642500F34B57 /* CommonPageContent.m in Sources */,
-				9C0BC9FB1AD6E3F500234AC8 /* YIInnerShadowView.m in Sources */,
 				9C42A73A1AC9975600DD524F /* CommonCrash.m in Sources */,
 				9C90FF7A19377EBB004CE056 /* NSDictionary+Utils.m in Sources */,
 				9C6DD7D519F130670013D333 /* UIImage+Color.m in Sources */,
 				9CD9F773196E907900EBBD85 /* NSString+HTML.m in Sources */,
-				9C0BC9FF1AD7008C00234AC8 /* YIInnerShadowButton.m in Sources */,
 				9CCB62DF19ED156F0061D0C1 /* CommonSystem.m in Sources */,
 				9C8C0AFE1934A1800033D2A9 /* UIImage+RoundedCorner.m in Sources */,
 				9C8C0AFF1934A1830033D2A9 /* UIImage+FixOrientation.m in Sources */,
