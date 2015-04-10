@@ -2,8 +2,6 @@
 //  Copyright (c) 2012年 Yasuhiro Inami. All rights reserved.
 //  Modified by Karen Lusinyan on 2015/04/10
 
-#import <SpriteKit/SpriteKit.h>
-
 typedef NS_ENUM(NSInteger, CommonInnerShadowMask) {
     CommonInnerShadowMaskNone       = 0,
     CommonInnerShadowMaskTop        = 1 << 1,
