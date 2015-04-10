@@ -128,62 +128,64 @@
 
 - (CommonInnerShadowMask)shadowMask
 {
-    return [objc_getAssociatedObject(self, @selector(shadowMask)) integerValue];
+    return [self innerShadowLayer].shadowMask;
 }
 
 - (void)setShadowMask:(CommonInnerShadowMask)shadowMask
 {
-    objc_setAssociatedObject(self, @selector(shadowMask), @(shadowMask), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    [self innerShadowLayer].shadowMask = shadowMask;
 }
 
 - (UIColor *)shadowColor
 {
-    return objc_getAssociatedObject(self, @selector(shadowColor));
+    return [UIColor colorWithCGColor:[self innerShadowLayer].shadowColor];
 }
 
 - (void)setShadowColor:(UIColor *)shadowColor
 {
-    objc_setAssociatedObject(self, @selector(shadowColor), shadowColor, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    [self innerShadowLayer].shadowColor = shadowColor.CGColor;
 }
 
 - (CGFloat)shadowOpacity
 {
-    return [objc_getAssociatedObject(self, @selector(shadowOpacity)) floatValue];
+    return [self innerShadowLayer].shadowOpacity;
 }
 
 - (void)setShadowOpacity:(CGFloat)shadowOpacity
 {
-    objc_setAssociatedObject(self, @selector(shadowOpacity), @(shadowOpacity), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    [self innerShadowLayer].shadowOpacity = shadowOpacity;
 }
 
 - (CGSize)shadowOffset
 {
-    return [objc_getAssociatedObject(self, @selector(shadowOffset)) CGSizeValue];
+    return [self innerShadowLayer].shadowOffset;
 }
 
 - (void)setShadowOffset:(CGSize)shadowOffset
 {
-    objc_setAssociatedObject(self, @selector(shadowOffset), [NSValue valueWithCGSize:shadowOffset], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    [self innerShadowLayer].shadowOffset = shadowOffset;
 }
 
 - (CGFloat)shadowRadius
 {
-    return [objc_getAssociatedObject(self, @selector(shadowRadius)) floatValue];
+    return [self innerShadowLayer].shadowRadius;
 }
 
 - (void)setShadowRadius:(CGFloat)shadowRadius
 {
-    objc_setAssociatedObject(self, @selector(shadowRadius), @(shadowRadius), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    [self innerShadowLayer].shadowRadius = shadowRadius;
 }
 
 - (CGFloat)cornerRadius
 {
-    return [objc_getAssociatedObject(self, @selector(cornerRadius)) floatValue];
+    return [self innerShadowLayer].cornerRadius;
 }
 
 - (void)setCornerRadius:(CGFloat)cornerRadius
 {
-    objc_setAssociatedObject(self, @selector(cornerRadius), @(cornerRadius), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    self.layer.cornerRadius = cornerRadius;
+    
+    [self innerShadowLayer].cornerRadius = cornerRadius;
 }
 
 - (void)setupInnerShadow

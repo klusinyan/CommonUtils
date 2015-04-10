@@ -98,7 +98,7 @@ typedef NS_ENUM(NSInteger, RowType) {
     
     self.canDisplayAds = YES;
     self.animated = NO;
-    self.shouldCoverContent = YES;
+    //self.shouldCoverContent = YES;
 
     /* CRASH TEST
      NSArray *a = [NSArray array];
