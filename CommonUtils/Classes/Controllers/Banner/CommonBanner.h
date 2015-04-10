@@ -55,7 +55,3 @@ typedef NS_ENUM(NSInteger, CommonBannerPosition) {
 @interface UIViewController (BannerAdapter) <CommonBannerAdapter>
 
 @end
-
-@interface UITableViewController (BannerAdapter) <CommonBannerAdapter>
-
-@end
