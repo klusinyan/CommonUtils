@@ -46,4 +46,7 @@ typedef NS_ENUM(NSInteger, CommonInnerShadowMask) {
 
 @end
 
+@interface UIButton (InnerShadow) <InnerShadowAdapter>
+
+@end
 

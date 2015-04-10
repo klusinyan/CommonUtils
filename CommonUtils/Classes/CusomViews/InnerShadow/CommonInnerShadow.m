@@ -192,6 +192,7 @@
 {
     // add as sublayer so that self.backgroundColor will work nicely
     [self setInnerShadowLayer:[CommonInnerShadow layer]];
+    [self innerShadowLayer].frame = self.layer.bounds;
     [self innerShadowLayer].actions = [NSDictionary dictionaryWithObjectsAndKeys:
                                        [NSNull null], @"position",
                                        [NSNull null], @"bounds",
@@ -202,14 +203,110 @@
                                        [NSNull null], @"shadowRadius",
                                        nil];
     
-    [self.layer addSublayer:[self innerShadowLayer]];
     self.layer.masksToBounds = YES;
-    self.userInteractionEnabled = NO;
+    
+    [self.layer insertSublayer:[self innerShadowLayer] atIndex:0];
 }
 
-- (void)layoutSubviews
+@end
+
+@implementation UIButton (InnerShadow)
+@dynamic innerShadowLayer, shadowMask, shadowColor, shadowOpacity, shadowOffset, shadowRadius, cornerRadius;
+
+#pragma mark -
+
+#pragma mark Accessors
+
+- (CommonInnerShadow *)innerShadowLayer
 {
+    return objc_getAssociatedObject(self, @selector(innerShadowLayer));
+}
+
+- (void)setInnerShadowLayer:(CommonInnerShadow *)innerShadowLayer
+{
+    objc_setAssociatedObject(self, @selector(innerShadowLayer), innerShadowLayer, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (CommonInnerShadowMask)shadowMask
+{
+    return [self innerShadowLayer].shadowMask;
+}
+
+- (void)setShadowMask:(CommonInnerShadowMask)shadowMask
+{
+    [self innerShadowLayer].shadowMask = shadowMask;
+}
+
+- (UIColor *)shadowColor
+{
+    return [UIColor colorWithCGColor:[self innerShadowLayer].shadowColor];
+}
+
+- (void)setShadowColor:(UIColor *)shadowColor
+{
+    [self innerShadowLayer].shadowColor = shadowColor.CGColor;
+}
+
+- (CGFloat)shadowOpacity
+{
+    return [self innerShadowLayer].shadowOpacity;
+}
+
+- (void)setShadowOpacity:(CGFloat)shadowOpacity
+{
+    [self innerShadowLayer].shadowOpacity = shadowOpacity;
+}
+
+- (CGSize)shadowOffset
+{
+    return [self innerShadowLayer].shadowOffset;
+}
+
+- (void)setShadowOffset:(CGSize)shadowOffset
+{
+    [self innerShadowLayer].shadowOffset = shadowOffset;
+}
+
+- (CGFloat)shadowRadius
+{
+    return [self innerShadowLayer].shadowRadius;
+}
+
+- (void)setShadowRadius:(CGFloat)shadowRadius
+{
+    [self innerShadowLayer].shadowRadius = shadowRadius;
+}
+
+- (CGFloat)cornerRadius
+{
+    return [self innerShadowLayer].cornerRadius;
+}
+
+- (void)setCornerRadius:(CGFloat)cornerRadius
+{
+    self.layer.cornerRadius = cornerRadius;
+    
+    [self innerShadowLayer].cornerRadius = cornerRadius;
+}
+
+- (void)setupInnerShadow
+{
+    // add as sublayer so that self.backgroundColor will work nicely
+    [self setInnerShadowLayer:[CommonInnerShadow layer]];
     [self innerShadowLayer].frame = self.layer.bounds;
+    [self innerShadowLayer].actions = [NSDictionary dictionaryWithObjectsAndKeys:
+                                       [NSNull null], @"position",
+                                       [NSNull null], @"bounds",
+                                       [NSNull null], @"contents",
+                                       [NSNull null], @"shadowColor",
+                                       [NSNull null], @"shadowOpacity",
+                                       [NSNull null], @"shadowOffset",
+                                       [NSNull null], @"shadowRadius",
+                                       nil];
+    
+    self.layer.masksToBounds = YES;
+    
+    [self.layer insertSublayer:[self innerShadowLayer] atIndex:0];
 }
 
 @end
