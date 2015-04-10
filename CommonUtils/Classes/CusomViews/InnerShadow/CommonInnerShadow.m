@@ -148,7 +148,7 @@
 
 - (CGFloat)shadowOpacity
 {
-    return [objc_getAssociatedObject(self, @selector(shadowOpacity)) integerValue];
+    return [objc_getAssociatedObject(self, @selector(shadowOpacity)) floatValue];
 }
 
 - (void)setShadowOpacity:(CGFloat)shadowOpacity
@@ -168,7 +168,7 @@
 
 - (CGFloat)shadowRadius
 {
-    return [objc_getAssociatedObject(self, @selector(shadowRadius)) integerValue];
+    return [objc_getAssociatedObject(self, @selector(shadowRadius)) floatValue];
 }
 
 - (void)setShadowRadius:(CGFloat)shadowRadius
@@ -178,7 +178,7 @@
 
 - (CGFloat)cornerRadius
 {
-    return [objc_getAssociatedObject(self, @selector(cornerRadius)) integerValue];
+    return [objc_getAssociatedObject(self, @selector(cornerRadius)) floatValue];
 }
 
 - (void)setCornerRadius:(CGFloat)cornerRadius
@@ -186,7 +186,7 @@
     objc_setAssociatedObject(self, @selector(cornerRadius), @(cornerRadius), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
-- (void)setupAppearance
+- (void)setupInnerShadow
 {
     // add as sublayer so that self.backgroundColor will work nicely
     [self setInnerShadowLayer:[CommonInnerShadow layer]];

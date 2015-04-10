@@ -38,7 +38,7 @@ typedef NS_ENUM(NSInteger, CommonInnerShadowMask) {
 @property (nonatomic)         CGFloat  shadowRadius;
 @property (nonatomic)         CGFloat  cornerRadius;
 
-- (void)setupAppearance;
+- (void)setupInnerShadow;
 
 @end
 
