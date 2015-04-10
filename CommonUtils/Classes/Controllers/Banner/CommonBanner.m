@@ -14,7 +14,6 @@ NSString * const CommonBannerDidCompleteSetup = @"CommonBannerDidCompleteSetup";
 
 @property (nonatomic, getter=isDisplayed) BOOL displayed;
 @property (nonatomic, getter=isStopped) BOOL stopped;
-@property (nonatomic, getter=isForcedHidden) BOOL forceHide;
 
 @property (nonatomic) id <CommonBannerAdapter> adapter;
 @property (nonatomic) CommonBannerPosition bannerPosition;
@@ -52,23 +51,6 @@ NSString * const CommonBannerDidCompleteSetup = @"CommonBannerDidCompleteSetup";
                                                           usingBlock:^(NSNotification *note) {
                                                               [[self sharedInstance] setup];
                                                               [[self sharedInstance] start];
-                                                          }];
-            [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidEnterBackgroundNotification
-                                                              object:nil
-                                                               queue:[NSOperationQueue mainQueue]
-                                                          usingBlock:^(NSNotification *note) {
-                                                              [CommonTask performBackgroundTask:^{
-                                                                  [[self sharedInstance] displayBanner:NO completion:nil];
-                                                              }];
-                                                          }];
-            
-            [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillEnterForegroundNotification
-                                                              object:nil
-                                                               queue:[NSOperationQueue mainQueue]
-                                                          usingBlock:^(NSNotification *note) {
-                                                              [CommonTask performBackgroundTask:^{
-                                                                  [[self sharedInstance] displayBanner:YES completion:nil];
-                                                              }];
                                                           }];
         });
         if ([self sharedInstance].isStopped) {
@@ -157,7 +139,7 @@ NSString * const CommonBannerDidCompleteSetup = @"CommonBannerDidCompleteSetup";
     }
 }
 
-- (void)viewDidLayoutSubviews
+- (void)viewWillLayoutSubviews
 {
     CGRect contentFrame = self.view.bounds, bannerFrame = CGRectZero;
     
@@ -167,7 +149,7 @@ NSString * const CommonBannerDidCompleteSetup = @"CommonBannerDidCompleteSetup";
     
     DebugLog(@"adapter [%@] canDisplayAds [%@]", NSStringFromClass([self.adapter class]), [self.adapter canDisplayAds] ? @"Y" : @"N");
     
-    if (self.bannerView.isBannerLoaded && [self.adapter canDisplayAds] && !self.isForcedHidden) {
+    if (self.bannerView.isBannerLoaded && [self.adapter canDisplayAds]) {
         if (self.bannerPosition == CommonBannerPositionBottom) {
             contentFrame.size.height -= bannerFrame.size.height;
             bannerFrame.origin.y = contentFrame.size.height;
@@ -215,26 +197,18 @@ NSString * const CommonBannerDidCompleteSetup = @"CommonBannerDidCompleteSetup";
 
 - (void)displayBanner:(BOOL)display completion:(void (^)(BOOL finished))completion
 {
-    if ((self.isDisplayed && display) || (!self.isDisplayed && !display)) return;
-    
-    self.forceHide = !display;
-
-    CGFloat animDuration = (display) ? 0.25f : 0.1;
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.0001 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        DebugLog(@"isBannerLoaded=[%@] display=[%@]", self.bannerView.isBannerLoaded ? @"Y" : @"N", display ? @"Y" : @"N");
-        [UIView animateWithDuration:[self.adapter animated] ? animDuration : 0.0f animations:^{
-            // viewDidLayoutSubviews will handle positioning the banner view so that it is visible.
-            // You must not call [self.view layoutSubviews] directly.  However, you can flag the view
-            // as requiring layout...
-            [self.view setNeedsLayout];
-            // ... then ask it to lay itself out immediately if it is flagged as requiring layout...
-            [self.view layoutIfNeeded];
-            // ... which has the same effect.
-        } completion:^(BOOL finished) {
-            if (completion) completion(finished);
-        }];
-        
-    });
+    DebugLog(@"isBannerLoaded=[%@] display=[%@]", self.bannerView.isBannerLoaded ? @"Y" : @"N", display ? @"Y" : @"N");
+    [UIView animateWithDuration:[self.adapter animated] ? 0.25 : 0.0f animations:^{
+        // viewDidLayoutSubviews will handle positioning the banner view so that it is visible.
+        // You must not call [self.view layoutSubviews] directly.  However, you can flag the view
+        // as requiring layout...
+        [self.view setNeedsLayout];
+        // ... then ask it to lay itself out immediately if it is flagged as requiring layout...
+        [self.view layoutIfNeeded];
+        // ... which has the same effect.
+    } completion:^(BOOL finished) {
+        if (completion) completion(finished);
+    }];
 }
 
 

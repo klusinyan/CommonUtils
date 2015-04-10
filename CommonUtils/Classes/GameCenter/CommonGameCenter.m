@@ -94,10 +94,10 @@ typedef void(^CompletionWhenGameViewControllerDisappeared)(void);
         // send notification when local player did change
         [[NSNotificationCenter defaultCenter] postNotificationName:NotificationGameCenterLocalPlayerDidChange object:nil];
     }
-
+    
     // save new player
     self.localPlayerID = playerID;
-
+    
     // reset all scores for previous player
     self.scores = nil;
 }
@@ -188,13 +188,13 @@ typedef void(^CompletionWhenGameViewControllerDisappeared)(void);
         if (viewController) {   //needs login to game center
             
             /*
-             [[self rootViewController] presentViewController:self.viewController
-             animated:YES
-             completion:nil];
-             
+            [[self rootViewController] presentViewController:viewController
+                                                    animated:YES
+                                                  completion:nil];
              //*/
             
             //**********************HANDLE USER ACCESS TO GAMECENTER ACCOUNT**********************//
+            ///*
             self.viewController = viewController;
             if ([CommonSerilizer loadObjectForKey:keyGameCenterRequestChoice] != nil) {
                 NSInteger lastChoice = [[CommonSerilizer loadObjectForKey:keyGameCenterRequestChoice] integerValue];
@@ -204,6 +204,7 @@ typedef void(^CompletionWhenGameViewControllerDisappeared)(void);
                 }
             }
             [self askForGameCenterAccess];
+            //*/
             //**********************HANDLE USER ACCESS TO GAMECENTER ACCOUNT**********************//
             
             if (completion) completion(NO, error);
@@ -454,8 +455,8 @@ typedef void(^CompletionWhenGameViewControllerDisappeared)(void);
     UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Game Center Requested"
                                                  message:[NSString stringWithFormat:@"%@ would like to access your Game Center account", appName]
                                                 delegate:self
-                                       cancelButtonTitle:@"Cancel"
-                                       otherButtonTitles:@"Decide later", @"Sign in", nil];
+                                       cancelButtonTitle:@"No, thanks"
+                                       otherButtonTitles:@"Sign in", @"Decide later", nil];
     [av show];
 }
 
