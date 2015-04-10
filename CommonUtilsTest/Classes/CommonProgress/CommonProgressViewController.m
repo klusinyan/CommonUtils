@@ -74,7 +74,7 @@
 - (void)startTest
 {
     //---------------COMMON PROGRESS---------------//
-    /*
+    ///*
      //BOOL random = arc4random_uniform(3);
      [CommonProgress sharedProgress].backgroundImageColor = [UIColor colorWithWhite:0.5 alpha:0.8];
      [CommonProgress sharedProgress].activityIndicatorViewStyle = CommonProgressActivityIndicatorViewStyleSmall;
@@ -91,14 +91,15 @@
     //[CSBlurView setBlur:UIBarStyleDefault view:self.descrAnimationView];
 
     //---------------COMMON SPINNER---------------//
-    [CommonSpinner setHidesWhenStopped:YES];
-    [CommonSpinner setTitle:@"iCoop Mobile"];
+    //[CommonSpinner setHidesWhenStopped:YES];
+    //[CommonSpinner setTitle:@"iCoop Mobile"];
     //[CommonSpinner sharedSpinner].timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    /*dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [CommonSpinner showWithTaregt:self completion:^{
             DebugLog(@"Loading");
         }];
     });
+     */
     
     /*
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
