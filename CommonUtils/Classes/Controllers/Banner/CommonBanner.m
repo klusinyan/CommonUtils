@@ -197,18 +197,20 @@ NSString * const CommonBannerDidCompleteSetup = @"CommonBannerDidCompleteSetup";
 
 - (void)displayBanner:(BOOL)display completion:(void (^)(BOOL finished))completion
 {
-    DebugLog(@"isBannerLoaded=[%@] display=[%@]", self.bannerView.isBannerLoaded ? @"Y" : @"N", display ? @"Y" : @"N");
-    [UIView animateWithDuration:[self.adapter animated] ? 0.25 : 0.0f animations:^{
-        // viewDidLayoutSubviews will handle positioning the banner view so that it is visible.
-        // You must not call [self.view layoutSubviews] directly.  However, you can flag the view
-        // as requiring layout...
-        [self.view setNeedsLayout];
-        // ... then ask it to lay itself out immediately if it is flagged as requiring layout...
-        [self.view layoutIfNeeded];
-        // ... which has the same effect.
-    } completion:^(BOOL finished) {
-        if (completion) completion(finished);
-    }];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.01 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        DebugLog(@"isBannerLoaded=[%@] display=[%@]", self.bannerView.isBannerLoaded ? @"Y" : @"N", display ? @"Y" : @"N");
+        [UIView animateWithDuration:[self.adapter animated] ? 0.25 : 0.0f animations:^{
+            // viewDidLayoutSubviews will handle positioning the banner view so that it is visible.
+            // You must not call [self.view layoutSubviews] directly.  However, you can flag the view
+            // as requiring layout...
+            [self.view setNeedsLayout];
+            // ... then ask it to lay itself out immediately if it is flagged as requiring layout...
+            [self.view layoutIfNeeded];
+            // ... which has the same effect.
+        } completion:^(BOOL finished) {
+            if (completion) completion(finished);
+        }];
+    });
 }
 
 
