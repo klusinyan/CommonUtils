@@ -16,6 +16,7 @@ NSString * const NotificationGameCenterLocalPlayerDidChange   = @"NotificationGa
 
 #define kUnsignedPlayerID @"unsignedPlayer"
 
+#define keyPlayerImage @"localPlayerImage"
 #define keyPlayerScores @"playerScores"
 #define keyGameCenterRequestChoice @"gameCenterRequestChoice"
 
