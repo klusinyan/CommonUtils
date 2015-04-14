@@ -6,20 +6,13 @@
 
 #define kBundleName [DirectoryUtils commonUtilsBundlePathWithName:@"CommonBarcode.bundle"]
 
-NSString * const CBLocalizedStringInitializingMsg = @"CBLocalizedStringInitializingMsg";
-
-NSString * const CommonBarcodeErrorDomain = @"commonutils.domain.error";
+NSString * const CBErrorDomain = @"commonutils.commonbarcode.domain.error";
 
 //value are corresponding to localized strings's keys
-NSString * const CBErrorUnknwon = @"CBLocalizedStringUnknownError";
-NSString * const CBErrorTargetSimulator = @"CBLocalizedStringTargetSimulator";
-NSString * const CBErrorPermissionDenied = @"CBLocalizedStringPermissionDenied";
-
-typedef NS_ENUM(NSInteger, CBErrorCode) {
-    CBErrorCodeCustom           = -1001,
-    CBErrorCodeTargetSimulator  = -1002,
-    CBErrorCodePermissionDenied = -1003,
-};
+NSString * const CBLocalizedStringInitializingMsg = @"CBLocalizedStringInitializingMsg";
+NSString * const CBErrorUnknwon             = @"CBLocalizedStringUnknownError";
+NSString * const CBErrorTargetSimulator     = @"CBLocalizedStringTargetSimulator";
+NSString * const CBErrorPermissionDenied    = @"CBLocalizedStringPermissionDenied";
 
 @interface CommonBarcode () <AVCaptureMetadataOutputObjectsDelegate, UIAlertViewDelegate>
 
@@ -37,6 +30,7 @@ typedef NS_ENUM(NSInteger, CBErrorCode) {
 @property (readwrite, nonatomic, assign) BOOL alreadyScanned;
 @property (readwrite, nonatomic, getter=isSessionStarted) BOOL sessionStarted;
 @property (readwrite, nonatomic, getter=isRunning) BOOL running;
+@property (readwrite, nonatomic, strong) CommonSpinner *commonSpinner;
 
 @end
 
@@ -99,16 +93,14 @@ typedef NS_ENUM(NSInteger, CBErrorCode) {
                                                                                  action:@selector(flash:)];
     }
     
-    //TODO
-    /*
     [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidChangeStatusBarOrientationNotification
                                                       object:nil
                                                        queue:[NSOperationQueue mainQueue]
                                                   usingBlock:^(NSNotification * __unused notification) {
-                                                      [self adjustFrames];
-                                                      [self adjustOrientationWithInterfaceOrientation:self.interfaceOrientation];
+                                                      //TODO
+                                                      //[self adjustFrames];
+                                                      //[self adjustOrientationWithInterfaceOrientation:self.interfaceOrientation];
                                                   }];
-     //*/
     
     [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillEnterForegroundNotification
                                                       object:nil
@@ -126,37 +118,41 @@ typedef NS_ENUM(NSInteger, CBErrorCode) {
     if (!self.manualStart) {
         self.previewContainer.backgroundColor = [UIColor blackColor];
         
-        [CommonSpinner setTintColor:[UIColor grayColor]];
-        [CommonSpinner setHidesWhenStopped:YES];
-        [CommonSpinner setNetworkActivityIndicatorVisible:NO];
-        [CommonSpinner setTitle:[DirectoryUtils localizedStringForKey:CBLocalizedStringInitializingMsg bundleName:kBundleName]];
+        if (self.commonSpinner != nil) {
+            [self.commonSpinner hideWithCompletion:nil];
+        }
         
-        [CommonSpinner showWithTaregt:self completion:^{
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [self startCapturingWithCompletion:^(NSError *error) {
-                    if (error) {
-                        NSString *errMessage = nil;
-                        switch (error.code) {
-                            case CBErrorCodeTargetSimulator:
-                                errMessage = CBErrorTargetSimulator;
-                                break;
-                            case CBErrorCodePermissionDenied:
-                                errMessage = CBErrorPermissionDenied;
-                                break;
-                            default:
-                                errMessage = CBErrorUnknwon;
-                                break;
-                        }
-                        [CommonSpinner setTitleOnly:[DirectoryUtils localizedStringForKey:errMessage bundleName:kBundleName]];
-                        if ([self respondsToSelector:@selector(barcode:didFailCapturingWithError:)]) {
-                            [self barcode:self didFailCapturingWithError:error];
-                        }
+        self.commonSpinner = [CommonSpinner instance];
+        [self.commonSpinner setTintColor:[UIColor grayColor]];
+        [self.commonSpinner setHidesWhenStopped:YES];
+        [self.commonSpinner setNetworkActivityIndicatorVisible:NO];
+        [self.commonSpinner setTitle:[DirectoryUtils localizedStringForKey:CBLocalizedStringInitializingMsg bundleName:kBundleName]];
+        
+        [self.commonSpinner showInView:self.view completion:^{
+            [self startCapturingWithCompletion:^(NSError *error) {
+                if (error) {
+                    NSString *errMessage = nil;
+                    switch (error.code) {
+                        case CBErrorCodeTargetSimulator:
+                            errMessage = CBErrorTargetSimulator;
+                            break;
+                        case CBErrorCodePermissionDenied:
+                            errMessage = CBErrorPermissionDenied;
+                            break;
+                        default:
+                            errMessage = CBErrorUnknwon;
+                            break;
                     }
-                    else {
-                        [CommonSpinner hideWithCompletion:nil];
+                    NSString *localizedString = [DirectoryUtils localizedStringForKey:errMessage bundleName:kBundleName];
+                    [self.commonSpinner setTitleOnly:localizedString activityIndicatorVisible:NO];
+                    if ([self respondsToSelector:@selector(barcode:didFailCapturingWithError:)]) {
+                        [self barcode:self didFailCapturingWithError:error];
                     }
-                }];
-            });
+                }
+                else {
+                    [self.commonSpinner hideWithCompletion:nil];
+                }
+            }];
         }];
     }
 }
@@ -258,7 +254,7 @@ typedef NS_ENUM(NSInteger, CBErrorCode) {
 {
     __block NSError *error = nil;
     if (TARGET_IPHONE_SIMULATOR) {
-        error = [[NSError alloc] initWithDomain:CommonBarcodeErrorDomain
+        error = [[NSError alloc] initWithDomain:CBErrorDomain
                                            code:CBErrorCodeTargetSimulator
                                        userInfo:@{NSLocalizedDescriptionKey :
                                                       [DirectoryUtils localizedStringForKey:CBErrorTargetSimulator
@@ -271,7 +267,7 @@ typedef NS_ENUM(NSInteger, CBErrorCode) {
                 [self startSession];
             }
             else {
-                error = [[NSError alloc] initWithDomain:CommonBarcodeErrorDomain
+                error = [[NSError alloc] initWithDomain:CBErrorDomain
                                                    code:CBErrorCodePermissionDenied
                                                userInfo:@{NSLocalizedDescriptionKey :
                                                               [DirectoryUtils localizedStringForKey:CBErrorPermissionDenied bundleName:kBundleName]}];
@@ -290,7 +286,7 @@ typedef NS_ENUM(NSInteger, CBErrorCode) {
 {
     __block NSError *error = nil;
     if (TARGET_IPHONE_SIMULATOR) {
-        error = [[NSError alloc] initWithDomain:CommonBarcodeErrorDomain
+        error = [[NSError alloc] initWithDomain:CBErrorDomain
                                            code:CBErrorCodeTargetSimulator
                                        userInfo:@{NSLocalizedDescriptionKey : [DirectoryUtils localizedStringForKey:CBErrorTargetSimulator bundleName:kBundleName]}];
         
@@ -302,7 +298,7 @@ typedef NS_ENUM(NSInteger, CBErrorCode) {
                 [self stopSession];
             }
             else {
-                error = [[NSError alloc] initWithDomain:CommonBarcodeErrorDomain
+                error = [[NSError alloc] initWithDomain:CBErrorDomain
                                                    code:CBErrorCodePermissionDenied
                                                userInfo:@{NSLocalizedDescriptionKey : [DirectoryUtils localizedStringForKey:CBErrorPermissionDenied bundleName:kBundleName]}];
             }

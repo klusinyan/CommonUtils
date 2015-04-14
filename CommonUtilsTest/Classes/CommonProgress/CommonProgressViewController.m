@@ -81,9 +81,9 @@
      [CommonProgress sharedProgress].indicatorImageColor = [UIColor greenColor];
      [CommonProgress sharedProgress].networkActivityIndicatorVisible = YES;
      
-     
-     [CommonProgress showWithTaregt:self completion:^{
-     DebugLog(@"common progress did start");
+     /*
+     [CommonProgress showWithTarget:self.view completion:^{
+         DebugLog(@"common progress did start");
      }];
      //*/
     
@@ -94,12 +94,11 @@
     //[CommonSpinner setHidesWhenStopped:YES];
     //[CommonSpinner setTitle:@"iCoop Mobile"];
     //[CommonSpinner sharedSpinner].timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-    /*dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [CommonSpinner showWithTaregt:self completion:^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [CommonSpinner showInView:self.view completion:^{
             DebugLog(@"Loading");
         }];
     });
-     */
     
     /*
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -188,7 +187,7 @@
         [self animate:NO];
     }
     else {
-        [CommonSpinner showWithTaregt:self
+        [CommonSpinner showInView:self.view
                             completion:^{
                                 DebugLog(@"common progress did start");
                             }];

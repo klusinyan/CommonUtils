@@ -3,9 +3,11 @@
 
 @interface NSIndexPath (Utils)
 
-- (NSString *)keyFromIndexPath;
++ (NSString *)keyFromIndexPath:(NSIndexPath *)indexPath;
 
-- (NSUInteger)tagFromIndexPath;
++ (NSIndexPath *)indexPathFromKey:(NSString *)key;
+
+- (NSUInteger)tagFromIndexPath:(NSIndexPath *)indexPath;
 
 @end
 

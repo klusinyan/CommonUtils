@@ -15,16 +15,26 @@ typedef NS_ENUM(NSInteger, CommonPageAnimationRule) {
 
 @property (nonatomic) UIColor *backgroundColor;
 
-@property (nonatomic, getter=isZoomEnabled) BOOL zoomEnabled;       //defualt NO
+@property (nonatomic, getter=isZoomEnabled) BOOL zoomEnabled;                   //defualt NO
+
+@property (nonatomic, getter=isTwoFingersTapEnabled) BOOL twoFingersTapEnabled; //defualt YES
 
 @property (nonatomic) UIImage *image;
 
+@property (nonatomic) NSString *imageUrl;
+
 @property (readonly, nonatomic) UIImageView *imageView;
 
+/*************AUTORESIZING ONLY*************/
+@property (nonatomic) UIEdgeInsets contentInset;
+/*************AUTORESIZING ONLY*************/
+
+/*************AUTOLAYOUT ONLY*************/
 @property (nonatomic) CGFloat leadingSpaceWhenPortrait;
 @property (nonatomic) CGFloat topSpaceWhenPortrait;
 @property (nonatomic) CGFloat leadingSpaceWhenLandscape;
 @property (nonatomic) CGFloat topSpaceWhenLandscape;
+/*************AUTOLAYOUT ONLY*************/
 
 //animations
 @property (nonatomic) NSArray *animations;

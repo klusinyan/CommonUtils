@@ -2,9 +2,13 @@
 
 #import <AVFoundation/AVFoundation.h>
 
-UIKIT_EXTERN NSString * const CBErrorUnknwon;            //code -1001
-UIKIT_EXTERN NSString * const CBErrorTargetSimulator;    //code -1002
-UIKIT_EXTERN NSString * const CBErrorPermissionDenied;   //code -1003
+UIKIT_EXTERN NSString * const CBErrorDomain;
+
+typedef NS_ENUM(NSInteger, CBErrorCode) {
+    CBErrorCodeUnknown          = -1001,
+    CBErrorCodeTargetSimulator  = -1002,
+    CBErrorCodePermissionDenied = -1003,
+};
 
 @class CommonBarcode;
 
@@ -20,7 +24,7 @@ UIKIT_EXTERN NSString * const CBErrorPermissionDenied;   //code -1003
     UIView *_previewContainer;
 }
 
-@property (readwrite, nonatomic, strong) NSArray *supportedBarcodes;    //default all
+@property (readwrite, nonatomic, strong) NSArray *supportedBarcodes;    //default all types AVMetadataObjectType...
 @property (readwrite, nonatomic, strong) UIColor *themeColor;           //default [UIColor redColor]
 @property (readwrite, nonatomic, assign) CGFloat cropFactorX;           //default 0.7 respect to previewLayer's width
 @property (readwrite, nonatomic, assign) CGFloat cropFactorY;           //defautl 0.5 respect to cropLayer's width

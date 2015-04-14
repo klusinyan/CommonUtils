@@ -3,12 +3,13 @@
 #import "CommonBarcodeController.h"
 #import "DirectoryUtils.h"
 
+#import <CommonBanner.h>
+
 //static dispatch_once_t * once_token;
 
 @interface CommonBarcodeController ()
 
 //IBOutlets
-@property (readwrite, nonatomic, strong) IBOutlet UIView *previewContainer;
 @property (readwrite, nonatomic, strong) IBOutlet UIView *buttonContainer;
 @property (readwrite, nonatomic, strong) IBOutlet UIButton *btnDone;
 @property (readwrite, nonatomic, strong) IBOutlet UIButton *btnRetry;
@@ -52,6 +53,8 @@
 {
     [super viewDidLoad];
     
+    self.canDisplayAds = NO;
+
     if (self.UIInterfaceType == UIInterfaceTypeSimple) {
         self.buttonContainer.hidden = YES;
         self.btnDone.hidden = YES;
@@ -72,6 +75,11 @@
     
     self.btnDone.layer.cornerRadius = 5.0f;
     self.btnRetry.layer.cornerRadius = 5.0f;
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
 }
 
 - (void)viewDidLayoutSubviews
@@ -104,12 +112,11 @@
 #pragma mark -
 #pragma mark - BarcodeReaderDelegate Protocol
 
-//override
-- (void)capturedCode:(NSString *)code
+- (void)barcode:(CommonBarcode *)barcode didFinishCapturingWithCode:(NSString *)code
 {
     //save code
     self.code = code;
-
+    
     if (self.UIInterfaceType == UIInterfaceTypeSimple) {
         [self actionDone:nil];
     }
@@ -121,10 +128,19 @@
     }
 }
 
+- (void)barcode:(CommonBarcode *)barcode didFailCapturingWithError:(NSError *)error
+{
+    if (self.delegate && [self.delegate respondsToSelector:@selector(barcode:didFailCapturingWithError:)]) {
+        [self.delegate barcode:barcode didFailCapturingWithError:error];
+    }
+}
+
+#pragma ibactions
+
 - (IBAction)actionDone:(id)sender
 {
-    if (self.delegate && [self.delegate respondsToSelector:@selector(selectedBarcodeCode:withTarget:)]) {
-        [self.delegate selectedBarcodeCode:self.code withTarget:self];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(barcode:didFinishCapturingWithCode:)]) {
+        [self.delegate barcode:self didFinishCapturingWithCode:self.code];
     }
 }
 

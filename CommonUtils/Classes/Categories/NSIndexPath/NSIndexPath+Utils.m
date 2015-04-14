@@ -5,14 +5,23 @@
 
 @implementation NSIndexPath (Utils)
 
-- (NSString *)keyFromIndexPath
++ (NSString *)keyFromIndexPath:(NSIndexPath *)indexPath
 {
-    return [NSString stringWithFormat:@"%ld-%ld",(long)self.section,(long)self.row];
+    return [NSString stringWithFormat:@"%ld-%ld",(long)indexPath.section, (long)indexPath.row];
 }
 
-- (NSUInteger)tagFromIndexPath
++ (NSIndexPath *)indexPathFromKey:(NSString *)key
 {
-    return [[NSString stringWithFormat:@"%ld%ld", (long)self.section, (long)self.row] integerValue];
+    NSArray *components = [key componentsSeparatedByString:@"-"];
+    if ([components count] == 2) {
+        return [NSIndexPath indexPathForRow:[[components objectAtIndex:1] integerValue] inSection:[[components objectAtIndex:0] integerValue]];
+    }
+    return nil;
+}
+
+- (NSUInteger)tagFromIndexPath:(NSIndexPath *)indexPath
+{
+    return [[NSString stringWithFormat:@"%ld%ld", (long)indexPath.section, (long)indexPath.row] integerValue];
 }
 
 @end
