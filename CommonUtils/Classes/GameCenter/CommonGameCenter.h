@@ -3,9 +3,10 @@
 
 #import <GameKit/GameKit.h>
 
-extern NSString * const NotificationGameCenterWillStartSynchronizing;
-extern NSString * const NotificationGameCenterDidFinishSynchronizing;
-extern NSString * const NotificationGameCenterLocalPlayerDidChange;
+extern NSString * const CommonGameCenterWillStartSynchronizing;
+extern NSString * const CommonGameCenterDidFinishSynchronizing;
+extern NSString * const CommonGameCenterLocalPlayerDidChange;
+extern NSString * const CommonGameCenterLocalPlayerPhotoDidLoad;
 
 @interface CommonGameCenter : NSObject
 
@@ -27,6 +28,13 @@ extern NSString * const NotificationGameCenterLocalPlayerDidChange;
  *  @return return YES if user is logged in game center
  */
 + (BOOL)userAuthenticated;
+
+/*!
+ *  @brief  Call this method to get local player photo
+ *
+ *  @return return placeholder if not exists in game center
+ */
++ (UIImage *)localPlayerPhoto;
 
 /*!
  *  @brief  Call this method to sent score to specific leaderboard

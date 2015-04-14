@@ -30,24 +30,29 @@ typedef NS_ENUM(NSInteger, UIImageRepresentation) {
 
 + (void)createDirectoryIfNotExistsWithPath:(NSString *)path;
 
-+ (NSString *)imagePathWithName:(NSString *)imageName moduleName:(NSString *)moduleName;
++ (NSString *)imagePathWithName:(NSString *)imageName
+                     moduleName:(NSString *)moduleName;
 
-//shoud be removed from header if not used from outside
-+ (UIImage *)imageExistsWithName:(NSString *)imageName moduleName:(NSString *)moduleName;
++ (UIImage *)imageExistsWithName:(NSString *)imageName
+                      moduleName:(NSString *)moduleName;
 
-//shoud be removed from header if not used from outside
-+ (UIImage *)saveThumbnailImage:(UIImage *)image withSize:(NSUInteger)size toFilePath:(NSString *)filePath imageRepresentation:(UIImageRepresentation)imageRepresentation;
++ (UIImage *)saveThumbnailImage:(UIImage *)image
+                       withSize:(NSUInteger)size
+                     toFilePath:(NSString *)filePath
+            imageRepresentation:(UIImageRepresentation)imageRepresentation;
 
-//shoud be removed from header if not used from outside
-+ (UIImage *)saveImage:(UIImage *)image toFilePath:(NSString *)filePath imageRepresentation:(UIImageRepresentation)imageRepresentation;
++ (UIImage *)saveImage:(UIImage *)image
+            toFilePath:(NSString *)filePath
+   imageRepresentation:(UIImageRepresentation)imageRepresentation;
 
-//shoud be removed from header if not used from outside
-+ (void)saveImageData:(NSData *)imageData toFilePath:(NSString *)filePath;
++ (void)saveImageData:(NSData *)imageData
+           toFilePath:(NSString *)filePath;
 
-+ (BOOL)deleteImageAtPath:(NSString *)filePath error:(NSError *__autoreleasing *)error;
++ (BOOL)deleteImageAtPath:(NSString *)filePath
+                    error:(NSError *__autoreleasing *)error;
 
-//shoud be removed from header if not used from outside
 + (UIImage *)placeholderImage;
+
 
 #pragma bundle
 
@@ -60,9 +65,11 @@ typedef NS_ENUM(NSInteger, UIImageRepresentation) {
 + (NSBundle *)bundleWithName:(NSString *)bundleName;
 
 //file path with from given bundle
-+ (NSString *)filePathWithName:(NSString *)fileName bundleName:(NSString *)bundleName;
++ (NSString *)filePathWithName:(NSString *)fileName
+                    bundleName:(NSString *)bundleName;
 
 //localizable string from given bundle
-+ (NSString *)localizedStringForKey:(NSString *)key bundleName:(NSString *)bundleName;
++ (NSString *)localizedStringForKey:(NSString *)key
+                         bundleName:(NSString *)bundleName;
 
 @end

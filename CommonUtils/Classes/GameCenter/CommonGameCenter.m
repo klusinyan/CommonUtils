@@ -3,6 +3,10 @@
 
 #import "CommonGameCenter.h"
 #import "CommonSerilizer.h"
+#import "DirectoryUtils.h"
+#import "AFNetworkReachabilityManager.h"
+
+#define kBundleName [DirectoryUtils commonUtilsBundlePathWithName:@"CommonGameCenter.bundle"]
 
 typedef NS_ENUM(NSInteger, GameCenterRequestChoice) {
     GameCenterRequestChoiceDenied = 0,
@@ -10,13 +14,14 @@ typedef NS_ENUM(NSInteger, GameCenterRequestChoice) {
     GameCenterRequestChoiceGranted,
 };
 
-NSString * const NotificationGameCenterWillStartSynchronizing = @"NotificationGameCenterWillStartSynchronizing";
-NSString * const NotificationGameCenterDidFinishSynchronizing = @"NotificationGameCenterDidFinishSynchronizing";
-NSString * const NotificationGameCenterLocalPlayerDidChange   = @"NotificationGameCenterLocalPlayerDidChange";
+NSString * const CommonGameCenterWillStartSynchronizing  = @"CommonGameCenterWillStartSynchronizing";
+NSString * const CommonGameCenterDidFinishSynchronizing  = @"CommonGameCenterDidFinishSynchronizing";
+NSString * const CommonGameCenterLocalPlayerDidChange    = @"CommonGameCenterLocalPlayerDidChange";
+NSString * const CommonGameCenterLocalPlayerPhotoDidLoad = @"CommonGameCenterLocalPlayerPhotoDidLoad";
 
 #define kUnsignedPlayerID @"unsignedPlayer"
 
-#define keyPlayerImage @"localPlayerImage"
+#define keyLocalPlayerPhoto @"localPlayerPhoto"
 #define keyPlayerScores @"playerScores"
 #define keyGameCenterRequestChoice @"gameCenterRequestChoice"
 
@@ -39,18 +44,29 @@ typedef void(^CompletionWhenGameViewControllerDisappeared)(void);
 @property (nonatomic, copy) CompletionWhenGameViewControllerDisappeared controllerDismissed;
 @property (nonatomic) id target;
 
-// volatile variable saves local player's ID
+// volatile variable saves local player's ID, local player's photo (if exists)
 @property (nonatomic, copy) NSString *localPlayerID;
+@property (nonatomic, strong) UIImage *localPlayerPhoto;
 
 @end
 
 @implementation CommonGameCenter
 @synthesize localPlayerID = _localPlayerID;
 
+- (void)dealloc
+{
+    [[AFNetworkReachabilityManager sharedManager] stopMonitoring];
+}
+
 - (id)init
 {
     self = [super init];
     if (self) {
+        
+        [[AFNetworkReachabilityManager sharedManager] startMonitoring];
+        
+        [self localPlayerPhoto];
+        
         self.playerScores = [CommonSerilizer loadObjectForKey:keyPlayerScores];
         if (self.playerScores == nil) {
             self.playerScores = [NSMutableDictionary dictionary];
@@ -64,12 +80,26 @@ typedef void(^CompletionWhenGameViewControllerDisappeared)(void);
     return self;
 }
 
+- (BOOL)playerLogged
+{
+    return ![self.localPlayerID isEqualToString:keyPlayerScores];
+}
+
 - (NSString *)localPlayerID
 {
     if (_localPlayerID == nil) {
         _localPlayerID = kUnsignedPlayerID;
     }
     return _localPlayerID;
+}
+
+- (UIImage *)localPlayerPhoto
+{
+    _localPlayerPhoto = [CommonSerilizer loadObjectForKey:keyLocalPlayerPhoto];
+    if (_localPlayerPhoto == nil) {
+        _localPlayerPhoto = [UIImage imageNamed:@"CommonUtils.bundle/CommonGameCenter.bundle/defaultPhoto"];
+    }
+    return _localPlayerPhoto;
 }
 
 - (NSMutableDictionary *)scores
@@ -89,18 +119,30 @@ typedef void(^CompletionWhenGameViewControllerDisappeared)(void);
 {
     NSString *playerID = [[notification object] playerID];
     
-    if ((playerID != nil && [self.localPlayerID isEqualToString:kUnsignedPlayerID]) ||
-        (playerID == nil && ![self.localPlayerID isEqualToString:kUnsignedPlayerID])) {
-        
-        // send notification when local player did change
-        [[NSNotificationCenter defaultCenter] postNotificationName:NotificationGameCenterLocalPlayerDidChange object:nil];
-    }
+    // luser logged to game center
+    BOOL cond1 = ([self playerLogged] && playerID != nil);
+    if (cond1) DebugLog(@"USER LOGGED IN GAME CENTER. LAST ID=[%@], CURRENT ID=[%@]", self.localPlayerID, playerID);
     
+    // user logout from game center
+    BOOL cond2 = (![self playerLogged] && playerID == nil);
+    if (cond2) DebugLog(@"USER LOGOUT FROM GAME CENTER. CURRENT ID=[%@]", kUnsignedPlayerID);
+
     // save new player
     self.localPlayerID = playerID;
     
     // reset all scores for previous player
     self.scores = nil;
+
+    if (cond1 || cond2) {
+        
+        // send notification when local player did change
+        [[NSNotificationCenter defaultCenter] postNotificationName:CommonGameCenterLocalPlayerDidChange object:[self localPlayerID]];
+        
+        // load player photo if exists (async)
+        if (playerID != nil) {
+            [self localPlayerPhoto];
+        }
+    }
 }
 
 #pragma public methods
@@ -134,6 +176,11 @@ typedef void(^CompletionWhenGameViewControllerDisappeared)(void);
 + (BOOL)userAuthenticated
 {
     return [GKLocalPlayer localPlayer].isAuthenticated;
+}
+
++ (UIImage *)localPlayerPhoto
+{
+    return [[self sharedInstance] localPlayerPhoto];
 }
 
 + (void)reportScore:(int64_t)score forLeaderboard:(NSString*)identifier
@@ -211,7 +258,8 @@ typedef void(^CompletionWhenGameViewControllerDisappeared)(void);
             if (completion) completion(NO, error);
         }
         else if (!error && [GKLocalPlayer localPlayer].isAuthenticated) {
-            [self loadLeaderboards];
+            [self loadLeaderboards];        // async
+            [self loadLocalPlayerPhoto];    // async
             if (completion) completion (YES, nil);
         }
         else if (error) {
@@ -231,6 +279,25 @@ typedef void(^CompletionWhenGameViewControllerDisappeared)(void);
     }
     else {
         if (completion) completion(nil, nil);
+    }
+}
+
+- (void)loadLocalPlayerPhoto
+{
+    if ([GKLocalPlayer localPlayer].isAuthenticated && [AFNetworkReachabilityManager sharedManager].isReachable) {
+        [[GKLocalPlayer localPlayer] loadPhotoForSize:GKPhotoSizeNormal
+                                withCompletionHandler:^(UIImage *photo, NSError *error) {
+                                    
+                                    if (photo != nil) {
+                                        
+                                        // save to disk
+                                        [CommonSerilizer saveObject:photo forKey:keyLocalPlayerPhoto];
+                                        // quick memory access
+                                        self.localPlayerPhoto = photo;
+                                        
+                                        [[NSNotificationCenter defaultCenter] postNotificationName:CommonGameCenterLocalPlayerPhotoDidLoad object:photo];
+                                    }
+                                }];
     }
 }
 
@@ -426,7 +493,7 @@ typedef void(^CompletionWhenGameViewControllerDisappeared)(void);
 
 - (void)synchronizationWillStart
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:NotificationGameCenterWillStartSynchronizing object:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:CommonGameCenterWillStartSynchronizing object:nil];
     
     DebugLog(@"//**************BEFORE GAME-CENTER SYNCRONIZATION**************//");
     [self print];
@@ -435,7 +502,7 @@ typedef void(^CompletionWhenGameViewControllerDisappeared)(void);
 
 - (void)synchronizationDidFinish
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:NotificationGameCenterDidFinishSynchronizing object:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:CommonGameCenterDidFinishSynchronizing object:nil];
     
     DebugLog(@"//**************AFTER GAME-CENTER SYNCRONIZATION**************//");
     [self print];

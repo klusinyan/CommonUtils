@@ -122,6 +122,7 @@
 		9C0BC9F11AD6E3F500234AC8 /* CommonInnerShadow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonInnerShadow.m; sourceTree = "<group>"; };
 		9C1192001A7BE0AB000B6090 /* CommonSpinner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonSpinner.h; sourceTree = "<group>"; };
 		9C1192011A7BE0AB000B6090 /* CommonSpinner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonSpinner.m; sourceTree = "<group>"; };
+		9C1AF5FA1ADD2AB3001F6D04 /* CommonGameCenter.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = CommonGameCenter.bundle; sourceTree = "<group>"; };
 		9C1E392F198E42F600EA933D /* UIAlertView+Blocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIAlertView+Blocks.h"; sourceTree = "<group>"; };
 		9C1E3930198E42F600EA933D /* UIAlertView+Blocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertView+Blocks.m"; sourceTree = "<group>"; };
 		9C20BE561949EF830077C6E8 /* ADVAnimationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ADVAnimationController.h; sourceTree = "<group>"; };
@@ -680,6 +681,7 @@
 		9CFDEC751ACD30C4001D1E62 /* GameCenter */ = {
 			isa = PBXGroup;
 			children = (
+				9C1AF5FA1ADD2AB3001F6D04 /* CommonGameCenter.bundle */,
 				9CFDEC761ACD30F0001D1E62 /* CommonGameCenter.h */,
 				9CFDEC771ACD30F0001D1E62 /* CommonGameCenter.m */,
 			);
