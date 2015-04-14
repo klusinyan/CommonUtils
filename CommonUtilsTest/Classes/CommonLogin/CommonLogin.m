@@ -73,7 +73,7 @@ UITextFieldDelegate
 
     NSInteger numberOfRows = 0;
     if (self.dataSource && [self.dataSource respondsToSelector:@selector(numberOfRows)]) {
-        if (![self.dataSource numberOfRows] < 0) {
+        if ([self.dataSource numberOfRows] > 0) {
             numberOfRows = [self.dataSource numberOfRows];
         }
     }
