@@ -3,6 +3,9 @@
 #import "CommonProgress.h"
 #import "UIImage+Color.h"
 #import "NetworkUtils.h"
+#import "DirectoryUtils.h"
+
+#define kBundleName @"CommonProgress.bundle"
 
 @interface CommonProgress ()
 
@@ -71,25 +74,25 @@
 {
     _activityIndicatorViewStyle = activityIndicatorViewStyle;
     
-    NSString *backgroundImageName;
-    NSString *indicatorImageName;
+    UIImage *backgroundImage = nil;
+    UIImage *indicatorImage = nil;
     switch (_activityIndicatorViewStyle) {
         case CommonProgressActivityIndicatorViewStyleNormal:
-            backgroundImageName = @"CommonUtils.bundle/CommonProgress.bundle/background-normal";
-            indicatorImageName = @"CommonUtils.bundle/CommonProgress.bundle/spinner-normal";
+            backgroundImage = [DirectoryUtils imageWithName:@"background-normal" bundleName:kBundleName];
+            indicatorImage = [DirectoryUtils imageWithName:@"spinner-normal" bundleName:kBundleName];
             break;
         case CommonProgressActivityIndicatorViewStyleSmall:
-            backgroundImageName = @"CommonUtils.bundle/CommonProgress.bundle/background-small";
-            indicatorImageName = @"CommonUtils.bundle/CommonProgress.bundle/spinner-small";
+            backgroundImage = [DirectoryUtils imageWithName:@"background-small" bundleName:kBundleName];
+            indicatorImage = [DirectoryUtils imageWithName:@"spinner-small" bundleName:kBundleName];
             break;
         case CommonProgressActivityIndicatorViewStyleLarge:
-            backgroundImageName = @"CommonUtils.bundle/CommonProgress.bundle/background-large";
-            indicatorImageName = @"CommonUtils.bundle/CommonProgress.bundle/spinner-large";
+            backgroundImage = [DirectoryUtils imageWithName:@"background-large" bundleName:kBundleName];
+            indicatorImage = [DirectoryUtils imageWithName:@"spinner-large" bundleName:kBundleName];
             break;
     }
     
-    self.backgroundImage = [UIImage imageNamed:backgroundImageName];
-    self.indicatorImage = [UIImage imageNamed:indicatorImageName];
+    self.backgroundImage = backgroundImage;
+    self.indicatorImage = indicatorImage;
 
     self.backgroundImageView.image = self.backgroundImage;
     self.indicatorImageView.image = self.indicatorImage;

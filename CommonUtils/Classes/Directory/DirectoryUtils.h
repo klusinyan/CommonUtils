@@ -56,19 +56,26 @@ typedef NS_ENUM(NSInteger, UIImageRepresentation) {
 
 #pragma bundle
 
-//gives commonutils bunlde for XIB
+// gives commonutils bunlde for XIB
 + (NSBundle *)commonUtilsBundle;
 
 + (NSString *)commonUtilsBundlePathWithName:(NSString *)bundleName;
 
-//bundle with given bundle
+// image from given bundle
+// ex: with    bundle: [UIImage imageNamed:@"CommonUtils.bundle/subbundle_name.bundle/image_name"]
+// ex: without bundle: [UIImage imageNamed:@"CommonUtils.bundle/image_name"]
+// important: the resources from subbundle work only with images not xibs or localized string
++ (UIImage *)imageWithName:(NSString *)imageName
+                bundleName:(NSString *)bundleName;
+
+// bundle with given bundle
 + (NSBundle *)bundleWithName:(NSString *)bundleName;
 
-//file path with from given bundle
+// file path with from given bundle
 + (NSString *)filePathWithName:(NSString *)fileName
                     bundleName:(NSString *)bundleName;
 
-//localizable string from given bundle
+// localizable string from given bundle
 + (NSString *)localizedStringForKey:(NSString *)key
                          bundleName:(NSString *)bundleName;
 

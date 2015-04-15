@@ -4,33 +4,24 @@
 #import "CommonGameCenter.h"
 #import "CommonSerilizer.h"
 #import "DirectoryUtils.h"
-#import "AFNetworkReachabilityManager.h"
 
-#define kBundleName [DirectoryUtils commonUtilsBundlePathWithName:@"CommonGameCenter.bundle"]
-
-typedef NS_ENUM(NSInteger, GameCenterRequestChoice) {
-    GameCenterRequestChoiceDenied = 0,
-    GameCenterRequestChoiceRememberMe,
-    GameCenterRequestChoiceGranted,
-};
+#define kBundleName @"CommonGameCenter.bundle"
 
 NSString * const CommonGameCenterWillStartSynchronizing  = @"CommonGameCenterWillStartSynchronizing";
 NSString * const CommonGameCenterDidFinishSynchronizing  = @"CommonGameCenterDidFinishSynchronizing";
 NSString * const CommonGameCenterLocalPlayerDidChange    = @"CommonGameCenterLocalPlayerDidChange";
 NSString * const CommonGameCenterLocalPlayerPhotoDidLoad = @"CommonGameCenterLocalPlayerPhotoDidLoad";
 
-#define kUnsignedPlayerID @"unsignedPlayer"
-
-#define keyLocalPlayerPhoto @"localPlayerPhoto"
+#define keyUserCancelledAuthentication @"userCancelledAuthentication"
 #define keyPlayerScores @"playerScores"
-#define keyGameCenterRequestChoice @"gameCenterRequestChoice"
+#define kUnsignedPlayerID @"unsignedPlayer"
 
 typedef void(^CompletionWhenGameViewControllerDisappeared)(void);
 
 @interface CommonGameCenter () <GKGameCenterControllerDelegate, UIAlertViewDelegate>
 
 @property (nonatomic, strong) NSArray *leaderboards;
-@property (nonatomic, assign) UIViewController *viewController;
+@property (nonatomic, strong) UIViewController *viewController;
 
 // persistent
 // key:      (NSString)playerId
@@ -46,16 +37,14 @@ typedef void(^CompletionWhenGameViewControllerDisappeared)(void);
 
 // volatile variable saves local player's ID, local player's photo (if exists)
 @property (nonatomic, copy) NSString *localPlayerID;
-@property (nonatomic, strong) UIImage *localPlayerPhoto;
 
 @end
 
 @implementation CommonGameCenter
-@synthesize localPlayerID = _localPlayerID;
 
 - (void)dealloc
 {
-    [[AFNetworkReachabilityManager sharedManager] stopMonitoring];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (id)init
@@ -63,26 +52,41 @@ typedef void(^CompletionWhenGameViewControllerDisappeared)(void);
     self = [super init];
     if (self) {
         
-        [[AFNetworkReachabilityManager sharedManager] startMonitoring];
-        
-        [self localPlayerPhoto];
-        
         self.playerScores = [CommonSerilizer loadObjectForKey:keyPlayerScores];
         if (self.playerScores == nil) {
             self.playerScores = [NSMutableDictionary dictionary];
         }
         
+        // Important: system calls every type app wakes up
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(playerDidChange:)
                                                      name:GKPlayerDidChangeNotificationName
                                                    object:nil];
     }
+
     return self;
 }
 
-- (BOOL)playerLogged
+- (NSString *)localPlayerDisplayName
 {
-    return ![self.localPlayerID isEqualToString:keyPlayerScores];
+    NSString *displayName = nil;
+    if ([GKLocalPlayer localPlayer].isAuthenticated) {
+        displayName = [GKLocalPlayer localPlayer].displayName;
+    }
+    return displayName;
+}
+
+- (UIImage *)localPlayerPhoto
+{
+    UIImage *photo = [DirectoryUtils imageExistsWithName:[self localPlayerID] moduleName:@"images"];
+    if (photo == nil) {
+        photo = [DirectoryUtils imageWithName:@"defaultPhoto" bundleName:kBundleName];
+        NSString *path = [DirectoryUtils imagePathWithName:[self localPlayerID] moduleName:@"images"];
+        [DirectoryUtils saveImage:photo
+                       toFilePath:path
+              imageRepresentation:UIImageRepresentationPNG];
+    }
+    return photo;
 }
 
 - (NSString *)localPlayerID
@@ -91,15 +95,6 @@ typedef void(^CompletionWhenGameViewControllerDisappeared)(void);
         _localPlayerID = kUnsignedPlayerID;
     }
     return _localPlayerID;
-}
-
-- (UIImage *)localPlayerPhoto
-{
-    _localPlayerPhoto = [CommonSerilizer loadObjectForKey:keyLocalPlayerPhoto];
-    if (_localPlayerPhoto == nil) {
-        _localPlayerPhoto = [UIImage imageNamed:@"CommonUtils.bundle/CommonGameCenter.bundle/defaultPhoto"];
-    }
-    return _localPlayerPhoto;
 }
 
 - (NSMutableDictionary *)scores
@@ -115,33 +110,36 @@ typedef void(^CompletionWhenGameViewControllerDisappeared)(void);
     return _scores;
 }
 
+#pragma player did change notification
+
 - (void)playerDidChange:(NSNotification *)notification
 {
     NSString *playerID = [[notification object] playerID];
     
     // luser logged to game center
-    BOOL cond1 = ([self playerLogged] && playerID != nil);
-    if (cond1) DebugLog(@"USER LOGGED IN GAME CENTER. LAST ID=[%@], CURRENT ID=[%@]", self.localPlayerID, playerID);
+    BOOL cond1 = (playerID != nil && [[self localPlayerID] isEqualToString:kUnsignedPlayerID]);
+    if (cond1) DebugLog(@"USER LOGGED IN GAME CENTER. LAST ID=[%@], CURRENT ID=[%@]", [self localPlayerID], playerID);
     
     // user logout from game center
-    BOOL cond2 = (![self playerLogged] && playerID == nil);
+    BOOL cond2 = (playerID == nil && ![[self localPlayerID] isEqualToString:kUnsignedPlayerID]);
     if (cond2) DebugLog(@"USER LOGOUT FROM GAME CENTER. CURRENT ID=[%@]", kUnsignedPlayerID);
-
-    // save new player
-    self.localPlayerID = playerID;
     
-    // reset all scores for previous player
-    self.scores = nil;
-
+    // player did change
     if (cond1 || cond2) {
         
-        // send notification when local player did change
-        [[NSNotificationCenter defaultCenter] postNotificationName:CommonGameCenterLocalPlayerDidChange object:[self localPlayerID]];
+        // save new player
+        self.localPlayerID = playerID;
         
-        // load player photo if exists (async)
+        // force reset all scores for previous player
+        self.scores = nil;
+        
+        // async call
         if (playerID != nil) {
-            [self localPlayerPhoto];
+            [self loadLocalPlayerPhoto];
         }
+        
+        // player did change notification send to subscribers
+        [[NSNotificationCenter defaultCenter] postNotificationName:CommonGameCenterLocalPlayerDidChange object:[self localPlayerID]];
     }
 }
 
@@ -173,9 +171,14 @@ typedef void(^CompletionWhenGameViewControllerDisappeared)(void);
     });
 }
 
-+ (BOOL)userAuthenticated
++ (BOOL)playerIsAuthenticated
 {
     return [GKLocalPlayer localPlayer].isAuthenticated;
+}
+
++ (NSString *)localPlayerDisplayName
+{
+    return [[self sharedInstance] localPlayerDisplayName];
 }
 
 + (UIImage *)localPlayerPhoto
@@ -233,36 +236,26 @@ typedef void(^CompletionWhenGameViewControllerDisappeared)(void);
 - (void)startAuthenticationWithCompletion:(void (^)(BOOL authenticated, NSError *error))completion
 {
     [self authenticateUserWithCompletion:^(UIViewController *viewController, NSError *error) {
-        if (viewController) {   //needs login to game center
-            
-            /*
+        if (viewController) {
+            if ([[CommonSerilizer loadObjectForKey:keyUserCancelledAuthentication] boolValue]) {
+                if (completion) completion(NO, error);
+                [self synchronizationDidFinish];
+                return;
+            }
+            [[self rootViewController] dismissViewControllerAnimated:NO completion:nil];
             [[self rootViewController] presentViewController:viewController
                                                     animated:YES
                                                   completion:nil];
-             //*/
-            
-            //**********************HANDLE USER ACCESS TO GAMECENTER ACCOUNT**********************//
-            ///*
-            self.viewController = viewController;
-            if ([CommonSerilizer loadObjectForKey:keyGameCenterRequestChoice] != nil) {
-                NSInteger lastChoice = [[CommonSerilizer loadObjectForKey:keyGameCenterRequestChoice] integerValue];
-                if (lastChoice == GameCenterRequestChoiceDenied) {
-                    [self synchronizationDidFinish];
-                    return;
-                }
-            }
-            [self askForGameCenterAccess];
-            //*/
-            //**********************HANDLE USER ACCESS TO GAMECENTER ACCOUNT**********************//
-            
-            if (completion) completion(NO, error);
         }
         else if (!error && [GKLocalPlayer localPlayer].isAuthenticated) {
-            [self loadLeaderboards];        // async
-            [self loadLocalPlayerPhoto];    // async
-            if (completion) completion (YES, nil);
+            [self loadLeaderboards];
+            if (completion) completion (YES, error);
         }
         else if (error) {
+            //user cancelled authentification
+            if (error.code == 2) {
+                [CommonSerilizer saveObject:@(YES) forKey:keyUserCancelledAuthentication];
+            }
             [self synchronizationDidFinish];
             if (completion) completion(NO, error);
         }
@@ -277,28 +270,25 @@ typedef void(^CompletionWhenGameViewControllerDisappeared)(void);
             if (completion) completion(viewController, error);
         }];
     }
-    else {
-        if (completion) completion(nil, nil);
-    }
 }
 
 - (void)loadLocalPlayerPhoto
 {
-    if ([GKLocalPlayer localPlayer].isAuthenticated && [AFNetworkReachabilityManager sharedManager].isReachable) {
-        [[GKLocalPlayer localPlayer] loadPhotoForSize:GKPhotoSizeNormal
-                                withCompletionHandler:^(UIImage *photo, NSError *error) {
+    [[GKLocalPlayer localPlayer] loadPhotoForSize:GKPhotoSizeNormal
+                            withCompletionHandler:^(UIImage *photo, NSError *error) {
+                                if (photo != nil) {
+                                    // path last component is md5 of [self localPlayerID]
+                                    NSString *path = [DirectoryUtils imagePathWithName:[self localPlayerID] moduleName:@"images"];
+                                    // save to disk
+                                    [DirectoryUtils saveImage:photo
+                                                   toFilePath:path
+                                          imageRepresentation:UIImageRepresentationPNG];
                                     
-                                    if (photo != nil) {
-                                        
-                                        // save to disk
-                                        [CommonSerilizer saveObject:photo forKey:keyLocalPlayerPhoto];
-                                        // quick memory access
-                                        self.localPlayerPhoto = photo;
-                                        
-                                        [[NSNotificationCenter defaultCenter] postNotificationName:CommonGameCenterLocalPlayerPhotoDidLoad object:photo];
-                                    }
-                                }];
-    }
+                                    // notify notification subscribers
+                                    [[NSNotificationCenter defaultCenter]
+                                     postNotificationName:CommonGameCenterLocalPlayerPhotoDidLoad object:photo];
+                                }
+                            }];
 }
 
 - (void)loadLeaderboards
@@ -515,31 +505,6 @@ typedef void(^CompletionWhenGameViewControllerDisappeared)(void);
         GKScore *local = [self.scores objectForKey:identifier];
         DebugLog(@"leaderbaord %@ player score %@", identifier, @(local.value));
     }
-}
-
-- (void)askForGameCenterAccess
-{
-    NSString *appName = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleDisplayName"];
-    UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Game Center Requested"
-                                                 message:[NSString stringWithFormat:@"%@ would like to access your Game Center account", appName]
-                                                delegate:self
-                                       cancelButtonTitle:@"No, thanks"
-                                       otherButtonTitles:@"Decide later", @"Sign in", nil];
-    [av show];
-}
-
-- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
-{
-    if (buttonIndex == GameCenterRequestChoiceDenied || buttonIndex == GameCenterRequestChoiceRememberMe) {
-        [self synchronizationDidFinish];
-    }
-    else  {
-        [[self rootViewController] presentViewController:self.viewController
-                                                animated:YES
-                                              completion:nil];
-    }
-    
-    [CommonSerilizer saveObject:@(buttonIndex) forKey:keyGameCenterRequestChoice];
 }
 
 @end

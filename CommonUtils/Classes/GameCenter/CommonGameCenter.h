@@ -25,9 +25,16 @@ extern NSString * const CommonGameCenterLocalPlayerPhotoDidLoad;
 /*!
  *  @brief  Call this method to get user's authentification state
  *
- *  @return return YES if user is logged in game center
+ *  @return return YES if player is logged in game center
  */
-+ (BOOL)userAuthenticated;
++ (BOOL)playerIsAuthenticated;
+
+/*!
+ *  @brief  Call this method to get local player display name
+ *
+ *  @return retunr display name
+ */
++ (NSString *)localPlayerDisplayName;
 
 /*!
  *  @brief  Call this method to get local player photo
