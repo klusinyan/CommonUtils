@@ -162,11 +162,11 @@ typedef void(^CompletionWhenGameViewControllerDisappeared)(void);
     return _sharedObject;
 }
 
-+ (void)startWithCompletion:(void (^)(BOOL authenticated, NSError *error))completion
++ (void)startAuthenticationWithCompletion:(void (^)(BOOL authenticated, NSError *error))completion
 {
     static dispatch_once_t pred = 0;
     dispatch_once(&pred, ^{
-        [[self sharedInstance] startWithCompletion:completion];
+        [[self sharedInstance] startManaginWithCompletion:completion];
     });
 }
 
@@ -230,14 +230,9 @@ typedef void(^CompletionWhenGameViewControllerDisappeared)(void);
     return [[UIApplication sharedApplication].keyWindow rootViewController];
 }
 
-- (void)startWithCompletion:(void (^)(BOOL authenticated, NSError *error))completion
+- (void)startManaginWithCompletion:(void (^)(BOOL authenticated, NSError *error))completion
 {
     [self startAuthenticationWithCompletion:completion];
-}
-
-- (void)stopWithCompletion:(void (^)(void))completion
-{
-    if (completion) completion();
 }
 
 - (void)startAuthenticationWithCompletion:(void (^)(BOOL authenticated, NSError *error))completion
