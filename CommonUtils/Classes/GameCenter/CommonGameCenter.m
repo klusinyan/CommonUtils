@@ -37,10 +37,12 @@ typedef void(^CompletionWhenGameViewControllerDisappeared)(void);
 
 // volatile variable saves local player's ID, local player's photo (if exists)
 @property (nonatomic, copy) NSString *localPlayerID;
+@property (nonatomic, strong) UIImage *localPlayerPhoto;
 
 @end
 
 @implementation CommonGameCenter
+@synthesize localPlayerID = _localPlayerID;
 
 - (void)dealloc
 {
@@ -78,21 +80,23 @@ typedef void(^CompletionWhenGameViewControllerDisappeared)(void);
 
 - (UIImage *)localPlayerPhoto
 {
-    UIImage *photo = [DirectoryUtils imageExistsWithName:[self localPlayerID] moduleName:@"images"];
-    if (photo == nil) {
-        photo = [DirectoryUtils imageWithName:@"defaultPhoto" bundleName:kBundleName];
-        NSString *path = [DirectoryUtils imagePathWithName:[self localPlayerID] moduleName:@"images"];
-        [DirectoryUtils saveImage:photo
-                       toFilePath:path
-              imageRepresentation:UIImageRepresentationPNG];
+    if (_localPlayerPhoto == nil) {
+        _localPlayerPhoto = [DirectoryUtils imageExistsWithName:[self localPlayerID] moduleName:@"images"];
+        if (_localPlayerPhoto == nil) {
+            _localPlayerPhoto = [DirectoryUtils imageWithName:@"defaultPhoto" bundleName:kBundleName];
+            NSString *path = [DirectoryUtils imagePathWithName:[self localPlayerID] moduleName:@"images"];
+            [DirectoryUtils saveImage:_localPlayerPhoto
+                           toFilePath:path
+                  imageRepresentation:UIImageRepresentationPNG];
+        }
     }
-    return photo;
+    return _localPlayerPhoto;
 }
 
 - (NSString *)localPlayerID
 {
     if (_localPlayerID == nil) {
-        _localPlayerID = kUnsignedPlayerID;
+        return kUnsignedPlayerID;
     }
     return _localPlayerID;
 }
@@ -116,13 +120,14 @@ typedef void(^CompletionWhenGameViewControllerDisappeared)(void);
 {
     NSString *playerID = [[notification object] playerID];
     
+    ///*
     // luser logged to game center
-    BOOL cond1 = (playerID != nil && [[self localPlayerID] isEqualToString:kUnsignedPlayerID]);
+    BOOL cond1 = (playerID != nil && _localPlayerID == nil);
     if (cond1) DebugLog(@"USER LOGGED IN GAME CENTER. LAST ID=[%@], CURRENT ID=[%@]", [self localPlayerID], playerID);
     
     // user logout from game center
-    BOOL cond2 = (playerID == nil && ![[self localPlayerID] isEqualToString:kUnsignedPlayerID]);
-    if (cond2) DebugLog(@"USER LOGOUT FROM GAME CENTER. CURRENT ID=[%@]", kUnsignedPlayerID);
+    BOOL cond2 = (playerID == nil && _localPlayerID != nil);
+    if (cond2) DebugLog(@"USER LOGOUT FROM GAME CENTER. LAST ID=[%@], CURRENT ID=[%@]", [self localPlayerID], playerID);
     
     // player did change
     if (cond1 || cond2) {
@@ -130,17 +135,19 @@ typedef void(^CompletionWhenGameViewControllerDisappeared)(void);
         // save new player
         self.localPlayerID = playerID;
         
+        // reset current photo
+        self.localPlayerPhoto = nil;
+        
         // force reset all scores for previous player
         self.scores = nil;
         
         // async call
-        if (playerID != nil) {
-            [self loadLocalPlayerPhoto];
-        }
+        [self loadPlayerPhotoIfNeeded];
         
         // player did change notification send to subscribers
         [[NSNotificationCenter defaultCenter] postNotificationName:CommonGameCenterLocalPlayerDidChange object:[self localPlayerID]];
     }
+    //*/
 }
 
 #pragma public methods
@@ -272,23 +279,25 @@ typedef void(^CompletionWhenGameViewControllerDisappeared)(void);
     }
 }
 
-- (void)loadLocalPlayerPhoto
+- (void)loadPlayerPhotoIfNeeded
 {
-    [[GKLocalPlayer localPlayer] loadPhotoForSize:GKPhotoSizeNormal
-                            withCompletionHandler:^(UIImage *photo, NSError *error) {
-                                if (photo != nil) {
-                                    // path last component is md5 of [self localPlayerID]
-                                    NSString *path = [DirectoryUtils imagePathWithName:[self localPlayerID] moduleName:@"images"];
-                                    // save to disk
-                                    [DirectoryUtils saveImage:photo
-                                                   toFilePath:path
-                                          imageRepresentation:UIImageRepresentationPNG];
-                                    
-                                    // notify notification subscribers
-                                    [[NSNotificationCenter defaultCenter]
-                                     postNotificationName:CommonGameCenterLocalPlayerPhotoDidLoad object:photo];
-                                }
-                            }];
+    if ([GKLocalPlayer localPlayer].isAuthenticated) {
+        [[GKLocalPlayer localPlayer] loadPhotoForSize:GKPhotoSizeNormal
+                                withCompletionHandler:^(UIImage *photo, NSError *error) {
+                                    if (photo != nil) {
+                                        // path last component is md5 of [self localPlayerID]
+                                        NSString *path = [DirectoryUtils imagePathWithName:[self localPlayerID] moduleName:@"images"];
+                                        // save to disk
+                                        [DirectoryUtils saveImage:photo
+                                                       toFilePath:path
+                                              imageRepresentation:UIImageRepresentationPNG];
+                                        
+                                        // notify notification subscribers
+                                        [[NSNotificationCenter defaultCenter]
+                                         postNotificationName:CommonGameCenterLocalPlayerPhotoDidLoad object:photo];
+                                    }
+                                }];
+    }
 }
 
 - (void)loadLeaderboards
