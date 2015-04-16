@@ -80,74 +80,84 @@ typedef void(^CompletionWhenGameViewControllerDisappeared)(void);
 
 - (UIImage *)localPlayerPhoto
 {
-    if (_localPlayerPhoto == nil) {
-        _localPlayerPhoto = [DirectoryUtils imageExistsWithName:[self localPlayerID] moduleName:@"images"];
+    @synchronized(self) {
         if (_localPlayerPhoto == nil) {
-            _localPlayerPhoto = [DirectoryUtils imageWithName:@"defaultPhoto" bundleName:kBundleName];
-            NSString *path = [DirectoryUtils imagePathWithName:[self localPlayerID] moduleName:@"images"];
-            [DirectoryUtils saveImage:_localPlayerPhoto
-                           toFilePath:path
-                  imageRepresentation:UIImageRepresentationPNG];
+            _localPlayerPhoto = [DirectoryUtils imageExistsWithName:[self localPlayerID] moduleName:@"images"];
+            if (_localPlayerPhoto == nil) {
+                _localPlayerPhoto = [DirectoryUtils imageWithName:@"defaultPhoto" bundleName:kBundleName];
+                NSString *path = [DirectoryUtils imagePathWithName:[self localPlayerID] moduleName:@"images"];
+                [DirectoryUtils saveImage:_localPlayerPhoto
+                               toFilePath:path
+                      imageRepresentation:UIImageRepresentationPNG];
+            }
         }
+        return _localPlayerPhoto;
     }
-    return _localPlayerPhoto;
 }
 
 - (NSString *)localPlayerID
 {
-    if (_localPlayerID == nil) {
-        return kUnsignedPlayerID;
+    @synchronized(self) {
+        if (_localPlayerID == nil) {
+            return kUnsignedPlayerID;
+        }
+        return _localPlayerID;
     }
-    return _localPlayerID;
 }
 
 - (NSMutableDictionary *)scores
 {
-    if (_scores == nil) {
-        _scores = [NSMutableDictionary dictionary];
-        if ([self.playerScores objectForKey:[self localPlayerID]] != nil) {
-            _scores = [self.playerScores objectForKey:[self localPlayerID]];
+    @synchronized(self) {
+        if (_scores == nil) {
+            if ([self.playerScores objectForKey:[self localPlayerID]] != nil) {
+                _scores = [self.playerScores objectForKey:[self localPlayerID]];
+            }
+            else {
+                _scores = [NSMutableDictionary dictionary];
+                [self.playerScores setObject:_scores forKey:[self localPlayerID]];
+                [CommonSerilizer saveObject:self.playerScores forKey:keyPlayerScores];
+            }
         }
-        [self.playerScores setObject:_scores forKey:[self localPlayerID]];
-        [CommonSerilizer saveObject:self.playerScores forKey:keyPlayerScores];
+        return _scores;
     }
-    return _scores;
 }
 
 #pragma player did change notification
 
 - (void)playerDidChange:(NSNotification *)notification
 {
-    NSString *playerID = [[notification object] playerID];
-    
-    ///*
-    // luser logged to game center
-    BOOL cond1 = (playerID != nil && _localPlayerID == nil);
-    if (cond1) DebugLog(@"USER LOGGED IN GAME CENTER. LAST ID=[%@], CURRENT ID=[%@]", [self localPlayerID], playerID);
-    
-    // user logout from game center
-    BOOL cond2 = (playerID == nil && _localPlayerID != nil);
-    if (cond2) DebugLog(@"USER LOGOUT FROM GAME CENTER. LAST ID=[%@], CURRENT ID=[%@]", [self localPlayerID], playerID);
-    
-    // player did change
-    if (cond1 || cond2) {
+    @synchronized(self) {
+        NSString *playerID = [[notification object] playerID];
         
-        // save new player
-        self.localPlayerID = playerID;
+        ///*
+        // luser logged to game center
+        BOOL cond1 = (playerID != nil && _localPlayerID == nil);
+        if (cond1) DebugLog(@"USER LOGGED IN GAME CENTER. LAST ID=[%@], CURRENT ID=[%@]", [self localPlayerID], playerID);
         
-        // reset current photo
-        self.localPlayerPhoto = nil;
+        // user logout from game center
+        BOOL cond2 = (playerID == nil && _localPlayerID != nil);
+        if (cond2) DebugLog(@"USER LOGOUT FROM GAME CENTER. LAST ID=[%@], CURRENT ID=[%@]", [self localPlayerID], playerID);
         
-        // force reset all scores for previous player
-        self.scores = nil;
-        
-        // async call
-        [self loadPlayerPhotoIfNeeded];
-        
-        // player did change notification send to subscribers
-        [[NSNotificationCenter defaultCenter] postNotificationName:CommonGameCenterLocalPlayerDidChange object:[self localPlayerID]];
+        // player did change
+        if (cond1 || cond2) {
+            
+            // save new player
+            self.localPlayerID = playerID;
+            
+            // reset current photo
+            self.localPlayerPhoto = nil;
+            
+            // force reset all scores for previous player
+            self.scores = nil;
+            
+            // async call
+            [self loadPlayerPhotoIfNeeded];
+            
+            // player did change notification send to subscribers
+            [[NSNotificationCenter defaultCenter] postNotificationName:CommonGameCenterLocalPlayerDidChange object:[self localPlayerID]];
+        }
+        //*/
     }
-    //*/
 }
 
 #pragma public methods
@@ -330,11 +340,12 @@ typedef void(^CompletionWhenGameViewControllerDisappeared)(void);
     
     for (int i = 0; i < [self.leaderboards count]; i++) {
         @autoreleasepool {
-            GKLeaderboard *leaderboard = [self.leaderboards objectAtIndex:i];
+            __block GKLeaderboard *leaderboard = [self.leaderboards objectAtIndex:i];
             DebugLog(@"start sync leaderboard at index=[%@]", @(i));
             [leaderboard loadScoresWithCompletionHandler:^(NSArray *scores, NSError *error) {
                 if (error) {
                     [self synchronizationDidFinish];
+                    leaderboard = nil;
                 }
                 else {
                     // if local score exists
@@ -350,10 +361,11 @@ typedef void(^CompletionWhenGameViewControllerDisappeared)(void);
                             }
                             // if local score higher than remote score then send it
                             else if (leaderboard.localPlayerScore.value < local.value) {
-                                GKScore *remote = [[GKScore alloc] initWithLeaderboardIdentifier:leaderboard.identifier];
+                                __block GKScore *remote = [[GKScore alloc] initWithLeaderboardIdentifier:leaderboard.identifier];
                                 remote.value = local.value;
                                 [GKScore reportScores:@[remote] withCompletionHandler:^(NSError *error) {
                                     DebugLog(@"Uploading score did finish with error %@", [error localizedDescription]);
+                                    remote = nil;
                                 }];
                             }
                         }
@@ -362,6 +374,7 @@ typedef void(^CompletionWhenGameViewControllerDisappeared)(void);
                         syncCount++;
                         if (syncCount == [self.leaderboards count]) {
                             [self synchronizationDidFinish];
+                            leaderboard = nil;
                         }
                     }
                     // if local score does not exists and it remote score exists then save it
@@ -374,11 +387,13 @@ typedef void(^CompletionWhenGameViewControllerDisappeared)(void);
                         syncCount++;
                         if (syncCount == [self.leaderboards count]) {
                             [self synchronizationDidFinish];
+                            leaderboard = nil;
                         }
                     }
                     else {
                         // proceed in any case
                         [self synchronizationDidFinish];
+                        leaderboard = nil;
                     }
                 }
             }];
@@ -397,17 +412,17 @@ typedef void(^CompletionWhenGameViewControllerDisappeared)(void);
     NSAssert(identifier, assert);
     
     if ([GKLocalPlayer localPlayer].isAuthenticated && [self leaderboardExistsWithIdentifier:identifier]) {
-        //report score to game center
-        GKScore *remote = [[GKScore alloc] initWithLeaderboardIdentifier:identifier];
+        // report score to game center
+        __block GKScore *remote = [[GKScore alloc] initWithLeaderboardIdentifier:identifier];
         remote.value = score;
-        
         NSArray *scores = @[remote];
         [GKScore reportScores:scores withCompletionHandler:^(NSError *error) {
             DebugLog(@"Uploading score did finish with error %@", [error localizedDescription]);
+            remote = nil;
         }];
     }
     
-    //save score locally if needed
+    // save score locally if needed
     GKScore *local = nil;
     if ([self.scores objectForKey:identifier]) {
         local = [self.scores objectForKey:identifier];
