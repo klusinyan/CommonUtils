@@ -54,6 +54,13 @@ typedef NS_ENUM(NSInteger, RowType) {
 {
     self = [super initWithStyle:style];
     if (self) {
+        
+        [[NSNotificationCenter defaultCenter] addObserverForName:CommonBannerDidCompleteSetup
+                                                          object:nil
+                                                           queue:[NSOperationQueue currentQueue]
+                                                      usingBlock:^(NSNotification *note) {
+                                                          DebugLog(@"self.view akdalskdjlaksjdlkasd%@", self.view);
+                                                      }];
     }
     return self;
 }
@@ -65,6 +72,8 @@ typedef NS_ENUM(NSInteger, RowType) {
     self.navigationController.navigationBar.translucent = NO;
 
     self.tableView.rowHeight = 100;
+    
+    DebugLog(@"self.view %@", self.view);
     
     /*
     [CommonSystem networkInfoWithCompletion:^(NSDictionary *networkInfo) {
@@ -99,6 +108,8 @@ typedef NS_ENUM(NSInteger, RowType) {
     self.canDisplayAds = YES;
     self.animated = NO;
     //self.shouldCoverContent = YES;
+    
+    DebugLog(@"self.view %@", self.view);
 
     /* CRASH TEST
      NSArray *a = [NSArray array];
