@@ -35,6 +35,12 @@ NSString * const CommonBannerDidCompleteSetup = @"CommonBannerDidCompleteSetup";
     __strong static id sharedInstance = nil;
     dispatch_once(&pred, ^{
         sharedInstance = [[self alloc] init];
+        [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillEnterForegroundNotification
+                                                          object:nil
+                                                           queue:[NSOperationQueue currentQueue]
+                                                      usingBlock:^(NSNotification *note) {
+                                                          [self waitAndReload];
+                                                      }];
     });
     
     return sharedInstance;
@@ -47,21 +53,26 @@ NSString * const CommonBannerDidCompleteSetup = @"CommonBannerDidCompleteSetup";
         dispatch_once(&pred, ^{
             [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidFinishLaunchingNotification
                                                               object:nil
-                                                               queue:[NSOperationQueue mainQueue]
+                                                               queue:[NSOperationQueue currentQueue]
                                                           usingBlock:^(NSNotification *note) {
                                                               [[self sharedInstance] setup];
-                                                              [[self sharedInstance] start];
                                                           }];
         });
-        if ([self sharedInstance].isStopped) {
-            [[self sharedInstance] start];
-        }
     }
 }
 
 + (void)stopManaging
 {
     [self sharedInstance].stopped = YES;
+    [self sharedInstance].bannerView.delegate = nil;
+}
+
++ (void)waitAndReload
+{
+    [self sharedInstance].stopped = YES;
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self sharedInstance].stopped = NO;
+    });
 }
 
 + (void)setBannerPosition:(CommonBannerPosition)bannerPosition
@@ -98,16 +109,11 @@ NSString * const CommonBannerDidCompleteSetup = @"CommonBannerDidCompleteSetup";
     // add banner to view
     [self.view addSubview:self.bannerView];
     
-    // setup did compete
-    [[NSNotificationCenter defaultCenter] postNotificationName:CommonBannerDidCompleteSetup object:nil];
-}
-
-- (void)start
-{
-    self.stopped = NO;
-    
     // ready to receive banners
     self.bannerView.delegate = self;
+
+    // setup did compete
+    [[NSNotificationCenter defaultCenter] postNotificationName:CommonBannerDidCompleteSetup object:nil];
 }
 
 - (void)loadView
@@ -128,13 +134,7 @@ NSString * const CommonBannerDidCompleteSetup = @"CommonBannerDidCompleteSetup";
 - (void)setStopped:(BOOL)stopped
 {
     @synchronized(self) {
-        if (stopped) {
-            if ([self.bannerView isBannerLoaded] && [self.adapter canDisplayAds]) {
-                [self displayBanner:NO animated:YES completion:^(BOOL finished) {
-                    self.bannerView.delegate = nil;
-                }];
-            }
-        }
+        [self displayBanner:!stopped animated:!stopped completion:nil];
         _stopped = stopped;
     }
 }
@@ -149,7 +149,7 @@ NSString * const CommonBannerDidCompleteSetup = @"CommonBannerDidCompleteSetup";
     
     DebugLog(@"adapter [%@] canDisplayAds [%@]", NSStringFromClass([self.adapter class]), [self.adapter canDisplayAds] ? @"Y" : @"N");
     
-    if (self.bannerView.isBannerLoaded && [self.adapter canDisplayAds]) {
+    if (self.bannerView.isBannerLoaded && [self.adapter canDisplayAds] && !self.isStopped) {
         if (self.bannerPosition == CommonBannerPositionBottom) {
             contentFrame.size.height -= bannerFrame.size.height;
             bannerFrame.origin.y = contentFrame.size.height;
@@ -197,7 +197,7 @@ NSString * const CommonBannerDidCompleteSetup = @"CommonBannerDidCompleteSetup";
 
 - (void)displayBanner:(BOOL)display animated:(BOOL)animated completion:(void (^)(BOOL finished))completion
 {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
         dispatch_async(dispatch_get_main_queue(), ^{
             DebugLog(@"isBannerLoaded=[%@] display=[%@]", self.bannerView.isBannerLoaded ? @"Y" : @"N", display ? @"Y" : @"N");
             [UIView animateWithDuration:[self.adapter animated] && animated ? 0.25 : 0.0f animations:^{
