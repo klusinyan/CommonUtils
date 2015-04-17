@@ -3,7 +3,7 @@
 
 #import "CommonUtilsVersion.h"
 
-#define kLibVersion @"1.5.1-beta3"
+#define kLibVersion @"1.5.1-beta4"
 
 @implementation CommonUtilsVersion
 
@@ -11,7 +11,7 @@
 {
     static dispatch_once_t pred = 0;
     dispatch_once(&pred, ^{
-        NSLog(@"\"LibCommonUtils\" version [%@]", kLibVersion);
+        NSLog(@"LibCommonUtils [%@]", kLibVersion);
     });
 }
 

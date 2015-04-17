@@ -62,13 +62,13 @@ typedef void(^CompletionWhenGameViewControllerDisappeared)(void);
     return ![self.localPlayerID isEqualToString:kUnsignedPlayerID];
 }
 
-- (NSString *)localPlayerDisplayName
+- (NSString *)localPlayerAlias
 {
-    NSString *displayName = nil;
+    NSString *alias = nil;
     if ([GKLocalPlayer localPlayer].isAuthenticated) {
-        displayName = [GKLocalPlayer localPlayer].displayName;
+        alias = [GKLocalPlayer localPlayer].alias;
     }
-    return displayName;
+    return alias;
 }
 
 - (UIImage *)localPlayerPhoto
@@ -185,9 +185,9 @@ typedef void(^CompletionWhenGameViewControllerDisappeared)(void);
     return [GKLocalPlayer localPlayer].isAuthenticated;
 }
 
-+ (NSString *)localPlayerDisplayName
++ (NSString *)localPlayerAlias
 {
-    return [[self sharedInstance] localPlayerDisplayName];
+    return [[self sharedInstance] localPlayerAlias];
 }
 
 + (UIImage *)localPlayerPhoto

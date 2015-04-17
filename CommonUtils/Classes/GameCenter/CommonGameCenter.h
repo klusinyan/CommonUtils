@@ -29,7 +29,7 @@ extern NSString * const CommonGameCenterLocalPlayerPhotoDidLoad;
  *
  *  @return local player's display name
  */
-+ (NSString *)localPlayerDisplayName;
++ (NSString *)localPlayerAlias;
 
 /*!
  *  @brief  Call this method to get local player photo
