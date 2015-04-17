@@ -44,29 +44,38 @@
 }
 
 //only here MD5Hash(imageName) applied
-+ (NSString *)imagePathWithName:(NSString *)imageName moduleName:(NSString *)moduleName
++ (NSString *)imagePathWithName:(NSString *)imageName
+                     moduleName:(NSString *)moduleName
 {
     if (!imageName) return nil;
     return [[self moduleCacheDirectoryPath:moduleName] stringByAppendingPathComponent:MD5Hash(imageName)];
 }
 
-+ (UIImage *)imageExistsWithName:(NSString *)imageName moduleName:(NSString *)moduleName
++ (UIImage *)imageExistsWithName:(NSString *)imageName
+                      moduleName:(NSString *)moduleName
 {
     if (!imageName) return nil;
     return [UIImage imageWithContentsOfFile:[self imagePathWithName:imageName moduleName:moduleName]];
 }
 
-+ (UIImage *)saveThumbnailImage:(UIImage *)image withSize:(NSUInteger)size toFilePath:(NSString *)filePath imageRepresentation:(UIImageRepresentation)imageRepresentation
++ (UIImage *)saveThumbnailImage:(UIImage *)image
+                       withSize:(NSUInteger)size
+                     toFilePath:(NSString *)filePath
+            imageRepresentation:(UIImageRepresentation)imageRepresentation
 {
     if (!image) return nil;
     UIImage *thumbnail = [image thumbnailImage:size
                              transparentBorder:0
                                   cornerRadius:0
                           interpolationQuality:kCGInterpolationDefault];
-    return [self saveImage:thumbnail toFilePath:filePath imageRepresentation:imageRepresentation];
+    return [self saveImage:thumbnail
+                toFilePath:filePath
+       imageRepresentation:imageRepresentation];
 }
 
-+ (UIImage *)saveImage:(UIImage *)image toFilePath:(NSString *)filePath imageRepresentation:(UIImageRepresentation)imageRepresentation
++ (UIImage *)saveImage:(UIImage *)image
+            toFilePath:(NSString *)filePath
+   imageRepresentation:(UIImageRepresentation)imageRepresentation
 {
     if (!image) return nil;
     if (imageRepresentation == UIImageRepresentationPNG) {
@@ -78,13 +87,15 @@
     return image;
 }
 
-+ (void)saveImageData:(NSData *)imageData toFilePath:(NSString *)filePath
++ (void)saveImageData:(NSData *)imageData
+           toFilePath:(NSString *)filePath
 {
     if (!imageData) return;
     [imageData writeToFile:filePath atomically:YES];
 }
 
-+ (BOOL)deleteImageAtPath:(NSString *)filePath error:(NSError *__autoreleasing *)error
++ (BOOL)deleteImageAtPath:(NSString *)filePath
+                    error:(NSError *__autoreleasing *)error
 {
     if ([[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
         return [[NSFileManager defaultManager] removeItemAtPath:filePath error:error];
@@ -111,6 +122,19 @@
     return [kCommonUtilsBundleName stringByAppendingPathComponent:bundleName];
 }
 
++ (UIImage *)imageWithName:(NSString *)imageName
+                bundleName:(NSString *)bundleName
+{
+    NSString *fullPath = kCommonUtilsBundleName;
+    if ([bundleName length] > 0) {
+        fullPath = [self commonUtilsBundlePathWithName:bundleName];
+    }
+    if ([imageName length] > 0) {
+        fullPath = [fullPath stringByAppendingPathComponent:imageName];
+    }
+    return [UIImage imageNamed:fullPath];
+}
+
 + (NSBundle *)bundleWithName:(NSString *)bundleName
 {
     NSBundle *bundle = [NSBundle mainBundle];
@@ -123,13 +147,15 @@
     return bundle;
 }
 
-+ (NSString *)filePathWithName:(NSString *)fileName bundleName:(NSString *)bundleName
++ (NSString *)filePathWithName:(NSString *)fileName
+                    bundleName:(NSString *)bundleName
 {
     NSBundle *bundle = [self bundleWithName:bundleName];
     return [[bundle resourcePath] stringByAppendingPathComponent:fileName];
 }
 
-+ (NSString *)localizedStringForKey:(NSString *)key bundleName:(NSString *)bundleName
++ (NSString *)localizedStringForKey:(NSString *)key
+                         bundleName:(NSString *)bundleName
 {
     NSBundle *bundle = [self bundleWithName:bundleName];
     return [bundle localizedStringForKey:key value:nil table:nil];

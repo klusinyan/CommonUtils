@@ -3,7 +3,7 @@
 
 #import "CommonUtilsVersion.h"
 
-#define kLibVersion @"1.5.0"
+#define kLibVersion @"1.5.1-beta2"
 
 @implementation CommonUtilsVersion
 

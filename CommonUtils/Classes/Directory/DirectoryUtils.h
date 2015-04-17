@@ -30,39 +30,53 @@ typedef NS_ENUM(NSInteger, UIImageRepresentation) {
 
 + (void)createDirectoryIfNotExistsWithPath:(NSString *)path;
 
-+ (NSString *)imagePathWithName:(NSString *)imageName moduleName:(NSString *)moduleName;
++ (NSString *)imagePathWithName:(NSString *)imageName
+                     moduleName:(NSString *)moduleName;
 
-//shoud be removed from header if not used from outside
-+ (UIImage *)imageExistsWithName:(NSString *)imageName moduleName:(NSString *)moduleName;
++ (UIImage *)imageExistsWithName:(NSString *)imageName
+                      moduleName:(NSString *)moduleName;
 
-//shoud be removed from header if not used from outside
-+ (UIImage *)saveThumbnailImage:(UIImage *)image withSize:(NSUInteger)size toFilePath:(NSString *)filePath imageRepresentation:(UIImageRepresentation)imageRepresentation;
++ (UIImage *)saveThumbnailImage:(UIImage *)image
+                       withSize:(NSUInteger)size
+                     toFilePath:(NSString *)filePath
+            imageRepresentation:(UIImageRepresentation)imageRepresentation;
 
-//shoud be removed from header if not used from outside
-+ (UIImage *)saveImage:(UIImage *)image toFilePath:(NSString *)filePath imageRepresentation:(UIImageRepresentation)imageRepresentation;
++ (UIImage *)saveImage:(UIImage *)image
+            toFilePath:(NSString *)filePath
+   imageRepresentation:(UIImageRepresentation)imageRepresentation;
 
-//shoud be removed from header if not used from outside
-+ (void)saveImageData:(NSData *)imageData toFilePath:(NSString *)filePath;
++ (void)saveImageData:(NSData *)imageData
+           toFilePath:(NSString *)filePath;
 
-+ (BOOL)deleteImageAtPath:(NSString *)filePath error:(NSError *__autoreleasing *)error;
++ (BOOL)deleteImageAtPath:(NSString *)filePath
+                    error:(NSError *__autoreleasing *)error;
 
-//shoud be removed from header if not used from outside
 + (UIImage *)placeholderImage;
+
 
 #pragma bundle
 
-//gives commonutils bunlde for XIB
+// gives commonutils bunlde for XIB
 + (NSBundle *)commonUtilsBundle;
 
 + (NSString *)commonUtilsBundlePathWithName:(NSString *)bundleName;
 
-//bundle with given bundle
+// image from given bundle
+// ex: with    bundle: [UIImage imageNamed:@"CommonUtils.bundle/subbundle_name.bundle/image_name"]
+// ex: without bundle: [UIImage imageNamed:@"CommonUtils.bundle/image_name"]
+// important: the resources from subbundle work only with images not xibs or localized string
++ (UIImage *)imageWithName:(NSString *)imageName
+                bundleName:(NSString *)bundleName;
+
+// bundle with given bundle
 + (NSBundle *)bundleWithName:(NSString *)bundleName;
 
-//file path with from given bundle
-+ (NSString *)filePathWithName:(NSString *)fileName bundleName:(NSString *)bundleName;
+// file path with from given bundle
++ (NSString *)filePathWithName:(NSString *)fileName
+                    bundleName:(NSString *)bundleName;
 
-//localizable string from given bundle
-+ (NSString *)localizedStringForKey:(NSString *)key bundleName:(NSString *)bundleName;
+// localizable string from given bundle
++ (NSString *)localizedStringForKey:(NSString *)key
+                         bundleName:(NSString *)bundleName;
 
 @end

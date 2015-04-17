@@ -36,7 +36,7 @@ typedef NS_ENUM(NSInteger, CommonBannerPosition) {
 + (void)startManaging;
 
 /*!
- *  @brief  Call this method to stop managing banners
+ *  @brief  Call this method to stop managing banners. Important: when stopped can not be restarted again, restart the app.
  */
 + (void)stopManaging;
 
