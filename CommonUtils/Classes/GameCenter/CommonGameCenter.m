@@ -137,8 +137,11 @@ typedef void(^CompletionWhenGameViewControllerDisappeared)(void);
     BOOL cond2 = (playerID == nil && [self playerLogged]);
     if (cond2) DebugLog(@"USER LOGOUT FROM GAME CENTER. LAST ID=[%@], CURRENT ID=[%@]", [self localPlayerID], playerID);
     
+    BOOL cond3 = (playerID != nil && ![playerID isEqualToString:[self localPlayerID]]);
+    if (cond3) DebugLog(@"USER LOGGED AND CHANGED. LAST ID=[%@], CURRENT ID=[%@]", [self localPlayerID], playerID);
+    
     // player did change
-    if (cond1 || cond2) {
+    if (cond1 || cond2 || cond3) {
         
         // save new player
         self.localPlayerID = nil;
@@ -149,7 +152,7 @@ typedef void(^CompletionWhenGameViewControllerDisappeared)(void);
         // force reset all scores for previous player
         self.scores = nil;
     }
-    return (cond1 || cond2);
+    return (cond1 || cond2 || cond3);
 }
 
 #pragma public methods
@@ -240,34 +243,40 @@ typedef void(^CompletionWhenGameViewControllerDisappeared)(void);
 - (void)startAuthenticationWithCompletion:(void (^)(BOOL authenticated, NSError *error))completion
 {
     [self authenticateUserWithCompletion:^(UIViewController *viewController, NSError *error) {
-        
-        if ([self isPlayerChanged]) {
-            [[NSNotificationCenter defaultCenter] postNotificationName:CommonGameCenterLocalPlayerDidChange object:nil];
-        }
-        
-        if (viewController) {
-            if ([[CommonSerilizer loadObjectForKey:keyUserCancelledAuthentication] boolValue]) {
-                if (completion) completion(NO, error);
+        @synchronized(self) {
+            
+            // start sync
+            [self synchronizationWillStart];
+            
+            // check if current user did change always
+            if ([self isPlayerChanged]) {
+                [[NSNotificationCenter defaultCenter] postNotificationName:CommonGameCenterLocalPlayerDidChange object:nil];
+            }
+            
+            if (viewController) {
+                if ([[CommonSerilizer loadObjectForKey:keyUserCancelledAuthentication] boolValue]) {
+                    if (completion) completion(NO, error);
+                    [self synchronizationDidFinish];
+                    return;
+                }
+                [[self rootViewController] dismissViewControllerAnimated:NO completion:nil];
+                [[self rootViewController] presentViewController:viewController
+                                                        animated:YES
+                                                      completion:nil];
+            }
+            else if (!error && [GKLocalPlayer localPlayer].isAuthenticated) {
+                [self loadLeaderboards];
+                [self loadPlayerPhoto];
+                if (completion) completion (YES, error);
+            }
+            else if (error) {
+                //user cancelled authentification
+                if (error.code == 2) {
+                    [CommonSerilizer saveObject:@(YES) forKey:keyUserCancelledAuthentication];
+                }
                 [self synchronizationDidFinish];
-                return;
+                if (completion) completion(NO, error);
             }
-            [[self rootViewController] dismissViewControllerAnimated:NO completion:nil];
-            [[self rootViewController] presentViewController:viewController
-                                                    animated:YES
-                                                  completion:nil];
-        }
-        else if (!error && [GKLocalPlayer localPlayer].isAuthenticated) {
-            [self loadLeaderboards];
-            [self loadPlayerPhoto];
-            if (completion) completion (YES, error);
-        }
-        else if (error) {
-            //user cancelled authentification
-            if (error.code == 2) {
-                [CommonSerilizer saveObject:@(YES) forKey:keyUserCancelledAuthentication];
-            }
-            [self synchronizationDidFinish];
-            if (completion) completion(NO, error);
         }
     }];
 }
@@ -283,9 +292,7 @@ typedef void(^CompletionWhenGameViewControllerDisappeared)(void);
 }
 
 - (void)loadLeaderboards
-{
-    [self synchronizationWillStart];
-    
+{    
     [GKLeaderboard loadLeaderboardsWithCompletionHandler:^(NSArray *leaderboards, NSError *error) {
         //DebugLog(@"Leaderboards %@", leaderboards);
         self.leaderboards = leaderboards;
