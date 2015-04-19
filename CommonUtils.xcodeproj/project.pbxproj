@@ -130,6 +130,8 @@
 		9C20BE581949EF830077C6E8 /* DropAnimationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DropAnimationController.m; sourceTree = "<group>"; };
 		9C20BE591949EF830077C6E8 /* ZoomAnimationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZoomAnimationController.h; sourceTree = "<group>"; };
 		9C20BE5A1949EF830077C6E8 /* ZoomAnimationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZoomAnimationController.m; sourceTree = "<group>"; };
+		9C2688361AE41CCF00C478A0 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		9C2688371AE41CD800C478A0 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		9C27EEA01AAA295A004EB522 /* CommonPageContent_AutoLayout.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CommonPageContent_AutoLayout.xib; sourceTree = "<group>"; };
 		9C2AC5DE19EA96F900588538 /* CommonProgress.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = CommonProgress.bundle; sourceTree = "<group>"; };
 		9C2AC5DF19EA96F900588538 /* CommonProgress.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonProgress.h; sourceTree = "<group>"; };
@@ -149,7 +151,6 @@
 		9C5ADFED1AA4A38800CD5215 /* CommonAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonAnimation.m; sourceTree = "<group>"; };
 		9C6DD7D219F130670013D333 /* UIImage+Color.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Color.h"; sourceTree = "<group>"; };
 		9C6DD7D319F130670013D333 /* UIImage+Color.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Color.m"; sourceTree = "<group>"; };
-		9C8A6AF219D17151000062F7 /* RELEASE_INFO.md */ = {isa = PBXFileReference; lastKnownFileType = text; path = RELEASE_INFO.md; sourceTree = "<group>"; };
 		9C8F99DD1AA0642500F34B57 /* CommonPageContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonPageContent.h; sourceTree = "<group>"; };
 		9C8F99DE1AA0642500F34B57 /* CommonPageContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonPageContent.m; sourceTree = "<group>"; };
 		9C8F99F11AA0894200F34B57 /* CommonPageContent.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CommonPageContent.xib; sourceTree = "<group>"; };
@@ -546,7 +547,8 @@
 			isa = PBXGroup;
 			children = (
 				9CD9F762196E8AAF00EBBD85 /* CommonUtils.podspec */,
-				9C8A6AF219D17151000062F7 /* RELEASE_INFO.md */,
+				9C2688361AE41CCF00C478A0 /* LICENSE */,
+				9C2688371AE41CD800C478A0 /* README.md */,
 				9CB81FD718FD375300C918FB /* Classes */,
 				9C8F99EF1AA0894200F34B57 /* Resources */,
 				9CB81F0918FD2BDC00C918FB /* Products */,
@@ -943,6 +945,7 @@
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
 				DSTROOT = /tmp/Common.dst;
+				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "CommonUtils/Classes/Lib-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
@@ -954,7 +957,8 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = "";
 				ONLY_ACTIVE_ARCH = NO;
-				OTHER_LDFLAGS = "-ObjC";
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
 				PRODUCT_NAME = CommonUtils;
 				SKIP_INSTALL = NO;
 				VALIDATE_PRODUCT = YES;
@@ -967,6 +971,7 @@
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
 				DSTROOT = /tmp/Common.dst;
+				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "CommonUtils/Classes/Lib-Prefix.pch";
 				HEADER_SEARCH_PATHS = (
@@ -976,7 +981,8 @@
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = "";
-				OTHER_LDFLAGS = "-ObjC";
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
 				PRODUCT_NAME = CommonUtils;
 				SKIP_INSTALL = NO;
 				VALIDATE_PRODUCT = YES;

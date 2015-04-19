@@ -1,29 +1,31 @@
-# README #
+# CommonUtils
 
-This README would normally document whatever steps are necessary to get your application up and running.
+[![CI Status](http://img.shields.io/travis/Karen Lusinyan/CommonUtils.svg?style=flat)](https://travis-ci.org/Karen Lusinyan/CommonUtils)
+[![Version](https://img.shields.io/cocoapods/v/CommonUtils.svg?style=flat)](http://cocoapods.org/pods/CommonUtils)
+[![License](https://img.shields.io/cocoapods/l/CommonUtils.svg?style=flat)](http://cocoapods.org/pods/CommonUtils)
+[![Platform](https://img.shields.io/cocoapods/p/CommonUtils.svg?style=flat)](http://cocoapods.org/pods/CommonUtils)
 
-### What is this repository for? ###
+## Usage
 
-* Quick summary
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
+To run the example project, clone the repo, and run `pod install` from the Example directory first.
 
-### How do I get set up? ###
+## Requirements
 
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
+## Installation
 
-### Contribution guidelines ###
+CommonUtils is available through [CocoaPods](http://cocoapods.org). To install
+it, simply add the following line to your Podfile:
 
-* Writing tests
-* Code review
-* Other guidelines
+```ruby
+pod "CommonUtils"
+```
 
-### Who do I talk to? ###
+## Author
 
-* Repo owner or admin
-* Other community or team contact
+Karen Lusinyan, karen.lusinyan.developerios@gmail.com
+
+## License
+
+CommonUtils is available under the MIT license. See the LICENSE file for more info.
+
+RELEASE-INFO: pod trunk push CommonUtils.podspec
