@@ -50,7 +50,7 @@ typedef NS_ENUM(NSInteger, CommonBannerPriority) {
  *  @param provider reflection class of type CommonBannerProvideriAd, CommonBannerProviderGAd
  *  @param priority of type CommonBannerPriority
  */
-+ (void)regitserProvider:(Class)provider withPriority:(CommonBannerPriority)priority;
++ (void)regitserProvider:(Class)aClass withPriority:(CommonBannerPriority)priority;
 
 /*!
  *  @brief  Call this method to start managing banners

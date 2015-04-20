@@ -24,9 +24,7 @@ Pod::Spec.new do |s|
 
     s.dependency 'AFNetworking'
     s.dependency 'Canvas'
-
-    #specified in podfile
-    #s.dependency 'Google-Mobile-Ads-SDK'
+    s.dependency 'Google-Mobile-Ads-SDK'
 
     #s.resource_bundles = {
     #  'Nibs'   => ['CommonUtils/Resources/Images/**/*.*'],
@@ -41,6 +39,6 @@ Pod::Spec.new do |s|
     s.frameworks = 'SystemConfiguration', 'MobileCoreServices', 'CoreTelephony', 'AdSupport', 'iAd', 'GameKit'
     #---------------------------
 
-    s.vendored_frameworks = 'GoogleMobileAds'
+    #s.vendored_frameworks = 'GoogleMobileAds'
     s.xcconfig = { 'FRAMEWORK_SEARCH_PATHS' => '"${PODS_ROOT}/Google-Mobile-Ads-SDK/**"' }
 end

@@ -11,40 +11,46 @@ NSString * const CommonBannerDidCompleteSetup = @"CommonBannerDidCompleteSetup";
 
 NSString * const BannerProviderIsReadyToDisplayAd = @"BannerProviderIsReadyToDisplayAd";
 
-@interface BannerProvider : NSObject
+typedef NS_ENUM(NSInteger, BannerProviderState) {
+    BannerProviderStateIdle=-1,
+    BannerProviderStateReady,
+    BannerProviderStateShown
+};
 
-@property (nonatomic, getter=isReady) BOOL ready;
-@property (nonatomic, getter=isShown) BOOL shown;
+@interface Provider : NSObject
 
+@property (nonatomic) id<CommonBannerPovider> bannerProvider;
 @property (nonatomic) CommonBannerPriority priority;
-@property (nonatomic) id<CommonBannerPovider> provider;
+
+@property (nonatomic) BannerProviderState state;
 
 - (instancetype)initWithProvider:(Class)provider priority:(CommonBannerPriority)priority;
 
 @end
 
-@implementation BannerProvider
+@implementation Provider
 
 - (id)initWithProvider:(Class)provider priority:(CommonBannerPriority)priority
 {
     self = [super init];
     if (self) {
-        self.provider = [NSClassFromString(NSStringFromClass(provider)) sharedInstance];
+        self.bannerProvider = [NSClassFromString(NSStringFromClass(provider)) sharedInstance];
         self.priority = priority;
     }
     return self;
 }
 
-- (void)setReady:(BOOL)ready
+- (void)setState:(BannerProviderState)state
 {
-    _ready = ready;
-    
+    _state = state;
+
     [[NSNotificationCenter defaultCenter] postNotificationName:BannerProviderIsReadyToDisplayAd object:nil];
 }
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"provider.class=%@, provider.priority=%@, isReady=%@, isShown=%@", NSStringFromClass([self.provider class]), @(self.priority), (self.isReady) ? @"Y" : @"N", (self.isShown) ? @"Y" : @"N"];
+    return [NSString stringWithFormat:@"class=[%@], provider.priority=[%@], state=[%@]",
+            NSStringFromClass([self.bannerProvider class]), @(self.priority), @(self.state)];
 }
 
 @end
@@ -58,6 +64,7 @@ NSString * const BannerProviderIsReadyToDisplayAd = @"BannerProviderIsReadyToDis
 @property (nonatomic) CommonBannerPosition bannerPosition;
 @property (nonatomic) id <CommonBannerAdapter> adapter;
 @property (nonatomic, strong) id<CommonBannerPovider> bannerProvider;
+@property (nonatomic, getter=isLocked) BOOL locked;
 
 @property (nonatomic, strong) NSMutableArray *providersQueue;
 
@@ -95,9 +102,9 @@ NSString * const BannerProviderIsReadyToDisplayAd = @"BannerProviderIsReadyToDis
     return sharedInstance;
 }
 
-+ (void)regitserProvider:(Class)provider withPriority:(CommonBannerPriority)priority
++ (void)regitserProvider:(Class)aClass withPriority:(CommonBannerPriority)priority
 {
-    [[self sharedInstance] setProvider:provider withPriority:priority];
+    [[self sharedInstance] setProvider:aClass withPriority:priority];
 }
 
 + (void)startManaging
@@ -166,62 +173,100 @@ NSString * const BannerProviderIsReadyToDisplayAd = @"BannerProviderIsReadyToDis
     }
 }
 
-- (BannerProvider *)provider:(Class)provider
+- (Provider *)provider:(Class)provider
 {
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"provider.class = %@", provider];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"bannerProvider.class = %@",provider];
     return [[self.providersQueue filteredArrayUsingPredicate:predicate] firstObject];
 }
 
-- (void)setProvider:(Class)provider withPriority:(CommonBannerPriority)priority
+- (void)setProvider:(Class)aClass withPriority:(CommonBannerPriority)priority
 {
-    BannerProvider *bannerProvider = [[BannerProvider alloc] initWithProvider:provider priority:priority];
+    Provider *provider = [[Provider alloc] initWithProvider:aClass priority:priority];
     if (self.providersQueue == nil) {
         self.providersQueue = [NSMutableArray array];
     }
-    [[self providersQueue] addObject:bannerProvider];
+    [[self providersQueue] addObject:provider];
 }
-
-- (void)manageProvidersQueue
-{
-    @synchronized(self) {
-        NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"priority" ascending:NO];
-        NSArray *providers = [self.providersQueue sortedArrayUsingDescriptors:@[sort]];
-        [providers enumerateObjectsUsingBlock:^(BannerProvider *bannerProvider, NSUInteger idx, BOOL *stop) {
-            //*******************DEBUG*******************//
-            DebugLog(@"bannerProvider %@", bannerProvider);
-            //*******************DEBUG*******************//
-            if (bannerProvider.priority == CommonBannerPriorityHigh && bannerProvider.isShown) {
-                *stop = YES;
-            }
-            else if ([bannerProvider isReady]) {
-                *stop = YES;
-                // stop immediately
-                self.stopped = YES;
-                // hide previuous
-                [self.bannerProvider bannerView].hidden = YES;
-                // assign provider
-                self.bannerProvider = [bannerProvider provider];
-                // takes a time to prepare banner view
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.01f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                    [self.view addSubview:[self.bannerProvider bannerView]];
-                    [self.bannerProvider bannerView].hidden = NO;
-                    // takes a time to reload
-                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.25f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                        self.stopped = NO;
-                    });
-                });
-            }
-        }];
-    }
-}
-
-#pragma getter/setter
 
 - (void)setStopped:(BOOL)stopped
 {
     @synchronized(self) {
         [self displayBanner:!stopped animated:!stopped completion:nil];
+        [self.bannerProvider bannerView].hidden = stopped;
         _stopped = stopped;
+    }
+}
+
+- (Provider *)currentProvider
+{
+    return [self provider:[self.bannerProvider class]];
+}
+
+- (void)manageProvidersQueue
+{
+    @synchronized(self) {
+        if (self.isLocked) {
+            return;
+        }
+        self.locked = YES;
+        NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"priority" ascending:NO];
+        NSArray *providers = [self.providersQueue sortedArrayUsingDescriptors:@[sort]];
+        for (int i = 0; i < [providers count]; i++) {
+            if (i == [providers count] - 1) {
+                self.locked = NO;
+            }
+            Provider *provider = [self.providersQueue objectAtIndex:i];
+            //*******************DEBUG*******************//
+            DebugLog(@"provider %@", provider);
+            DebugLog(@"curProvider %@", [self currentProvider]);
+            //*******************DEBUG*******************//
+            if (self.adapter != nil) {
+                if (![self.adapter canDisplayAds]) {
+                    self.stopped = YES;
+                    self.locked = NO;
+                    break;
+                }
+                else {
+                    // if current banner provider shown with priority=1 then skip
+                    if ([self currentProvider].priority == CommonBannerPriorityHigh &&
+                        [self currentProvider].state == BannerProviderStateShown) {
+                        continue;
+                    }
+                    // if current banner provider changes state to idle then hide
+                    if ([self currentProvider].state == BannerProviderStateIdle) {
+                        self.stopped = YES;
+                        self.bannerProvider = nil;
+                        continue;
+                    }
+                    // if provider changes its state to ready
+                    if (provider.state == BannerProviderStateReady) {
+                        
+                        // stop immediately
+                        self.stopped = YES;
+
+                        //******************SYNC BLOCK******************//
+                        // set old provider to [state=ready]
+                        [self currentProvider].state = BannerProviderStateReady;
+                        
+                        // get new provider
+                        self.bannerProvider = [provider bannerProvider];
+                        
+                        // set new provider to [state=shown]
+                        [self currentProvider].state = BannerProviderStateShown;
+                        //******************SYNC BLOCK******************//
+                    
+                        // takes a time to prepare banner view
+                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.01f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                            [self.view addSubview:[self.bannerProvider bannerView]];
+                            // takes a time to reload
+                            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.25f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                                self.stopped = NO;
+                            });
+                        });
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -245,8 +290,6 @@ NSString * const BannerProviderIsReadyToDisplayAd = @"BannerProviderIsReadyToDis
             contentFrame.origin.y += bannerFrame.size.height;
             contentFrame.size.height -= bannerFrame.size.height;
         }
-        
-        [self provider:[self.bannerProvider class]].shown = YES;
     }
     else {
         if (self.bannerPosition == CommonBannerPositionBottom) {
@@ -256,8 +299,6 @@ NSString * const BannerProviderIsReadyToDisplayAd = @"BannerProviderIsReadyToDis
             bannerFrame.origin.y -= bannerFrame.size.height;
             contentFrame = self.view.bounds;
         }
-        
-        [self provider:[self.bannerProvider class]].shown = NO;
     }
     
     if ([self.adapter shouldCoverContent]) {
@@ -317,7 +358,7 @@ NSString * const BannerProviderIsReadyToDisplayAd = @"BannerProviderIsReadyToDis
     
     [[CommonBanner sharedInstance] setAdapter:self];
     
-    [[CommonBanner sharedInstance] displayBanner:canDisplayAds animated:YES completion:nil];
+    [[CommonBanner sharedInstance] manageProvidersQueue];
 }
 
 - (BOOL)shouldCoverContent
@@ -345,6 +386,7 @@ NSString * const BannerProviderIsReadyToDisplayAd = @"BannerProviderIsReadyToDis
 @interface CommonBannerProvideriAd () <ADBannerViewDelegate>
 
 @property (nonatomic, strong) ADBannerView *bannerView;
+@property (nonatomic, getter=isBannerLoaded) BOOL bannerLoaded;
 
 @end
 
@@ -372,21 +414,20 @@ NSString * const BannerProviderIsReadyToDisplayAd = @"BannerProviderIsReadyToDis
     return sharedInstance;
 }
 
-- (BOOL)isBannerLoaded
-{
-    return [[CommonBanner sharedInstance] provider:[self class]].ready;
-}
-
 #pragma ADBannerViewDelegate protocol
 
 - (void)bannerViewDidLoadAd:(ADBannerView *)banner
 {
-    [[CommonBanner sharedInstance] provider:[self class]].ready = YES;
+    self.bannerLoaded = YES;
+    
+    [[CommonBanner sharedInstance] provider:[self class]].state = BannerProviderStateReady;
 }
 
 - (void)bannerView:(ADBannerView *)banner didFailToReceiveAdWithError:(NSError *)error
 {
-    [[CommonBanner sharedInstance] provider:[self class]].ready = NO;
+    self.bannerLoaded = NO;
+    
+    [[CommonBanner sharedInstance] provider:[self class]].state = BannerProviderStateIdle;
 }
 
 - (BOOL)bannerViewActionShouldBegin:(ADBannerView *)banner willLeaveApplication:(BOOL)willLeave
@@ -412,6 +453,7 @@ NSString * const BannerProviderIsReadyToDisplayAd = @"BannerProviderIsReadyToDis
 @interface CommonBannerProviderGAd () <GADBannerViewDelegate>
 
 @property (nonatomic, strong) GADBannerView *bannerView;
+@property (nonatomic, getter=isBannerLoaded) BOOL bannerLoaded;
 
 @end
 
@@ -444,21 +486,20 @@ NSString * const BannerProviderIsReadyToDisplayAd = @"BannerProviderIsReadyToDis
     return sharedInstance;
 }
 
-- (BOOL)isBannerLoaded
-{
-    return [[CommonBanner sharedInstance] provider:[self class]].ready;
-}
-
 #pragma GADBannerViewDelegate
 
 - (void)adViewDidReceiveAd:(GADBannerView *)view
 {
-    [[CommonBanner sharedInstance] provider:[self class]].ready = YES;
+    self.bannerLoaded = YES;
+    
+    [[CommonBanner sharedInstance] provider:[self class]].state = BannerProviderStateReady;
 }
 
 - (void)adView:(GADBannerView *)view didFailToReceiveAdWithError:(GADRequestError *)error
 {
-    [[CommonBanner sharedInstance] provider:[self class]].ready = NO;
+    self.bannerLoaded = NO;
+    
+    [[CommonBanner sharedInstance] provider:[self class]].state = BannerProviderStateIdle;
 }
 
 - (void)adViewWillLeaveApplication:(GADBannerView *)adView
@@ -469,7 +510,7 @@ NSString * const BannerProviderIsReadyToDisplayAd = @"BannerProviderIsReadyToDis
     }
 }
 
-- (void)adViewWillDismissScreen:(GADBannerView *)adView
+- (void)adViewDidDismissScreen:(GADBannerView *)adView
 {
     id<CommonBannerAdapter> adapter = [CommonBanner sharedInstance].adapter;
     if (adapter && [adapter respondsToSelector:@selector(bannerViewActionDidFinish)]) {
