@@ -24,7 +24,7 @@ Pod::Spec.new do |s|
 
     s.dependency 'AFNetworking'
     s.dependency 'Canvas'
-    s.dependency 'Google-Mobile-Ads-SDK', '7.1.0'
+    s.dependency 'Google-Mobile-Ads-SDK'
 
     #s.resource_bundles = {
     #  'Nibs'   => ['CommonUtils/Resources/Images/**/*.*'],
@@ -36,8 +36,8 @@ Pod::Spec.new do |s|
     s.resource_bundles = { 'CommonUtils' => ['CommonUtils/Resources/Nibs/**/*.*', 'CommonUtils/Resources/Images/**/*.*', 'CommonUtils/Resources/Sounds/**/*.*', 'CommonUtils/Classes/Controllers/Progress/CommonProgress.bundle', 'CommonUtils/Classes/Controllers/Book/CommonBook.bundle', 'CommonUtils/Classes/Controllers/BarcodeReader/CommonBarcode.bundle', 'CommonUtils/Classes/GameCenter/CommonGameCenter.bundle', 'CommonUtils/Classes/SplitViewController/Split.bundle'] }
 
     #-------- Frameworks --------
-    s.frameworks = 'SystemConfiguration', 'MobileCoreServices', 'CoreTelephony', 'AdSupport', 'iAd', 'GameKit', 'GoogleMobileAds'
+    s.frameworks = 'SystemConfiguration', 'MobileCoreServices', 'CoreTelephony', 'AdSupport', 'iAd', 'GameKit'
     #---------------------------
 
-    s.xcconfig = { 'FRAMEWORK_SEARCH_PATHS' => '"${PODS_ROOT}/Google-Mobile-Ads-SDK/GoogleMobileAdsSdkiOS-7.1.0"' }
+    s.xcconfig = { 'FRAMEWORK_SEARCH_PATHS' => '"${PODS_ROOT}/Google-Mobile-Ads-SDK/**"' }
 end

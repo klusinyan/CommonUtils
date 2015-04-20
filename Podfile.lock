@@ -26,11 +26,11 @@ PODS:
     - AFNetworking
     - Canvas
     - CommonUtils/no-arc (= 1.5.1-beta4)
-    - Google-Mobile-Ads-SDK (= 7.1.0)
+    - Google-Mobile-Ads-SDK
   - CommonUtils/no-arc (1.5.1-beta4):
     - AFNetworking
     - Canvas
-    - Google-Mobile-Ads-SDK (= 7.1.0)
+    - Google-Mobile-Ads-SDK
   - Google-Mobile-Ads-SDK (7.1.0)
 
 DEPENDENCIES:
@@ -45,7 +45,7 @@ SPEC CHECKSUMS:
   AFNetworking: fefbce9660acb17f48ae0011292d4da0f457bf36
   Appirater: 8783318c36414e8de3ea023443028df94c1b784b
   Canvas: eb861e3b555d032648146c8ffda1a5dea40059ca
-  CommonUtils: 256e4844bb14a89cd96b793ceb93b5bbd797de08
+  CommonUtils: a862f32ce9a67bb863d3fd4ff9dcf93d4e130de8
   Google-Mobile-Ads-SDK: 9b7c22345f13de4164e9e6d90ad49cce42124c3c
 
 COCOAPODS: 0.36.4
