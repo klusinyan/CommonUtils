@@ -9,7 +9,7 @@
 
 NSString * const CommonBannerDidCompleteSetup = @"CommonBannerDidCompleteSetup";
 
-NSString * const BannerProviderIsReadyToDisplayAd = @"BannerProviderIsReadyToDisplayAd";
+NSString * const BannerProviderStatusDidChnage = @"BannerProviderStatusDidChnage";
 
 typedef NS_ENUM(NSInteger, BannerProviderState) {
     BannerProviderStateIdle=-1,
@@ -44,7 +44,7 @@ typedef NS_ENUM(NSInteger, BannerProviderState) {
 {
     _state = state;
 
-    [[NSNotificationCenter defaultCenter] postNotificationName:BannerProviderIsReadyToDisplayAd object:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:BannerProviderStatusDidChnage object:nil];
 }
 
 - (NSString *)description
@@ -70,8 +70,6 @@ typedef NS_ENUM(NSInteger, BannerProviderState) {
 
 @end
 
-#pragma mark -
-
 @implementation CommonBanner
 
 - (void)dealloc
@@ -91,7 +89,7 @@ typedef NS_ENUM(NSInteger, BannerProviderState) {
                                                       usingBlock:^(NSNotification *note) {
                                                           [self waitAndReload];
                                                       }];
-        [[NSNotificationCenter defaultCenter] addObserverForName:BannerProviderIsReadyToDisplayAd
+        [[NSNotificationCenter defaultCenter] addObserverForName:BannerProviderStatusDidChnage
                                                           object:nil
                                                            queue:[NSOperationQueue currentQueue]
                                                       usingBlock:^(NSNotification *note) {
@@ -206,15 +204,14 @@ typedef NS_ENUM(NSInteger, BannerProviderState) {
 {
     @synchronized(self) {
         if (self.isLocked) {
+            DebugLog(@"LOCKED...");
             return;
         }
+        
         self.locked = YES;
         NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"priority" ascending:NO];
         NSArray *providers = [self.providersQueue sortedArrayUsingDescriptors:@[sort]];
         for (int i = 0; i < [providers count]; i++) {
-            if (i == [providers count] - 1) {
-                self.locked = NO;
-            }
             Provider *provider = [self.providersQueue objectAtIndex:i];
             //*******************DEBUG*******************//
             DebugLog(@"provider %@", provider);
@@ -228,43 +225,45 @@ typedef NS_ENUM(NSInteger, BannerProviderState) {
                 }
                 else {
                     // if current banner provider shown with priority=1 then skip
-                    if ([self currentProvider].priority == CommonBannerPriorityHigh &&
-                        [self currentProvider].state == BannerProviderStateShown) {
-                        continue;
-                    }
-                    // if current banner provider changes state to idle then hide
-                    if ([self currentProvider].state == BannerProviderStateIdle) {
-                        self.stopped = YES;
-                        self.bannerProvider = nil;
-                        continue;
-                    }
-                    // if provider changes its state to ready
-                    if (provider.state == BannerProviderStateReady) {
-                        
-                        // stop immediately
-                        self.stopped = YES;
+                    if ([self currentProvider].state != BannerProviderStateShown || [self currentProvider].priority != CommonBannerPriorityHigh) {
+                        // if current banner provider changes state to idle then hide
+                        if ([self currentProvider].state == BannerProviderStateIdle) {
 
-                        //******************SYNC BLOCK******************//
-                        // set old provider to [state=ready]
-                        [self currentProvider].state = BannerProviderStateReady;
-                        
-                        // get new provider
-                        self.bannerProvider = [provider bannerProvider];
-                        
-                        // set new provider to [state=shown]
-                        [self currentProvider].state = BannerProviderStateShown;
-                        //******************SYNC BLOCK******************//
-                    
-                        // takes a time to prepare banner view
-                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.01f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                            [self.view addSubview:[self.bannerProvider bannerView]];
-                            // takes a time to reload
-                            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.25f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                                self.stopped = NO;
+                            // stop immediately
+                            self.stopped = YES;
+                            self.bannerProvider = nil;
+                        }
+                        // if provider changes its state to ready
+                        else if (provider.state == BannerProviderStateReady && provider != [self currentProvider]) {
+                            
+                            // stop immediately
+                            self.stopped = YES;
+                            
+                            //******************SYNC BLOCK******************//
+                            // set old provider to [state=ready]
+                            [self currentProvider].state = BannerProviderStateReady;
+                            
+                            // get new provider
+                            self.bannerProvider = [provider bannerProvider];
+                            
+                            // set new provider to [state=shown]
+                            [self currentProvider].state = BannerProviderStateShown;
+                            //******************SYNC BLOCK******************//
+                            
+                            // takes a time to prepare banner view
+                            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.01f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                                [self.view addSubview:[self.bannerProvider bannerView]];
+                                // takes a time to reload
+                                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.25f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                                    self.stopped = NO;
+                                });
                             });
-                        });
+                        }
                     }
                 }
+            }
+            if (i == [providers count] - 1) {
+                self.locked = NO;
             }
         }
     }
