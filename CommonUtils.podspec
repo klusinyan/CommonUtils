@@ -39,5 +39,6 @@ Pod::Spec.new do |s|
     s.frameworks = 'SystemConfiguration', 'MobileCoreServices', 'CoreTelephony', 'AdSupport', 'iAd', 'GameKit'
     #---------------------------
 
+    s.vendored_frameworks = 'GoogleMobileAds'
     s.xcconfig = { 'FRAMEWORK_SEARCH_PATHS' => '"${PODS_ROOT}/Google-Mobile-Ads-SDK/**"' }
 end
