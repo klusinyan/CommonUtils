@@ -24,7 +24,9 @@ Pod::Spec.new do |s|
 
     s.dependency 'AFNetworking'
     s.dependency 'Canvas'
-    s.dependency 'Google-Mobile-Ads-SDK'
+
+    #specified in podfile
+    #s.dependency 'Google-Mobile-Ads-SDK'
 
     #s.resource_bundles = {
     #  'Nibs'   => ['CommonUtils/Resources/Images/**/*.*'],
