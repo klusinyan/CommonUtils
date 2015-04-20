@@ -106,11 +106,9 @@ typedef NS_ENUM(NSInteger, RowType) {
     [super viewDidAppear:animated];
     
     self.canDisplayAds = YES;
-    self.animated = NO;
+    self.animated = YES;
     //self.shouldCoverContent = YES;
     
-    DebugLog(@"self.view %@", self.view);
-
     /* CRASH TEST
      NSArray *a = [NSArray array];
     [a objectAtIndex:2];

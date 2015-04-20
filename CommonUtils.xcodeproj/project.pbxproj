@@ -945,7 +945,7 @@
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
 				DSTROOT = /tmp/Common.dst;
-				FRAMEWORK_SEARCH_PATHS = "";
+				FRAMEWORK_SEARCH_PATHS = "Pods/Google-Mobile-Ads-SDK/GoogleMobileAdsSdkiOS-7.1.0";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "CommonUtils/Classes/Lib-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
@@ -971,7 +971,7 @@
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
 				DSTROOT = /tmp/Common.dst;
-				FRAMEWORK_SEARCH_PATHS = "";
+				FRAMEWORK_SEARCH_PATHS = "Pods/Google-Mobile-Ads-SDK/GoogleMobileAdsSdkiOS-7.1.0";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "CommonUtils/Classes/Lib-Prefix.pch";
 				HEADER_SEARCH_PATHS = (

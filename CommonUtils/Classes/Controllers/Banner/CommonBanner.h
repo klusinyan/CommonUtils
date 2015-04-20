@@ -21,14 +21,36 @@ typedef NS_ENUM(NSInteger, CommonBannerPosition) {
 @property (readwrite, nonatomic, assign) BOOL animated;
 
 @optional
-- (void)bannerViewDidLoadAd:(ADBannerView *)banner;
-- (void)bannerView:(ADBannerView *)banner didFailToReceiveAdWithError:(NSError *)error;
-- (BOOL)bannerViewActionShouldBegin:(ADBannerView *)banner willLeaveApplication:(BOOL)willLeave;
-- (void)bannerViewActionDidFinish:(ADBannerView *)banner;
+- (void)bannerViewActionShouldBegin;
+- (void)bannerViewActionDidFinish;
 
 @end
 
+@protocol CommonBannerPovider <NSObject>
+
+@required
+@property (readonly, nonatomic) UIView *bannerView;
+
+@required
++ (instancetype)sharedInstance;
+- (BOOL)isBannerLoaded;
+
+@end
+
+typedef NS_ENUM(NSInteger, CommonBannerPriority) {
+    CommonBannerPriorityLow=0,
+    CommonBannerPriorityHigh
+};
+
 @interface CommonBanner : UIViewController
+
+/*!
+ *  @brief  Call this method to initialize provider bannner
+ *
+ *  @param provider reflection class of type CommonBannerProvideriAd, CommonBannerProviderGAd
+ *  @param priority of type CommonBannerPriority
+ */
++ (void)regitserProvider:(Class)provider withPriority:(CommonBannerPriority)priority;
 
 /*!
  *  @brief  Call this method to start managing banners
@@ -53,5 +75,13 @@ typedef NS_ENUM(NSInteger, CommonBannerPosition) {
 @end
 
 @interface UIViewController (BannerAdapter) <CommonBannerAdapter>
+
+@end
+
+@interface CommonBannerProvideriAd : NSObject <CommonBannerPovider>
+
+@end
+
+@interface CommonBannerProviderGAd : NSObject <CommonBannerPovider>
 
 @end
