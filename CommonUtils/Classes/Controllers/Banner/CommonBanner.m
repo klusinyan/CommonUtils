@@ -429,7 +429,6 @@ typedef NS_ENUM(NSInteger, BannerProviderState) {
 @interface CommonBannerProvideriAd () <ADBannerViewDelegate>
 
 @property (nonatomic, strong) ADBannerView *bannerView;
-@property (nonatomic, getter=isBannerLoaded) BOOL bannerLoaded;
 
 @end
 
@@ -498,7 +497,6 @@ typedef NS_ENUM(NSInteger, BannerProviderState) {
 @interface CommonBannerProviderGAd () <GADBannerViewDelegate>
 
 @property (nonatomic, strong) GADBannerView *bannerView;
-@property (nonatomic, getter=isBannerLoaded) BOOL bannerLoaded;
 
 @end
 
