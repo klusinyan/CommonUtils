@@ -5,6 +5,10 @@
 #import "CommonTask.h"
 #import <objc/runtime.h>
 
+// requested params of AdMob
+NSString * const keyAdUnitID = @"adUnitID";
+NSString * const keyTestDevices = @"testDevices";
+
 @import GoogleMobileAds;
 
 NSString * const CommonBannerDidCompleteSetup = @"CommonBannerDidCompleteSetup";
@@ -19,24 +23,31 @@ typedef NS_ENUM(NSInteger, BannerProviderState) {
 
 @interface Provider : NSObject
 
-@property (nonatomic) id<CommonBannerPovider> bannerProvider;
+@property (nonatomic) id<CommonBannerProvider> bannerProvider;
 @property (nonatomic) CommonBannerPriority priority;
 
 @property (nonatomic) BannerProviderState state;
 
-- (instancetype)initWithProvider:(Class)provider priority:(CommonBannerPriority)priority;
+- (id)initWithProvider:(Class)provider priority:(CommonBannerPriority)priority requestParams:(NSDictionary *)requestParams;
 
 @end
 
 @implementation Provider
 
-- (id)initWithProvider:(Class)provider priority:(CommonBannerPriority)priority
+- (id)initWithProvider:(Class)provider priority:(CommonBannerPriority)priority requestParams:(NSDictionary *)requestParams
 {
     self = [super init];
     if (self) {
+        // configure banner provider
         self.bannerProvider = [NSClassFromString(NSStringFromClass(provider)) sharedInstance];
+        [self.bannerProvider setRequestParams:requestParams];
+        
+        // add options to provider
         self.priority = priority;
         self.state = BannerProviderStateIdle;
+        
+        // start loading banner
+        [self.bannerProvider startLoading];
     }
     return self;
 }
@@ -95,14 +106,10 @@ typedef NS_ENUM(NSInteger, BannerProviderState) {
 
 @property (nonatomic) CommonBannerPosition bannerPosition;
 @property (nonatomic) id <CommonBannerAdapter> adapter;
-@property (nonatomic, strong) id<CommonBannerPovider> bannerProvider;
+@property (nonatomic, strong) id<CommonBannerProvider> bannerProvider;
 @property (nonatomic, getter=isLocked) BOOL locked;
 
 @property (nonatomic, strong) NSMutableArray *providersQueue;
-
-//only AdMob
-@property (nonatomic, strong) NSString *adUnitID;
-@property (nonatomic, strong) NSArray *testDevices;
 
 @end
 
@@ -136,19 +143,9 @@ typedef NS_ENUM(NSInteger, BannerProviderState) {
     return sharedInstance;
 }
 
-+ (void)setAdUnitID:(NSString *)adUnitID
++ (void)regitserProvider:(Class)aClass withPriority:(CommonBannerPriority)priority requestParams:(NSDictionary *)requestParams
 {
-    [[self sharedInstance] setAdUnitID:adUnitID];
-}
-
-+ (void)setTestDevices:(NSArray *)testDevices
-{
-    [[self sharedInstance] setTestDevices:testDevices];
-}
-
-+ (void)regitserProvider:(Class)aClass withPriority:(CommonBannerPriority)priority
-{
-    [[self sharedInstance] setProvider:aClass withPriority:priority];
+    [[self sharedInstance] setProvider:aClass withPriority:priority requestParams:requestParams];
 }
 
 + (void)updatePriorityIfNeeded:(CommonBannerPriority)priority forClass:(Class)aClass
@@ -233,9 +230,9 @@ typedef NS_ENUM(NSInteger, BannerProviderState) {
     return [[self.providersQueue filteredArrayUsingPredicate:predicate] firstObject];
 }
 
-- (void)setProvider:(Class)aClass withPriority:(CommonBannerPriority)priority
+- (void)setProvider:(Class)aClass withPriority:(CommonBannerPriority)priority requestParams:(NSDictionary *)requestParams
 {
-    Provider *provider = [[Provider alloc] initWithProvider:aClass priority:priority];
+    Provider *provider = [[Provider alloc] initWithProvider:aClass priority:priority requestParams:requestParams];
     if (self.providersQueue == nil) {
         self.providersQueue = [NSMutableArray array];
     }
@@ -477,27 +474,31 @@ typedef NS_ENUM(NSInteger, BannerProviderState) {
 @end
 
 @implementation CommonBannerProvideriAd
+@synthesize requestParams;
 
 + (instancetype)sharedInstance
 {
     static dispatch_once_t pred = 0;
-    __strong static CommonBannerProvideriAd *sharedInstance = nil;
+    __strong static id sharedInstance = nil;
     dispatch_once(&pred, ^{
         sharedInstance = [[self alloc] init];
-        
+    });
+    return sharedInstance;
+}
+
+- (void)startLoading
+{
+    static dispatch_once_t pred = 0;
+    dispatch_once(&pred, ^{
         // on iOS 6 ADBannerView introduces a new initializer, use it when available.
         if ([ADBannerView instancesRespondToSelector:@selector(initWithAdType:)]) {
-            sharedInstance.bannerView = [[ADBannerView alloc] initWithAdType:ADAdTypeBanner];
+            self.bannerView = [[ADBannerView alloc] initWithAdType:ADAdTypeBanner];
         }
         else {
-            sharedInstance.bannerView = [[ADBannerView alloc] init];
+            self.bannerView = [[ADBannerView alloc] init];
         }
-        
-        // start request
-        sharedInstance.bannerView.delegate = sharedInstance;
+        self.bannerView.delegate = self;
     });
-    
-    return sharedInstance;
 }
 
 - (BOOL)isBannerLoaded
@@ -555,34 +556,36 @@ typedef NS_ENUM(NSInteger, BannerProviderState) {
 @end
 
 @implementation CommonBannerProviderGAd
+@synthesize requestParams;
 
 + (instancetype)sharedInstance
 {
     static dispatch_once_t pred = 0;
-    __strong static CommonBannerProviderGAd *sharedInstance = nil;
+    __strong static id sharedInstance = nil;
     dispatch_once(&pred, ^{
         sharedInstance = [[self alloc] init];
-        
-        sharedInstance.bannerView = [[GADBannerView alloc] initWithAdSize:kGADAdSizeBanner];
-        
-        // Replace this ad unit ID with your own ad unit ID.
-        sharedInstance.bannerView.adUnitID = [[CommonBanner sharedInstance] adUnitID];
-        sharedInstance.bannerView.rootViewController = [CommonBanner sharedInstance];
-        sharedInstance.bannerView.delegate = sharedInstance;
+    });
+    return sharedInstance;
+}
+
+- (void)startLoading
+{
+    static dispatch_once_t pred = 0;
+    dispatch_once(&pred, ^{
+        self.bannerView = [[GADBannerView alloc] initWithAdSize:kGADAdSizeBanner];
+        self.bannerView.adUnitID = [self.requestParams objectForKey:keyAdUnitID];
+        self.bannerView.rootViewController = [CommonBanner sharedInstance];
+        self.bannerView.delegate = self;
         
         GADRequest *request = [GADRequest request];
         // Requests test ads on devices you specify. Your test device ID is printed to the console when
         // an ad request is made. GADBannerView automatically returns test ads when running on a
         // simulator.
         if (DEBUG) {
-            request.testDevices = [[CommonBanner sharedInstance] testDevices];
+            request.testDevices = [self.requestParams objectForKey:keyTestDevices];
         }
-        
-        // start request
-        [sharedInstance.bannerView loadRequest:request];
+        [self.bannerView loadRequest:request];
     });
-    
-    return sharedInstance;
 }
 
 - (BOOL)isBannerLoaded

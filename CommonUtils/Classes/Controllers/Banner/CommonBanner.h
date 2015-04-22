@@ -28,13 +28,21 @@ typedef NS_ENUM(NSInteger, CommonBannerPosition) {
 
 @end
 
-@protocol CommonBannerPovider <NSObject>
+// params to build request params of AdMob
+extern NSString * const keyAdUnitID;
+extern NSString * const keyTestDevices;
+
+@protocol CommonBannerProvider <NSObject>
 
 @required
 @property (readonly, nonatomic) UIView *bannerView;
 
+@optional
+@property (readwrite, nonatomic) NSDictionary *requestParams;
+
 @required
 + (instancetype)sharedInstance;
+- (void)startLoading;
 - (BOOL)isBannerLoaded;
 
 @end
@@ -47,28 +55,12 @@ typedef NS_ENUM(NSInteger, CommonBannerPriority) {
 @interface CommonBanner : UIViewController
 
 /*!
- *  @brief  Call this method to set adUnitID
- *
- *  @param adUnitID app id provided from AdMob
- *  @warning USED BY ADMOB
- */
-+ (void)setAdUnitID:(NSString *)adUnitID;
-
-/*!
- *  @brief  Call this method to set device IDs only for DEMUG mode
- *
- *  @param devices array of string
- *  @warning USED BY ADMOB
- */
-+ (void)setTestDevices:(NSArray *)testDevices;
-
-/*!
  *  @brief  Call this method to initialize provider bannner
  *
  *  @param provider reflection class of type CommonBannerProvideriAd, CommonBannerProviderGAd
  *  @param priority of type CommonBannerPriority
  */
-+ (void)regitserProvider:(Class)aClass withPriority:(CommonBannerPriority)priority;
++ (void)regitserProvider:(Class)aClass withPriority:(CommonBannerPriority)priority requestParams:(NSDictionary *)requestParams;
 
 /*!
  *  @brief  Call this method to update priorities if current one is different the one that passing
@@ -113,10 +105,10 @@ typedef NS_ENUM(NSInteger, CommonBannerPriority) {
 
 @end
 
-@interface CommonBannerProvideriAd : NSObject <CommonBannerPovider>
+@interface CommonBannerProvideriAd : NSObject <CommonBannerProvider>
 
 @end
 
-@interface CommonBannerProviderGAd : NSObject <CommonBannerPovider>
+@interface CommonBannerProviderGAd : NSObject <CommonBannerProvider>
 
 @end
