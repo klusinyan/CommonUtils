@@ -100,6 +100,10 @@ typedef NS_ENUM(NSInteger, BannerProviderState) {
 
 @property (nonatomic, strong) NSMutableArray *providersQueue;
 
+//only AdMob
+@property (nonatomic, strong) NSString *adUnitID;
+@property (nonatomic, strong) NSArray *testDevices;
+
 @end
 
 @implementation CommonBanner
@@ -130,6 +134,16 @@ typedef NS_ENUM(NSInteger, BannerProviderState) {
     });
     
     return sharedInstance;
+}
+
++ (void)setAdUnitID:(NSString *)adUnitID
+{
+    [[self sharedInstance] setAdUnitID:adUnitID];
+}
+
++ (void)setTestDevices:(NSArray *)testDevices
+{
+    [[self sharedInstance] setTestDevices:testDevices];
 }
 
 + (void)regitserProvider:(Class)aClass withPriority:(CommonBannerPriority)priority
@@ -497,11 +511,21 @@ typedef NS_ENUM(NSInteger, BannerProviderState) {
 {
     Provider *provider = [[CommonBanner sharedInstance] provider:[self class]];
     if (provider.state != BannerProviderStateShown) provider.state = BannerProviderStateReady;
+    
+    id<CommonBannerAdapter> adapter = [CommonBanner sharedInstance].adapter;
+    if (adapter && [adapter respondsToSelector:@selector(bannerViewDidLoad)]) {
+        [adapter bannerViewDidLoad];
+    }
 }
 
 - (void)bannerView:(ADBannerView *)banner didFailToReceiveAdWithError:(NSError *)error
 {
     [[CommonBanner sharedInstance] provider:[self class]].state = BannerProviderStateIdle;
+    
+    id<CommonBannerAdapter> adapter = [CommonBanner sharedInstance].adapter;
+    if (adapter && [adapter respondsToSelector:@selector(bannerViewDidFailToReceiveWithError:)]) {
+        [adapter bannerViewDidFailToReceiveWithError:error];
+    }
 }
 
 - (BOOL)bannerViewActionShouldBegin:(ADBannerView *)banner willLeaveApplication:(BOOL)willLeave
@@ -542,7 +566,7 @@ typedef NS_ENUM(NSInteger, BannerProviderState) {
         sharedInstance.bannerView = [[GADBannerView alloc] initWithAdSize:kGADAdSizeBanner];
         
         // Replace this ad unit ID with your own ad unit ID.
-        sharedInstance.bannerView.adUnitID = @"ca-app-pub-3940256099942544/2934735716";
+        sharedInstance.bannerView.adUnitID = [[CommonBanner sharedInstance] adUnitID];
         sharedInstance.bannerView.rootViewController = [CommonBanner sharedInstance];
         sharedInstance.bannerView.delegate = sharedInstance;
         
@@ -550,7 +574,9 @@ typedef NS_ENUM(NSInteger, BannerProviderState) {
         // Requests test ads on devices you specify. Your test device ID is printed to the console when
         // an ad request is made. GADBannerView automatically returns test ads when running on a
         // simulator.
-        request.testDevices = @[@"104e7e015323c4993bcecf1b7fc91b08"];
+        if (DEBUG) {
+            request.testDevices = [[CommonBanner sharedInstance] testDevices];
+        }
         
         // start request
         [sharedInstance.bannerView loadRequest:request];
@@ -570,11 +596,21 @@ typedef NS_ENUM(NSInteger, BannerProviderState) {
 {
     Provider *provider = [[CommonBanner sharedInstance] provider:[self class]];
     if (provider.state != BannerProviderStateShown) provider.state = BannerProviderStateReady;
+    
+    id<CommonBannerAdapter> adapter = [CommonBanner sharedInstance].adapter;
+    if (adapter && [adapter respondsToSelector:@selector(bannerViewDidLoad)]) {
+        [adapter bannerViewDidLoad];
+    }
 }
 
 - (void)adView:(GADBannerView *)view didFailToReceiveAdWithError:(GADRequestError *)error
 {
     [[CommonBanner sharedInstance] provider:[self class]].state = BannerProviderStateIdle;
+    
+    id<CommonBannerAdapter> adapter = [CommonBanner sharedInstance].adapter;
+    if (adapter && [adapter respondsToSelector:@selector(bannerViewDidFailToReceiveWithError:)]) {
+        [adapter bannerViewDidFailToReceiveWithError:error];
+    }
 }
 
 - (void)adViewWillLeaveApplication:(GADBannerView *)adView

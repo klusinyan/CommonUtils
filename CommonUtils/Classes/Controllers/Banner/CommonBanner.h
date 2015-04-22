@@ -21,6 +21,8 @@ typedef NS_ENUM(NSInteger, CommonBannerPosition) {
 @property (readwrite, nonatomic, assign) BOOL animated;
 
 @optional
+- (void)bannerViewDidLoad;
+- (void)bannerViewDidFailToReceiveWithError:(NSError *)error;
 - (void)bannerViewActionShouldBegin;
 - (void)bannerViewActionDidFinish;
 
@@ -43,6 +45,22 @@ typedef NS_ENUM(NSInteger, CommonBannerPriority) {
 };
 
 @interface CommonBanner : UIViewController
+
+/*!
+ *  @brief  Call this method to set adUnitID
+ *
+ *  @param adUnitID app id provided from AdMob
+ *  @warning USED BY ADMOB
+ */
++ (void)setAdUnitID:(NSString *)adUnitID;
+
+/*!
+ *  @brief  Call this method to set device IDs only for DEMUG mode
+ *
+ *  @param devices array of string
+ *  @warning USED BY ADMOB
+ */
++ (void)setTestDevices:(NSArray *)testDevices;
 
 /*!
  *  @brief  Call this method to initialize provider bannner
