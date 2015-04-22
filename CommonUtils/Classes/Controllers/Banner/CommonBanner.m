@@ -125,7 +125,7 @@ typedef NS_ENUM(NSInteger, BannerProviderState) {
                                                           object:nil
                                                            queue:[NSOperationQueue currentQueue]
                                                       usingBlock:^(NSNotification *note) {
-                                                          [sharedInstance dipatchProvidersQueue];
+                                                          [sharedInstance dispatchProvidersQueue];
                                                       }];
     });
     
@@ -234,6 +234,9 @@ typedef NS_ENUM(NSInteger, BannerProviderState) {
         if ([provider.bannerProvider isMemberOfClass:aClass]) {
             if (provider.priority != priority) {
                 provider.priority = priority;
+                
+                // try to update immediately
+                [self dispatchProvidersQueue];
             }
             *stop = YES;
         }
@@ -270,7 +273,7 @@ typedef NS_ENUM(NSInteger, BannerProviderState) {
     }
 }
 
-- (void)dipatchProvidersQueue
+- (void)dispatchProvidersQueue
 {
     @synchronized(self) {
         if (self.isLocked) {
@@ -428,7 +431,7 @@ typedef NS_ENUM(NSInteger, BannerProviderState) {
     
     [[CommonBanner sharedInstance] setAdapter:self];
     
-    [[CommonBanner sharedInstance] dipatchProvidersQueue];
+    [[CommonBanner sharedInstance] dispatchProvidersQueue];
 }
 
 - (BOOL)shouldCoverContent
