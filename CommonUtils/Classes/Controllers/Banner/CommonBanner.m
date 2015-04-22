@@ -137,6 +137,16 @@ typedef NS_ENUM(NSInteger, BannerProviderState) {
     [[self sharedInstance] setProvider:aClass withPriority:priority];
 }
 
++ (void)updatePriorityIfNeeded:(CommonBannerPriority)priority forClass:(Class)aClass
+{
+    [[self sharedInstance] updatePriorityIfNeeded:priority forClass:aClass];
+}
+
++ (CommonBannerPriority)priorityForClass:(Class)aClass
+{
+    return [[self sharedInstance] priorityForClass:aClass];
+}
+
 + (void)startManaging
 {
     @synchronized(self) {
@@ -205,7 +215,7 @@ typedef NS_ENUM(NSInteger, BannerProviderState) {
 
 - (Provider *)provider:(Class)provider
 {
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"bannerProvider.class = %@",provider];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"bannerProvider.class = %@", provider];
     return [[self.providersQueue filteredArrayUsingPredicate:predicate] firstObject];
 }
 
@@ -216,6 +226,23 @@ typedef NS_ENUM(NSInteger, BannerProviderState) {
         self.providersQueue = [NSMutableArray array];
     }
     [[self providersQueue] addObject:provider];
+}
+
+- (void)updatePriorityIfNeeded:(CommonBannerPriority)priority forClass:(Class)aClass
+{
+    [self.providersQueue enumerateObjectsUsingBlock:^(Provider *provider, NSUInteger idx, BOOL *stop) {
+        if ([provider.bannerProvider isMemberOfClass:aClass]) {
+            if (provider.priority != priority) {
+                provider.priority = priority;
+            }
+            *stop = YES;
+        }
+    }];
+}
+
+- (CommonBannerPriority)priorityForClass:(Class)aClass
+{
+    return [[[self provider:aClass] valueForKey:@"priority"] integerValue];
 }
 
 - (void)setStopped:(BOOL)stopped

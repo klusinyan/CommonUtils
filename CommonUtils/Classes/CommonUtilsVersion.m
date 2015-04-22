@@ -3,8 +3,6 @@
 
 #import "CommonUtilsVersion.h"
 
-#define kLibVersion @"1.5.1"
-
 @implementation CommonUtilsVersion
 
 + (void)load

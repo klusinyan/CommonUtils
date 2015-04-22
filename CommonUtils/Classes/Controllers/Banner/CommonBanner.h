@@ -53,6 +53,23 @@ typedef NS_ENUM(NSInteger, CommonBannerPriority) {
 + (void)regitserProvider:(Class)aClass withPriority:(CommonBannerPriority)priority;
 
 /*!
+ *  @brief  Call this method to update priorities if current one is different the one that passing
+ *
+ *  @param priority of type CommonBannerPriority
+ *  @param aClass   reflection class of type CommonBannerProvideriAd, CommonBannerProviderGAd
+ */
++ (void)updatePriorityIfNeeded:(CommonBannerPriority)priority forClass:(Class)aClass;
+
+/*!
+ *  @brief  Call this method to know the current priority for a given class
+ *
+ *  @param aClass reflection class of type CommonBannerProvideriAd, CommonBannerProviderGAd
+ *
+ *  @return currrent priority
+ */
++ (CommonBannerPriority)priorityForClass:(Class)aClass;
+
+/*!
  *  @brief  Call this method to start managing banners
  */
 + (void)startManaging;
