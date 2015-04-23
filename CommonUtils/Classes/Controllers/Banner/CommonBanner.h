@@ -28,14 +28,17 @@ typedef NS_ENUM(NSInteger, CommonBannerPosition) {
 
 @end
 
-// params to build request params of AdMob
+// params needs to build AdMob request
+// required - app id
 extern NSString * const keyAdUnitID;
+// optional - device id array
 extern NSString * const keyTestDevices;
 
 @protocol CommonBannerProvider <NSObject>
 
 @required
 @property (readonly, nonatomic) UIView *bannerView;
+@property (readonly, nonatomic, getter=isBannerLoaded) BOOL bannerLoaded;
 
 @optional
 @property (readwrite, nonatomic) NSDictionary *requestParams;
@@ -43,7 +46,6 @@ extern NSString * const keyTestDevices;
 @required
 + (instancetype)sharedInstance;
 - (void)startLoading;
-- (BOOL)isBannerLoaded;
 
 @end
 

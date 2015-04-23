@@ -3,6 +3,7 @@
 
 #import "CommonBanner.h"
 #import "CommonTask.h"
+#import "AFNetworkReachabilityManager.h"
 #import <objc/runtime.h>
 
 // requested params of AdMob
@@ -46,7 +47,7 @@ typedef NS_ENUM(NSInteger, BannerProviderState) {
         self.priority = priority;
         self.state = BannerProviderStateIdle;
         
-        // start loading banner
+        // dispatch_once
         [self.bannerProvider startLoading];
     }
     return self;
@@ -107,7 +108,12 @@ typedef NS_ENUM(NSInteger, BannerProviderState) {
 @property (nonatomic) CommonBannerPosition bannerPosition;
 @property (nonatomic) id <CommonBannerAdapter> adapter;
 @property (nonatomic, strong) id<CommonBannerProvider> bannerProvider;
+
+// ivar "locked" needs to synchronize dispatch_queue
 @property (nonatomic, getter=isLocked) BOOL locked;
+
+// ivar that indicates if diplay banner is called
+@property (nonatomic, getter=isLayoutNeeded) BOOL layoutNeeded;
 
 @property (nonatomic, strong) NSMutableArray *providersQueue;
 
@@ -117,6 +123,8 @@ typedef NS_ENUM(NSInteger, BannerProviderState) {
 
 - (void)dealloc
 {
+    [[AFNetworkReachabilityManager sharedManager] stopMonitoring];
+    
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
@@ -126,6 +134,18 @@ typedef NS_ENUM(NSInteger, BannerProviderState) {
     __strong static id sharedInstance = nil;
     dispatch_once(&pred, ^{
         sharedInstance = [[self alloc] init];
+        
+        [[AFNetworkReachabilityManager sharedManager] startMonitoring];
+        
+        [[AFNetworkReachabilityManager sharedManager] setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
+            if (![AFNetworkReachabilityManager sharedManager].isReachable) {
+                [sharedInstance stopLoading];
+            }
+            else {
+                [sharedInstance startLoading];
+            }
+        }];
+        
         [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillEnterForegroundNotification
                                                           object:nil
                                                            queue:[NSOperationQueue currentQueue]
@@ -138,7 +158,7 @@ typedef NS_ENUM(NSInteger, BannerProviderState) {
                                                       usingBlock:^(NSNotification *note) {
                                                           [sharedInstance dispatchProvidersQueue];
                                                       }];
-    });
+   });
     
     return sharedInstance;
 }
@@ -175,7 +195,10 @@ typedef NS_ENUM(NSInteger, BannerProviderState) {
 
 + (void)stopManaging
 {
-    [self sharedInstance].stopped = YES;
+    static dispatch_once_t pred = 0;
+    dispatch_once(&pred, ^{
+        [[self sharedInstance] stopLoading];
+    });
 }
 
 + (void)waitAndReload
@@ -222,6 +245,40 @@ typedef NS_ENUM(NSInteger, BannerProviderState) {
         self.view = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
         self.view.backgroundColor = [UIColor clearColor];
     }
+}
+
+- (void)stopLoading
+{
+    [self syncTask:^{
+        if (!self.isStopped) {
+            self.stopped = YES;
+            [self.providersQueue enumerateObjectsUsingBlock:^(Provider *provider, NSUInteger idx, BOOL *stop) {
+                provider.state = BannerProviderStateIdle;
+            }];
+            DebugLog(@"/////%@/////", NSStringFromSelector(_cmd));
+        }
+    } withLockStatusChangeBlock:^(BOOL locked) {
+        if (!locked) {
+            [self dispatchProvidersQueue];
+        }
+    }];
+}
+
+- (void)startLoading
+{
+    [self syncTask:^{
+        if (self.isStopped) {
+            [self.providersQueue enumerateObjectsUsingBlock:^(Provider *provider, NSUInteger idx, BOOL *stop) {
+                provider.state = ([provider.bannerProvider isBannerLoaded]) ? BannerProviderStateReady : BannerProviderStateIdle;
+            }];
+            self.stopped = NO;
+            DebugLog(@"/////%@/////", NSStringFromSelector(_cmd));
+        }
+    } withLockStatusChangeBlock:^(BOOL locked) {
+        if (!locked) {
+            [self dispatchProvidersQueue];
+        }
+    }];
 }
 
 - (Provider *)provider:(Class)provider
@@ -275,12 +332,19 @@ typedef NS_ENUM(NSInteger, BannerProviderState) {
 
 - (void)syncTask:(void(^)(void))task
 {
+    [self syncTask:task withLockStatusChangeBlock:nil];
+}
+
+- (void)syncTask:(void(^)(void))task withLockStatusChangeBlock:(void(^)(BOOL locked))lockStatus
+{
     @synchronized(self) {
         self.locked = YES;
+        if (lockStatus) lockStatus(self.locked);
         DebugLog(@"locking...");
         if (task) task();
         DebugLog(@"unlocking...");
         self.locked = NO;
+        if (lockStatus) lockStatus(self.locked);
     }
 }
 
@@ -354,8 +418,17 @@ typedef NS_ENUM(NSInteger, BannerProviderState) {
     }
 }
 
-- (void)viewWillLayoutSubviews
+// call "before" to set layout needed ivar
+- (void)setNeedsLayout
 {
+    self.layoutNeeded = YES;
+}
+
+// call "after" to layout if requested before by calling [self setNeedsLayout]
+- (void)layoutIfNeeded:(void(^)(void))completion
+{
+    if (!self.isLayoutNeeded) return;
+
     CGRect contentFrame = self.view.bounds, bannerFrame = CGRectZero;
     
     // All we need to do is ask the banner for a size that fits into the layout area we are using.
@@ -391,6 +464,17 @@ typedef NS_ENUM(NSInteger, BannerProviderState) {
     
     self.contentController.view.frame = contentFrame;
     [self.bannerProvider bannerView].frame = bannerFrame;
+    
+    if (completion) completion();
+}
+
+- (void)viewWillLayoutSubviews
+{
+    [super viewWillLayoutSubviews];
+    
+    [self layoutIfNeeded:^{
+        self.layoutNeeded = NO;
+    }];
 }
 
 
@@ -410,18 +494,34 @@ typedef NS_ENUM(NSInteger, BannerProviderState) {
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
         dispatch_async(dispatch_get_main_queue(), ^{
-            DebugLog(@"isBannerLoaded=[%@] display=[%@] animated=[%@]", self.bannerProvider.isBannerLoaded ? @"Y" : @"N", display ? @"Y" : @"N", ([self.adapter animated] && animated) ? @"Y" : @"N");
-            [UIView animateWithDuration:[self.adapter animated] && animated ? .25f : .0f animations:^{
-                // viewDidLayoutSubviews will handle positioning the banner view so that it is visible.
-                // You must not call [self.view layoutSubviews] directly.  However, you can flag the view
-                // as requiring layout...
-                [self.view setNeedsLayout];
-                // ... then ask it to lay itself out immediately if it is flagged as requiring layout...
-                [self.view layoutIfNeeded];
-                // ... which has the same effect.
-            } completion:^(BOOL finished) {
-                if (completion) completion(finished);
-            }];
+            
+            [self setNeedsLayout];
+            
+            //****************************DEBUG****************************//
+            DebugLog(@"isBannerLoaded=[%@] display=[%@] animated=[%@]",
+                     self.bannerProvider.isBannerLoaded ? @"Y" : @"N",
+                     display ? @"Y" : @"N",
+                     ([self.adapter animated] && animated) ? @"Y" : @"N");
+            //****************************DEBUG****************************//
+            if ([self.adapter animated] && animated) {
+                [UIView animateWithDuration:.25f animations:^{
+                    // viewDidLayoutSubviews will handle positioning the banner view so that it is visible.
+                    // You must not call [self.view layoutSubviews] directly.  However, you can flag the view
+                    // as requiring layout...
+                    [self.view setNeedsLayout];
+                    // ... then ask it to lay itself out immediately if it is flagged as requiring layout...
+                    [self.view layoutIfNeeded];
+                    // ... which has the same effect.
+                } completion:^(BOOL finished) {
+                    if (completion) completion(finished);
+                }];
+            }
+            else {
+                [self layoutIfNeeded:^{
+                    self.layoutNeeded = NO;
+                    if (completion) completion(YES);
+                }];
+            }
         });
     });
 }
@@ -470,6 +570,7 @@ typedef NS_ENUM(NSInteger, BannerProviderState) {
 @interface CommonBannerProvideriAd () <ADBannerViewDelegate>
 
 @property (nonatomic, strong) ADBannerView *bannerView;
+@property (readwrite, nonatomic, getter=isBannerLoaded) BOOL bannerLoaded;
 
 @end
 
@@ -503,15 +604,22 @@ typedef NS_ENUM(NSInteger, BannerProviderState) {
 
 - (BOOL)isBannerLoaded
 {
-    return ([[CommonBanner sharedInstance] provider:[self class]].state != BannerProviderStateIdle);
+    if (_bannerLoaded) {
+        Provider *provider = [[CommonBanner sharedInstance] provider:[self class]];
+        if (provider.state == BannerProviderStateIdle) provider.state = BannerProviderStateReady;
+    }
+    return _bannerLoaded;
 }
+
 
 #pragma ADBannerViewDelegate protocol
 
 - (void)bannerViewDidLoadAd:(ADBannerView *)banner
 {
+    self.bannerLoaded = YES;
+    
     Provider *provider = [[CommonBanner sharedInstance] provider:[self class]];
-    if (provider.state != BannerProviderStateShown) provider.state = BannerProviderStateReady;
+    if (provider.state == BannerProviderStateIdle) provider.state = BannerProviderStateReady;
     
     id<CommonBannerAdapter> adapter = [CommonBanner sharedInstance].adapter;
     if (adapter && [adapter respondsToSelector:@selector(bannerViewDidLoad)]) {
@@ -521,8 +629,11 @@ typedef NS_ENUM(NSInteger, BannerProviderState) {
 
 - (void)bannerView:(ADBannerView *)banner didFailToReceiveAdWithError:(NSError *)error
 {
-    [[CommonBanner sharedInstance] provider:[self class]].state = BannerProviderStateIdle;
+    self.bannerLoaded = NO;
     
+    Provider *provider = [[CommonBanner sharedInstance] provider:[self class]];
+    if (provider.state != BannerProviderStateIdle) provider.state = BannerProviderStateIdle;
+   
     id<CommonBannerAdapter> adapter = [CommonBanner sharedInstance].adapter;
     if (adapter && [adapter respondsToSelector:@selector(bannerViewDidFailToReceiveWithError:)]) {
         [adapter bannerViewDidFailToReceiveWithError:error];
@@ -552,6 +663,7 @@ typedef NS_ENUM(NSInteger, BannerProviderState) {
 @interface CommonBannerProviderGAd () <GADBannerViewDelegate>
 
 @property (nonatomic, strong) GADBannerView *bannerView;
+@property (readwrite, nonatomic, getter=isBannerLoaded) BOOL bannerLoaded;
 
 @end
 
@@ -590,15 +702,22 @@ typedef NS_ENUM(NSInteger, BannerProviderState) {
 
 - (BOOL)isBannerLoaded
 {
-    return ([[CommonBanner sharedInstance] provider:[self class]].state != BannerProviderStateIdle);
+    if (_bannerLoaded) {
+        Provider *provider = [[CommonBanner sharedInstance] provider:[self class]];
+        if (provider.state == BannerProviderStateIdle) provider.state = BannerProviderStateReady;
+    }
+    return _bannerLoaded;
 }
+
 
 #pragma GADBannerViewDelegate
 
 - (void)adViewDidReceiveAd:(GADBannerView *)view
 {
+    self.bannerLoaded = YES;
+    
     Provider *provider = [[CommonBanner sharedInstance] provider:[self class]];
-    if (provider.state != BannerProviderStateShown) provider.state = BannerProviderStateReady;
+    if (provider.state == BannerProviderStateIdle) provider.state = BannerProviderStateReady;
     
     id<CommonBannerAdapter> adapter = [CommonBanner sharedInstance].adapter;
     if (adapter && [adapter respondsToSelector:@selector(bannerViewDidLoad)]) {
@@ -608,7 +727,10 @@ typedef NS_ENUM(NSInteger, BannerProviderState) {
 
 - (void)adView:(GADBannerView *)view didFailToReceiveAdWithError:(GADRequestError *)error
 {
-    [[CommonBanner sharedInstance] provider:[self class]].state = BannerProviderStateIdle;
+    self.bannerLoaded = NO;
+    
+    Provider *provider = [[CommonBanner sharedInstance] provider:[self class]];
+    if (provider.state != BannerProviderStateIdle) provider.state = BannerProviderStateIdle;
     
     id<CommonBannerAdapter> adapter = [CommonBanner sharedInstance].adapter;
     if (adapter && [adapter respondsToSelector:@selector(bannerViewDidFailToReceiveWithError:)]) {
