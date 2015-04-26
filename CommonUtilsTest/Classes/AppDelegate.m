@@ -35,9 +35,9 @@
     [Appirater setDebug:NO];                            //for production use always NO
     [Appirater appLaunched:YES];                        //start launching rater
     
-    [CommonBanner regitserProvider:[CommonBannerProviderTest class]
-                      withPriority:CommonBannerPriorityLow
-                     requestParams:nil];
+//    [CommonBanner regitserProvider:[CommonBannerProviderTest class]
+//                      withPriority:CommonBannerPriorityLow
+//                     requestParams:nil];
     [CommonBanner regitserProvider:[CommonBannerProvideriAd class]
                       withPriority:CommonBannerPriorityHigh
                      requestParams:nil];

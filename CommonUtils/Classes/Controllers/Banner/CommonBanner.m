@@ -252,10 +252,28 @@ typedef NS_ENUM(NSInteger, LockState) {
     
     // setup did compete
     [[NSNotificationCenter defaultCenter] postNotificationName:CommonBannerDidCompleteSetup object:nil];
+}
+
+- (void)loadView
+{
+    // call in case if initialized from XIB
+    [super loadView];
+    
+    // create view if not initialized from XIB
+    if (self.view == nil) {
+        self.view = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+        self.view.backgroundColor = [UIColor clearColor];
+    }
     
     // setup banner container
-    self.bannerContainer = [[UIView alloc] init];
+    [self setupBannerContainer];
+}
 
+- (void)setupBannerContainer
+{
+    // setup banner container
+    self.bannerContainer = [[UIView alloc] init];
+    
     // banner's container's size assigned from first provider's size
     NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"priority" ascending:NO];
     NSArray *providers = [self.providersQueue sortedArrayUsingDescriptors:@[sort]];
@@ -269,18 +287,6 @@ typedef NS_ENUM(NSInteger, LockState) {
     };
     self.bannerContainer.frame = frame;
     [self.view addSubview:self.bannerContainer];
-}
-
-- (void)loadView
-{
-    // call in case if initialized from XIB
-    [super loadView];
-    
-    // create view if not initialized from XIB
-    if (self.view == nil) {
-        self.view = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
-        self.view.backgroundColor = [UIColor clearColor];
-    }
 }
 
 - (Provider *)provider:(Class)provider
@@ -441,7 +447,6 @@ typedef NS_ENUM(NSInteger, LockState) {
                             }];
                             break;
                         }
-                        // if provider changes its state to ready
                         else if ([provider.bannerProvider isBannerLoaded] && !([provider isEqual:[self currentProvider]])) {
                             DebugLog(@"preparing to show...%@", [[provider bannerProvider] class]);
                             [self displayBanner:NO animated:YES completion:^(BOOL finished) {
@@ -630,15 +635,6 @@ typedef NS_ENUM(NSInteger, LockState) {
     self.bannerView.delegate = self;
 }
 
-- (BOOL)isBannerLoaded
-{
-    if (_bannerLoaded) {
-        Provider *provider = [[CommonBanner sharedInstance] provider:[self class]];
-        if (provider.state == BannerProviderStateIdle) provider.state = BannerProviderStateReady;
-    }
-    return _bannerLoaded;
-}
-
 
 #pragma ADBannerViewDelegate protocol
 
@@ -733,16 +729,6 @@ typedef NS_ENUM(NSInteger, LockState) {
     self.bannerView.delegate = self;
     [self.bannerView loadRequest:self.request];
 }
-
-- (BOOL)isBannerLoaded
-{
-    if (_bannerLoaded) {
-        Provider *provider = [[CommonBanner sharedInstance] provider:[self class]];
-        if (provider.state == BannerProviderStateIdle) provider.state = BannerProviderStateReady;
-    }
-    return _bannerLoaded;
-}
-
 
 #pragma GADBannerViewDelegate
 
