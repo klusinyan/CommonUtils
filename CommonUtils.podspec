@@ -17,9 +17,10 @@ Pod::Spec.new do |s|
     s.requires_arc = true
     s.source_files = 'CommonUtils/Classes/**/*.{h,m}'
     s.exclude_files = non_arc_files
+
     s.subspec 'no-arc' do |sna|
-    sna.requires_arc = false
-    sna.source_files = non_arc_files
+        sna.requires_arc = false
+        sna.source_files = non_arc_files
     end
 
     s.dependency 'AFNetworking'

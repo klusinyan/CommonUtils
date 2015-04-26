@@ -203,8 +203,8 @@
 {
     [super viewWillAppear:animated];
 
-    self.canDisplayAds = NO;
     self.animated = YES;
+    self.canDisplayAds = NO;
 }
 
 - (void)segmentedController:(UIViewController *)segmentedController

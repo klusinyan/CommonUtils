@@ -105,8 +105,8 @@ typedef NS_ENUM(NSInteger, RowType) {
 {
     [super viewDidAppear:animated];
     
-    self.canDisplayAds = YES;
     self.animated = YES;
+    self.canDisplayAds = YES;
     //self.shouldCoverContent = YES;
     
     /* CRASH TEST
@@ -114,12 +114,14 @@ typedef NS_ENUM(NSInteger, RowType) {
     [a objectAtIndex:2];
      //*/
     
+    /*
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(10 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         self.canDisplayAds = NO;
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(10 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             self.canDisplayAds = YES;
         });
     });
+     //*/
 }
 
 - (void)didReceiveMemoryWarning

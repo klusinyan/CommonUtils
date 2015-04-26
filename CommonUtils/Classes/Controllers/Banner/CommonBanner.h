@@ -13,12 +13,12 @@ typedef NS_ENUM(NSInteger, CommonBannerPosition) {
 
 @protocol CommonBannerAdapter <NSObject>
 
+@optional
+@property (readwrite, nonatomic, assign) BOOL animated;
+@property (readwrite, nonatomic, assign) BOOL shouldCoverContent;
+
 @required
 @property (readwrite, nonatomic, assign) BOOL canDisplayAds;
-
-@optional
-@property (readwrite, nonatomic, assign) BOOL shouldCoverContent;
-@property (readwrite, nonatomic, assign) BOOL animated;
 
 @optional
 - (void)bannerViewDidLoad;
@@ -46,6 +46,7 @@ extern NSString * const keyTestDevices;
 @required
 + (instancetype)sharedInstance;
 - (void)startLoading;
+- (void)stopLoading;
 
 @end
 
@@ -112,5 +113,9 @@ typedef NS_ENUM(NSInteger, CommonBannerPriority) {
 @end
 
 @interface CommonBannerProviderGAd : NSObject <CommonBannerProvider>
+
+@end
+
+@interface CommonBannerProviderTest : NSObject <CommonBannerProvider>
 
 @end
