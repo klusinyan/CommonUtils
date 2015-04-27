@@ -610,17 +610,21 @@ typedef NS_ENUM(NSInteger, LockState) {
         else {
             self.bannerView = [[ADBannerView alloc] init];
         }
+        
+        // layout banner if orientation did change
+        [self layoutBannerIfNeeded];
+        
         [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidChangeStatusBarOrientationNotification
                                                           object:nil
                                                            queue:[NSOperationQueue currentQueue]
                                                       usingBlock:^(NSNotification *note) {
-                                                          [self orientationDidChange:note];
+                                                          [self layoutBannerIfNeeded];
                                                       }];
     });
     self.bannerView.delegate = self;
 }
 
-- (void)orientationDidChange:(NSNotification *)notification
+- (void)layoutBannerIfNeeded
 {
     CGRect frame = self.bannerView.frame;
     frame.size = [self.bannerView sizeThatFits:[UIScreen mainScreen].bounds.size];
@@ -720,18 +724,21 @@ typedef NS_ENUM(NSInteger, LockState) {
         // simulator.
         self.request.testDevices = [self.requestParams objectForKey:keyTestDevices];
         
+        // layout banner if orientation did change
+        [self layoutBannerIfNeeded];
+        
         [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidChangeStatusBarOrientationNotification
                                                           object:nil
                                                            queue:[NSOperationQueue currentQueue]
                                                       usingBlock:^(NSNotification *note) {
-                                                               [self orientationDidChange:note];
+                                                               [self layoutBannerIfNeeded];
                                                            }];
     });
     self.bannerView.delegate = self;
     [self.bannerView loadRequest:self.request];
 }
 
-- (void)orientationDidChange:(NSNotification *)notification
+- (void)layoutBannerIfNeeded
 {
     if (UIInterfaceOrientationIsPortrait([[UIApplication sharedApplication] statusBarOrientation])) {
         self.bannerView.adSize = kGADAdSizeSmartBannerPortrait;
@@ -824,17 +831,20 @@ typedef NS_ENUM(NSInteger, LockState) {
         self.bannerView = [[UIView alloc] initWithFrame:(CGRect){0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, 50.0f}];
         self.bannerView.backgroundColor = [UIColor greenColor];
         
+        // layout banner if orientation did change
+        [self layoutBannerIfNeeded];
+        
         [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidChangeStatusBarOrientationNotification
                                                           object:nil
                                                            queue:[NSOperationQueue currentQueue]
                                                       usingBlock:^(NSNotification *note) {
-                                                          [self orientationDidChange:note];
+                                                          [self layoutBannerIfNeeded];
                                                       }];
     });
     self.bannerLoaded = YES;
 }
 
-- (void)orientationDidChange:(NSNotification *)notification
+- (void)layoutBannerIfNeeded
 {
     CGRect frame = self.bannerView.frame;
     frame.size.width = [[UIScreen mainScreen] bounds].size.width;
