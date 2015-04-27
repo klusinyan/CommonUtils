@@ -252,6 +252,8 @@ typedef NS_ENUM(NSInteger, LockState) {
     
     // setup did compete
     [[NSNotificationCenter defaultCenter] postNotificationName:CommonBannerDidCompleteSetup object:nil];
+    
+    [self setupBannerContainer];
 }
 
 - (void)loadView
@@ -266,37 +268,16 @@ typedef NS_ENUM(NSInteger, LockState) {
     }
 }
 
-- (void)viewWillAppear:(BOOL)animated
+- (void)viewDidLoad
 {
-    [super viewWillAppear:animated];
+    [super viewDidLoad];
     
-    static dispatch_once_t pred = 0;
-    dispatch_once(&pred, ^{
-        [self setupBannerContainer];
-    });
+    [self setupBannerContainer];
 }
 
 - (void)setupBannerContainer
 {
-    // setup banner container
     self.bannerContainer = [[UIView alloc] init];
-    self.bannerContainer.translatesAutoresizingMaskIntoConstraints = NO;
-    
-    // banner's container's size assigned from first provider's size
-    /*
-    NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"priority" ascending:NO];
-    NSArray *providers = [self.providersQueue sortedArrayUsingDescriptors:@[sort]];
-    CGSize bannerSize = [[[[providers firstObject] bannerProvider] bannerView] sizeThatFits:self.view.frame.size];
-
-    CGRect frame = (CGRect){
-        0,
-        0,
-        bannerSize.width,
-        bannerSize.height
-    };
-     //*/
-    
-    //self.bannerContainer.frame = frame;
     [self.view addSubview:self.bannerContainer];
 }
 

@@ -41,7 +41,7 @@ extern NSString * const keyTestDevices;
 @property (readonly, nonatomic, getter=isBannerLoaded) BOOL bannerLoaded;
 
 @optional
-@property (readwrite, nonatomic) NSDictionary *requestParams;
+@property (readwrite, nonatomic, strong) NSDictionary *requestParams;
 
 @required
 + (instancetype)sharedInstance;
