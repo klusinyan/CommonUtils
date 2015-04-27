@@ -454,7 +454,8 @@ typedef NS_ENUM(NSInteger, LockState) {
                         if ([self currentProvider].state == BannerProviderStateIdle) {
                             self.bannerProvider = nil;
                             [self displayBanner:NO animated:NO completion:^(BOOL finished) {
-                                // do something
+                                // try to dispatch again
+                                [self dispatchProvidersQueue];
                             }];
                             break;
                         }
@@ -743,7 +744,7 @@ typedef NS_ENUM(NSInteger, LockState) {
 {
     static dispatch_once_t pred = 0;
     dispatch_once(&pred, ^{
-        self.bannerView = [[GADBannerView alloc] initWithAdSize:kGADAdSizeBanner];
+        self.bannerView = [[GADBannerView alloc] initWithAdSize:kGADAdSizeSmartBannerPortrait];
         self.bannerView.adUnitID = [self.requestParams objectForKey:keyAdUnitID];
         self.bannerView.rootViewController = [CommonBanner sharedInstance];
         
@@ -769,10 +770,10 @@ typedef NS_ENUM(NSInteger, LockState) {
 - (void)orientationDidChange:(NSNotification *)notification
 {
     if (UIInterfaceOrientationIsPortrait([[UIApplication sharedApplication] statusBarOrientation])) {
-        self.bannerView.adSize = GADAdSizeFullWidthPortraitWithHeight(50.0f);
+        self.bannerView.adSize = kGADAdSizeSmartBannerPortrait;
     }
     else {
-        self.bannerView.adSize = GADAdSizeFullWidthLandscapeWithHeight(50.0f);
+        self.bannerView.adSize = kGADAdSizeSmartBannerLandscape;
     }
 }
 
@@ -822,14 +823,14 @@ typedef NS_ENUM(NSInteger, LockState) {
 
 @end
 
-@interface CommonBannerProviderTest () <GADBannerViewDelegate>
+@interface CommonBannerProviderCustom () <GADBannerViewDelegate>
 
 @property (nonatomic, strong) UIView *bannerView;
 @property (readwrite, nonatomic, getter=isBannerLoaded) BOOL bannerLoaded;
 
 @end
 
-@implementation CommonBannerProviderTest
+@implementation CommonBannerProviderCustom
 @synthesize requestParams;
 
 - (void)dealloc
@@ -867,15 +868,6 @@ typedef NS_ENUM(NSInteger, LockState) {
                                                       }];
     });
     self.bannerLoaded = YES;
-}
-
-- (BOOL)isBannerLoaded
-{
-    if (_bannerLoaded) {
-        Provider *provider = [[CommonBanner sharedInstance] provider:[self class]];
-        if (provider.state == BannerProviderStateIdle) provider.state = BannerProviderStateReady;
-    }
-    return _bannerLoaded;
 }
 
 - (void)orientationDidChange:(NSNotification *)notification

@@ -116,6 +116,6 @@ typedef NS_ENUM(NSInteger, CommonBannerPriority) {
 
 @end
 
-@interface CommonBannerProviderTest : NSObject <CommonBannerProvider>
+@interface CommonBannerProviderCustom : NSObject <CommonBannerProvider>
 
 @end
