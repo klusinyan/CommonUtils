@@ -752,9 +752,7 @@ typedef NS_ENUM(NSInteger, LockState) {
         // Requests test ads on devices you specify. Your test device ID is printed to the console when
         // an ad request is made. GADBannerView automatically returns test ads when running on a
         // simulator.
-        if (DEBUG) {
-            self.request.testDevices = [self.requestParams objectForKey:keyTestDevices];
-        }
+        self.request.testDevices = [self.requestParams objectForKey:keyTestDevices];
         
         [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidChangeStatusBarOrientationNotification
                                                           object:nil
