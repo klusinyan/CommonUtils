@@ -111,8 +111,6 @@ typedef NS_ENUM(NSInteger, LockState) {
 
 @property (nonatomic, strong) UIViewController *contentController;
 
-@property (nonatomic, getter=isStopped) BOOL stopped;
-
 @property (nonatomic) CommonBannerPosition bannerPosition;
 @property (nonatomic) id <CommonBannerAdapter> adapter;
 @property (nonatomic, strong) id<CommonBannerProvider> bannerProvider;
@@ -140,7 +138,7 @@ typedef NS_ENUM(NSInteger, LockState) {
 {
     self = [super init];
     if (self) {
-        self.stopped = YES;
+        // custom init
     }
     return self;
 }
@@ -252,8 +250,6 @@ typedef NS_ENUM(NSInteger, LockState) {
     
     // setup did compete
     [[NSNotificationCenter defaultCenter] postNotificationName:CommonBannerDidCompleteSetup object:nil];
-    
-    [self setupBannerContainer];
 }
 
 - (void)loadView
@@ -268,17 +264,13 @@ typedef NS_ENUM(NSInteger, LockState) {
     }
 }
 
-- (void)viewDidLoad
+- (UIView *)bannerContainer
 {
-    [super viewDidLoad];
-    
-    [self setupBannerContainer];
-}
-
-- (void)setupBannerContainer
-{
-    self.bannerContainer = [[UIView alloc] init];
-    [self.view addSubview:self.bannerContainer];
+    if (_bannerContainer == nil) {
+        _bannerContainer = [[UIView alloc] init];
+        [self.view addSubview:_bannerContainer];
+    }
+    return _bannerContainer;
 }
 
 - (Provider *)provider:(Class)provider
@@ -319,13 +311,6 @@ typedef NS_ENUM(NSInteger, LockState) {
 - (Provider *)currentProvider
 {
     return [self provider:[self.bannerProvider class]];
-}
-
-- (void)setStopped:(BOOL)stopped
-{
-    @synchronized(self) {
-        _stopped = stopped;
-    }
 }
 
 - (void)syncTask:(void(^)(void))task
