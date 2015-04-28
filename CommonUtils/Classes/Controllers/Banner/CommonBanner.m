@@ -163,14 +163,14 @@ typedef NS_ENUM(NSInteger, LockState) {
                 [sharedInstance startLoading:YES];
             }
         }];
-        
+         //*/
+
         [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillEnterForegroundNotification
                                                           object:nil
                                                            queue:[NSOperationQueue currentQueue]
                                                       usingBlock:^(NSNotification *note) {
-                                                          [self waitAndReload];
+                                                          [sharedInstance dispatchProvidersQueue];
                                                       }];
-         //*/
         
         [[NSNotificationCenter defaultCenter] addObserverForName:BannerProviderStatusDidChnage
                                                           object:nil
@@ -178,6 +178,7 @@ typedef NS_ENUM(NSInteger, LockState) {
                                                       usingBlock:^(NSNotification *note) {
                                                           [sharedInstance dispatchProvidersQueue];
                                                       }];
+        
         [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidChangeStatusBarOrientationNotification
                                                           object:nil
                                                            queue:[NSOperationQueue currentQueue]
