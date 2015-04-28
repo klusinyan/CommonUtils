@@ -62,6 +62,13 @@ typedef NS_ENUM(NSInteger, CommonBannerPriority) {
 @interface CommonBanner : UIViewController
 
 /*!
+ *  @brief  Call this method to enable debug mode
+ *
+ *  @param debugMode set YES to enable
+ */
++ (void)setDebugMode:(BOOL)debugMode;
+
+/*!
  *  @brief  Call this method to have ref to common banner
  *
  *  @return singleton instance

@@ -123,9 +123,44 @@ typedef NS_ENUM(NSInteger, LockState) {
 
 @property (nonatomic, copy) Task task;
 
+@property (nonatomic, getter=isDebugMode) BOOL debugMode;
+
 @end
 
 @implementation CommonBanner
+
+//**********************************************************//
+//************************DEBUG MODE************************//
+//**********************************************************//
+// static method to LOG provider state and selector
+static void inline LOG(Provider *provider, SEL selector) {
+    if ([CommonBanner isDebugMode]) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:[NSString stringWithFormat:@"%@\n%@",
+                                                                 NSStringFromClass([provider.bannerProvider class]),
+                                                                 NSStringFromSelector(selector)]
+                                                        message:[NSString stringWithFormat:@"state=%@", [provider providerState]]
+                                                       delegate:nil
+                                              cancelButtonTitle:@"Ok"
+                                              otherButtonTitles:nil];
+        [alert show];
+    }
+}
+
++ (void)setDebugMode:(BOOL)debugMode
+{
+    static dispatch_once_t pred = 0;
+    dispatch_once(&pred, ^{
+        [[self sharedInstance] setDebugMode:debugMode];
+    });
+}
+
++ (BOOL)isDebugMode
+{
+    return [[self sharedInstance] isDebugMode];
+}
+//**********************************************************//
+//************************DEBUG MODE************************//
+//**********************************************************//
 
 - (void)dealloc
 {
@@ -472,6 +507,7 @@ typedef NS_ENUM(NSInteger, LockState) {
                                     // animated
                                     [self displayBanner:YES animated:YES completion:^(BOOL finished) {
                                         DebugLog(@"currentProvider %@", [self currentProvider]);
+                                        LOG([self currentProvider], _cmd);
                                     }];
                                 }];
                             }];
@@ -663,6 +699,8 @@ typedef NS_ENUM(NSInteger, LockState) {
     if (adapter && [adapter respondsToSelector:@selector(bannerViewDidLoad)]) {
         [adapter bannerViewDidLoad];
     }
+    
+    LOG(provider, _cmd);
 }
 
 - (void)bannerView:(ADBannerView *)banner didFailToReceiveAdWithError:(NSError *)error
@@ -676,6 +714,8 @@ typedef NS_ENUM(NSInteger, LockState) {
     if (adapter && [adapter respondsToSelector:@selector(bannerViewDidFailToReceiveWithError:)]) {
         [adapter bannerViewDidFailToReceiveWithError:error];
     }
+    
+    LOG(provider, _cmd);
 }
 
 - (BOOL)bannerViewActionShouldBegin:(ADBannerView *)banner willLeaveApplication:(BOOL)willLeave
@@ -778,6 +818,8 @@ typedef NS_ENUM(NSInteger, LockState) {
     if (adapter && [adapter respondsToSelector:@selector(bannerViewDidLoad)]) {
         [adapter bannerViewDidLoad];
     }
+    
+    LOG(provider, _cmd);
 }
 
 - (void)adView:(GADBannerView *)view didFailToReceiveAdWithError:(GADRequestError *)error
@@ -791,6 +833,8 @@ typedef NS_ENUM(NSInteger, LockState) {
     if (adapter && [adapter respondsToSelector:@selector(bannerViewDidFailToReceiveWithError:)]) {
         [adapter bannerViewDidFailToReceiveWithError:error];
     }
+    
+    LOG(provider, _cmd);
 }
 
 - (void)adViewWillLeaveApplication:(GADBannerView *)adView
