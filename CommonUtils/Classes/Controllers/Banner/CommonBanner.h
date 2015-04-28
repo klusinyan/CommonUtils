@@ -14,11 +14,11 @@ typedef NS_ENUM(NSInteger, CommonBannerPosition) {
 @protocol CommonBannerAdapter <NSObject>
 
 @optional
-@property (readwrite, nonatomic, assign) BOOL animated;
-@property (readwrite, nonatomic, assign) BOOL shouldCoverContent;
+@property (readwrite, nonatomic) BOOL shouldCoverContent;
+@property (readwrite, nonatomic) BOOL animated;
 
 @required
-@property (readwrite, nonatomic, assign) BOOL canDisplayAds;
+@property (readwrite, nonatomic) BOOL canDisplayAds;
 
 @optional
 - (void)bannerViewDidLoad;

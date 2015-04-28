@@ -457,7 +457,7 @@ typedef NS_ENUM(NSInteger, LockState) {
                         else if ([provider.bannerProvider isBannerLoaded] && !([provider isEqual:[self currentProvider]])) {
                             DebugLog(@"preparing to show...%@", [[provider bannerProvider] class]);
                             [self syncTask:^{
-                                [self displayBanner:NO animated:YES completion:^(BOOL finished) {
+                                [self displayBanner:NO animated:NO completion:^(BOOL finished) {
                                     // remove current banner from bannerContainer
                                     [[self.bannerProvider bannerView] removeFromSuperview];
                                     // get new provider
