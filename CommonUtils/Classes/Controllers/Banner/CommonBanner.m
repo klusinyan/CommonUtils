@@ -129,7 +129,9 @@ typedef NS_ENUM(NSInteger, LockState) {
 
 - (void)dealloc
 {
+    /* not used
     [[AFNetworkReachabilityManager sharedManager] stopMonitoring];
+    //*/
     
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
@@ -149,7 +151,8 @@ typedef NS_ENUM(NSInteger, LockState) {
     __strong static id sharedInstance = nil;
     dispatch_once(&pred, ^{
         sharedInstance = [[self alloc] init];
-        
+
+        /* // not used
         [[AFNetworkReachabilityManager sharedManager] startMonitoring];
         
         [[AFNetworkReachabilityManager sharedManager] setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
@@ -167,6 +170,8 @@ typedef NS_ENUM(NSInteger, LockState) {
                                                       usingBlock:^(NSNotification *note) {
                                                           [self waitAndReload];
                                                       }];
+         //*/
+        
         [[NSNotificationCenter defaultCenter] addObserverForName:BannerProviderStatusDidChnage
                                                           object:nil
                                                            queue:[NSOperationQueue currentQueue]
@@ -226,6 +231,8 @@ typedef NS_ENUM(NSInteger, LockState) {
     });
 }
 
+
+/* // not used
 + (void)waitAndReload
 {
     [[self sharedInstance] stopLoading:YES];
@@ -233,6 +240,7 @@ typedef NS_ENUM(NSInteger, LockState) {
         [[self sharedInstance] startLoading:YES];
     });
 }
+ //*/
 
 + (void)setBannerPosition:(CommonBannerPosition)bannerPosition
 {
@@ -374,8 +382,7 @@ typedef NS_ENUM(NSInteger, LockState) {
 /*!
  *  @brief  Call this method so stop loading banners
  *
- *  @param forced   stops provider completely, means no any banner notification will posted
- *  @param dispatch flag to force to call dispatchProvidersQueue
+ *  @param forced  stops provider completely by cancalling "delegate", means no any banner notification will posted
  */
 - (void)stopLoading:(BOOL)forced
 {
@@ -395,8 +402,7 @@ typedef NS_ENUM(NSInteger, LockState) {
 /*!
  *  @brief  Call this method so start loading banners
  *
- *  @param forced   starts providers means they will be ready to post notifications
- *  @param dispatch flag to force to call dispatchProvidersQueue
+ *  @param forced  starts providers by re-setting "delegate" means they will be ready to post notifications
  */
 - (void)startLoading:(BOOL)forced
 {
@@ -629,6 +635,8 @@ typedef NS_ENUM(NSInteger, LockState) {
         // layout banner if orientation did change
         [self layoutBannerIfNeeded];
     });
+
+    // start receiving callbacks
     self.bannerView.delegate = self;
 }
 
@@ -728,6 +736,7 @@ typedef NS_ENUM(NSInteger, LockState) {
         self.bannerView = [[GADBannerView alloc] initWithAdSize:kGADAdSizeSmartBannerPortrait];
         self.bannerView.adUnitID = [self.requestParams objectForKey:keyAdUnitID];
         self.bannerView.rootViewController = [CommonBanner sharedInstance];
+        self.bannerView.autoloadEnabled = YES;
         
         self.request = [GADRequest request];
         // Requests test ads on devices you specify. Your test device ID is printed to the console when
@@ -738,8 +747,9 @@ typedef NS_ENUM(NSInteger, LockState) {
         // layout banner if orientation did change
         [self layoutBannerIfNeeded];
     });
+
+    // start receiving callbacks
     self.bannerView.delegate = self;
-    [self.bannerView loadRequest:self.request];
 }
 
 - (void)layoutBannerIfNeeded
@@ -842,6 +852,8 @@ typedef NS_ENUM(NSInteger, LockState) {
         // layout banner if orientation did change
         [self layoutBannerIfNeeded];
     });
+    
+    // start receiving callbacks
     self.bannerLoaded = YES;
 }
 
