@@ -38,9 +38,9 @@
     [CommonBanner regitserProvider:[CommonBannerProviderCustom class]
                       withPriority:CommonBannerPriorityLow
                      requestParams:nil];
-    [CommonBanner regitserProvider:[CommonBannerProvideriAd class]
-                      withPriority:CommonBannerPriorityHigh
-                     requestParams:nil];
+//    [CommonBanner regitserProvider:[CommonBannerProvideriAd class]
+//                      withPriority:CommonBannerPriorityHigh
+//                     requestParams:nil];
     [CommonBanner regitserProvider:[CommonBannerProviderGAd class]
                       withPriority:CommonBannerPriorityHigh
                      requestParams:@{keyAdUnitID    : @"ca-app-pub-3940256099942544/2934735716",

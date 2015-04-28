@@ -460,6 +460,8 @@ typedef NS_ENUM(NSInteger, LockState) {
                                 [self displayBanner:NO animated:NO completion:^(BOOL finished) {
                                     // remove current banner from bannerContainer
                                     [[self.bannerProvider bannerView] removeFromSuperview];
+                                    // set old provider to [state=ready]
+                                    [self currentProvider].state = BannerProviderStateIdle;
                                     // get new provider
                                     self.bannerProvider = [provider bannerProvider];
                                     // set new provider to [state=shown]
