@@ -48,6 +48,9 @@ extern NSString * const keyTestDevices;
 - (void)startLoading;
 - (void)stopLoading;
 
+@optional
+- (void)layoutBannerIfNeeded;
+
 @end
 
 typedef NS_ENUM(NSInteger, CommonBannerPriority) {
@@ -56,6 +59,13 @@ typedef NS_ENUM(NSInteger, CommonBannerPriority) {
 };
 
 @interface CommonBanner : UIViewController
+
+/*!
+ *  @brief  Call this method to have ref to common banner
+ *
+ *  @return singleton instance
+ */
++ (CommonBanner *)sharedInstance;
 
 /*!
  *  @brief  Call this method to initialize provider bannner

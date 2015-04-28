@@ -35,20 +35,19 @@
     [Appirater setDebug:NO];                            //for production use always NO
     [Appirater appLaunched:YES];                        //start launching rater
     
-    ///*
-//    [CommonBanner regitserProvider:[CommonBannerProviderCustom class]
-//                      withPriority:CommonBannerPriorityLow
-//                     requestParams:nil];
-//    [CommonBanner regitserProvider:[CommonBannerProvideriAd class]
-//                      withPriority:CommonBannerPriorityHigh
-//                     requestParams:nil];
-     //*/
+    [CommonBanner regitserProvider:[CommonBannerProviderCustom class]
+                      withPriority:CommonBannerPriorityLow
+                     requestParams:nil];
+    [CommonBanner regitserProvider:[CommonBannerProvideriAd class]
+                      withPriority:CommonBannerPriorityHigh
+                     requestParams:nil];
     [CommonBanner regitserProvider:[CommonBannerProviderGAd class]
                       withPriority:CommonBannerPriorityLow
                      requestParams:@{keyAdUnitID    : @"ca-app-pub-3940256099942544/2934735716",
                                      keyTestDevices : @[@"104e7e015323c4993bcecf1b7fc91b08"]}];
     [CommonBanner startManaging];
-//    [CommonBanner setBannerPosition:CommonBannerPositionTop];
+
+    //[CommonBanner setBannerPosition:CommonBannerPositionTop];
 
     return YES;
 }

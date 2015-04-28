@@ -154,10 +154,10 @@ typedef NS_ENUM(NSInteger, LockState) {
         
         [[AFNetworkReachabilityManager sharedManager] setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
             if (![AFNetworkReachabilityManager sharedManager].isReachable) {
-                [sharedInstance stopLoading];
+                [sharedInstance stopLoading:YES];
             }
             else {
-                [sharedInstance startLoading];
+                [sharedInstance startLoading:YES];
             }
         }];
         
@@ -173,6 +173,15 @@ typedef NS_ENUM(NSInteger, LockState) {
                                                       usingBlock:^(NSNotification *note) {
                                                           [sharedInstance dispatchProvidersQueue];
                                                       }];
+        [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidChangeStatusBarOrientationNotification
+                                                          object:nil
+                                                           queue:[NSOperationQueue currentQueue]
+                                                      usingBlock:^(NSNotification *note) {
+                                                          if ([[sharedInstance bannerProvider] respondsToSelector:@selector(layoutBannerIfNeeded)]) {
+                                                              [[sharedInstance bannerProvider] layoutBannerIfNeeded];
+                                                          }
+                                                      }];
+
    });
     
     return sharedInstance;
@@ -202,9 +211,9 @@ typedef NS_ENUM(NSInteger, LockState) {
                                                               object:nil
                                                                queue:[NSOperationQueue currentQueue]
                                                           usingBlock:^(NSNotification *note) {
-                                                              [[self sharedInstance] setupOnce];
+                                                              [[self sharedInstance] applicationDidFinishLaunching:note];
                                                           }];
-            [[self sharedInstance] startLoading];
+            [[self sharedInstance] startLoading:YES];
         });
     }
 }
@@ -213,15 +222,15 @@ typedef NS_ENUM(NSInteger, LockState) {
 {
     static dispatch_once_t pred = 0;
     dispatch_once(&pred, ^{
-        [[self sharedInstance] stopLoading];
+        [[self sharedInstance] stopLoading:YES];
     });
 }
 
 + (void)waitAndReload
 {
-    [[self sharedInstance] stopLoading];
+    [[self sharedInstance] stopLoading:YES];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [[self sharedInstance] startLoading];
+        [[self sharedInstance] startLoading:YES];
     });
 }
 
@@ -234,22 +243,24 @@ typedef NS_ENUM(NSInteger, LockState) {
 }
 
 // dispatch_once
-- (void)setupOnce
+- (void)applicationDidFinishLaunching:(NSNotification *)notification
 {
-    //****************SETUP COMMON BANNER****************//
-    self.contentController = [[[UIApplication sharedApplication] keyWindow] rootViewController];
-    if ([self.contentController isKindOfClass:[UINavigationController class]]) {
-        self.bannerPosition = CommonBannerPositionBottom;
+    if (self.contentController == nil) {
+        //****************SETUP COMMON BANNER****************//
+        self.contentController = [[[UIApplication sharedApplication] keyWindow] rootViewController];
+        if ([self.contentController isKindOfClass:[UINavigationController class]]) {
+            self.bannerPosition = CommonBannerPositionBottom;
+        }
+        [self.view addSubview:self.contentController.view];
+        [self addChildViewController:self.contentController];
+        
+        // switch root view controller
+        [[UIApplication sharedApplication] keyWindow].rootViewController = self;
+        //****************SETUP COMMON BANNER****************//
+        
+        // setup did compete
+        [[NSNotificationCenter defaultCenter] postNotificationName:CommonBannerDidCompleteSetup object:nil];
     }
-    [self.view addSubview:self.contentController.view];
-    [self addChildViewController:self.contentController];
-    
-    // switch root view controller
-    [[UIApplication sharedApplication] keyWindow].rootViewController = self;
-    //****************SETUP COMMON BANNER****************//
-    
-    // setup did compete
-    [[NSNotificationCenter defaultCenter] postNotificationName:CommonBannerDidCompleteSetup object:nil];
 }
 
 - (void)loadView
@@ -264,6 +275,8 @@ typedef NS_ENUM(NSInteger, LockState) {
     }
 }
 
+#pragma getter/setter
+
 - (UIView *)bannerContainer
 {
     if (_bannerContainer == nil) {
@@ -271,6 +284,16 @@ typedef NS_ENUM(NSInteger, LockState) {
         [self.view addSubview:_bannerContainer];
     }
     return _bannerContainer;
+}
+
+- (UIViewController *)contentController
+{
+    if (_contentController == nil) {
+        if ([[self childViewControllers] count] > 0) {
+            _contentController = [self childViewControllers][0];
+        }
+    }
+    return _contentController;
 }
 
 - (Provider *)provider:(Class)provider
@@ -354,12 +377,13 @@ typedef NS_ENUM(NSInteger, LockState) {
  *  @param forced   stops provider completely, means no any banner notification will posted
  *  @param dispatch flag to force to call dispatchProvidersQueue
  */
-- (void)stopLoading
+- (void)stopLoading:(BOOL)forced
 {
     [self syncTaskWithCallback:^{
         [self.providersQueue enumerateObjectsUsingBlock:^(Provider *provider, NSUInteger idx, BOOL *stop) {
-            provider.state = BannerProviderStateIdle;
-            [provider.bannerProvider stopLoading];
+            if (forced) {
+                [provider.bannerProvider stopLoading];
+            }
         }];
     } withLockStatusChangeBlock:^(LockState lockState) {
         if (lockState == LockStateReleased) {
@@ -374,12 +398,13 @@ typedef NS_ENUM(NSInteger, LockState) {
  *  @param forced   starts providers means they will be ready to post notifications
  *  @param dispatch flag to force to call dispatchProvidersQueue
  */
-- (void)startLoading
+- (void)startLoading:(BOOL)forced
 {
     [self syncTaskWithCallback:^{
         [self.providersQueue enumerateObjectsUsingBlock:^(Provider *provider, NSUInteger idx, BOOL *stop) {
-            provider.state = BannerProviderStateIdle;
-            [provider.bannerProvider startLoading];
+            if (forced) {
+                [provider.bannerProvider startLoading];
+            }
         }];
     } withLockStatusChangeBlock:^(LockState lockState) {
         if (lockState == LockStateReleased) {
@@ -407,10 +432,9 @@ typedef NS_ENUM(NSInteger, LockState) {
                 if (![self.adapter canDisplayAds]) {
                     [self syncTask:^{
                         [self currentProvider].state = BannerProviderStateIdle;
-                    }];
-                    self.bannerProvider = nil;
-                    [self displayBanner:NO animated:NO completion:^(BOOL finished) {
-                        // do something
+                        [self displayBanner:NO animated:NO completion:^(BOOL finished) {
+                            self.bannerProvider = nil;
+                        }];
                     }];
                 }
                 else {
@@ -418,29 +442,28 @@ typedef NS_ENUM(NSInteger, LockState) {
                     if ([self currentProvider].state != BannerProviderStateShown || [self currentProvider].priority != CommonBannerPriorityHigh) {
                         // if current banner provider changes state to idle then hide
                         if ([self currentProvider].state == BannerProviderStateIdle) {
-                            self.bannerProvider = nil;
-                            [self displayBanner:NO animated:NO completion:^(BOOL finished) {
-                                // try to dispatch again
-                                [self dispatchProvidersQueue];
+                            [self syncTask:^{
+                                [self displayBanner:NO animated:NO completion:^(BOOL finished) {
+                                    self.bannerProvider = nil;
+                                }];
                             }];
-                            break;
                         }
                         else if ([provider.bannerProvider isBannerLoaded] && !([provider isEqual:[self currentProvider]])) {
                             DebugLog(@"preparing to show...%@", [[provider bannerProvider] class]);
-                            [self displayBanner:NO animated:YES completion:^(BOOL finished) {
-                                // remove current banner from bannerContainer
-                                [[self.bannerProvider bannerView] removeFromSuperview];
-                                // get new provider
-                                self.bannerProvider = [provider bannerProvider];
-                                // set new provider to [state=shown]
-                                [self syncTask:^{
+                            [self syncTask:^{
+                                [self displayBanner:NO animated:YES completion:^(BOOL finished) {
+                                    // remove current banner from bannerContainer
+                                    [[self.bannerProvider bannerView] removeFromSuperview];
+                                    // get new provider
+                                    self.bannerProvider = [provider bannerProvider];
+                                    // set new provider to [state=shown]
                                     [self currentProvider].state = BannerProviderStateShown;
-                                }];
-                                // add current banner to bannerContainer
-                                [self.bannerContainer addSubview:[self.bannerProvider bannerView]];
-                                // animated
-                                [self displayBanner:YES animated:YES completion:^(BOOL finished) {
-                                    DebugLog(@"currentProvider %@", [self currentProvider]);
+                                    // add current banner to bannerContainer
+                                    [self.bannerContainer addSubview:[self.bannerProvider bannerView]];
+                                    // animated
+                                    [self displayBanner:YES animated:YES completion:^(BOOL finished) {
+                                        DebugLog(@"currentProvider %@", [self currentProvider]);
+                                    }];
                                 }];
                             }];
                             break;
@@ -521,18 +544,6 @@ typedef NS_ENUM(NSInteger, LockState) {
     [self layoutBannerContainer];
 }
 
-#pragma orientation
-
-- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation
-{
-    return [self.contentController preferredInterfaceOrientationForPresentation];
-}
-
-- (NSUInteger)supportedInterfaceOrientations
-{
-    return [self.contentController supportedInterfaceOrientations];
-}
-
 @end
 
 @implementation UIViewController (BannerAdapter)
@@ -597,6 +608,10 @@ typedef NS_ENUM(NSInteger, LockState) {
 - (void)stopLoading
 {
     self.bannerView.delegate = nil;
+    
+    // set to idle state
+    Provider *provider = [[CommonBanner sharedInstance] provider:[self class]];
+    provider.state = BannerProviderStateIdle;
 }
 
 - (void)startLoading
@@ -613,13 +628,6 @@ typedef NS_ENUM(NSInteger, LockState) {
         
         // layout banner if orientation did change
         [self layoutBannerIfNeeded];
-        
-        [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidChangeStatusBarOrientationNotification
-                                                          object:nil
-                                                           queue:[NSOperationQueue currentQueue]
-                                                      usingBlock:^(NSNotification *note) {
-                                                          [self layoutBannerIfNeeded];
-                                                      }];
     });
     self.bannerView.delegate = self;
 }
@@ -665,7 +673,6 @@ typedef NS_ENUM(NSInteger, LockState) {
     if (adapter && [adapter respondsToSelector:@selector(bannerViewActionShouldBegin)]) {
         [adapter bannerViewActionShouldBegin];
     }
-    
     return YES;
 }
 
@@ -708,6 +715,10 @@ typedef NS_ENUM(NSInteger, LockState) {
 - (void)stopLoading
 {
     self.bannerView.delegate = nil;
+    
+    // set to idle state
+    Provider *provider = [[CommonBanner sharedInstance] provider:[self class]];
+    provider.state = BannerProviderStateIdle;
 }
 
 - (void)startLoading
@@ -726,13 +737,6 @@ typedef NS_ENUM(NSInteger, LockState) {
         
         // layout banner if orientation did change
         [self layoutBannerIfNeeded];
-        
-        [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidChangeStatusBarOrientationNotification
-                                                          object:nil
-                                                           queue:[NSOperationQueue currentQueue]
-                                                      usingBlock:^(NSNotification *note) {
-                                                               [self layoutBannerIfNeeded];
-                                                           }];
     });
     self.bannerView.delegate = self;
     [self.bannerView loadRequest:self.request];
@@ -822,6 +826,10 @@ typedef NS_ENUM(NSInteger, LockState) {
 - (void)stopLoading
 {
     self.bannerLoaded = NO;
+    
+    // set to idle state
+    Provider *provider = [[CommonBanner sharedInstance] provider:[self class]];
+    provider.state = BannerProviderStateIdle;
 }
 
 - (void)startLoading
@@ -833,13 +841,6 @@ typedef NS_ENUM(NSInteger, LockState) {
         
         // layout banner if orientation did change
         [self layoutBannerIfNeeded];
-        
-        [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidChangeStatusBarOrientationNotification
-                                                          object:nil
-                                                           queue:[NSOperationQueue currentQueue]
-                                                      usingBlock:^(NSNotification *note) {
-                                                          [self layoutBannerIfNeeded];
-                                                      }];
     });
     self.bannerLoaded = YES;
 }
