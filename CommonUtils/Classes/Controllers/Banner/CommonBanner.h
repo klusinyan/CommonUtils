@@ -14,8 +14,9 @@ typedef NS_ENUM(NSInteger, CommonBannerPosition) {
 @protocol CommonBannerAdapter <NSObject>
 
 @optional
-@property (readwrite, nonatomic) BOOL shouldCoverContent;
-@property (readwrite, nonatomic) BOOL animated;
+// @important: optional params should be set before calling "canDisplayAds"
+@property (readwrite, nonatomic) BOOL adsShouldCoverContent;
+@property (readwrite, nonatomic) BOOL adsShouldDisplayAnimated;
 
 @required
 @property (readwrite, nonatomic) BOOL canDisplayAds;

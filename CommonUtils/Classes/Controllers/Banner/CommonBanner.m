@@ -487,9 +487,9 @@ typedef NS_ENUM(NSInteger, LockState) {
     DebugLog(@"isBannerLoaded=[%@] display=[%@] animated=[%@]",
              [self.bannerProvider isBannerLoaded] ? @"Y" : @"N",
              display ? @"Y" : @"N",
-             ([self.adapter animated] && animated) ? @"Y" : @"N");
+             ([self.adapter adsShouldDisplayAnimated] && animated) ? @"Y" : @"N");
     //****************************DEBUG****************************//
-    if ([self.adapter animated] && animated) {
+    if ([self.adapter adsShouldDisplayAnimated] && animated) {
         [UIView animateWithDuration:0.25 animations:^{
             // viewDidLayoutSubviews will handle positioning the banner view so that it is visible.
             // You must not call [self.view layoutSubviews] directly.  However, you can flag the view
@@ -537,7 +537,7 @@ typedef NS_ENUM(NSInteger, LockState) {
         }
     }
     
-    if ([self.adapter shouldCoverContent]) {
+    if ([self.adapter adsShouldCoverContent]) {
         contentFrame = self.view.bounds;
     }
     
@@ -553,7 +553,7 @@ typedef NS_ENUM(NSInteger, LockState) {
 @end
 
 @implementation UIViewController (BannerAdapter)
-@dynamic canDisplayAds, shouldCoverContent, animated;
+@dynamic canDisplayAds, adsShouldCoverContent, adsShouldDisplayAnimated;
 
 - (BOOL)canDisplayAds
 {
@@ -569,24 +569,24 @@ typedef NS_ENUM(NSInteger, LockState) {
     [[CommonBanner sharedInstance] dispatchProvidersQueue];
 }
 
-- (BOOL)shouldCoverContent
+- (BOOL)adsShouldCoverContent
 {
-    return [objc_getAssociatedObject(self, @selector(shouldCoverContent)) boolValue];
+    return [objc_getAssociatedObject(self, @selector(adsShouldCoverContent)) boolValue];
 }
 
-- (void)setShouldCoverContent:(BOOL)shouldCoverContent
+- (void)setAdsShouldCoverContent:(BOOL)adsShouldCoverContent
 {
-    objc_setAssociatedObject(self, @selector(shouldCoverContent), @(shouldCoverContent), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    objc_setAssociatedObject(self, @selector(adsShouldCoverContent), @(adsShouldCoverContent), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
-- (BOOL)animated
+- (BOOL)adsShouldDisplayAnimated
 {
-    return [objc_getAssociatedObject(self, @selector(animated)) boolValue];
+    return [objc_getAssociatedObject(self, @selector(adsShouldDisplayAnimated)) boolValue];
 }
 
-- (void)setAnimated:(BOOL)animated
+- (void)setAdsShouldDisplayAnimated:(BOOL)adsShouldDisplayAnimated
 {
-    objc_setAssociatedObject(self, @selector(animated), @(animated), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    objc_setAssociatedObject(self, @selector(adsShouldDisplayAnimated), @(adsShouldDisplayAnimated), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 @end

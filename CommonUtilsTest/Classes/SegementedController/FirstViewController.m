@@ -202,8 +202,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-
-    self.animated = YES;
+    
     self.canDisplayAds = NO;
 }
 
