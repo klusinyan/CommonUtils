@@ -17,12 +17,14 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    application.idleTimerDisabled = YES;
+    
     ///*
     TestViewController *vc = [[TestViewController alloc] init];
     UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:vc];
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    self.window.backgroundColor = [UIColor clearColor];
+    self.window.backgroundColor = [UIColor whiteColor];
     self.window.rootViewController = nc;
     [self.window makeKeyAndVisible];
     //*/
@@ -45,7 +47,7 @@
                       withPriority:CommonBannerPriorityLow
                      requestParams:@{keyAdUnitID    : @"ca-app-pub-3940256099942544/2934735716",
                                      keyTestDevices : @[@"104e7e015323c4993bcecf1b7fc91b08"]}];
-    [CommonBanner setDebugMode:YES];
+    [CommonBanner setDebugMode:NO];
     [CommonBanner startManaging];
 
     //[CommonBanner setBannerPosition:CommonBannerPositionTop];

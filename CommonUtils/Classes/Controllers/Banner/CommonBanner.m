@@ -2,8 +2,6 @@
 //  Copyright (c) 2014 Karen Lusinyan. All rights reserved.
 
 #import "CommonBanner.h"
-#import "CommonTask.h"
-#import "AFNetworkReachabilityManager.h"
 #import <objc/runtime.h>
 
 // requested params of AdMob
@@ -47,8 +45,17 @@ typedef NS_ENUM(NSInteger, BannerProviderState) {
         self.priority = priority;
         self.state = BannerProviderStateIdle;
         
-        // dispatch_once
+        // init bannerView, set delegate and start loading
         [self.bannerProvider startLoading];
+        
+        [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidChangeStatusBarOrientationNotification
+                                                          object:nil
+                                                           queue:[NSOperationQueue currentQueue]
+                                                      usingBlock:^(NSNotification *note) {
+                                                          if ([self.bannerProvider respondsToSelector:@selector(layoutBannerIfNeeded)]) {
+                                                              [self.bannerProvider layoutBannerIfNeeded];
+                                                          }
+                                                      }];
     }
     return self;
 }
@@ -124,6 +131,7 @@ typedef NS_ENUM(NSInteger, LockState) {
 @property (nonatomic, copy) Task task;
 
 @property (nonatomic, getter=isDebugMode) BOOL debugMode;
+@property (nonatomic, strong) NSMutableArray *debugAlertQueue;
 
 @end
 
@@ -134,16 +142,38 @@ typedef NS_ENUM(NSInteger, LockState) {
 //**********************************************************//
 // static method to LOG provider state and selector
 static void inline LOG(Provider *provider, SEL selector) {
-    if ([CommonBanner isDebugMode]) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:[NSString stringWithFormat:@"%@\n%@",
-                                                                 NSStringFromClass([provider.bannerProvider class]),
-                                                                 NSStringFromSelector(selector)]
-                                                        message:[NSString stringWithFormat:@"state=%@", [provider providerState]]
-                                                       delegate:nil
-                                              cancelButtonTitle:@"Ok"
-                                              otherButtonTitles:nil];
-        [alert show];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if ([CommonBanner isDebugMode]) {
+
+                NSString *trimedTitle =
+                [NSStringFromClass([provider.bannerProvider class]) stringByReplacingOccurrencesOfString:@"CommonBannerProvider"
+                                                                                              withString:@""];
+                UIAlertView  *alert =
+                [[UIAlertView alloc] initWithTitle:[NSString stringWithFormat:@"%@\n%@", trimedTitle, NSStringFromSelector(selector)]
+                                           message:[NSString stringWithFormat:@"%@", [provider providerState]]
+                                          delegate:nil
+                                 cancelButtonTitle:nil
+                                 otherButtonTitles:nil];
+                [alert show];
+
+                [[CommonBanner sharedInstance].debugAlertQueue addObject:alert];
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    for (UIAlertView *alert in [CommonBanner sharedInstance].debugAlertQueue) {
+                        [alert dismissWithClickedButtonIndex:0 animated:YES];
+                    }
+                });
+            }
+        });
+    });
+}
+
+- (NSMutableArray *)debugAlertQueue
+{
+    if (_debugAlertQueue == nil) {
+        _debugAlertQueue = [[NSMutableArray alloc] init];
     }
+    return _debugAlertQueue;
 }
 
 + (void)setDebugMode:(BOOL)debugMode
@@ -164,10 +194,6 @@ static void inline LOG(Provider *provider, SEL selector) {
 
 - (void)dealloc
 {
-    /* not used
-    [[AFNetworkReachabilityManager sharedManager] stopMonitoring];
-    //*/
-    
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
@@ -187,19 +213,6 @@ static void inline LOG(Provider *provider, SEL selector) {
     dispatch_once(&pred, ^{
         sharedInstance = [[self alloc] init];
 
-        /* // not used
-        [[AFNetworkReachabilityManager sharedManager] startMonitoring];
-        
-        [[AFNetworkReachabilityManager sharedManager] setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
-            if (![AFNetworkReachabilityManager sharedManager].isReachable) {
-                [sharedInstance stopLoading:YES];
-            }
-            else {
-                [sharedInstance startLoading:YES];
-            }
-        }];
-         //*/
-
         [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillEnterForegroundNotification
                                                           object:nil
                                                            queue:[NSOperationQueue currentQueue]
@@ -213,16 +226,6 @@ static void inline LOG(Provider *provider, SEL selector) {
                                                       usingBlock:^(NSNotification *note) {
                                                           [sharedInstance dispatchProvidersQueue];
                                                       }];
-        
-        [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidChangeStatusBarOrientationNotification
-                                                          object:nil
-                                                           queue:[NSOperationQueue currentQueue]
-                                                      usingBlock:^(NSNotification *note) {
-                                                          if ([[sharedInstance bannerProvider] respondsToSelector:@selector(layoutBannerIfNeeded)]) {
-                                                              [[sharedInstance bannerProvider] layoutBannerIfNeeded];
-                                                          }
-                                                      }];
-
    });
     
     return sharedInstance;
@@ -266,17 +269,6 @@ static void inline LOG(Provider *provider, SEL selector) {
         [[self sharedInstance] stopLoading:YES];
     });
 }
-
-
-/* // not used
-+ (void)waitAndReload
-{
-    [[self sharedInstance] stopLoading:YES];
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [[self sharedInstance] startLoading:YES];
-    });
-}
- //*/
 
 + (void)setBannerPosition:(CommonBannerPosition)bannerPosition
 {
@@ -672,9 +664,6 @@ static void inline LOG(Provider *provider, SEL selector) {
         else {
             self.bannerView = [[ADBannerView alloc] init];
         }
-        
-        // layout banner if orientation did change
-        [self layoutBannerIfNeeded];
     });
 
     // start receiving callbacks
@@ -750,11 +739,6 @@ static void inline LOG(Provider *provider, SEL selector) {
 @implementation CommonBannerProviderGAd
 @synthesize requestParams;
 
-- (void)dealloc
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
-
 + (instancetype)sharedInstance
 {
     static dispatch_once_t pred = 0;
@@ -788,9 +772,6 @@ static void inline LOG(Provider *provider, SEL selector) {
         // an ad request is made. GADBannerView automatically returns test ads when running on a
         // simulator.
         self.request.testDevices = [self.requestParams objectForKey:keyTestDevices];
-        
-        // layout banner if orientation did change
-        [self layoutBannerIfNeeded];
     });
 
     // start receiving callbacks
@@ -867,11 +848,6 @@ static void inline LOG(Provider *provider, SEL selector) {
 @implementation CommonBannerProviderCustom
 @synthesize requestParams;
 
-- (void)dealloc
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
-
 + (instancetype)sharedInstance
 {
     static dispatch_once_t pred = 0;
@@ -897,9 +873,6 @@ static void inline LOG(Provider *provider, SEL selector) {
     dispatch_once(&pred, ^{
         self.bannerView = [[UIView alloc] initWithFrame:(CGRect){0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, 50.0f}];
         self.bannerView.backgroundColor = [UIColor greenColor];
-        
-        // layout banner if orientation did change
-        [self layoutBannerIfNeeded];
     });
     
     // start receiving callbacks

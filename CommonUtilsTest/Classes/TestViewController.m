@@ -350,6 +350,7 @@ typedef NS_ENUM(NSInteger, RowType) {
     return YES;
 }
 
+/*
 - (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation
 {
     return UIInterfaceOrientationPortrait;
@@ -359,5 +360,6 @@ typedef NS_ENUM(NSInteger, RowType) {
 {
     return UIInterfaceOrientationMaskAll;
 }
+//*/
 
 @end
