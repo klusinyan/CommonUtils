@@ -113,7 +113,7 @@ typedef NS_ENUM(NSInteger, LockState) {
 
 @property (nonatomic) CommonBannerPosition bannerPosition;
 @property (nonatomic) id <CommonBannerAdapter> adapter;
-@property (nonatomic, strong) id<CommonBannerProvider> bannerProvider;
+@property (nonatomic, strong) id<CommonBannerProvider> currentBannerProvider;
 @property (nonatomic, strong) UIView *bannerContainer;
 
 // ivar "locked" needs to synchronize dispatch_queue
@@ -377,7 +377,7 @@ static void inline LOG(Provider *provider, SEL selector) {
 
 - (Provider *)currentProvider
 {
-    return [self provider:[self.bannerProvider class]];
+    return [self provider:[self.currentBannerProvider class]];
 }
 
 - (void)syncTask:(void(^)(void))task
@@ -472,21 +472,23 @@ static void inline LOG(Provider *provider, SEL selector) {
             //*******************DEBUG*******************//
             if (self.adapter != nil) {
                 if (![self.adapter canDisplayAds]) {
-                    [self syncTask:^{
-                        [self currentProvider].state = BannerProviderStateIdle;
-                        [self displayBanner:NO animated:NO completion:^(BOOL finished) {
-                            self.bannerProvider = nil;
+                    if (self.currentBannerProvider != nil) {
+                        [self syncTask:^{
+                            [self currentProvider].state = BannerProviderStateIdle;
+                            [self displayBanner:NO animated:NO completion:^(BOOL finished) {
+                                self.currentBannerProvider = nil;
+                            }];
                         }];
-                    }];
+                    }
                 }
                 else {
                     // if current banner provider shown with priority=1 then skip
                     if ([self currentProvider].state != BannerProviderStateShown || [self currentProvider].priority != CommonBannerPriorityHigh) {
                         // if current banner provider changes state to idle then hide
-                        if ([self currentProvider].state == BannerProviderStateIdle) {
+                        if (self.currentBannerProvider != nil && [self currentProvider].state == BannerProviderStateIdle) {
                             [self syncTask:^{
                                 [self displayBanner:NO animated:NO completion:^(BOOL finished) {
-                                    self.bannerProvider = nil;
+                                    self.currentBannerProvider = nil;
                                 }];
                             }];
                         }
@@ -495,15 +497,15 @@ static void inline LOG(Provider *provider, SEL selector) {
                             [self syncTask:^{
                                 [self displayBanner:NO animated:NO completion:^(BOOL finished) {
                                     // remove current banner from bannerContainer
-                                    [[self.bannerProvider bannerView] removeFromSuperview];
+                                    [[self.currentBannerProvider bannerView] removeFromSuperview];
                                     // set old provider to [state=ready]
                                     [self currentProvider].state = BannerProviderStateIdle;
                                     // get new provider
-                                    self.bannerProvider = [provider bannerProvider];
+                                    self.currentBannerProvider = [provider bannerProvider];
                                     // set new provider to [state=shown]
                                     [self currentProvider].state = BannerProviderStateShown;
                                     // add current banner to bannerContainer
-                                    [self.bannerContainer addSubview:[self.bannerProvider bannerView]];
+                                    [self.bannerContainer addSubview:[self.currentBannerProvider bannerView]];
                                     // animated
                                     [self displayBanner:YES animated:YES completion:^(BOOL finished) {
                                         DebugLog(@"currentProvider %@", [self currentProvider]);
@@ -524,7 +526,7 @@ static void inline LOG(Provider *provider, SEL selector) {
 {
     //****************************DEBUG****************************//
     DebugLog(@"isBannerLoaded=[%@] display=[%@] animated=[%@]",
-             [self.bannerProvider isBannerLoaded] ? @"Y" : @"N",
+             [self.currentBannerProvider isBannerLoaded] ? @"Y" : @"N",
              display ? @"Y" : @"N",
              ([self.adapter adsShouldDisplayAnimated] && animated) ? @"Y" : @"N");
     //****************************DEBUG****************************//
@@ -553,9 +555,9 @@ static void inline LOG(Provider *provider, SEL selector) {
     
     // All we need to do is ask the banner for a size that fits into the layout area we are using.
     // At this point in this method contentFrame=self.view.bounds, so we'll use that size for the layout.
-    bannerFrame.size = [[self.bannerProvider bannerView] sizeThatFits:contentFrame.size];
+    bannerFrame.size = [[self.currentBannerProvider bannerView] sizeThatFits:contentFrame.size];
     
-    if ([self.bannerProvider isBannerLoaded] && [self.adapter canDisplayAds]) {
+    if ([self.currentBannerProvider isBannerLoaded] && [self.adapter canDisplayAds]) {
         if (self.bannerPosition == CommonBannerPositionBottom) {
             contentFrame.size.height -= bannerFrame.size.height;
             bannerFrame.origin.y = contentFrame.size.height;
