@@ -47,7 +47,7 @@
                       withPriority:CommonBannerPriorityLow
                      requestParams:@{keyAdUnitID    : @"ca-app-pub-3940256099942544/2934735716",
                                      keyTestDevices : @[@"104e7e015323c4993bcecf1b7fc91b08"]}];
-    [CommonBanner setDebugMode:NO];
+    [CommonBanner setDebug:NO];
     [CommonBanner startManaging];
 
     //[CommonBanner setBannerPosition:CommonBannerPositionTop];

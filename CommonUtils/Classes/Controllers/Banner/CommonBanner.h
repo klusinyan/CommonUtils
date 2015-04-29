@@ -64,9 +64,9 @@ typedef NS_ENUM(NSInteger, CommonBannerPriority) {
 /*!
  *  @brief  Call this method to enable debug mode
  *
- *  @param debugMode set YES to enable
+ *  @param debug set YES to enable
  */
-+ (void)setDebugMode:(BOOL)debugMode;
++ (void)setDebug:(BOOL)debug;
 
 /*!
  *  @brief  Call this method to have ref to common banner
