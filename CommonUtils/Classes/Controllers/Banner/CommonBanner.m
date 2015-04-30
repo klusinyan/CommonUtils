@@ -843,7 +843,7 @@ static void inline LOG(Provider *provider, SEL selector) {
 
 - (void)viewWillTransitionToSize:(CGSize)size
 {
-    if (UIDeviceOrientationIsPortrait([[UIDevice currentDevice] orientation])) {
+    if (UIInterfaceOrientationIsPortrait([[UIApplication sharedApplication] statusBarOrientation])) {
         self.bannerView.adSize = kGADAdSizeSmartBannerPortrait;
     }
     else {
