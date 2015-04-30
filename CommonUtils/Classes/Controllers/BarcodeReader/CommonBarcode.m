@@ -88,7 +88,7 @@ NSString * const CBErrorPermissionDenied    = @"CBLocalizedStringPermissionDenie
     [self setupDevice];
     if (self.captureDevice.isTorchAvailable && self.flashEnabled) {
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Flash"
-                                                                                  style:UIBarButtonItemStyleBordered
+                                                                                  style:UIBarButtonItemStylePlain
                                                                                  target:self
                                                                                  action:@selector(flash:)];
     }
