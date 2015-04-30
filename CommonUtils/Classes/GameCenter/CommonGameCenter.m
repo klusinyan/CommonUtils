@@ -259,7 +259,10 @@ typedef void(^CompletionWhenGameViewControllerDisappeared)(void);
                     [self synchronizationDidFinish];
                     return;
                 }
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 80000
+                // iOS8 workaround to handle multimple gameviewcontrollers visalizations.
                 [[self rootViewController] dismissViewControllerAnimated:NO completion:nil];
+#endif
                 [[self rootViewController] presentViewController:viewController
                                                         animated:YES
                                                       completion:nil];

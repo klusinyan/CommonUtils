@@ -616,6 +616,15 @@ static void inline LOG(Provider *provider, SEL selector) {
     }
 }
 
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    
+    // workaround for iOS 7. For wihtout on iOS 8
+    [[[CommonBanner manager] bannerContainer] setNeedsLayout];
+    [[[CommonBanner manager] bannerContainer] layoutIfNeeded];
+}
+
 - (void)viewDidLayoutSubviews
 {
     // adjust banner orientation
