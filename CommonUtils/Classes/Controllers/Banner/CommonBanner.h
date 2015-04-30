@@ -50,7 +50,7 @@ extern NSString * const keyTestDevices;
 - (void)stopLoading;
 
 @optional
-- (void)layoutBannerIfNeeded;
+- (void)viewWillTransitionToSize:(CGSize)size;
 
 @end
 
@@ -59,7 +59,9 @@ typedef NS_ENUM(NSInteger, CommonBannerPriority) {
     CommonBannerPriorityHigh
 };
 
-@interface CommonBanner : UIViewController
+@class CommonBannerController;
+
+@interface CommonBanner : NSObject
 
 /*!
  *  @brief  Call this method to enable debug mode
@@ -69,11 +71,21 @@ typedef NS_ENUM(NSInteger, CommonBannerPriority) {
 + (void)setDebug:(BOOL)debug;
 
 /*!
- *  @brief  Call this method to have ref to common banner
+ *  @brief  Call this method to have shared manager of CommonBanner
  *
- *  @return singleton instance
+ *  @return singleton instance of banner mananer
  */
-+ (CommonBanner *)sharedInstance;
++ (CommonBanner *)manager;
+
+/*!
+ *  @brief  Call this method to set rootViewController
+ *
+ *  @param rootViewController first controller of stack
+ *
+ *  @return singleton instance of banner mananer
+ *  @discussion This method should be called in application:didFinishLaunchingWithOptions: The returned viewcontroller an instance of type CommonBannerController should be set as a application window.rootViewController. If your app uses storyboard you should ignore this method. In that case create initial view controller with type=CommonBannerController, then create embed transition to your top view controller
+ */
++ (CommonBannerController *)bannerControllerWithRootViewController:(UIViewController *)rootViewController;
 
 /*!
  *  @brief  Call this method to initialize provider bannner
@@ -119,6 +131,10 @@ typedef NS_ENUM(NSInteger, CommonBannerPriority) {
  *  for usability issues.
  */
 + (void)setBannerPosition:(CommonBannerPosition)bannerPosition;
+
+@end
+
+@interface CommonBannerController : UIViewController
 
 @end
 

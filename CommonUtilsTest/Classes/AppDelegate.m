@@ -19,16 +19,6 @@
 {
     application.idleTimerDisabled = YES;
     
-    ///*
-    TestViewController *vc = [[TestViewController alloc] init];
-    UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:vc];
-    
-    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    self.window.backgroundColor = [UIColor whiteColor];
-    self.window.rootViewController = nc;
-    [self.window makeKeyAndVisible];
-    //*/
-     
     [Appirater setAppId:@"770699556"];                  //iTunes ID
     [Appirater setDaysUntilPrompt:0];                   //days after first prompt
     [Appirater setUsesUntilPrompt:5];                   //number of times for next visualizzation
@@ -37,16 +27,31 @@
     [Appirater setDebug:NO];                            //for production use always NO
     [Appirater appLaunched:YES];                        //start launching rater
     
-//    [CommonBanner regitserProvider:[CommonBannerProviderCustom class]
-//                      withPriority:CommonBannerPriorityLow
-//                     requestParams:nil];
-    [CommonBanner regitserProvider:[CommonBannerProvideriAd class]
-                      withPriority:CommonBannerPriorityHigh
-                     requestParams:nil];
+    // your controllers
+    /*
+    TestViewController *vc = [[TestViewController alloc] init];
+    UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:vc];
+
+    // set CommonBanner as a rootViewController of window
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    self.window.backgroundColor = [UIColor whiteColor];
+    self.window.rootViewController = [CommonBanner bannerControllerWithRootViewController:nc];
+    [self.window makeKeyAndVisible];
+     //*/
+    
     [CommonBanner regitserProvider:[CommonBannerProviderGAd class]
-                      withPriority:CommonBannerPriorityLow
+                      withPriority:CommonBannerPriorityHigh
                      requestParams:@{keyAdUnitID    : @"ca-app-pub-3940256099942544/2934735716",
                                      keyTestDevices : @[@"104e7e015323c4993bcecf1b7fc91b08"]}];
+    
+    [CommonBanner regitserProvider:[CommonBannerProviderCustom class]
+                      withPriority:CommonBannerPriorityLow
+                     requestParams:nil];
+    
+//    [CommonBanner regitserProvider:[CommonBannerProvideriAd class]
+//                      withPriority:CommonBannerPriorityHigh
+//                     requestParams:nil];
+    
     [CommonBanner setDebug:NO];
     [CommonBanner startManaging];
 

@@ -44,18 +44,6 @@ typedef NS_ENUM(NSInteger, BannerProviderState) {
         // add options to provider
         self.priority = priority;
         self.state = BannerProviderStateIdle;
-        
-        // init bannerView, set delegate and start loading
-        [self.bannerProvider startLoading];
-        
-        [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidChangeStatusBarOrientationNotification
-                                                          object:nil
-                                                           queue:[NSOperationQueue currentQueue]
-                                                      usingBlock:^(NSNotification *note) {
-                                                          if ([self.bannerProvider respondsToSelector:@selector(layoutBannerIfNeeded)]) {
-                                                              [self.bannerProvider layoutBannerIfNeeded];
-                                                          }
-                                                      }];
     }
     return self;
 }
@@ -116,7 +104,8 @@ typedef NS_ENUM(NSInteger, LockState) {
 
 @interface CommonBanner ()
 
-@property (nonatomic, strong) UIViewController *contentController;
+@property (nonatomic, strong) CommonBannerController *commonBannerController;
+@property (nonatomic, strong) UIViewController *rootViewController;
 
 @property (nonatomic) CommonBannerPosition bannerPosition;
 @property (nonatomic) id <CommonBannerAdapter> adapter;
@@ -136,6 +125,7 @@ typedef NS_ENUM(NSInteger, LockState) {
 @end
 
 @implementation CommonBanner
+@synthesize rootViewController = _rootViewController;
 
 //**********************************************************//
 //************************DEBUG MODE************************//
@@ -157,9 +147,9 @@ static void inline LOG(Provider *provider, SEL selector) {
                                  otherButtonTitles:nil];
                 [alert show];
 
-                [[CommonBanner sharedInstance].debugAlertQueue addObject:alert];
+                [[CommonBanner manager].debugAlertQueue addObject:alert];
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                    for (UIAlertView *alert in [CommonBanner sharedInstance].debugAlertQueue) {
+                    for (UIAlertView *alert in [CommonBanner manager].debugAlertQueue) {
                         [alert dismissWithClickedButtonIndex:0 animated:YES];
                     }
                 });
@@ -180,13 +170,13 @@ static void inline LOG(Provider *provider, SEL selector) {
 {
     static dispatch_once_t pred = 0;
     dispatch_once(&pred, ^{
-        [[self sharedInstance] setDebug:debug];
+        [[self manager] setDebug:debug];
     });
 }
 
 + (BOOL)isDebug
 {
-    return [[self sharedInstance] isDebug];
+    return [[self manager] isDebug];
 }
 //**********************************************************//
 //************************DEBUG MODE************************//
@@ -194,7 +184,35 @@ static void inline LOG(Provider *provider, SEL selector) {
 
 - (void)dealloc
 {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [self removeObservers];
+}
+
+- (void)addObservers
+{
+    [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillEnterForegroundNotification
+                                                      object:nil
+                                                       queue:[NSOperationQueue currentQueue]
+                                                  usingBlock:^(NSNotification *note) {
+                                                      [self dispatchProvidersQueue];
+                                                  }];
+    
+    [[NSNotificationCenter defaultCenter] addObserverForName:BannerProviderStatusDidChnage
+                                                      object:nil
+                                                       queue:[NSOperationQueue currentQueue]
+                                                  usingBlock:^(NSNotification *note) {
+                                                      [self dispatchProvidersQueue];
+                                                  }];
+}
+
+- (void)removeObservers
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:UIApplicationWillEnterForegroundNotification
+                                                  object:nil];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:BannerProviderStatusDidChnage
+                                                  object:nil];
 }
 
 - (id)init
@@ -206,44 +224,36 @@ static void inline LOG(Provider *provider, SEL selector) {
     return self;
 }
 
-+ (CommonBanner *)sharedInstance
++ (CommonBanner *)manager
 {
     static dispatch_once_t pred = 0;
-    __strong static id sharedInstance = nil;
+    __strong static CommonBanner *manager = nil;
     dispatch_once(&pred, ^{
-        sharedInstance = [[self alloc] init];
+        manager = [[self alloc] init];
+    });
+    return manager;
+}
 
-        [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillEnterForegroundNotification
-                                                          object:nil
-                                                           queue:[NSOperationQueue currentQueue]
-                                                      usingBlock:^(NSNotification *note) {
-                                                          [sharedInstance dispatchProvidersQueue];
-                                                      }];
-        
-        [[NSNotificationCenter defaultCenter] addObserverForName:BannerProviderStatusDidChnage
-                                                          object:nil
-                                                           queue:[NSOperationQueue currentQueue]
-                                                      usingBlock:^(NSNotification *note) {
-                                                          [sharedInstance dispatchProvidersQueue];
-                                                      }];
-   });
++ (CommonBannerController *)bannerControllerWithRootViewController:(UIViewController *)rootViewController
+{
+    [self manager].rootViewController = rootViewController;
     
-    return sharedInstance;
+    return [self manager].commonBannerController;
 }
 
 + (void)regitserProvider:(Class)aClass withPriority:(CommonBannerPriority)priority requestParams:(NSDictionary *)requestParams
 {
-    [[self sharedInstance] setProvider:aClass withPriority:priority requestParams:requestParams];
+    [[self manager] setProvider:aClass withPriority:priority requestParams:requestParams];
 }
 
 + (void)updatePriorityIfNeeded:(CommonBannerPriority)priority forClass:(Class)aClass
 {
-    [[self sharedInstance] updatePriorityIfNeeded:priority forClass:aClass];
+    [[self manager] updatePriorityIfNeeded:priority forClass:aClass];
 }
 
 + (CommonBannerPriority)priorityForClass:(Class)aClass
 {
-    return [[self sharedInstance] priorityForClass:aClass];
+    return [[self manager] priorityForClass:aClass];
 }
 
 + (void)startManaging
@@ -251,13 +261,8 @@ static void inline LOG(Provider *provider, SEL selector) {
     @synchronized(self) {
         static dispatch_once_t pred = 0;
         dispatch_once(&pred, ^{
-            [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidFinishLaunchingNotification
-                                                              object:nil
-                                                               queue:[NSOperationQueue currentQueue]
-                                                          usingBlock:^(NSNotification *note) {
-                                                              [[self sharedInstance] applicationDidFinishLaunching:note];
-                                                          }];
-            [[self sharedInstance] startLoading:YES];
+            [[self manager] startLoading:YES];
+            [[self manager] addObservers];
         });
     }
 }
@@ -266,7 +271,8 @@ static void inline LOG(Provider *provider, SEL selector) {
 {
     static dispatch_once_t pred = 0;
     dispatch_once(&pred, ^{
-        [[self sharedInstance] stopLoading:YES];
+        [[self manager] stopLoading:YES];
+        [[self manager] removeObservers];
     });
 }
 
@@ -274,62 +280,49 @@ static void inline LOG(Provider *provider, SEL selector) {
 {
     static dispatch_once_t pred = 0;
     dispatch_once(&pred, ^{
-        [self sharedInstance].bannerPosition = bannerPosition;
+        [self manager].bannerPosition = bannerPosition;
     });
 }
 
-// dispatch_once
-- (void)applicationDidFinishLaunching:(NSNotification *)notification
-{
-    if (self.contentController == nil) {
-        //****************SETUP COMMON BANNER****************//
-        self.contentController = [[[UIApplication sharedApplication] keyWindow] rootViewController];
-        if ([self.contentController isKindOfClass:[UINavigationController class]]) {
-            self.bannerPosition = CommonBannerPositionBottom;
-        }
-        [self.view addSubview:self.contentController.view];
-        [self addChildViewController:self.contentController];
-        
-        // switch root view controller
-        [[UIApplication sharedApplication] keyWindow].rootViewController = self;
-        //****************SETUP COMMON BANNER****************//
-        
-        // setup did compete
-        [[NSNotificationCenter defaultCenter] postNotificationName:CommonBannerDidCompleteSetup object:nil];
-    }
-}
-
-- (void)loadView
-{
-    // call in case if initialized from XIB
-    [super loadView];
-    
-    // create view if not initialized from XIB
-    if (self.view == nil) {
-        self.view = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
-        self.view.backgroundColor = [UIColor clearColor];
-    }
-}
-
 #pragma getter/setter
+
+- (UIViewController *)commonBannerController
+{
+    if (_commonBannerController == nil) {
+        _commonBannerController = [[CommonBannerController alloc] init];
+    }
+    return _commonBannerController;
+}
+
+- (void)setRootViewController:(UIViewController *)rootViewController
+{
+    if (_rootViewController != rootViewController) {
+
+        rootViewController.view.frame = rootViewController.view.frame;
+        [self.commonBannerController.view addSubview:rootViewController.view];
+        [self.commonBannerController addChildViewController:rootViewController];
+
+        _rootViewController = rootViewController;
+    }
+}
+
+- (UIViewController *)rootViewController
+{
+    if (_rootViewController == nil) {
+        if ([[self.commonBannerController childViewControllers] count] > 0) {
+            _rootViewController = [self.commonBannerController childViewControllers][0];
+        }
+    }
+    return _rootViewController;
+}
 
 - (UIView *)bannerContainer
 {
     if (_bannerContainer == nil) {
         _bannerContainer = [[UIView alloc] init];
-        [self.view addSubview:_bannerContainer];
+        [self.commonBannerController.view addSubview:_bannerContainer];
     }
     return _bannerContainer;
-}
-
-- (UIViewController *)contentController
-{
-    if (_contentController == nil) {
-        if ([[self childViewControllers] count] > 0) {
-            _contentController = [self childViewControllers][0];
-        }
-    }
-    return _contentController;
 }
 
 - (Provider *)provider:(Class)provider
@@ -487,6 +480,7 @@ static void inline LOG(Provider *provider, SEL selector) {
                         else if ([provider.bannerProvider isBannerLoaded] && !([provider isEqual:[self currentProvider]])) {
                             DebugLog(@"preparing to show...%@", [[provider bannerProvider] class]);
                             [self syncTask:^{
+                                // hide banner
                                 [self displayBanner:NO animated:NO completion:^(BOOL finished) {
                                     // remove current banner from bannerContainer
                                     [[self.currentBannerProvider bannerView] removeFromSuperview];
@@ -498,9 +492,8 @@ static void inline LOG(Provider *provider, SEL selector) {
                                     [self currentProvider].state = BannerProviderStateShown;
                                     // add current banner to bannerContainer
                                     [self.bannerContainer addSubview:[self.currentBannerProvider bannerView]];
-                                    // animated
+                                    // diplay banner
                                     [self displayBanner:YES animated:YES completion:^(BOOL finished) {
-                                        DebugLog(@"currentProvider %@", [self currentProvider]);
                                         LOG([self currentProvider], _cmd);
                                     }];
                                 }];
@@ -527,9 +520,9 @@ static void inline LOG(Provider *provider, SEL selector) {
             // viewDidLayoutSubviews will handle positioning the banner view so that it is visible.
             // You must not call [self.view layoutSubviews] directly.  However, you can flag the view
             // as requiring layout...
-            [self.view setNeedsLayout];
+            [self.commonBannerController.view setNeedsLayout];
             // ... then ask it to lay itself out immediately if it is flagged as requiring layout...
-            [self.view layoutIfNeeded];
+            [self.commonBannerController.view layoutIfNeeded];
             // ... which has the same effect.
         } completion:^(BOOL finished) {
             if (completion) completion(YES);
@@ -543,7 +536,7 @@ static void inline LOG(Provider *provider, SEL selector) {
 
 - (void)layoutBannerContainer
 {
-    CGRect contentFrame = self.view.bounds, bannerFrame = CGRectZero;
+    CGRect contentFrame = self.commonBannerController.view.bounds, bannerFrame = CGRectZero;
     
     // All we need to do is ask the banner for a size that fits into the layout area we are using.
     // At this point in this method contentFrame=self.view.bounds, so we'll use that size for the layout.
@@ -566,22 +559,92 @@ static void inline LOG(Provider *provider, SEL selector) {
         }
         else if (self.bannerPosition == CommonBannerPositionTop) {
             bannerFrame.origin.y -= bannerFrame.size.height;
-            contentFrame = self.view.bounds;
+            contentFrame = self.commonBannerController.view.bounds;
         }
     }
     
     if ([self.adapter adsShouldCoverContent]) {
-        contentFrame = self.view.bounds;
+        contentFrame = self.commonBannerController.view.bounds;
     }
     
-    self.contentController.view.frame = contentFrame;
+    self.rootViewController.view.frame = contentFrame;
     self.bannerContainer.frame = bannerFrame;
+}
+
+@end
+
+@interface CommonBannerController ()
+
+@property (nonatomic) CGSize currentSize;
+
+@end
+
+@implementation CommonBannerController
+
+- (id)init
+{
+    self = [super init];
+    if (self) {
+        // custom init
+    }
+    return self;
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder
+{
+    self = [super initWithCoder:aDecoder];
+    if (self) {
+        // custom init
+    }
+    return self;
+}
+
+- (void)awakeFromNib
+{
+    [CommonBanner manager].commonBannerController = self;
+}
+
+- (void)loadView
+{
+    // call in case if initialized from XIB
+    [super loadView];
+    
+    // create view if not initialized from XIB
+    if (self.view == nil) {
+        self.view = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+        self.view.backgroundColor = [UIColor clearColor];
+    }
 }
 
 - (void)viewDidLayoutSubviews
 {
-    [self layoutBannerContainer];
+    // adjust banner orientation
+    if ([[[CommonBanner manager] currentBannerProvider] respondsToSelector:@selector(viewWillTransitionToSize:)]) {
+        [[[CommonBanner manager] currentBannerProvider] viewWillTransitionToSize:self.view.bounds.size];
+    }
+
+    // layout banner container
+    [[CommonBanner manager] layoutBannerContainer];
 }
+
+/*!
+ * @method Call this method if your target >= 8.0
+ *
+ * @discussion
+ * Reserved for future use.
+ */
+/*
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 80000
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+{
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    
+    if ([[[CommonBanner manager] currentBannerProvider] respondsToSelector:@selector(viewWillTransitionToSize:)]) {
+        [[[CommonBanner manager] currentBannerProvider] viewWillTransitionToSize:size];
+    }
+}
+#endif
+ //*/
 
 @end
 
@@ -597,9 +660,9 @@ static void inline LOG(Provider *provider, SEL selector) {
 {
     objc_setAssociatedObject(self, @selector(canDisplayAds), @(canDisplayAds), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     
-    [[CommonBanner sharedInstance] setAdapter:self];
+    [[CommonBanner manager] setAdapter:self];
 
-    [[CommonBanner sharedInstance] dispatchProvidersQueue];
+    [[CommonBanner manager] dispatchProvidersQueue];
 }
 
 - (BOOL)adsShouldCoverContent
@@ -649,7 +712,7 @@ static void inline LOG(Provider *provider, SEL selector) {
     self.bannerView.delegate = nil;
     
     // set to idle state
-    Provider *provider = [[CommonBanner sharedInstance] provider:[self class]];
+    Provider *provider = [[CommonBanner manager] provider:[self class]];
     provider.state = BannerProviderStateIdle;
 }
 
@@ -670,10 +733,10 @@ static void inline LOG(Provider *provider, SEL selector) {
     self.bannerView.delegate = self;
 }
 
-- (void)layoutBannerIfNeeded
+- (void)viewWillTransitionToSize:(CGSize)size
 {
     CGRect frame = self.bannerView.frame;
-    frame.size = [self.bannerView sizeThatFits:[UIScreen mainScreen].bounds.size];
+    frame.size = [self.bannerView sizeThatFits:size];
     self.bannerView.frame = frame;
 }
 
@@ -683,10 +746,10 @@ static void inline LOG(Provider *provider, SEL selector) {
 {
     self.bannerLoaded = YES;
     
-    Provider *provider = [[CommonBanner sharedInstance] provider:[self class]];
+    Provider *provider = [[CommonBanner manager] provider:[self class]];
     if (provider.state == BannerProviderStateIdle) provider.state = BannerProviderStateReady;
     
-    id<CommonBannerAdapter> adapter = [CommonBanner sharedInstance].adapter;
+    id<CommonBannerAdapter> adapter = [CommonBanner manager].adapter;
     if (adapter && [adapter respondsToSelector:@selector(bannerViewDidLoad)]) {
         [adapter bannerViewDidLoad];
     }
@@ -698,10 +761,10 @@ static void inline LOG(Provider *provider, SEL selector) {
 {
     self.bannerLoaded = NO;
     
-    Provider *provider = [[CommonBanner sharedInstance] provider:[self class]];
+    Provider *provider = [[CommonBanner manager] provider:[self class]];
     if (provider.state != BannerProviderStateIdle) provider.state = BannerProviderStateIdle;
    
-    id<CommonBannerAdapter> adapter = [CommonBanner sharedInstance].adapter;
+    id<CommonBannerAdapter> adapter = [CommonBanner manager].adapter;
     if (adapter && [adapter respondsToSelector:@selector(bannerViewDidFailToReceiveWithError:)]) {
         [adapter bannerViewDidFailToReceiveWithError:error];
     }
@@ -711,7 +774,7 @@ static void inline LOG(Provider *provider, SEL selector) {
 
 - (BOOL)bannerViewActionShouldBegin:(ADBannerView *)banner willLeaveApplication:(BOOL)willLeave
 {
-    id<CommonBannerAdapter> adapter = [CommonBanner sharedInstance].adapter;
+    id<CommonBannerAdapter> adapter = [CommonBanner manager].adapter;
     if (adapter && [adapter respondsToSelector:@selector(bannerViewActionShouldBegin)]) {
         [adapter bannerViewActionShouldBegin];
     }
@@ -720,7 +783,7 @@ static void inline LOG(Provider *provider, SEL selector) {
 
 - (void)bannerViewActionDidFinish:(ADBannerView *)banner
 {
-    id<CommonBannerAdapter> adapter = [CommonBanner sharedInstance].adapter;
+    id<CommonBannerAdapter> adapter = [CommonBanner manager].adapter;
     if (adapter && [adapter respondsToSelector:@selector(bannerViewActionDidFinish)]) {
         [adapter bannerViewActionDidFinish];
     }
@@ -754,7 +817,7 @@ static void inline LOG(Provider *provider, SEL selector) {
     self.bannerView.delegate = nil;
     
     // set to idle state
-    Provider *provider = [[CommonBanner sharedInstance] provider:[self class]];
+    Provider *provider = [[CommonBanner manager] provider:[self class]];
     provider.state = BannerProviderStateIdle;
 }
 
@@ -764,7 +827,7 @@ static void inline LOG(Provider *provider, SEL selector) {
     dispatch_once(&pred, ^{
         self.bannerView = [[GADBannerView alloc] initWithAdSize:kGADAdSizeSmartBannerPortrait];
         self.bannerView.adUnitID = [self.requestParams objectForKey:keyAdUnitID];
-        self.bannerView.rootViewController = [CommonBanner sharedInstance];
+        self.bannerView.rootViewController = [CommonBanner manager].commonBannerController;
         self.bannerView.autoloadEnabled = YES;
         
         self.request = [GADRequest request];
@@ -778,9 +841,9 @@ static void inline LOG(Provider *provider, SEL selector) {
     self.bannerView.delegate = self;
 }
 
-- (void)layoutBannerIfNeeded
+- (void)viewWillTransitionToSize:(CGSize)size
 {
-    if (UIInterfaceOrientationIsPortrait([[UIApplication sharedApplication] statusBarOrientation])) {
+    if (UIDeviceOrientationIsPortrait([[UIDevice currentDevice] orientation])) {
         self.bannerView.adSize = kGADAdSizeSmartBannerPortrait;
     }
     else {
@@ -794,10 +857,10 @@ static void inline LOG(Provider *provider, SEL selector) {
 {
     self.bannerLoaded = YES;
     
-    Provider *provider = [[CommonBanner sharedInstance] provider:[self class]];
+    Provider *provider = [[CommonBanner manager] provider:[self class]];
     if (provider.state == BannerProviderStateIdle) provider.state = BannerProviderStateReady;
     
-    id<CommonBannerAdapter> adapter = [CommonBanner sharedInstance].adapter;
+    id<CommonBannerAdapter> adapter = [CommonBanner manager].adapter;
     if (adapter && [adapter respondsToSelector:@selector(bannerViewDidLoad)]) {
         [adapter bannerViewDidLoad];
     }
@@ -809,10 +872,10 @@ static void inline LOG(Provider *provider, SEL selector) {
 {
     self.bannerLoaded = NO;
     
-    Provider *provider = [[CommonBanner sharedInstance] provider:[self class]];
+    Provider *provider = [[CommonBanner manager] provider:[self class]];
     if (provider.state != BannerProviderStateIdle) provider.state = BannerProviderStateIdle;
     
-    id<CommonBannerAdapter> adapter = [CommonBanner sharedInstance].adapter;
+    id<CommonBannerAdapter> adapter = [CommonBanner manager].adapter;
     if (adapter && [adapter respondsToSelector:@selector(bannerViewDidFailToReceiveWithError:)]) {
         [adapter bannerViewDidFailToReceiveWithError:error];
     }
@@ -822,7 +885,7 @@ static void inline LOG(Provider *provider, SEL selector) {
 
 - (void)adViewWillLeaveApplication:(GADBannerView *)adView
 {
-    id<CommonBannerAdapter> adapter = [CommonBanner sharedInstance].adapter;
+    id<CommonBannerAdapter> adapter = [CommonBanner manager].adapter;
     if (adapter && [adapter respondsToSelector:@selector(bannerViewActionShouldBegin)]) {
         [adapter bannerViewActionShouldBegin];
     }
@@ -830,7 +893,7 @@ static void inline LOG(Provider *provider, SEL selector) {
 
 - (void)adViewDidDismissScreen:(GADBannerView *)adView
 {
-    id<CommonBannerAdapter> adapter = [CommonBanner sharedInstance].adapter;
+    id<CommonBannerAdapter> adapter = [CommonBanner manager].adapter;
     if (adapter && [adapter respondsToSelector:@selector(bannerViewActionDidFinish)]) {
         [adapter bannerViewActionDidFinish];
     }
@@ -863,7 +926,7 @@ static void inline LOG(Provider *provider, SEL selector) {
     self.bannerLoaded = NO;
     
     // set to idle state
-    Provider *provider = [[CommonBanner sharedInstance] provider:[self class]];
+    Provider *provider = [[CommonBanner manager] provider:[self class]];
     provider.state = BannerProviderStateIdle;
 }
 
@@ -879,10 +942,10 @@ static void inline LOG(Provider *provider, SEL selector) {
     self.bannerLoaded = YES;
 }
 
-- (void)layoutBannerIfNeeded
+- (void)viewWillTransitionToSize:(CGSize)size
 {
     CGRect frame = self.bannerView.frame;
-    frame.size.width = [[UIScreen mainScreen] bounds].size.width;
+    frame.size.width = size.width;
     if (UIInterfaceOrientationIsPortrait([[UIApplication sharedApplication] statusBarOrientation])) {
         frame.size.height = 50;
         self.bannerView.backgroundColor = [UIColor greenColor];
