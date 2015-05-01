@@ -101,8 +101,6 @@
 		9CE7A8A719542CCF00E699E4 /* DirectoryUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CE7A8A519542CCF00E699E4 /* DirectoryUtils.h */; };
 		9CE7A8A819542CCF00E699E4 /* DirectoryUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CE7A8A619542CCF00E699E4 /* DirectoryUtils.m */; };
 		9CF9663818FD3ADC00E265A1 /* CallBackProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CF9663618FD3ADC00E265A1 /* CallBackProtocol.h */; };
-		9CFDEC781ACD30F0001D1E62 /* CommonGameCenter.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CFDEC761ACD30F0001D1E62 /* CommonGameCenter.h */; };
-		9CFDEC791ACD30F0001D1E62 /* CommonGameCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CFDEC771ACD30F0001D1E62 /* CommonGameCenter.m */; };
 		9CFDEC811ACD31DF001D1E62 /* CommonSerilizer.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CFDEC7F1ACD31DF001D1E62 /* CommonSerilizer.h */; };
 		9CFDEC821ACD31DF001D1E62 /* CommonSerilizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CFDEC801ACD31DF001D1E62 /* CommonSerilizer.m */; };
 /* End PBXBuildFile section */
@@ -122,7 +120,6 @@
 		9C0BC9F11AD6E3F500234AC8 /* CommonInnerShadow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonInnerShadow.m; sourceTree = "<group>"; };
 		9C1192001A7BE0AB000B6090 /* CommonSpinner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonSpinner.h; sourceTree = "<group>"; };
 		9C1192011A7BE0AB000B6090 /* CommonSpinner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonSpinner.m; sourceTree = "<group>"; };
-		9C1AF5FA1ADD2AB3001F6D04 /* CommonGameCenter.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = CommonGameCenter.bundle; sourceTree = "<group>"; };
 		9C1E392F198E42F600EA933D /* UIAlertView+Blocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIAlertView+Blocks.h"; sourceTree = "<group>"; };
 		9C1E3930198E42F600EA933D /* UIAlertView+Blocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertView+Blocks.m"; sourceTree = "<group>"; };
 		9C20BE561949EF830077C6E8 /* ADVAnimationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ADVAnimationController.h; sourceTree = "<group>"; };
@@ -213,8 +210,6 @@
 		9CE7A8A519542CCF00E699E4 /* DirectoryUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DirectoryUtils.h; sourceTree = "<group>"; };
 		9CE7A8A619542CCF00E699E4 /* DirectoryUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DirectoryUtils.m; sourceTree = "<group>"; };
 		9CF9663618FD3ADC00E265A1 /* CallBackProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CallBackProtocol.h; sourceTree = "<group>"; };
-		9CFDEC761ACD30F0001D1E62 /* CommonGameCenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonGameCenter.h; sourceTree = "<group>"; };
-		9CFDEC771ACD30F0001D1E62 /* CommonGameCenter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonGameCenter.m; sourceTree = "<group>"; };
 		9CFDEC7F1ACD31DF001D1E62 /* CommonSerilizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonSerilizer.h; sourceTree = "<group>"; };
 		9CFDEC801ACD31DF001D1E62 /* CommonSerilizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonSerilizer.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -571,7 +566,6 @@
 				9C3F54951ADCFB7B0085DD03 /* CommonUtilsVersion.m */,
 				9CAC8F3C1AD6C69B004C5A75 /* Task */,
 				9CFDEC7E1ACD31DF001D1E62 /* Serilizer */,
-				9CFDEC751ACD30C4001D1E62 /* GameCenter */,
 				9C42A7361AC9975600DD524F /* Crash */,
 				9C5ADFEB1AA4A37C00CD5215 /* Animations */,
 				9CB1FC81197598D00080534F /* Controllers */,
@@ -680,16 +674,6 @@
 			path = Categories;
 			sourceTree = "<group>";
 		};
-		9CFDEC751ACD30C4001D1E62 /* GameCenter */ = {
-			isa = PBXGroup;
-			children = (
-				9C1AF5FA1ADD2AB3001F6D04 /* CommonGameCenter.bundle */,
-				9CFDEC761ACD30F0001D1E62 /* CommonGameCenter.h */,
-				9CFDEC771ACD30F0001D1E62 /* CommonGameCenter.m */,
-			);
-			path = GameCenter;
-			sourceTree = "<group>";
-		};
 		9CFDEC7E1ACD31DF001D1E62 /* Serilizer */ = {
 			isa = PBXGroup;
 			children = (
@@ -731,7 +715,6 @@
 				9CB4800D19558E8400A5AC1B /* UIColor+Utils.h in Headers */,
 				9C20BE5B1949EF830077C6E8 /* ADVAnimationController.h in Headers */,
 				9C2AC5E119EA96F900588538 /* CommonProgress.h in Headers */,
-				9CFDEC781ACD30F0001D1E62 /* CommonGameCenter.h in Headers */,
 				9CFDEC811ACD31DF001D1E62 /* CommonSerilizer.h in Headers */,
 				9C90FF6B19377DEC004CE056 /* NSDate+Utils.h in Headers */,
 				9C94A99119EBC911003DF554 /* CommonSegmentedViewController.h in Headers */,
@@ -843,7 +826,6 @@
 				9C3F54971ADCFB7B0085DD03 /* CommonUtilsVersion.m in Sources */,
 				9C01922019D2CC0300E8E9E3 /* BlurView.m in Sources */,
 				9C2AC5E219EA96F900588538 /* CommonProgress.m in Sources */,
-				9CFDEC791ACD30F0001D1E62 /* CommonGameCenter.m in Sources */,
 				9C90FF6219374DD3004CE056 /* UITableView+Utils.m in Sources */,
 				9C42A7351AC98D2600DD524F /* CommonBanner.m in Sources */,
 				9C8C0AFD1934A17C0033D2A9 /* UIImage+Alpha.m in Sources */,
