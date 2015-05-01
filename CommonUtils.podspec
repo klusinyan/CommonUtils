@@ -37,7 +37,7 @@ Pod::Spec.new do |s|
     s.resource_bundles = { 'CommonUtils' => ['CommonUtils/Resources/Nibs/**/*.*', 'CommonUtils/Resources/Images/**/*.*', 'CommonUtils/Resources/Sounds/**/*.*', 'CommonUtils/Classes/Controllers/Progress/CommonProgress.bundle', 'CommonUtils/Classes/Controllers/Book/CommonBook.bundle', 'CommonUtils/Classes/Controllers/BarcodeReader/CommonBarcode.bundle', 'CommonUtils/Classes/GameCenter/CommonGameCenter.bundle', 'CommonUtils/Classes/SplitViewController/Split.bundle'] }
 
     #-------- Frameworks --------
-    s.frameworks = 'SystemConfiguration', 'MobileCoreServices', 'CoreTelephony', 'AdSupport', 'iAd', 'GameKit'
+    s.frameworks = 'SystemConfiguration', 'MobileCoreServices', 'CoreTelephony', 'AdSupport', 'iAd'
     #---------------------------
 
     #s.vendored_frameworks = 'GoogleMobileAds'
