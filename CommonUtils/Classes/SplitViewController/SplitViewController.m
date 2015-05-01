@@ -80,6 +80,11 @@ NSString * const NotificationMenuDidFinishClosing = @"NotificationMenuDidFinishC
     [super didReceiveMemoryWarning];
 }
 
+- (UIInterfaceOrientation)statusBarOrientation
+{
+    return [[UIApplication sharedApplication] statusBarOrientation];
+}
+
 #pragma mark - 
 #pragma mark public methods
 
@@ -236,10 +241,10 @@ NSString * const NotificationMenuDidFinishClosing = @"NotificationMenuDidFinishC
 - (void) configureMenuState
 {
     if (menuMode == MenuModeHiddenInPortrait) {
-        if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation)) {
+        if (UIInterfaceOrientationIsPortrait([self statusBarOrientation])) {
             menuState = MenuStateClosed;
         }
-        else if (UIInterfaceOrientationIsLandscape(self.interfaceOrientation)) {
+        else if (UIInterfaceOrientationIsLandscape([self statusBarOrientation])) {
             menuState = MenuStateOpen;
         }
     }
@@ -254,12 +259,12 @@ NSString * const NotificationMenuDidFinishClosing = @"NotificationMenuDidFinishC
 - (void) configureLayoutForMenuMode:(MenuMode)_menuMode
 {
     if (_menuMode == MenuModeHiddenInPortrait) {
-        if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation)) {
+        if (UIInterfaceOrientationIsPortrait([self statusBarOrientation])) {
             masterView.hidden = YES;
             [self changeRevealButtonState:RevealButtonStateOpenShown];
             [self changeRevealButtonState:RevealButtonStateCloseShown];
         }
-        else if (UIInterfaceOrientationIsLandscape(self.interfaceOrientation)) {
+        else if (UIInterfaceOrientationIsLandscape([self statusBarOrientation])) {
             masterView.hidden = NO;
             [self changeRevealButtonState:RevealButtonStateOpenHidden];
             [self changeRevealButtonState:RevealButtonStateCloseHidden];
@@ -293,10 +298,10 @@ NSString * const NotificationMenuDidFinishClosing = @"NotificationMenuDidFinishC
 - (void) configureFrames
 {
     if (menuMode == MenuModeHiddenInPortrait) {
-        if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation)) {
+        if (UIInterfaceOrientationIsPortrait([self statusBarOrientation])) {
             [self configureFramesForMenuState:MenuStateClosed];
         }
-        else if (UIInterfaceOrientationIsLandscape(self.interfaceOrientation)) {
+        else if (UIInterfaceOrientationIsLandscape([self statusBarOrientation])) {
             [self configureFramesForMenuState:MenuStateOpen];
         }
     }
@@ -579,7 +584,7 @@ NSString * const NotificationMenuDidFinishClosing = @"NotificationMenuDidFinishC
 {
     if (menuMode == MenuModeHiddenInPortrait) {
         if (menuState == MenuStateOpen) {
-            if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation)) {
+            if (UIInterfaceOrientationIsPortrait([self statusBarOrientation])) {
                 CABasicAnimation *bounceAnimation = [CABasicAnimation animationWithKeyPath:@"position.x"];
                 bounceAnimation.duration = 0.2;
                 bounceAnimation.fromValue = [NSNumber numberWithFloat:masterView.center.x];
@@ -609,7 +614,7 @@ NSString * const NotificationMenuDidFinishClosing = @"NotificationMenuDidFinishC
 {
     if (menuMode == MenuModeHiddenInPortrait) {
         [masterView.layer removeAllAnimations];
-        if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation)) {
+        if (UIInterfaceOrientationIsPortrait([self statusBarOrientation])) {
             if (menuState == MenuStateClosed) {
                 [self openMenu];
             }
@@ -694,7 +699,7 @@ timingFunctionName:(NSString *)timingFunctionName
         masterView.hidden = NO;
 
         if (menuMode == MenuModeHiddenInPortrait) {
-            if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation)) {
+            if (UIInterfaceOrientationIsPortrait([self statusBarOrientation])) {
                 [self changeRevealButtonState:RevealButtonStateOpenHidden];
                 [self changeRevealButtonState:RevealButtonStateCloseShown];
             }
@@ -742,7 +747,7 @@ timingFunctionName:(NSString *)timingFunctionName
 - (void) toggleSlideBar:(UIPanGestureRecognizer *)_panGesture
 {
     if (menuMode == MenuModeHiddenInPortrait) {
-        if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation)) {
+        if (UIInterfaceOrientationIsPortrait([self statusBarOrientation])) {
             CGFloat translation = [_panGesture translationInView:masterView].x;
             if (_panGesture.state == UIGestureRecognizerStateChanged) {
                 if (translation < 0.0) { // continues with touches that start when moving to left <- and continues also to right ->

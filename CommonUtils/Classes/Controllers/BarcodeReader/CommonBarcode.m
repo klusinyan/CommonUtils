@@ -157,6 +157,12 @@ NSString * const CBErrorPermissionDenied    = @"CBLocalizedStringPermissionDenie
     }
 }
 
+- (void)viewDidLayoutSubviews
+{
+    [self adjustFrames];
+    [self adjustOrientationWithInterfaceOrientation:[[UIApplication sharedApplication] statusBarOrientation]];
+}
+
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
@@ -353,7 +359,7 @@ NSString * const CBErrorPermissionDenied    = @"CBLocalizedStringPermissionDenie
     [self.previewContainer.layer addSublayer:self.previewLayer];
     
     [self adjustFrames];
-    [self adjustOrientationWithInterfaceOrientation:self.interfaceOrientation];
+    [self adjustOrientationWithInterfaceOrientation:[[UIApplication sharedApplication] statusBarOrientation]];
 }
 
 //exact execution order
@@ -475,7 +481,7 @@ NSString * const CBErrorPermissionDenied    = @"CBLocalizedStringPermissionDenie
     }
 }
 
-///*
+/* // not used for iOS 8 deperected issues: ex: willAnimateRotationToInterfaceOrientation:, didRotateFromInterfaceOrientation:, self.interfaceOrientation
 #pragma mark
 #pragma mark - Handle orientation changes
 

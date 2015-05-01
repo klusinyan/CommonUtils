@@ -13,7 +13,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <connections>
-                            <segue destination="bcb-c7-4gx" kind="embed" id="eUk-6h-Esg"/>
+                            <segue destination="nqI-TL-Kea" kind="embed" id="64M-gO-Q7g"/>
                         </connections>
                     </containerView>
                     <value key="contentSizeForViewInPopover" type="size" width="320" height="480"/>
@@ -21,7 +21,25 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BLG-gF-hAd" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-367" y="-451"/>
+            <point key="canvasLocation" x="-1139" y="-451"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="URt-sq-4OA">
+            <objects>
+                <navigationController storyboardIdentifier="nav" id="nqI-TL-Kea" sceneMemberID="viewController">
+                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                    <size key="freeformSize" width="320" height="568"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="kjb-w5-jKV">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="bcb-c7-4gx" kind="relationship" relationship="rootViewController" id="nEr-s6-P2k"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="fR7-Gw-wr3" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-737" y="-451"/>
         </scene>
         <!--Test View Controller-->
         <scene sceneID="1zN-ZE-T0z">
@@ -44,12 +62,13 @@
                             <outlet property="delegate" destination="bcb-c7-4gx" id="yWs-MH-jue"/>
                         </connections>
                     </tableView>
+                    <navigationItem key="navigationItem" id="W3B-fz-uBr"/>
                     <value key="contentSizeForViewInPopover" type="size" width="320" height="568"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="d0p-cS-48X" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="16" y="-451"/>
+            <point key="canvasLocation" x="-329" y="-451"/>
         </scene>
     </scenes>
 </document>

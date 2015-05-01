@@ -270,7 +270,13 @@ typedef NS_ENUM(NSInteger, RowType) {
             _barcodeReader.flashEnabled = YES;
             _barcodeReader.soundOn = NO;
             
-            [self.navigationController pushViewController:_barcodeReader animated:YES];
+            //if (iPhone) {
+                [self.navigationController pushViewController:_barcodeReader animated:YES];
+            //}
+            //else {
+            //    _barcodeReader.modalPresentationStyle = UIModalPresentationFormSheet;
+            //    [self presentViewController:_barcodeReader animated:YES completion:nil];
+            //}
             
             break;
         }

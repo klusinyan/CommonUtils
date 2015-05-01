@@ -58,10 +58,10 @@
     }
 }
 
-- (void) presentAddEntryViewController:(UIViewController *)addEntryController
-              overParentViewController:(UIViewController *)parentController
-                    usingContainerView:(UIView *)containerView
-                     transitionContext: (id<UIViewControllerContextTransitioning>)transitionContext
+- (void)presentAddEntryViewController:(UIViewController *)addEntryController
+             overParentViewController:(UIViewController *)parentController
+                   usingContainerView:(UIView *)containerView
+                    transitionContext: (id<UIViewControllerContextTransitioning>)transitionContext
 {
     [containerView addSubview:parentController.view];
     [containerView addSubview:addEntryController.view];
@@ -71,7 +71,7 @@
     CGPoint center = parentView.center;
     
     //configure addEntryView
-    UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+    UIInterfaceOrientation orientation = parentController.interfaceOrientation;
     if (UIInterfaceOrientationIsPortrait(orientation)) {
         addEntryView.frame = CGRectMake(0.0, 0.0, self.modalSize.width, self.modalSize.height);
     }
@@ -180,10 +180,10 @@
                               }];
 }
 
-- (void) dismissAddEntryViewController:(UIViewController *)addEntryController
-              fromParentViewController:(UIViewController *)parentController
-                    usingContainerView:(UIView *)containerView
-                     transitionContext: (id<UIViewControllerContextTransitioning>)transitionContext
+- (void)dismissAddEntryViewController:(UIViewController *)addEntryController
+             fromParentViewController:(UIViewController *)parentController
+                   usingContainerView:(UIView *)containerView
+                    transitionContext: (id<UIViewControllerContextTransitioning>)transitionContext
 {
     [containerView addSubview:parentController.view];
     [containerView addSubview:addEntryController.view];
