@@ -125,14 +125,7 @@
 + (UIImage *)imageWithName:(NSString *)imageName
                 bundleName:(NSString *)bundleName
 {
-    NSString *fullPath = kCommonUtilsBundleName;
-    if ([bundleName length] > 0) {
-        fullPath = [self commonUtilsBundlePathWithName:bundleName];
-    }
-    if ([imageName length] > 0) {
-        fullPath = [fullPath stringByAppendingPathComponent:imageName];
-    }
-    return [UIImage imageNamed:fullPath];
+    return [UIImage imageNamed:[bundleName stringByAppendingPathComponent:imageName]];
 }
 
 + (NSBundle *)bundleWithName:(NSString *)bundleName

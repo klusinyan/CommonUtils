@@ -59,6 +59,7 @@ typedef NS_ENUM(NSInteger, UIImageRepresentation) {
 // gives commonutils bunlde for XIB
 + (NSBundle *)commonUtilsBundle;
 
+// full bundle path: by adding to commonutils bundle the given bundle path
 + (NSString *)commonUtilsBundlePathWithName:(NSString *)bundleName;
 
 // image from given bundle
