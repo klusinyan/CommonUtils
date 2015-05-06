@@ -2,6 +2,7 @@
 //  Copyright (c) 2015 Karen Lusinyan. All rights reserved.
 
 #import "CommonSerilizer.h"
+#import <objc/runtime.h>
 
 @implementation CommonSerilizer
 
@@ -19,6 +20,32 @@
 
     [[NSUserDefaults standardUserDefaults] setObject:encodedObject forKey:key];
     [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
++ (NSDictionary *)dictionaryFromObject:(NSObject *)object
+{
+    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+    
+    Class clazz = [object class];
+    u_int count;
+    
+    objc_property_t* properties = class_copyPropertyList(clazz, &count);
+    NSMutableArray* propertyArray = [NSMutableArray arrayWithCapacity:count];
+    for (int i = 0; i < count ; i++)
+    {
+        const char* propertyName = property_getName(properties[i]);
+        [propertyArray addObject:[NSString  stringWithCString:propertyName encoding:NSUTF8StringEncoding]];
+    }
+    free(properties);
+    
+    for (id propertyName in propertyArray) {
+        id value = [object valueForKey:propertyName];
+        if (value != nil) {
+            [dict setObject:value forKey:propertyName];
+        }
+    }
+    
+    return dict;
 }
 
 @end

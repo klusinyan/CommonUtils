@@ -68,7 +68,7 @@ typedef NS_ENUM(NSInteger, CommonBannerPriority) {
  *
  *  @param debug set YES to enable
  */
-+ (void)setDebug:(BOOL)debug;
++ (void)setDebugMode:(BOOL)debugMode;
 
 /*!
  *  @brief  Call this method to have shared manager of CommonBanner

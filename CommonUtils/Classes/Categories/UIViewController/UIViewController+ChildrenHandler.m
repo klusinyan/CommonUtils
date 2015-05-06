@@ -49,6 +49,7 @@
     };
 
     [childViewController willMoveToParentViewController:parentViewController];
+    [childViewController.view removeFromSuperview];
     [childViewController removeFromParentViewController];
 }
 

@@ -7,4 +7,6 @@
 
 + (void)saveObject:(id)object forKey:(NSString *)key;
 
++ (NSDictionary *)dictionaryFromObject:(NSObject *)object;
+
 @end

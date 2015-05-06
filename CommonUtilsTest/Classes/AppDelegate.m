@@ -52,7 +52,7 @@
 //                      withPriority:CommonBannerPriorityHigh
 //                     requestParams:nil];
     
-    [CommonBanner setDebug:NO];
+    [CommonBanner setDebugMode:NO];
     [CommonBanner startManaging];
 
     //[CommonBanner setBannerPosition:CommonBannerPositionTop];

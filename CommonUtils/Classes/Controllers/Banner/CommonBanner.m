@@ -119,7 +119,7 @@ typedef NS_ENUM(NSInteger, LockState) {
 
 @property (nonatomic, copy) Task task;
 
-@property (nonatomic, getter=isDebug) BOOL debug;
+@property (nonatomic, getter=isDebugMode) BOOL debugMode;
 @property (nonatomic, strong) NSMutableArray *debugAlertQueue;
 
 @end
@@ -134,7 +134,7 @@ typedef NS_ENUM(NSInteger, LockState) {
 static void inline LOG(Provider *provider, SEL selector) {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         dispatch_async(dispatch_get_main_queue(), ^{
-            if ([CommonBanner isDebug]) {
+            if ([CommonBanner isDebugMode]) {
 
                 NSString *trimedTitle =
                 [NSStringFromClass([provider.bannerProvider class]) stringByReplacingOccurrencesOfString:@"CommonBannerProvider"
@@ -166,17 +166,17 @@ static void inline LOG(Provider *provider, SEL selector) {
     return _debugAlertQueue;
 }
 
-+ (void)setDebug:(BOOL)debug
++ (void)setDebugMode:(BOOL)debugMode
 {
     static dispatch_once_t pred = 0;
     dispatch_once(&pred, ^{
-        [[self manager] setDebug:debug];
+        [[self manager] setDebugMode:debugMode];
     });
 }
 
-+ (BOOL)isDebug
++ (BOOL)isDebugMode
 {
-    return [[self manager] isDebug];
+    return [[self manager] isDebugMode];
 }
 //**********************************************************//
 //************************DEBUG MODE************************//
