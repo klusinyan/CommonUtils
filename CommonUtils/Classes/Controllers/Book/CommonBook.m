@@ -208,7 +208,7 @@
 
 - (void)setupCustomPageControlInsideOfContainer:(UIView *)container completion:(void (^)(UIPageControl *))completion
 {
-    if (!self.pageControl) {
+    if (!self.pageControl && !self.pageControlHidden) {
         self.pageControl = [[UIPageControl alloc] init];
         self.pageControl.translatesAutoresizingMaskIntoConstraints = NO;
         self.pageControl.numberOfPages = [self.viewControllers count];

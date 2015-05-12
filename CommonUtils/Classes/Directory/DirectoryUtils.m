@@ -3,8 +3,6 @@
 #import "DirectoryUtils.h"
 #import "UIImage+Resize.h"
 
-#define kCommonUtilsBundleName @"CommonUtils.bundle"
-
 @implementation DirectoryUtils
 
 #pragma image
@@ -111,16 +109,6 @@
 #pragma bundle
 
 #pragma public methods
-
-+ (NSBundle *)commonUtilsBundle
-{
-    return [self bundleWithName:kCommonUtilsBundleName];
-}
-
-+ (NSString *)commonUtilsBundlePathWithName:(NSString *)bundleName
-{
-    return [kCommonUtilsBundleName stringByAppendingPathComponent:bundleName];
-}
 
 + (UIImage *)imageWithName:(NSString *)imageName
                 bundleName:(NSString *)bundleName

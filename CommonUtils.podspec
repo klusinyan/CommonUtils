@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name         = 'CommonUtils'
-    s.version      = '1.5.3'
+    s.version      = '1.5.4'
     s.summary      = 'Common Utilities.'
     s.homepage     = 'https://bitbucket.org/mrklteam/commonutils'
     s.license      = { :type => 'MIT', :file => 'LICENSE' }
@@ -28,7 +28,7 @@ Pod::Spec.new do |s|
     s.dependency 'Google-Mobile-Ads-SDK'
 
     #s.resource_bundles = {
-    #  'Nibs'   => ['CommonUtils/Resources/Images/**/*.*'],
+    #  'Nibs'   => ['CommonUtils/Resources/Nibs/**/*.*'],
     #  'Images' => ['CommonUtils/Resources/Images/**/*.*'],
     #  'Sounds' => ['CommonUtils/Resources/Sounds/**/*.*'],
     #  'CommonProgress' => ['CommonUtils/Resources/CommonProgress.bundle']

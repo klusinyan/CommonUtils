@@ -5,7 +5,7 @@
 #import "NetworkUtils.h"
 #import "DirectoryUtils.h"
 
-#define kBundleName [DirectoryUtils commonUtilsBundlePathWithName:@"CommonProgress.bundle"]
+#define kBundleName @"CommonUtils.bundle/CommonProgress.bundle"
 
 @interface CommonProgress ()
 

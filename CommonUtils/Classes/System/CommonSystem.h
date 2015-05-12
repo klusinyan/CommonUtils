@@ -1,6 +1,9 @@
 //  Created by Shmoopi LLC on 9/18/12.
 //  Copyright (c) 2012 Shmoopi LLC. All rights reserved.
 
+#define MB (1024*1024)
+#define GB (MB*1024)
+
 extern NSString * const kCurrentIPAddress;
 extern NSString * const kCurrentMACAddress;
 extern NSString * const kExternalIPAddress;
@@ -19,7 +22,7 @@ typedef void(^NetworkInfoCompletionHandler)(NSDictionary *networkInfo);
 
 @interface CommonSystem : NSObject
 
-// Network Information
+//**************************NETWORK**************************//
 + (void)networkInfoWithCompletion:(NetworkInfoCompletionHandler)completion;
 
 // Get Current IP Address
@@ -60,5 +63,24 @@ typedef void(^NetworkInfoCompletionHandler)(NSDictionary *networkInfo);
 
 // Connected to Cellular Network?
 + (BOOL)connectedToCellNetwork;
+//**************************NETWORK**************************//
+
+//*************************DISK INFO*************************//
+
+// Total Disk Space
++ (NSString *)diskSpace;
+
+// Total Free Disk Space
++ (NSString *)freeDiskSpace:(BOOL)inPercent;
+
+// Total Used Disk Space
++ (NSString *)usedDiskSpace:(BOOL)inPercent;
+
+// Get the total disk space in long format
++ (long long)longDiskSpace;
+
+// Get the total free disk space in long format
++ (long long)longFreeDiskSpace;
+
 
 @end

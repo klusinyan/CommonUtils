@@ -4,7 +4,7 @@
 #import "CommonSpinner.h"
 #import "DirectoryUtils.h"
 
-#define kBundleName [DirectoryUtils commonUtilsBundlePathWithName:@"CommonBarcode.bundle"]
+#define kBundleName @"CommonUtils.bundle/CommonBarcode.bundle"
 
 NSString * const CBErrorDomain = @"commonutils.commonbarcode.domain.error";
 

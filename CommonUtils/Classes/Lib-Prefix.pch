@@ -16,16 +16,15 @@
 #define SYSTEM_VERSION_LESS_THAN(v)                 ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedAscending)
 #define SYSTEM_VERSION_LESS_THAN_OR_EQUAL_TO(v)     ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] != NSOrderedDescending)
 
-// DEBUG si trova in Preprocessor Macros
-
 #ifdef DEBUG
 #define DebugLog( s, ... ) NSLog( @"<%@:(%d)> %@", [[NSString stringWithUTF8String:__FILE__] lastPathComponent], __LINE__, [NSString stringWithFormat:(s), ##__VA_ARGS__] )
 #else
 #define DebugLog( s, ... )
 #endif
 
-//Bundle constants
-#define kCommonBundlePath                       [[NSBundle mainBundle] pathForResource:@"ResourceBunlde" ofType:@"bundle"]
+#define kCommonBundleName                       @"CommonUtils.bundle"
+#define kCommonBundleNamePrefix                 @"CommonUtils"
+#define kCommonBundlePath                       [[NSBundle mainBundle] pathForResource:kCommonBundleNamePrefix ofType:@"bundle"]
 #define kCommonBundle                           [NSBundle bundleWithPath:kCommonBundlePath]
 #define kCommonImageWithNameOfType(name, type)  [UIImage imageWithContentsOfFile:[kCommonBundle pathForResource:name ofType:type]]
 #define kCommonImagePNGWithName(name)           [UIImage imageWithContentsOfFile:[kCommonBundle pathForResource:name ofType:@"png"]]

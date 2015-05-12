@@ -76,7 +76,7 @@
     }
     //*/
     
-    for (int i = 0; i < 1000; i++) {
+    for (int i = 0; i < arc4random_uniform(1)+1; i++) {
         [self.items addObject:[self fabriquePageContent]];
     }
     
@@ -110,14 +110,17 @@
                                       andCurrentPageIndicatorTintColor:[UIColor redColor]];
     self.commonBook.delegate = self;
     self.commonBook.dataSource = self;
-    self.commonBook.pageControlHidden = YES;
     [self.commonBook presentBookInsideOfContainer:self.container1 completion:^(BOOL finished) {
         DebugLog(@"finished [%@]", finished ? @"Y" : @"N");
         
-        /*
+        ///*
         //setup and position page control
         //not used only test
         //only when finished presneting book the customize page control
+        [self.commonBook setupCustomPageControlWithCompletion:^(UIPageControl *pageControl) {
+            pageControl.hidden = [self.items count] == 1;
+        }];
+        /*
         [self.commonBook setupCustomPageControlWithCompletion:^(UIPageControl *pageControl) {
                                                           
                                                           NSLayoutConstraint *bottom =
@@ -133,6 +136,8 @@
                                                       }];
          //*/
     }];
+    
+    self.commonBook.pageControlHidden = NO;
     
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         //---------------RELOAD PAGES---------------//

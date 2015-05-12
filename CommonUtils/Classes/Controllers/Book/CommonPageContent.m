@@ -13,7 +13,7 @@
 
 #define AUTO_LAYOUT 1
 
-#define kBundleName [DirectoryUtils commonUtilsBundlePathWithName:@"CommonBook.bundle"]
+#define kBundleName @"CommonUtils.bundle/CommonBook.bundle"
 
 #define ZOOM_VIEW_TAG 100
 #define ZOOM_STEP 1.2
@@ -84,7 +84,7 @@
 
 + (instancetype)pageContent
 {
-    return [[self alloc] initWithNibName:NSStringFromClass([self class]) bundle:[DirectoryUtils commonUtilsBundle]];
+    return [[self alloc] initWithNibName:NSStringFromClass([self class]) bundle:[DirectoryUtils bundleWithName:kCommonBundleName]];
 }
 
 - (void)animateIfNeeded
