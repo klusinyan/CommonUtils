@@ -304,6 +304,21 @@
 	return (NSInteger) (ti / D_DAY);
 }
 
+
+- (NSDate *)toLocalTime
+{
+    NSTimeZone *tz = [NSTimeZone defaultTimeZone];
+    NSInteger seconds = [tz secondsFromGMTForDate: self];
+    return [NSDate dateWithTimeInterval: seconds sinceDate: self];
+}
+
+- (NSDate *)toGlobalTime
+{
+    NSTimeZone *tz = [NSTimeZone defaultTimeZone];
+    NSInteger seconds = -[tz secondsFromGMTForDate: self];
+    return [NSDate dateWithTimeInterval: seconds sinceDate: self];
+}
+
 #pragma mark Decomposing Dates
 
 - (NSInteger) nearestHour
