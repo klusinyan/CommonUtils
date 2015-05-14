@@ -9,7 +9,3 @@ target 'CommonUtilsTest' do
      pod 'CommonUtils', :path =>  '.'
      pod 'Appirater'
 end
-
-#target 'CommonUtilsTest' do
-#    pod 'CommonUtilsBeta', :path =>  '.'
-#[end
