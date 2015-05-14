@@ -5,7 +5,6 @@
 #import "Appirater.h"
 
 #import <CommonCrash.h>
-#import <CommonBanner.h>
 
 @interface AppDelegate ()
 
@@ -38,24 +37,6 @@
     self.window.rootViewController = [CommonBanner bannerControllerWithRootViewController:nc];
     [self.window makeKeyAndVisible];
      //*/
-    
-    [CommonBanner regitserProvider:[CommonBannerProviderGAd class]
-                      withPriority:CommonBannerPriorityLow
-                     requestParams:@{keyAdUnitID    : @"ca-app-pub-3940256099942544/2934735716",
-                                     keyTestDevices : @[@"104e7e015323c4993bcecf1b7fc91b08"]}];
-    
-    [CommonBanner regitserProvider:[CommonBannerProviderCustom class]
-                      withPriority:CommonBannerPriorityLow
-                     requestParams:nil];
-    
-//    [CommonBanner regitserProvider:[CommonBannerProvideriAd class]
-//                      withPriority:CommonBannerPriorityHigh
-//                     requestParams:nil];
-    
-    [CommonBanner setDebugMode:NO];
-    [CommonBanner startManaging];
-
-    //[CommonBanner setBannerPosition:CommonBannerPositionTop];
 
     return YES;
 }

@@ -22,24 +22,20 @@ PODS:
     - AFNetworking/NSURLSession
   - Appirater (2.0.5)
   - Canvas (0.1.2)
-  - CommonUtils (1.5.4):
+  - CommonUtils (1.5.6-beta1):
     - AFNetworking
     - Canvas
-    - CommonUtils/no-arc (= 1.5.4)
+    - CommonUtils/no-arc (= 1.5.6-beta1)
     - DateTools
-    - Google-Mobile-Ads-SDK
-  - CommonUtils/no-arc (1.5.4):
+  - CommonUtils/no-arc (1.5.6-beta1):
     - AFNetworking
     - Canvas
     - DateTools
-    - Google-Mobile-Ads-SDK
   - DateTools (1.5.0)
-  - Google-Mobile-Ads-SDK (7.2.2)
 
 DEPENDENCIES:
   - Appirater
   - CommonUtils (from `.`)
-  - Google-Mobile-Ads-SDK
 
 EXTERNAL SOURCES:
   CommonUtils:
@@ -49,8 +45,7 @@ SPEC CHECKSUMS:
   AFNetworking: e1d86c2a96bb5d2e7408da36149806706ee122fe
   Appirater: e7c0a47fb67ee5041ce8479e6ba960927fb40264
   Canvas: eb861e3b555d032648146c8ffda1a5dea40059ca
-  CommonUtils: 3b052e937409e6bd50759e365ba9aba340357446
+  CommonUtils: 0e49fa2a2f166b81038063eaaf9669901aa8505e
   DateTools: b93a2c2017747329c6077c7d7e8a75106e23d0d7
-  Google-Mobile-Ads-SDK: 9561b27b8dd2ef861ee74b4c1ba77104c4c5414a
 
 COCOAPODS: 0.35.0

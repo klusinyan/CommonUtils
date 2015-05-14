@@ -8,8 +8,6 @@ xcodeproj 'CommonUtilsTest.xcodeproj'
 target 'CommonUtilsTest' do
      pod 'CommonUtils', :path =>  '.'
      pod 'Appirater'
-     pod 'Google-Mobile-Ads-SDK'
-     #pod 'Vertigo'
 end
 
 #target 'CommonUtilsTest' do
