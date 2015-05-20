@@ -54,13 +54,14 @@ typedef NS_ENUM(NSInteger, RowType) {
 {
     self = [super initWithStyle:style];
     if (self) {
-        
+        /*
         [[NSNotificationCenter defaultCenter] addObserverForName:CommonBannerDidCompleteSetup
                                                           object:nil
                                                            queue:[NSOperationQueue currentQueue]
                                                       usingBlock:^(NSNotification *note) {
                                                           DebugLog(@"self.view akdalskdjlaksjdlkasd%@", self.view);
                                                       }];
+         //*/
     }
     return self;
 }

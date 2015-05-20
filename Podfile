@@ -7,5 +7,6 @@ xcodeproj 'CommonUtilsTest.xcodeproj'
  
 target 'CommonUtilsTest' do
      pod 'CommonUtils', :path =>  '.'
+     pod 'CommonUtilsAds'
      pod 'Appirater'
 end

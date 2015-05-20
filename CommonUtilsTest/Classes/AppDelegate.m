@@ -5,6 +5,7 @@
 #import "Appirater.h"
 
 #import <CommonCrash.h>
+#import <CommonBanner.h>
 
 @interface AppDelegate ()
 
@@ -18,6 +19,23 @@
 {
     application.idleTimerDisabled = YES;
     
+    [CommonBanner regitserProvider:[CommonBannerProvideriAd class]
+                      withPriority:CommonBannerPriorityHigh
+                     requestParams:nil];
+    
+    [CommonBanner regitserProvider:[CommonBannerProviderGAd class]
+                      withPriority:CommonBannerPriorityLow
+                     requestParams:@{keyAdUnitID    : @"ca-app-pub-3940256099942544/2934735716",
+                                     keyTestDevices : @[kGADSimulatorID]}];
+    /*
+     [CommonBanner regitserProvider:[CommonBannerProviderCustom class]
+     withPriority:CommonBannerPriorityLow
+     requestParams:nil];
+     //*/
+    
+    [CommonBanner setDebugMode:NO];
+    [CommonBanner startManaging];
+
     [Appirater setAppId:@"770699556"];                  //iTunes ID
     [Appirater setDaysUntilPrompt:0];                   //days after first prompt
     [Appirater setUsesUntilPrompt:5];                   //number of times for next visualizzation
