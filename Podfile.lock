@@ -31,11 +31,11 @@ PODS:
     - AFNetworking
     - Canvas
     - DateTools
-  - CommonUtilsAds (1.0.1):
+  - CommonUtilsAds (1.0.5):
     - CommonUtils
-    - Google-Mobile-Ads-SDK
+    - Google-Mobile-Ads-SDK (~> 7.1.0)
   - DateTools (1.5.0)
-  - Google-Mobile-Ads-SDK (7.2.2)
+  - Google-Mobile-Ads-SDK (7.1.0)
 
 DEPENDENCIES:
   - Appirater
@@ -51,8 +51,8 @@ SPEC CHECKSUMS:
   Appirater: e7c0a47fb67ee5041ce8479e6ba960927fb40264
   Canvas: eb861e3b555d032648146c8ffda1a5dea40059ca
   CommonUtils: 427126d37a475a4cf95b90c6024181c03cbe67b9
-  CommonUtilsAds: cd4e0ad5d10b27c775e48dac65233487179d1341
+  CommonUtilsAds: 3681a3e7782dfa057237bf0778c12eb009e4df99
   DateTools: b93a2c2017747329c6077c7d7e8a75106e23d0d7
-  Google-Mobile-Ads-SDK: 9561b27b8dd2ef861ee74b4c1ba77104c4c5414a
+  Google-Mobile-Ads-SDK: 9b7c22345f13de4164e9e6d90ad49cce42124c3c
 
 COCOAPODS: 0.35.0
