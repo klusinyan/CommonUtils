@@ -34,7 +34,8 @@
             lroundf(b * 255)];
 }
 
-+ (UIColor *) colorWithHexString: (NSString *) hexString {
++ (UIColor *)colorWithHexString:(NSString *)hexString
+{
     NSString *colorString = [[hexString stringByReplacingOccurrencesOfString: @"#" withString: @""] uppercaseString];
     CGFloat alpha, red, blue, green;
     switch ([colorString length]) {
@@ -69,7 +70,8 @@
     return [UIColor colorWithRed: red green: green blue: blue alpha: alpha];
 }
 
-+ (CGFloat) colorComponentFrom: (NSString *) string start: (NSUInteger) start length: (NSUInteger) length {
++ (CGFloat)colorComponentFrom:(NSString *)string start:(NSUInteger)start length:(NSUInteger)length
+{
     NSString *substring = [string substringWithRange: NSMakeRange(start, length)];
     NSString *fullHex = length == 2 ? substring : [NSString stringWithFormat: @"%@%@", substring, substring];
     unsigned hexComponent;
