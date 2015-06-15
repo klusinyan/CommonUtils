@@ -291,7 +291,9 @@ typedef NS_ENUM(NSInteger, RowType) {
         }
         case RowTypeSplitController: {
             CustomSplitController *vc = [[CustomSplitController alloc] init];
-            [self.navigationController pushViewController:vc animated:YES];
+            vc.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+            [self presentViewController:vc animated:YES completion:nil];
+            //[self.navigationController pushViewController:vc animated:YES];
             
             break;
         }

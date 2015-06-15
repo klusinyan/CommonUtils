@@ -46,7 +46,7 @@
     //splitController.openningTimingFunctionName = kCAMediaTimingFunctionEaseInEaseOut;
     //splitController.closingTimingFunctionName = kCAMediaTimingFunctionEaseInEaseOut;
     splitController.menuMode = MenuModeShownAlways;
-    //splitController.menuWidth = 300;
+    splitController.menuWidth = 200;
     
     [self addChildViewController:splitController];
     [self.view addSubview:splitController.view];
