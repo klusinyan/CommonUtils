@@ -28,6 +28,8 @@ typedef NS_ENUM(NSInteger, UIImageRepresentation) {
 
 + (NSString *)moduleDocumentDirectoryPath:(NSString *)moduleName;
 
++ (NSString *)moduleLibraryDirectoryPath:(NSString *)moduleName;
+
 + (void)createDirectoryIfNotExistsWithPath:(NSString *)path;
 
 + (NSString *)imagePathWithName:(NSString *)imageName

@@ -7,25 +7,29 @@
 
 #pragma image
 
++ (NSString *)moduleDirectory:(NSSearchPathDirectory)searchPathDirectory moduleName:(NSString *)moduleName
+{
+    NSString *searchDir = [NSSearchPathForDirectoriesInDomains(searchPathDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+    if (moduleName) {
+        NSString *moduleDocumentDirPath = [searchDir stringByAppendingPathComponent:moduleName];
+        [self createDirectoryIfNotExistsWithPath:moduleDocumentDirPath];
+    }
+    return (moduleName) ? [searchDir stringByAppendingPathComponent:moduleName] : searchDir;
+}
+
 + (NSString *)moduleCacheDirectoryPath:(NSString *)moduleName
 {
-    NSString *cacheDir = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-    if (moduleName) {
-        NSString *moduleCacheDirPath = [cacheDir stringByAppendingPathComponent:moduleName];
-        [self createDirectoryIfNotExistsWithPath:moduleCacheDirPath];
-    }
-    return (moduleName) ? [cacheDir stringByAppendingPathComponent:moduleName] : cacheDir;
+    return [self moduleDirectory:NSCachesDirectory moduleName:moduleName];
 }
 
 + (NSString *)moduleDocumentDirectoryPath:(NSString *)moduleName
 {
-    NSString *documentDir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-    if (moduleName) {
-        NSString *moduleDocumentDirPath = [documentDir stringByAppendingPathComponent:moduleName];
-        [self createDirectoryIfNotExistsWithPath:moduleDocumentDirPath];
-    }
-    
-    return (moduleName) ? [documentDir stringByAppendingPathComponent:moduleName] : documentDir;
+    return [self moduleDirectory:NSDocumentDirectory moduleName:moduleName];
+}
+
++ (NSString *)moduleLibraryDirectoryPath:(NSString *)moduleName
+{
+    return [self moduleDirectory:NSLibraryDirectory moduleName:moduleName];
 }
 
 + (void)createDirectoryIfNotExistsWithPath:(NSString *)path
