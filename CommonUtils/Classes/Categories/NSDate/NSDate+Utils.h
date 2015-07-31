@@ -68,11 +68,6 @@
 - (NSInteger) daysAfterDate: (NSDate *) aDate;
 - (NSInteger) daysBeforeDate: (NSDate *) aDate;
 
-// UTC to local time
-- (NSDate *)toLocalTime;
-// local time to UTC 
-- (NSDate *)toGlobalTime;
-
 // Decomposing dates
 @property (readonly) NSInteger nearestHour;
 @property (readonly) NSInteger hour;

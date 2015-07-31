@@ -61,4 +61,23 @@
     }
 }
 
+- (void)resizeWithConstraint:(NSLayoutConstraint *)constraint
+                    constant:(CGFloat)constant
+                    duration:(NSTimeInterval)duration
+                  completion:(void(^)(BOOL finished))completion
+{
+    [self layoutIfNeeded];
+    
+    constraint.constant = constant;
+    
+    [UIView animateWithDuration:duration
+                          delay:0.0f
+                        options:UIViewAnimationOptionCurveEaseOut
+                     animations:^{
+                         [self layoutIfNeeded];
+                     } completion:^(BOOL finished) {
+                         if (completion) completion(finished);
+                     }];
+}
+
 @end
