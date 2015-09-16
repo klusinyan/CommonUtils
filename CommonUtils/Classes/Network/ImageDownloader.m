@@ -186,6 +186,7 @@ static BOOL IDLogging = NO;
     }
     
     //if there is no image then return placeholder
+    if ([self logging]) DebugLog(@"No image found, taking placeholder");
     return placeholder;
 }
 

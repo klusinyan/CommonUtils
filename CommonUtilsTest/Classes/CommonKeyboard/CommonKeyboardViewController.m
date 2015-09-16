@@ -24,6 +24,11 @@
     [CommonKeyboard unregisterRespondersForClass:[self class]];
 }
 
+- (IBAction)buttonTest:(id)sender
+{
+    
+}
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -39,6 +44,7 @@
     self.view.backgroundColor = [UIColor whiteColor];
     self.edgesForExtendedLayout = UIRectEdgeNone;
     
+    // NOTE:: if you add only a button on scollview. IT WILL NOT WORK, SOULD ADD OTHER UI ELEMENTS
     NSLayoutConstraint *leftConstraint = [NSLayoutConstraint constraintWithItem:self.contentView
                                                                       attribute:NSLayoutAttributeLeading
                                                                       relatedBy:0

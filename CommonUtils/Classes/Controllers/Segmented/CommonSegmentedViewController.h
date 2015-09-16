@@ -10,6 +10,8 @@
 
 @property (readwrite, nonatomic, strong) UIView *headerView;                     //defautl nil
 
+@property (readwrite, nonatomic, assign) CGFloat segmentedHeight;                //defualt 0
+
 @property (readwrite, nonatomic, assign) CGFloat headerHeight;                   //defualt 0
 
 @property (readwrite, nonatomic, assign) BOOL useToolBar;                        //default YES
@@ -47,5 +49,13 @@
 - (void)segmentedController:(CommonSegmentedViewController *)segmentedController
             didSelectConent:(id<CommonSegmentedControllerDelegate>)content
                     atIndex:(NSInteger)index;
+
+@end
+
+@interface UIViewController (SegmentedController) <CommonSegmentedControllerDelegate>
+
+@property (readonly, nonatomic, assign) CommonSegmentedViewController *segmentedController;
+
+- (void)viewDidAddToContainer;
 
 @end

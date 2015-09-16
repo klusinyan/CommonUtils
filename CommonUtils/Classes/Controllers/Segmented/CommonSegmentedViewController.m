@@ -2,6 +2,7 @@
 //  Copyright (c) 2012 Home. All rights reserved.
 
 #import "CommonSegmentedViewController.h"
+#import <objc/runtime.h>
 
 #define kTest NO
 
@@ -252,7 +253,13 @@
                                                                              options:NSLayoutFormatAlignAllCenterX | NSLayoutFormatAlignAllCenterY
                                                                              metrics:nil
                                                                                views:NSDictionaryOfVariableBindings(_segmentedControl)]];
-        
+        if (self.segmentedHeight > 0) {
+            [self.toolbar addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[_segmentedControl(==height)]|"
+                                                                                 options:NSLayoutFormatAlignAllCenterX | NSLayoutFormatAlignAllCenterY
+                                                                                 metrics:@{@"height" : @(self.segmentedHeight)}
+                                                                                   views:NSDictionaryOfVariableBindings(_segmentedControl)]];
+        }
+
         [self.toolbar addConstraint:[NSLayoutConstraint constraintWithItem:self.segmentedControl
                                                                  attribute:NSLayoutAttributeCenterX
                                                                  relatedBy:NSLayoutRelationEqual
@@ -410,6 +417,41 @@
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
 {
     [self.selectedViewController didRotateFromInterfaceOrientation:fromInterfaceOrientation];
+}
+
+@end
+
+@interface UIViewController ()
+
+@property (readwrite, nonatomic, assign) CommonSegmentedViewController *segmentedController;
+
+@end
+
+@implementation UIViewController (SegmentedController)
+@dynamic segmentedController;
+
+- (CommonSegmentedViewController *)segmentedController
+{
+    return objc_getAssociatedObject(self, @selector(segmentedController));
+}
+
+- (void)setSegmentedController:(CommonSegmentedViewController *)segmentedController
+{
+    objc_setAssociatedObject(self, @selector(segmentedController), segmentedController, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    
+    [self viewDidAddToContainer];
+}
+
+- (void)segmentedController:(CommonSegmentedViewController *)segmentedController
+            didSelectConent:(id<CommonSegmentedControllerDelegate>)content
+                    atIndex:(NSInteger)index
+{
+    self.segmentedController = segmentedController;
+}
+
+- (void)viewDidAddToContainer
+{
+    DebugLog(@"%@ did add to container %@", [self class], [self.segmentedController class]);
 }
 
 @end
