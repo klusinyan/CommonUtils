@@ -102,20 +102,32 @@ UIGestureRecognizerDelegate
 
 - (void)addObservers
 {
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillShow:)
+                                                 name:UIKeyboardWillShowNotification
+                                               object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWasShown:)
+                                             selector:@selector(keyboardDidShow:)
                                                  name:UIKeyboardDidShowNotification
                                                object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWillBeHidden:)
+                                             selector:@selector(keyboardWillHide:)
                                                  name:UIKeyboardWillHideNotification
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardDidHide:)
+                                                 name:UIKeyboardDidHideNotification
                                                object:nil];
 }
 
 - (void)removeObservers
 {
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:UIKeyboardWillShowNotification
+                                                  object:nil];
     
     [[NSNotificationCenter defaultCenter] removeObserver:self
                                                     name:UIKeyboardDidShowNotification
@@ -124,18 +136,36 @@ UIGestureRecognizerDelegate
     [[NSNotificationCenter defaultCenter] removeObserver:self
                                                     name:UIKeyboardWillHideNotification
                                                   object:nil];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:UIKeyboardDidHideNotification
+                                                  object:nil];
 }
 
 #pragma mark -
 #pragma mark Notifications
 
+- (void)keyboardWillShow:(NSNotification *)aNotification
+{
+    if (self.delegate && [self.delegate respondsToSelector:@selector(keyboard:willShowWithResponder:)]) {
+        [self.delegate keyboard:self willShowWithResponder:[self firstResponder]];
+    }
+}
+
+- (void)keyboardDidHide:(NSNotification *)aNotification
+{
+    if (self.delegate && [self.delegate respondsToSelector:@selector(keyboard:didHideWithResponder:)]) {
+        [self.delegate keyboard:self didHideWithResponder:[self firstResponder]];
+    }
+}
+
 // Called when the UIKeyboardDidShowNotification is sent.
-- (void)keyboardWasShown:(NSNotification*)aNotification
+- (void)keyboardDidShow:(NSNotification *)aNotification
 {
     self.visible = YES;
     
-    if (self.delegate && [self.delegate respondsToSelector:@selector(keyboard:wasShownWithResponder:)]) {
-        [self.delegate keyboard:self wasShownWithResponder:[self firstResponder]];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(keyboard:didShowWithResponder:)]) {
+        [self.delegate keyboard:self didShowWithResponder:[self firstResponder]];
     }
     
     CGFloat offest = 0;
@@ -181,10 +211,10 @@ UIGestureRecognizerDelegate
 }
 
 // Called when the UIKeyboardWillHideNotification is sent
-- (void)keyboardWillBeHidden:(NSNotification*)aNotification
+- (void)keyboardWillHide:(NSNotification*)aNotification
 {
-    if (self.delegate && [self.delegate respondsToSelector:@selector(keyboard:willBeHiddenWithResponder:)]) {
-        [self.delegate keyboard:self willBeHiddenWithResponder:[self firstResponder]];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(keyboard:willHideWithResponder:)]) {
+        [self.delegate keyboard:self willHideWithResponder:[self firstResponder]];
     }
     
     UIEdgeInsets contentInsets = UIEdgeInsetsZero;

@@ -75,12 +75,12 @@
     return 10;
 }
 
-- (void)keyboardDidShowWithResponder:(id)responder
+- (void)keyboard:(CommonKeyboard *)keyboard didShowWithResponder:(id)responder
 {
     DebugLog(@"responder %@", responder);
 }
 
-- (void)keyboardWillHideWithResponder:(id)responder
+- (void)keyboard:(CommonKeyboard *)keyboard willHideWithResponder:(id)responder
 {
     DebugLog(@"responder %@", responder);
 }
