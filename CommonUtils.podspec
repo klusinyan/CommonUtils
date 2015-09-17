@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name         = 'CommonUtils'
-    s.version      = '1.5.9.2'
+    s.version      = '1.5.9.3'
     s.summary      = 'Common Utilities.'
     s.homepage     = 'https://bitbucket.org/mrklteam/commonutils'
     s.license      = { :type => 'MIT', :file => 'LICENSE' }
@@ -24,7 +24,7 @@ Pod::Spec.new do |s|
     end
 
     s.dependency 'AFNetworking'
-    s.dependency 'AFNetworkActivityLogger'
+    #s.dependency 'AFNetworkActivityLogger'
     s.dependency 'Canvas'
     s.dependency 'DateTools'
 
