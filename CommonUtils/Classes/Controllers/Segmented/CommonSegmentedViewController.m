@@ -174,9 +174,10 @@
                                                                               metrics:nil
                                                                                 views:NSDictionaryOfVariableBindings(_headerView)]];
             
-            [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[_headerView][_toolbar(==44)][_contentView]|"
+            NSDictionary *metrics = @{@"height" : (self.segmentedHeight > 0 ? @(self.segmentedHeight) : @(44))};
+            [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[_headerView][_toolbar(==height)][_contentView]|"
                                                                               options:0
-                                                                              metrics:nil
+                                                                              metrics:metrics
                                                                                 views:NSDictionaryOfVariableBindings(_headerView, _toolbar, _contentView)]];
             
             [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.headerView
@@ -189,9 +190,10 @@
             
         }
         else {
-            [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[_toolbar(==44)][_contentView]|"
+            NSDictionary *metrics = @{@"height" : (self.segmentedHeight > 0 ? @(self.segmentedHeight) : @(44))};
+            [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[_toolbar(==height)][_contentView]|"
                                                                               options:0
-                                                                              metrics:nil
+                                                                              metrics:metrics
                                                                                 views:NSDictionaryOfVariableBindings(_toolbar, _contentView)]];
         }
         
