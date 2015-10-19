@@ -7,7 +7,9 @@
 #import "DirectoryUtils.h"
 #import "NetworkUtils.h"
 
+/*
 #import <AFNetworkReachabilityManager.h>
+//*/
 
 #define kDebugLog 1
 
@@ -47,7 +49,9 @@
 
 - (void)dealloc
 {
+    /*
     [[AFNetworkReachabilityManager sharedManager] stopMonitoring];
+    //*/
     
     self.scrollView.delegate = nil;
     
@@ -77,7 +81,9 @@
         //defualt is nil for memory
         //self.image = [UIImage imageNamed:@"CommonUtils.bundle/CommonProgress.bundle/WeCanDoIt"];
         
+        /*
         [[AFNetworkReachabilityManager sharedManager] startMonitoring];
+         //*/
     }
     return self;
 }
@@ -217,12 +223,14 @@
         [self.delegate pageContentWillAppear:self];
     }
     
+    /*
     [[AFNetworkReachabilityManager sharedManager] setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
         if (kDebugLog) DebugLog(@"status :%@, shouldRetry :%@", @(status), self.shouldRetry ? @"Y" : @"N");
         if (status != AFNetworkReachabilityStatusNotReachable && self.shouldRetry) {
             [self downloadImage];
         }
     }];
+     //*/
 }
 /****************SEQ[2]****************/
 

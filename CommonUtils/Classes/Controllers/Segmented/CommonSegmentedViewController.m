@@ -174,8 +174,9 @@
                                                                               metrics:nil
                                                                                 views:NSDictionaryOfVariableBindings(_headerView)]];
             
-            NSDictionary *metrics = @{@"height" : (self.segmentedHeight > 0 ? @(self.segmentedHeight) : @(44))};
-            [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[_headerView][_toolbar(==height)][_contentView]|"
+            NSDictionary *metrics = @{@"height" : (self.segmentedHeight > 0 ? @(self.segmentedHeight) : @(44)),
+                                      @"paddingOriginY" : @(self.paddingOriginY)};
+            [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-paddingOriginY-[_headerView][_toolbar(==height)][_contentView]|"
                                                                               options:0
                                                                               metrics:metrics
                                                                                 views:NSDictionaryOfVariableBindings(_headerView, _toolbar, _contentView)]];
@@ -190,8 +191,9 @@
             
         }
         else {
-            NSDictionary *metrics = @{@"height" : (self.segmentedHeight > 0 ? @(self.segmentedHeight) : @(44))};
-            [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[_toolbar(==height)][_contentView]|"
+            NSDictionary *metrics = @{@"height" : (self.segmentedHeight > 0 ? @(self.segmentedHeight) : @(44)),
+                                      @"paddingOriginY" : @(self.paddingOriginY)};
+            [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-paddingOriginY-[_toolbar(==height)][_contentView]|"
                                                                               options:0
                                                                               metrics:metrics
                                                                                 views:NSDictionaryOfVariableBindings(_toolbar, _contentView)]];

@@ -10,20 +10,24 @@
 
 @property (readwrite, nonatomic, strong) UIView *headerView;                     //defautl nil
 
-@property (readwrite, nonatomic, assign) CGFloat segmentedHeight;                //defualt 0
+@property (readwrite, nonatomic, assign) CGFloat segmentedHeight;                //default 0
 
-@property (readwrite, nonatomic, assign) CGFloat headerHeight;                   //defualt 0
+@property (readwrite, nonatomic, assign) CGFloat headerHeight;                   //default 0
+
+@property (readwrite, nonatomic, assign) CGFloat paddingOriginY;                 //default 0
 
 @property (readwrite, nonatomic, assign) BOOL useToolBar;                        //default YES
 
-@property (readwrite, nonatomic, assign) BOOL enableSwipe;                       //defualt NO
+@property (readwrite, nonatomic, assign) BOOL enableSwipe;                       //default NO
 
 @property (readwrite, nonatomic, assign) BOOL versioneTest;                      //default NO
 
-@property (readwrite, nonatomic, assign) NSInteger selectedIndex;                //defualt is 0
+@property (readwrite, nonatomic, assign) NSInteger selectedIndex;                //default is 0
 
 //readonly
-@property (readonly, nonatomic, strong) UIView *toolBar;                         //defualt is UIToolbar
+@property (readonly, nonatomic, strong) UIView *contentView;                     //content view
+
+@property (readonly, nonatomic, strong) UIView *toolBar;                         //default is UIToolbar
 
 @property (readonly, nonatomic, strong) NSArray *viewControllers;                //ref to viewController's stack
 
