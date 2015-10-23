@@ -1,41 +1,41 @@
 PODS:
-  - AFNetworking (2.5.4):
-    - AFNetworking/NSURLConnection (= 2.5.4)
-    - AFNetworking/NSURLSession (= 2.5.4)
-    - AFNetworking/Reachability (= 2.5.4)
-    - AFNetworking/Security (= 2.5.4)
-    - AFNetworking/Serialization (= 2.5.4)
-    - AFNetworking/UIKit (= 2.5.4)
-  - AFNetworking/NSURLConnection (2.5.4):
+  - AFNetworking (2.6.1):
+    - AFNetworking/NSURLConnection (= 2.6.1)
+    - AFNetworking/NSURLSession (= 2.6.1)
+    - AFNetworking/Reachability (= 2.6.1)
+    - AFNetworking/Security (= 2.6.1)
+    - AFNetworking/Serialization (= 2.6.1)
+    - AFNetworking/UIKit (= 2.6.1)
+  - AFNetworking/NSURLConnection (2.6.1):
     - AFNetworking/Reachability
     - AFNetworking/Security
     - AFNetworking/Serialization
-  - AFNetworking/NSURLSession (2.5.4):
+  - AFNetworking/NSURLSession (2.6.1):
     - AFNetworking/Reachability
     - AFNetworking/Security
     - AFNetworking/Serialization
-  - AFNetworking/Reachability (2.5.4)
-  - AFNetworking/Security (2.5.4)
-  - AFNetworking/Serialization (2.5.4)
-  - AFNetworking/UIKit (2.5.4):
+  - AFNetworking/Reachability (2.6.1)
+  - AFNetworking/Security (2.6.1)
+  - AFNetworking/Serialization (2.6.1)
+  - AFNetworking/UIKit (2.6.1):
     - AFNetworking/NSURLConnection
     - AFNetworking/NSURLSession
   - Appirater (2.0.5)
   - Canvas (0.1.2)
-  - CommonUtils (1.5.6):
+  - CommonUtils (1.5.9.4):
     - AFNetworking
     - Canvas
-    - CommonUtils/no-arc (= 1.5.6)
+    - CommonUtils/no-arc (= 1.5.9.4)
     - DateTools
-  - CommonUtils/no-arc (1.5.6):
+  - CommonUtils/no-arc (1.5.9.4):
     - AFNetworking
     - Canvas
     - DateTools
-  - CommonUtilsAds (1.0.5):
+  - CommonUtilsAds (1.0.8):
     - CommonUtils
-    - Google-Mobile-Ads-SDK (~> 7.1.0)
-  - DateTools (1.5.0)
-  - Google-Mobile-Ads-SDK (7.1.0)
+    - Google-Mobile-Ads-SDK
+  - DateTools (1.7.0)
+  - Google-Mobile-Ads-SDK (7.5.2)
 
 DEPENDENCIES:
   - Appirater
@@ -47,12 +47,12 @@ EXTERNAL SOURCES:
     :path: .
 
 SPEC CHECKSUMS:
-  AFNetworking: 05edc0ac4c4c8cf57bcf4b84be5b0744b6d8e71e
+  AFNetworking: 8e4e60500beb8bec644cf575beee72990a76d399
   Appirater: e7c0a47fb67ee5041ce8479e6ba960927fb40264
   Canvas: eb861e3b555d032648146c8ffda1a5dea40059ca
-  CommonUtils: 427126d37a475a4cf95b90c6024181c03cbe67b9
-  CommonUtilsAds: 3681a3e7782dfa057237bf0778c12eb009e4df99
-  DateTools: b93a2c2017747329c6077c7d7e8a75106e23d0d7
-  Google-Mobile-Ads-SDK: 9b7c22345f13de4164e9e6d90ad49cce42124c3c
+  CommonUtils: 8317cda93f73b0bec74cac70b4eb70c1f06d4b73
+  CommonUtilsAds: 3d59429368c2ecad721862921e750da596400054
+  DateTools: 53288ee8b905fdc75897a1e6b5cc0144b14cba60
+  Google-Mobile-Ads-SDK: 24a8ddfc0bcfec281960c5d88f75327df0d86b00
 
-COCOAPODS: 0.35.0
+COCOAPODS: 0.39.0

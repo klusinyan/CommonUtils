@@ -14,7 +14,9 @@
 
 @property (readwrite, nonatomic, assign) CGFloat headerHeight;                   //default 0
 
-@property (readwrite, nonatomic, assign) CGFloat paddingOriginY;                 //default 0
+@property (readwrite, nonatomic, assign) CGFloat paddingOriginYSegmented;        //default 0
+
+@property (readwrite, nonatomic, assign) CGFloat paddingOriginXSegmented;        //default 0
 
 @property (readwrite, nonatomic, assign) BOOL useToolBar;                        //default YES
 

@@ -41,6 +41,8 @@
         self.useToolBar = YES;
         self.enableSwipe = NO;
         self.selectedIndex = 0;
+        self.paddingOriginXSegmented = 0.0f;
+        self.paddingOriginYSegmented = 0.0f;
     }
     
     return self;
@@ -175,8 +177,8 @@
                                                                                 views:NSDictionaryOfVariableBindings(_headerView)]];
             
             NSDictionary *metrics = @{@"height" : (self.segmentedHeight > 0 ? @(self.segmentedHeight) : @(44)),
-                                      @"paddingOriginY" : @(self.paddingOriginY)};
-            [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-paddingOriginY-[_headerView][_toolbar(==height)][_contentView]|"
+                                      @"paddingOriginYSegmented" : @(self.paddingOriginYSegmented)};
+            [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[_headerView]-paddingOriginYSegmented-[_toolbar(==height)][_contentView]|"
                                                                               options:0
                                                                               metrics:metrics
                                                                                 views:NSDictionaryOfVariableBindings(_headerView, _toolbar, _contentView)]];
@@ -192,8 +194,8 @@
         }
         else {
             NSDictionary *metrics = @{@"height" : (self.segmentedHeight > 0 ? @(self.segmentedHeight) : @(44)),
-                                      @"paddingOriginY" : @(self.paddingOriginY)};
-            [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-paddingOriginY-[_toolbar(==height)][_contentView]|"
+                                      @"paddingOriginYSegmented" : @(self.paddingOriginYSegmented)};
+            [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-paddingOriginYSegmented-[_toolbar(==height)][_contentView]|"
                                                                               options:0
                                                                               metrics:metrics
                                                                                 views:NSDictionaryOfVariableBindings(_toolbar, _contentView)]];
@@ -253,9 +255,10 @@
         
         
         //constraints to segmented control
-        [self.toolbar addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-(==10)-[_segmentedControl]-(==10)-|"
+        NSDictionary *metrics = @{@"paddingOriginXSegmented" : @(self.paddingOriginXSegmented)};
+        [self.toolbar addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-(==paddingOriginXSegmented)-[_segmentedControl]-(==paddingOriginXSegmented)-|"
                                                                              options:NSLayoutFormatAlignAllCenterX | NSLayoutFormatAlignAllCenterY
-                                                                             metrics:nil
+                                                                             metrics:metrics
                                                                                views:NSDictionaryOfVariableBindings(_segmentedControl)]];
         if (self.segmentedHeight > 0) {
             [self.toolbar addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[_segmentedControl(==height)]|"
@@ -263,7 +266,7 @@
                                                                                  metrics:@{@"height" : @(self.segmentedHeight)}
                                                                                    views:NSDictionaryOfVariableBindings(_segmentedControl)]];
         }
-
+        
         [self.toolbar addConstraint:[NSLayoutConstraint constraintWithItem:self.segmentedControl
                                                                  attribute:NSLayoutAttributeCenterX
                                                                  relatedBy:NSLayoutRelationEqual
