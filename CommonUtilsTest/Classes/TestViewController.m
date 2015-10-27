@@ -207,7 +207,7 @@ typedef NS_ENUM(NSInteger, RowType) {
             CommonSegmentedViewController *segmentController =
             [[CommonSegmentedViewController alloc] initWithViewControllers:@[firstVC, secondVC]];
             segmentController.useToolBar = NO;
-            segmentController.paddingOriginY = 20.0f;
+            segmentController.paddingOriginYSegmented = 20.0f;
             
             [[UISegmentedControl appearance] setBackgroundImage:[UIImage imageNamed:@"stepper_and_segment_background_normal"] forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
             

@@ -909,6 +909,7 @@
 		9CB81F6418FD2C9D00C918FB /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				DSTROOT = /tmp/Common.dst;
 				FRAMEWORK_SEARCH_PATHS = "Pods/Google-Mobile-Ads-SDK/GoogleMobileAdsSdkiOS-7.1.0";
@@ -935,6 +936,7 @@
 		9CB81F6518FD2C9D00C918FB /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				DSTROOT = /tmp/Common.dst;
 				FRAMEWORK_SEARCH_PATHS = "Pods/Google-Mobile-Ads-SDK/GoogleMobileAdsSdkiOS-7.1.0";
