@@ -1,8 +1,7 @@
 //  Created by Karen Lusinyan on 02/03/15.
 //  Copyright (c) 2015 Karen Lusinyan. All rights reserved.
 
-#import "CSAnimation.h"
-#import "CSAnimationView.h"
+#import "Canvas.h"
 
 @interface CommonAnimation : NSObject
 
