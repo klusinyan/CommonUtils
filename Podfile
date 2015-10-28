@@ -6,7 +6,8 @@ source 'https://git.sftc.it/softec-ios/softeccocoapods.git'
 xcodeproj 'CommonUtilsTest.xcodeproj'
  
 target 'CommonUtilsTest' do
-     pod 'CommonUtils', :path =>  '.'
-     pod 'CommonUtilsAds', :path =>  '../CommonUtilsAds'
-     pod 'Appirater'
+    pod 'AFNetworkActivityLogger'
+    pod 'CommonUtils', :path =>  '.'
+    pod 'CommonUtilsAds', :path =>  '../CommonUtilsAds'
+    pod 'Appirater'
 end

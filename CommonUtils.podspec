@@ -24,7 +24,6 @@ Pod::Spec.new do |s|
     end
 
     s.dependency 'AFNetworking'
-    #s.dependency 'AFNetworkActivityLogger'
     s.dependency 'Canvas'
     s.dependency 'DateTools'
 

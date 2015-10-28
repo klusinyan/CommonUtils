@@ -7,11 +7,19 @@
 #import "CommonCrash.h"
 #import "CommonBanner.h"
 
+// TODO::
+//#import "FICImageCache.h"
+
 @interface AppDelegate ()
 
 @end
 
 @implementation AppDelegate
+
+- (void)setupFastImageCache
+{
+    // TODO::
+}
 
 #pragma CommonCrashDelegate protocol
 
@@ -56,6 +64,8 @@
     [self.window makeKeyAndVisible];
      //*/
 
+    [self setupFastImageCache];
+    
     return YES;
 }
 							
