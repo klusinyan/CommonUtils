@@ -3,8 +3,8 @@
 #import "DirectoryUtils.h"
 
 //AFNetworking
-#import <AFNetworkActivityIndicatorManager.h>
-#import <UIImageView+AFNetworking.h>
+#import "AFNetworkActivityIndicatorManager.h"
+#import "UIImageView+AFNetworking.h"
 
 @interface ImageDownloader : NSObject
 
