@@ -7,18 +7,97 @@
 #import "CommonCrash.h"
 #import "CommonBanner.h"
 
-// TODO::
-//#import "FICImageCache.h"
+#import "FICImageCache.h"
+#import "CUImage.h"
+#import "AFNetworking.h"
+#import "AFNetworkActivityIndicatorManager.h"
 
-@interface AppDelegate ()
+@interface AppDelegate () <FICImageCacheDelegate>
+
+@property (nonatomic, strong) NSOperationQueue *requestQueue;
 
 @end
 
 @implementation AppDelegate
 
+- (void)setupAFNetworking
+{
+    self.requestQueue = [NSOperationQueue new];
+    self.requestQueue.maxConcurrentOperationCount = 5;
+    
+    [AFNetworkActivityIndicatorManager sharedManager].enabled = YES;
+}
+
 - (void)setupFastImageCache
 {
-    // TODO::
+    FICImageFormat *photoThumbnailImageFormat = [[FICImageFormat alloc] init];
+    photoThumbnailImageFormat.name = CUPhotoSquareImage32BitBGRAFormatName;
+    photoThumbnailImageFormat.family = CUPhotoImageFormatFamily;
+    photoThumbnailImageFormat.style = FICImageFormatStyle32BitBGRA;
+    photoThumbnailImageFormat.imageSize = CUPhotoThumnailSize;
+    photoThumbnailImageFormat.maximumCount = 250;
+    photoThumbnailImageFormat.devices = FICImageFormatDevicePhone | FICImageFormatDevicePad;
+    photoThumbnailImageFormat.protectionMode = FICImageFormatProtectionModeNone;
+
+    // Configure the image cache
+    FICImageCache *sharedImageCache = [FICImageCache sharedImageCache];
+    [sharedImageCache setDelegate:self];
+    [sharedImageCache setFormats:@[photoThumbnailImageFormat]];
+}
+
+#pragma mark - FICImageCacheDelegate protocol
+
+// download from network
+- (void)imageCache:(FICImageCache *)imageCache wantsSourceImageForEntity:(id<FICEntity>)entity
+    withFormatName:(NSString *)formatName
+   completionBlock:(FICImageRequestCompletionBlock)completionBlock {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+
+        // grab the url from "entity"
+        NSURL *requestURL = [entity sourceImageURLWithFormatName:formatName];
+
+        // make request with AFNetworking
+        NSURLRequest *request = [NSURLRequest requestWithURL:requestURL];
+        AFHTTPRequestOperation *requestOperation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
+        requestOperation.responseSerializer = [AFImageResponseSerializer serializer];
+        [requestOperation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+            completionBlock(responseObject);
+            DebugLog(@"success with image %@", responseObject);
+        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+            DebugLog(@"error %@", error);
+        }];
+        
+        // add to queue
+        [self.requestQueue addOperation:requestOperation];
+    });
+}
+
+// read from disk
+/*
+- (void)imageCache:(FICImageCache *)imageCache
+wantsSourceImageForEntity:(id<FICEntity>)entity
+    withFormatName:(NSString *)formatName
+   completionBlock:(FICImageRequestCompletionBlock)completionBlock {
+    // Images typically come from the Internet rather than from the app bundle directly, so this would be the place to fire off a network request to download the image.
+    // For the purposes of this demo app, we'll just access images stored locally on disk.
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        UIImage *sourceImage = [(FICDPhoto *)entity sourceImage];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            completionBlock(sourceImage);
+        });
+    });
+}
+//*/
+
+- (BOOL)imageCache:(FICImageCache *)imageCache
+shouldProcessAllFormatsInFamily:(NSString *)formatFamily
+         forEntity:(id<FICEntity>)entity {
+    return NO;
+}
+
+- (void)imageCache:(FICImageCache *)imageCache
+errorDidOccurWithMessage:(NSString *)errorMessage {
+    DebugLog(@"%@", errorMessage);
 }
 
 #pragma CommonCrashDelegate protocol
@@ -64,6 +143,7 @@
     [self.window makeKeyAndVisible];
      //*/
 
+    [self setupAFNetworking];
     [self setupFastImageCache];
     
     return YES;

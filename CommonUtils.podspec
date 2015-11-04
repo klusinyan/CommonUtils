@@ -23,9 +23,10 @@ Pod::Spec.new do |s|
         sna.source_files = non_arc_files
     end
 
-    s.dependency 'AFNetworking'
+    s.dependency 'AFNetworking', '~>2.5.0'
     s.dependency 'Canvas'
     s.dependency 'DateTools'
+    s.dependency 'FastImageCache'
 
     #s.resource_bundles = {
     #  'Nibs'   => ['CommonUtils/Resources/Nibs/**/*.*'],

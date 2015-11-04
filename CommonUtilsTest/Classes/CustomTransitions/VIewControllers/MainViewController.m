@@ -14,11 +14,16 @@
 #import "ZoomAnimationController.h"
 #import "DropAnimationController.h"
 
+// fast image cache
+#import "CUImage.h"
+#import "FICImageCache.h"
+
 #define USE_iOS7_UIVCTransitioningDelegate 1
 #define USE_MY_TRANSITION 1
 
-#define kRowCount   1000
+#define kRowCount   100
 #define kImageSize  100
+#define kOldStyle 0
 
 static NSString *CustomCellIdentifier = @"CustomCellIdentifier";
 
@@ -46,32 +51,26 @@ static NSString *CustomCellIdentifier = @"CustomCellIdentifier";
     [super didReceiveMemoryWarning];
 }
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        self.dataSource = [NSMutableArray array];
-        
-        for (int i = 0; i < kRowCount; i++) {
-            UIColor *color = [UIColor colorWithHue:i/100.0f saturation:1 brightness:1 alpha:1];
-            NSString *hexColor = [UIColor hexStringFromColor:color];
-            NSString *url = [NSString stringWithFormat:@"http://placehold.it/%@x%@/%@/&text=image%@", @(kImageSize), @(kImageSize), hexColor, @(i)];
-            if (url) [self.dataSource addObject:url];
-        }
-    }
-    return self;
-}
-
 - (id)init
 {
     self = [super init];
     if (self) {
+        __block FICImageCache *sharedImageCache = [FICImageCache sharedImageCache];
+        [sharedImageCache reset];
         self.dataSource = [NSMutableArray array];
         for (int i = 0; i < kRowCount; i++) {
-            UIColor *color = [UIColor colorWithHue:i/100.0f saturation:1 brightness:1 alpha:1];
+            UIColor *color = [UIColor colorWithRed:(arc4random() % 255) / 255.0f
+                                             green:(arc4random() % 255) / 255.0f
+                                              blue:(arc4random() % 255) / 255.0f
+                                             alpha:1];
             NSString *hexColor = [UIColor hexStringFromColor:color];
             NSString *url = [NSString stringWithFormat:@"http://placehold.it/%@x%@/%@/&text=image%@", @(kImageSize), @(kImageSize), hexColor, @(i)];
-            if (url) [self.dataSource addObject:url];
+            DebugLog(@"color.url %@", url);
+            if (url) {
+                CUImage *photo = [[CUImage alloc] init];
+                photo.sourceImageURL = [NSURL URLWithString:url];
+                [self.dataSource addObject:photo];
+            }
         }
     }
     return self;
@@ -150,10 +149,12 @@ static NSString *CustomCellIdentifier = @"CustomCellIdentifier";
 {
     [self.collectionView reloadData];
     
+#if kOldStyle
     // -------------------------------------------------------------------------------
     //  Load images for all onscreen rows when scrolling is finished.
     // -------------------------------------------------------------------------------
     [self loadImagesForOnscreenRows];
+#endif
 }
 
 #pragma mark  -
@@ -171,11 +172,7 @@ static NSString *CustomCellIdentifier = @"CustomCellIdentifier";
 
 - (void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    /*
-    if ([cell isMemberOfClass:[CustomCell class]]) {
-        [(CustomCell *)cell startCanvasAnimation];
-    }
-    //*/
+    // do something
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -186,6 +183,30 @@ static NSString *CustomCellIdentifier = @"CustomCellIdentifier";
     cell.lblDescr.text = [NSString stringWithFormat:@"Descrizione: [%@%@]", @(indexPath.section), @(indexPath.row)];
     cell.lblPeriodo.text = [NSString stringWithFormat:@"Periodo di validita: [%@%@]", @(indexPath.section), @(indexPath.row)];
     
+    __block FICImageCache *sharedImageCache = [FICImageCache sharedImageCache];
+    /*
+    BOOL imageExists = [sharedImageCache asynchronouslyRetrieveImageForEntity:[self.dataSource objectAtIndex:indexPath.row]
+                                                               withFormatName:CUPhotoSquareImage32BitBGRAFormatName
+                                                              completionBlock:^(id<FICEntity> entity, NSString *formatName, UIImage *image) {
+                                                                  cell.imageView.image = image;
+                                                                  [cell.imageView.layer addAnimation:[CATransition animation] forKey:kCATransition];
+                                                              }];
+     //*/
+    BOOL imageExists = [sharedImageCache retrieveImageForEntity:[self.dataSource objectAtIndex:indexPath.row]
+                                                 withFormatName:CUPhotoSquareImage32BitBGRAFormatName
+                                                completionBlock:^(id<FICEntity> entity, NSString *formatName, UIImage *image) {
+                                                    if ([[collectionView indexPathsForVisibleItems] containsObject:indexPath]) {
+                                                        cell.imageView.image = image;
+                                                        [cell.imageView.layer addAnimation:[CATransition animation] forKey:kCATransition];
+                                                    }
+                                                }];
+    if (imageExists == NO) {
+        cell.imageView.image = [UIImage imageNamed:@"placeholder"];
+    }
+    
+    return cell;
+    
+#if kOldStyle
     //Logging
     [ImageDownloader setLogging:YES];
     
@@ -210,8 +231,10 @@ static NSString *CustomCellIdentifier = @"CustomCellIdentifier";
     //cell.imageView.image = [UIImage imageNamed:@"apple.png"];
 
     return cell;
+#endif
 }
 
+#if kOldStyle
 #pragma mark -
 #pragma mark - UIScrollViewDelegate+ImageDownloader
 
@@ -283,6 +306,7 @@ static NSString *CustomCellIdentifier = @"CustomCellIdentifier";
                                              }];
     }
 }
+#endif
 
 #pragma mark -
 #pragma mark - UICollectionViewDelegate delegate methods
