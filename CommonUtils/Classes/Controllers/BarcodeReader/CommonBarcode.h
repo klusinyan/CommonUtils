@@ -45,7 +45,7 @@ typedef NS_ENUM(NSInteger, CBErrorCode) {
 
 //preview container
 //should be set in subclasses
-@property (readwrite, nonatomic, strong) UIView *previewContainer;      //deault nil (if not overriden will throw an exception)
+@property (readwrite, nonatomic, strong) IBOutlet UIView *previewContainer; //deault nil (if not overriden will throw an exception)
 
 //without xib
 - (id)init;

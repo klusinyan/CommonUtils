@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "221C36E80BD54B8C70782F32A1FE75FAFED3799D",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "C1036E0E9A4F32158C65209B11FE787D83596530" : 0,
+    "221C36E80BD54B8C70782F32A1FE75FAFED3799D" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "C9BE0A54-4333-4FF2-B82D-C37150FC9060",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "C1036E0E9A4F32158C65209B11FE787D83596530" : "CommonUtilsAds",
+    "221C36E80BD54B8C70782F32A1FE75FAFED3799D" : "CommonUtils"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "CommonUtilsTest",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "CommonUtilsTest.xcworkspace",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/bitbucket.org\/mrklteam\/commonutils.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "221C36E80BD54B8C70782F32A1FE75FAFED3799D"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "bitbucket.org:mrklteam\/commonutilsads.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "C1036E0E9A4F32158C65209B11FE787D83596530"
+    }
+  ]
+}
