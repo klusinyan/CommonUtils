@@ -22,6 +22,10 @@
     childViewController.view.frame = container.bounds;
     [container addSubview:childViewController.view];
 
+    //***************************************************************//
+    //********************* implement if needed *********************//
+    //***************************************************************//
+    /*
     //set constrains to childView
     childViewController.view.translatesAutoresizingMaskIntoConstraints = NO;
     
@@ -38,6 +42,10 @@
                                                                       options:0
                                                                       metrics:nil
                                                                         views:bindings]];
+     //*/
+    //***************************************************************//
+    //********************* implement if needed *********************//
+    //***************************************************************//
 }
 
 - (void)removeChildViewController:(UIViewController<ChildControllerDelegate> *)childViewController
