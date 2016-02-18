@@ -11,7 +11,6 @@
 		9C01923419D2E5D000E8E9E3 /* CommonBookViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9C01923319D2E5D000E8E9E3 /* CommonBookViewController.xib */; };
 		9C06AD3A1ACBFD3E00B72F6C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9C06AD391ACBFD3E00B72F6C /* Main.storyboard */; };
 		9C1191FA1A7BE033000B6090 /* ChildViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C1191F91A7BE033000B6090 /* ChildViewController.m */; };
-		9C597DF319D1C71B000AE471 /* RDVKeyboardAvoidingScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C597DF219D1C71B000AE471 /* RDVKeyboardAvoidingScrollView.m */; };
 		9C72DF8919C719AB007E67A8 /* CommonBookContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C72DF8519C719AB007E67A8 /* CommonBookContentViewController.m */; };
 		9C72DF8A19C719AB007E67A8 /* CommonBookContentViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9C72DF8619C719AB007E67A8 /* CommonBookContentViewController.xib */; };
 		9C72DF8B19C719AB007E67A8 /* CommonBookViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C72DF8819C719AB007E67A8 /* CommonBookViewController.m */; };
@@ -77,8 +76,6 @@
 		9C1191F81A7BE033000B6090 /* ChildViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChildViewController.h; sourceTree = "<group>"; };
 		9C1191F91A7BE033000B6090 /* ChildViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChildViewController.m; sourceTree = "<group>"; };
 		9C3297AC1A9DECFE00AFFBEA /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		9C597DF119D1C71B000AE471 /* RDVKeyboardAvoidingScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDVKeyboardAvoidingScrollView.h; sourceTree = "<group>"; };
-		9C597DF219D1C71B000AE471 /* RDVKeyboardAvoidingScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDVKeyboardAvoidingScrollView.m; sourceTree = "<group>"; };
 		9C72DF8419C719AB007E67A8 /* CommonBookContentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonBookContentViewController.h; sourceTree = "<group>"; };
 		9C72DF8519C719AB007E67A8 /* CommonBookContentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonBookContentViewController.m; sourceTree = "<group>"; };
 		9C72DF8619C719AB007E67A8 /* CommonBookContentViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CommonBookContentViewController.xib; sourceTree = "<group>"; };
@@ -249,8 +246,6 @@
 				9C8A6AF719D17EE6000062F7 /* CommonKeyboardViewController.h */,
 				9C8A6AF819D17EE6000062F7 /* CommonKeyboardViewController.m */,
 				9C8A6AFA19D17F01000062F7 /* CommonKeyboardViewController.xib */,
-				9C597DF119D1C71B000AE471 /* RDVKeyboardAvoidingScrollView.h */,
-				9C597DF219D1C71B000AE471 /* RDVKeyboardAvoidingScrollView.m */,
 			);
 			path = CommonKeyboard;
 			sourceTree = "<group>";
@@ -630,7 +625,6 @@
 				9CC719F71A1B5F4A00CC0DF2 /* SFLoginButtonCell.m in Sources */,
 				9C72DF8B19C719AB007E67A8 /* CommonBookViewController.m in Sources */,
 				9CD9F7FC196EA7D400EBBD85 /* HostViewController.m in Sources */,
-				9C597DF319D1C71B000AE471 /* RDVKeyboardAvoidingScrollView.m in Sources */,
 				9CD9F7FB196EA7D400EBBD85 /* BaseViewController.m in Sources */,
 				9C83F87619CB0E0400F150B4 /* CommonPickerViewController.m in Sources */,
 				9CD9F801196EA7D400EBBD85 /* NavigationControllerController.m in Sources */,
