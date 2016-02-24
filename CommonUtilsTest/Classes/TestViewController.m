@@ -18,7 +18,7 @@
 #import "NetworkUtils.h"
 #import "UIAlertView+Blocks.h"
 
-#import "CommonBanner.h"
+//#import "CommonBanner.h"
 
 typedef NS_ENUM(NSInteger, RowType) {
     RowTypeSegementController,
@@ -40,6 +40,7 @@ typedef NS_ENUM(NSInteger, RowType) {
 
 @implementation TestViewController
 
+/*
 - (void)bannerDidShow:(ADBannerView *)bannerView
 {
     
@@ -49,6 +50,7 @@ typedef NS_ENUM(NSInteger, RowType) {
 {
     
 }
+//*/
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -106,8 +108,8 @@ typedef NS_ENUM(NSInteger, RowType) {
 {
     [super viewDidAppear:animated];
     
-    self.adsShouldDisplayAnimated = YES;
-    self.canDisplayAds = YES;
+    //self.adsShouldDisplayAnimated = YES;
+    //self.canDisplayAds = YES;
     
     /* CRASH TEST
      NSArray *a = [NSArray array];
@@ -361,7 +363,7 @@ typedef NS_ENUM(NSInteger, RowType) {
     return YES;
 }
 
-- (NSUInteger)supportedInterfaceOrientations
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations
 {
     return UIInterfaceOrientationMaskAll;
 }

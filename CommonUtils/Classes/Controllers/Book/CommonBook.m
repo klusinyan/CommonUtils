@@ -47,6 +47,11 @@
     return [self commonBookWithPageIndicatorTintColor:nil andCurrentPageIndicatorTintColor:nil];
 }
 
++ (instancetype)instance
+{
+    return [self commonBookWithPageIndicatorTintColor:nil andCurrentPageIndicatorTintColor:nil];
+}
+
 + (instancetype)commonBookWithPageIndicatorTintColor:(UIColor *)pageIndicatorTintColor
                     andCurrentPageIndicatorTintColor:(UIColor *)currentPageIndicatorTintColor
 {

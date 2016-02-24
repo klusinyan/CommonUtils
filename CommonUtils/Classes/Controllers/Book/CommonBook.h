@@ -1,5 +1,7 @@
 //  Created by Karen Lusinyan on 16/07/14.
 
+#import <UIKit/UIKit.h>
+
 typedef NS_ENUM(NSInteger, PresentationStyle) {
     PresentationStyleFullScreen,
     PresentationStyleCustom,
@@ -18,7 +20,9 @@ typedef NS_ENUM(NSInteger, PresentationStyle) {
 @property (readwrite, nonatomic, getter = isPageControlHidden) BOOL pageControlHidden;
 
 //desired initializers;
-+ (instancetype)commonBook;
++ (instancetype)commonBook __deprecated_msg("use +instance instead");
+
++ (instancetype)instance;
 
 + (instancetype)commonBookWithPageIndicatorTintColor:(UIColor *)pageIndicatorTintColor
                     andCurrentPageIndicatorTintColor:(UIColor *)currentPageIndicatorTintColor;

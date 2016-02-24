@@ -3,7 +3,7 @@
 #import "CommonBarcodeController.h"
 #import "DirectoryUtils.h"
 
-#import <CommonBanner.h>
+//#import "CommonBanner.h"
 
 //static dispatch_once_t * once_token;
 
@@ -53,7 +53,7 @@
 {
     [super viewDidLoad];
     
-    self.canDisplayAds = NO;
+    //self.canDisplayAds = NO;
 
     if (self.UIInterfaceType == UIInterfaceTypeSimple) {
         self.buttonContainer.hidden = YES;

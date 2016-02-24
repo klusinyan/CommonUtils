@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name         = 'CommonUtils'
-    s.version      = '1.5.9.5'
+    s.version      = '1.6.0'
     s.summary      = 'Common Utilities.'
     s.homepage     = 'https://bitbucket.org/mrklteam/commonutils'
     s.license      = { :type => 'MIT', :file => 'LICENSE' }
@@ -11,19 +11,22 @@ Pod::Spec.new do |s|
     s.prefix_header_file = 'CommonUtils/Classes/Lib-Prefix.pch'
 
     non_arc_files = 'CommonUtils/Classes/Categories/NSString/GTMNSString+HTML.{h,m}',
-                    'CommonUtils/Classes/Categories/NSString/NSString+HTML.{h,m}',
-                    'CommonUtils/Classes/Network/CUReachability.{h,m}'
+                    'CommonUtils/Classes/Categories/NSString/NSString+HTML.{h,m}'
 
     s.requires_arc = true
     s.source_files = 'CommonUtils/Classes/**/*.{h,m}'
     s.exclude_files = non_arc_files
+
+    #s.subspec 'PublicHeaders' do |ss|
+    #    ss.source_files = 'CommonUtils/PublicHeaders/*.h'
+    #end
 
     s.subspec 'no-arc' do |sna|
         sna.requires_arc = false
         sna.source_files = non_arc_files
     end
 
-    s.dependency 'AFNetworking', '~>2.5.0'
+    s.dependency 'AFNetworking'
     s.dependency 'Canvas'
     s.dependency 'DateTools'
     s.dependency 'FastImageCache'

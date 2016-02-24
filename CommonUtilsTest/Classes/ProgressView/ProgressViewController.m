@@ -4,7 +4,7 @@
 #import "ProgressViewController.h"
 #import "ProgressView.h"
 
-#import <CommonBanner.h>
+//#import "CommonBanner.h"
 
 @interface ProgressViewController ()
 
@@ -31,8 +31,8 @@
 {
     [super viewDidLoad];
     
-    self.adsShouldDisplayAnimated = YES;
-    self.canDisplayAds = YES;
+    //self.adsShouldDisplayAnimated = YES;
+    //self.canDisplayAds = YES;
     
     ProgressView *progressView = [ProgressView defaultHUDWithSize:CGSizeMake(100, 100)];
     [progressView setActivityIndicatorOn:YES];

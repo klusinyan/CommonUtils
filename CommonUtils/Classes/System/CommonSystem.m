@@ -229,27 +229,23 @@ NSString * const kConnectedToCellNetwork    = @"connectedToCellNetwork";
 + (void)externalIPAddressWithCompletion:(NetworkInfoCompletionHandler)completion
 {
     @try {
-        NSString *url = @"http://www.trackip.net/ip?json";
-        NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
-        
-        AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
-        [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
-            
-            NSError *error = nil;
-            NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject
-                                                                 options:NSJSONReadingMutableContainers
-                                                                   error:&error];
-            if ([dict valueForKey:@"ip"])
-                [NETWORK_INFO setObject:[dict valueForKey:@"ip"] forKey:kExternalIPAddress];
-            
-            if (completion) completion(NETWORK_INFO);
-            
-        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-            DebugLog(@"Network info error = %@",[error localizedDescription]);
-            if (completion) completion(NETWORK_INFO);
-        }];
-        
-        [operation start];
+        NSURL *URL = [NSURL URLWithString:@"http://www.trackip.net/ip?json"];
+        AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+        [manager GET:URL.absoluteString
+          parameters:nil progress:nil
+             success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+                 NSError *error = nil;
+                 NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject
+                                                                      options:NSJSONReadingMutableContainers
+                                                                        error:&error];
+                 if ([dict valueForKey:@"ip"])
+                     [NETWORK_INFO setObject:[dict valueForKey:@"ip"] forKey:kExternalIPAddress];
+                 
+                 if (completion) completion(NETWORK_INFO);
+             } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+                 DebugLog(@"Network info error = %@",[error localizedDescription]);
+                 if (completion) completion(NETWORK_INFO); 
+             }];
 
     }
     @catch (NSException *exception) {

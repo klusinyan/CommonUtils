@@ -5,7 +5,7 @@
 #import "Appirater.h"
 
 #import "CommonCrash.h"
-#import "CommonBanner.h"
+//#import "CommonBanner.h"
 
 #import "FICImageCache.h"
 #import "CUImage.h"
@@ -54,21 +54,18 @@
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
 
         // grab the url from "entity"
-        NSURL *requestURL = [entity sourceImageURLWithFormatName:formatName];
+        NSURL *URL = [entity sourceImageURLWithFormatName:formatName];
 
-        // make request with AFNetworking
-        NSURLRequest *request = [NSURLRequest requestWithURL:requestURL];
-        AFHTTPRequestOperation *requestOperation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
-        requestOperation.responseSerializer = [AFImageResponseSerializer serializer];
-        [requestOperation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
-            completionBlock(responseObject);
-            DebugLog(@"success with image %@", responseObject);
-        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-            DebugLog(@"error %@", error);
-        }];
-        
-        // add to queue
-        [self.requestQueue addOperation:requestOperation];
+        AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+        [manager GET:URL.absoluteString
+          parameters:nil
+            progress:nil
+             success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+                 completionBlock(responseObject);
+                 DebugLog(@"success with image %@", responseObject);
+             } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+                 DebugLog(@"error %@", error);
+             }];
     });
 }
 
@@ -106,6 +103,7 @@ errorDidOccurWithMessage:(NSString *)errorMessage {
 {
     application.idleTimerDisabled = YES;
     
+    /*
     [CommonBanner regitserProvider:[CommonBannerProvideriAd class]
                       withPriority:CommonBannerPriorityHigh
                      requestParams:nil];
@@ -114,15 +112,15 @@ errorDidOccurWithMessage:(NSString *)errorMessage {
                       withPriority:CommonBannerPriorityLow
                      requestParams:@{keyAdUnitID    : @"ca-app-pub-3940256099942544/2934735716",
                                      keyTestDevices : @[kDFPSimulatorID]}];
-    /*
-     [CommonBanner regitserProvider:[CommonBannerProviderCustom class]
-     withPriority:CommonBannerPriorityLow
-     requestParams:nil];
-     //*/
+
+     //[CommonBanner regitserProvider:[CommonBannerProviderCustom class]
+     //withPriority:CommonBannerPriorityLow
+     //requestParams:nil];
     
     [CommonBanner setDebugMode:NO];
     [CommonBanner startManaging];
-
+     
+     //*/
     [Appirater setAppId:@"770699556"];                  //iTunes ID
     [Appirater setDaysUntilPrompt:0];                   //days after first prompt
     [Appirater setUsesUntilPrompt:5];                   //number of times for next visualizzation

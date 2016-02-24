@@ -8,6 +8,6 @@ xcodeproj 'CommonUtilsTest.xcodeproj'
 target 'CommonUtilsTest' do
     #pod 'AFNetworkActivityLogger'
     pod 'CommonUtils', :path =>  '.'
-    pod 'CommonUtilsAds', :path =>  '../CommonUtilsAds'
+    #pod 'CommonUtilsAds', :path =>  '../CommonUtilsAds'
     pod 'Appirater'
 end

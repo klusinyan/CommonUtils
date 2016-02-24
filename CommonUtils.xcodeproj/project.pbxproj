@@ -128,6 +128,7 @@
 		9C2688361AE41CCF00C478A0 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		9C2688371AE41CD800C478A0 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		9C27EEA01AAA295A004EB522 /* CommonPageContent_AutoLayout.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CommonPageContent_AutoLayout.xib; sourceTree = "<group>"; };
+		9C2A84A91C78EA7F005D9E32 /* CommonUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CommonUtils.h; sourceTree = "<group>"; };
 		9C2AC5DE19EA96F900588538 /* CommonProgress.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = CommonProgress.bundle; sourceTree = "<group>"; };
 		9C2AC5DF19EA96F900588538 /* CommonProgress.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonProgress.h; sourceTree = "<group>"; };
 		9C2AC5E019EA96F900588538 /* CommonProgress.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonProgress.m; sourceTree = "<group>"; };
@@ -315,6 +316,15 @@
 				9C20BE5A1949EF830077C6E8 /* ZoomAnimationController.m */,
 			);
 			path = Others;
+			sourceTree = "<group>";
+		};
+		9C2A84A81C78EA7F005D9E32 /* PublicHeaders */ = {
+			isa = PBXGroup;
+			children = (
+				9C2A84A91C78EA7F005D9E32 /* CommonUtils.h */,
+			);
+			name = PublicHeaders;
+			path = CommonUtils/PublicHeaders;
 			sourceTree = "<group>";
 		};
 		9C34F7CD192CAFF9001B8D6D /* Network */ = {
@@ -530,6 +540,7 @@
 				9CD9F762196E8AAF00EBBD85 /* CommonUtils.podspec */,
 				9C2688361AE41CCF00C478A0 /* LICENSE */,
 				9C2688371AE41CD800C478A0 /* README.md */,
+				9C2A84A81C78EA7F005D9E32 /* PublicHeaders */,
 				9CB81FD718FD375300C918FB /* Classes */,
 				9C8F99EF1AA0894200F34B57 /* Resources */,
 				9CB81F0918FD2BDC00C918FB /* Products */,
@@ -754,7 +765,7 @@
 		9CB81F0018FD2BDC00C918FB /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0510;
+				LastUpgradeCheck = 0720;
 				ORGANIZATIONNAME = "Karen Lusinyan";
 			};
 			buildConfigurationList = 9CB81F0318FD2BDC00C918FB /* Build configuration list for PBXProject "CommonUtils" */;
@@ -849,6 +860,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;

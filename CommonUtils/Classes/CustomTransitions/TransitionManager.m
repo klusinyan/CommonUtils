@@ -71,7 +71,7 @@
     CGPoint center = parentView.center;
     
     //configure addEntryView
-    UIInterfaceOrientation orientation = parentController.interfaceOrientation;
+    UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
     if (UIInterfaceOrientationIsPortrait(orientation)) {
         addEntryView.frame = CGRectMake(0.0, 0.0, self.modalSize.width, self.modalSize.height);
     }
@@ -193,7 +193,7 @@
     CGPoint center = parentView.center;
     
     //configure addEntryView
-    UIInterfaceOrientation orientation = parentController.interfaceOrientation;
+    UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
     if (UIInterfaceOrientationIsPortrait(orientation)) {
         addEntryView.frame = CGRectMake(0.0, 0.0, self.modalSize.width, self.modalSize.height);
     }
