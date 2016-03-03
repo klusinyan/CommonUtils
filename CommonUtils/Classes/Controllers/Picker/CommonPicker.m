@@ -315,6 +315,35 @@ UIPopoverControllerDelegate
 
 - (void)showPopover
 {
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 90000
+    CGSize size = CGSizeMake([self getPickerWidth], [self getPickerHeight]);
+    UIViewController *vc = [self contentViewControllerWithSize:size];
+    //vc.view.backgroundColor = [UIColor greenColor];
+    vc.preferredContentSize = size;
+    vc.modalPresentationStyle = UIModalPresentationPopover;
+    [self.target presentViewController:vc
+                              animated:YES
+                            completion:^{
+                                if (self.showCompetion) self.showCompetion();
+                            }];
+    UIPopoverPresentationController *popover = vc.popoverPresentationController;
+    popover.backgroundColor = [UIColor whiteColor];
+    popover.permittedArrowDirections = UIPopoverArrowDirectionAny;
+    popover.canOverlapSourceViewRect = YES;
+    if ([self.sender isKindOfClass:[UIBarButtonItem class]]) {
+        popover.barButtonItem = self.sender;
+    }
+    else if ([self.sender isKindOfClass:[UIView class]]) {
+        UIView *sender = (UIView *)self.sender;
+        UIView *relativeSuperview = [sender superview];
+        if ([self.relativeSuperview isKindOfClass:[UIView class]]) {
+            relativeSuperview = self.relativeSuperview;
+        }
+        CGRect taregtRect = [self.target.view convertRect:sender.frame fromView:relativeSuperview];
+        popover.sourceRect = taregtRect;
+        popover.sourceView = self.sender;
+    }
+#else
     CGSize size = CGSizeMake([self getPickerWidth], [self getPickerHeight]);
     self.myPopoverController =
     [[UIPopoverController alloc] initWithContentViewController:[self contentViewControllerWithSize:size]];
@@ -347,15 +376,23 @@ UIPopoverControllerDelegate
     }
     
     if (self.showCompetion) self.showCompetion();
+#endif
 }
 
 - (void)dismissPopover
 {
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 90000
+    [self.target dismissViewControllerAnimated:YES
+                                    completion:^{
+                                        if (self.hideCompetion) self.hideCompetion();
+                                    }];
+#else
     if (self.myPopoverController.popoverVisible) {
         [self.myPopoverController dismissPopoverAnimated:YES];
         
         if (self.hideCompetion) self.hideCompetion();
     }
+#endif
 }
 
 - (void)addOverlay
