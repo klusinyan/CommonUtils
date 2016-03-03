@@ -11,14 +11,20 @@ typedef void(^ShowCompletionHandler)(void);
 typedef void(^HideCompletionHandler)(void);
 
 @interface CommonPicker ()
+
+#if __IPHONE_OS_VERSION_MAX_ALLOWED < 90000
 <
 UIPopoverControllerDelegate
 >
+#endif
+
 
 @property (readwrite, nonatomic, assign) UIViewController *target;
 @property (readwrite, nonatomic, assign) id sender;
 @property (readwrite, nonatomic, assign) UIView *relativeSuperview;
+#if __IPHONE_OS_VERSION_MAX_ALLOWED < 90000
 @property (readwrite, nonatomic, strong) UIPopoverController *myPopoverController;
+#endif
 @property (readwrite, nonatomic, strong) UIView *overlay;
 @property (readwrite, nonatomic, strong) UIView *pickerView;
 @property (readwrite, nonatomic, strong) UIView *toolbar;
@@ -53,11 +59,11 @@ UIPopoverControllerDelegate
         if (!target) {
             @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:[NSString stringWithFormat:@"%@ Please, provide valid target of kind of class UIViewController.", NSStringFromClass([self class])] userInfo:nil];
         }
-
+        
         self.target = target;
         self.sender = sender;
         self.relativeSuperview = relativeSuperview;
-
+        
         //defaults
         self.visible = NO;
         self.tapped = NO;
@@ -551,6 +557,7 @@ UIPopoverControllerDelegate
     }];
 }
 
+#if __IPHONE_OS_VERSION_MAX_ALLOWED < 90000
 #pragma mark -
 #pragma mark - UIPopoverControllerDelegate
 
@@ -572,5 +579,5 @@ UIPopoverControllerDelegate
         *rect = taregtRect;
     }
 }
-
+#endif
 @end
