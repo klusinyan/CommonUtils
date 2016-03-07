@@ -26,7 +26,6 @@ Pod::Spec.new do |s|
         sna.source_files = non_arc_files
     end
 
-    s.dependency 'AFNetworking'
     s.dependency 'Canvas'
     s.dependency 'DateTools'
     s.dependency 'FastImageCache'
