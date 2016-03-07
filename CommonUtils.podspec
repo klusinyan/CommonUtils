@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name         = 'CommonUtils'
-    s.version      = '1.9.5.6'
+    s.version      = '1.5.9.6'
     s.summary      = 'Common Utilities.'
     s.homepage     = 'https://bitbucket.org/mrklteam/commonutils'
     s.license      = { :type => 'MIT', :file => 'LICENSE' }
