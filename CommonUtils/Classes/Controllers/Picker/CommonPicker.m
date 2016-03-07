@@ -334,19 +334,14 @@ UIPopoverControllerDelegate
                             }];
     UIPopoverPresentationController *popover = vc.popoverPresentationController;
     popover.backgroundColor = [UIColor whiteColor];
-    popover.permittedArrowDirections = UIPopoverArrowDirectionAny;
     popover.canOverlapSourceViewRect = YES;
+    popover.permittedArrowDirections = UIPopoverArrowDirectionAny;
     if ([self.sender isKindOfClass:[UIBarButtonItem class]]) {
         popover.barButtonItem = self.sender;
     }
     else if ([self.sender isKindOfClass:[UIView class]]) {
         UIView *sender = (UIView *)self.sender;
-        UIView *relativeSuperview = [sender superview];
-        if ([self.relativeSuperview isKindOfClass:[UIView class]]) {
-            relativeSuperview = self.relativeSuperview;
-        }
-        CGRect taregtRect = [self.target.view convertRect:sender.frame fromView:relativeSuperview];
-        popover.sourceRect = taregtRect;
+        popover.sourceRect = CGRectMake(0, 0, sender.frame.size.width, sender.frame.size.height);
         popover.sourceView = self.sender;
     }
 #else
