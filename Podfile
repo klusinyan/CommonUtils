@@ -10,5 +10,5 @@ target 'CommonUtilsTest' do
     pod 'CommonUtils', :path =>  '.'
     #pod 'CommonUtilsAds', :path =>  '../CommonUtilsAds'
     pod 'Appirater'
-    pod 'AFNetworking', '~>1.x'
+    #pod 'AFNetworking', '~>1.x'
 end

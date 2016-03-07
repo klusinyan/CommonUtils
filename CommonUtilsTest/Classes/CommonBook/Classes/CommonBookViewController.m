@@ -76,7 +76,7 @@
     }
     //*/
     
-    for (int i = 0; i < arc4random_uniform(1)+1; i++) {
+    for (int i = 0; i < 10; i++) {
         [self.items addObject:[self fabriquePageContent]];
     }
     
