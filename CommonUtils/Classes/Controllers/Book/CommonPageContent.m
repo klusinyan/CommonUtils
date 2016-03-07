@@ -56,7 +56,8 @@
     self.scrollView.delegate = nil;
     
     [self.spinner hideWithCompletion:^{
-        [self.imageView cancelImageDownloadTask];
+        // TODO::
+        //[self.imageView cancelImageDownloadTask];
     }];
 }
 
@@ -279,7 +280,8 @@
     [super viewWillDisappear:animated];
     
     [self.spinner hideWithCompletion:^{
-        [self.imageView cancelImageDownloadTask];
+        // TODO::
+        //[self.imageView cancelImageDownloadTask];
     }];
 
     [self.scrollView setZoomScale:self.scrollView.minimumZoomScale animated:YES];

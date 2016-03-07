@@ -57,9 +57,12 @@ static BOOL IDLogging = NO;
 
 + (void)cancelAllDownloads
 {
+    // TODO::
+    /*
     for (UIImageView *downloadingImage in [self downloadingImages]) {
         [downloadingImage cancelImageDownloadTask];
     }
+     //*/
 }
 
 + (UIImage *)imageWithUrl:(NSString *)url

@@ -228,12 +228,14 @@ NSString * const kConnectedToCellNetwork    = @"connectedToCellNetwork";
 // Get the External IP Address
 + (void)externalIPAddressWithCompletion:(NetworkInfoCompletionHandler)completion
 {
+    // TODO::
+    /*
     @try {
         NSURL *URL = [NSURL URLWithString:@"http://www.trackip.net/ip?json"];
         AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
         [manager GET:URL.absoluteString
-          parameters:nil progress:nil
-             success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+          parameters:nil
+             success:^(NSURLSessionDataTask *task, id responseObject) {
                  NSError *error = nil;
                  NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject
                                                                       options:NSJSONReadingMutableContainers
@@ -242,11 +244,10 @@ NSString * const kConnectedToCellNetwork    = @"connectedToCellNetwork";
                      [NETWORK_INFO setObject:[dict valueForKey:@"ip"] forKey:kExternalIPAddress];
                  
                  if (completion) completion(NETWORK_INFO);
-             } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+             } failure:^(NSURLSessionDataTask *task, NSError *error) {
                  DebugLog(@"Network info error = %@",[error localizedDescription]);
-                 if (completion) completion(NETWORK_INFO); 
+                 if (completion) completion(NETWORK_INFO);
              }];
-
     }
     @catch (NSException *exception) {
         DebugLog(@"exeption network external ip address %@", exception);
@@ -255,6 +256,7 @@ NSString * const kConnectedToCellNetwork    = @"connectedToCellNetwork";
     @finally {
         //do something
     }
+     //*/
 }
 
 // Get Cell IP Address
