@@ -52,8 +52,6 @@
     withFormatName:(NSString *)formatName
    completionBlock:(FICImageRequestCompletionBlock)completionBlock {
     
-    //TODO::
-    /*
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
 
         // grab the url from "entity"
@@ -70,7 +68,6 @@
                  DebugLog(@"error %@", error);
              }];
     });
-     //*/
 }
 
 // read from disk

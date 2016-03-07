@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name         = 'CommonUtils'
-    s.version      = '1.5.9.7'
+    s.version      = '1.6.0-beta1'
     s.summary      = 'Common Utilities.'
     s.homepage     = 'https://bitbucket.org/mrklteam/commonutils'
     s.license      = { :type => 'MIT', :file => 'LICENSE' }
@@ -26,6 +26,7 @@ Pod::Spec.new do |s|
         sna.source_files = non_arc_files
     end
 
+    s.dependency 'AFNetworking'
     s.dependency 'Canvas'
     s.dependency 'DateTools'
     s.dependency 'FastImageCache'
