@@ -1,18 +1,32 @@
 //  Created by Karen Lusinyan on 14/08/14.
 
 #import "UIViewController+ChildrenHandler.h"
+#import <objc/runtime.h>
 
 @implementation UIViewController (ChildrenHandler)
 @dynamic controllerTransitionHandler;
+@dynamic transitionStatus;
+
+- (ControllerTransitionStatus)transitionStatus
+{
+    return [objc_getAssociatedObject(self, @selector(transitionStatus)) integerValue];
+}
+
+- (void)setTransitionStatus:(ControllerTransitionStatus)transitionStatus
+{
+    objc_setAssociatedObject(self, @selector(transitionStatus), @(transitionStatus), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
 
 - (void)addChildViewController:(UIViewController<ChildControllerDelegate> *)childViewController
         toParentViewController:(UIViewController *)parentViewController
                      container:(UIView *)container
                     completion:(ControllerTransintionHandler)completion
 {
-    childViewController.controllerTransitionHandler = ^(UIViewController *controller, ControllerTransitionStatus transitionStatus) {
-        if (completion) completion(controller, transitionStatus);
-    };
+    if ([self respondsToSelector:@selector(controllerTransitionHandler)]) {
+        childViewController.controllerTransitionHandler = ^(UIViewController *controller, ControllerTransitionStatus transitionStatus) {
+            if (completion) completion(controller, transitionStatus);
+        };
+    }
     
     //if container view is nil -> assign it self.view as a default value
     if (!container) container = self.view;
@@ -21,6 +35,8 @@
     [childViewController didMoveToParentViewController:parentViewController];
     childViewController.view.frame = container.bounds;
     [container addSubview:childViewController.view];
+    
+    if (completion) completion(childViewController, self.transitionStatus);
 
     //***************************************************************//
     //********************* implement if needed *********************//
@@ -52,9 +68,11 @@
          fromParentViewController:(UIViewController *)parentViewController
                        completion:(ControllerTransintionHandler)completion
 {
-    childViewController.controllerTransitionHandler = ^(UIViewController *controller, ControllerTransitionStatus transitionStatus) {
-        if (completion) completion(controller, transitionStatus);
-    };
+    if ([self respondsToSelector:@selector(controllerTransitionHandler)]) {
+        childViewController.controllerTransitionHandler = ^(UIViewController *controller, ControllerTransitionStatus transitionStatus) {
+            if (completion) completion(controller, transitionStatus);
+        };
+    }
 
     [childViewController willMoveToParentViewController:parentViewController];
     [childViewController.view removeFromSuperview];
@@ -64,9 +82,11 @@
 - (void)dismissChildrenViewControllerWithCompletion:(ControllerTransintionHandler)completion
 {
     for (UIViewController *childViewController in self.childViewControllers) {
-        childViewController.controllerTransitionHandler = ^(UIViewController *controller, ControllerTransitionStatus transitionStatus) {
-            if (completion) completion(controller, transitionStatus);
-        };
+        if ([self respondsToSelector:@selector(controllerTransitionHandler)]) {
+            childViewController.controllerTransitionHandler = ^(UIViewController *controller, ControllerTransitionStatus transitionStatus) {
+                if (completion) completion(controller, transitionStatus);
+            };
+        }
         
         [childViewController willMoveToParentViewController:nil];
         [childViewController.view removeFromSuperview];
@@ -76,6 +96,8 @@
 
 - (void)willMoveToParentViewController:(UIViewController *)parent
 {
+    self.transitionStatus = ControllerTransitionStatusWillMoveToParent;
+    
     if ([self respondsToSelector:@selector(controllerTransitionHandler)]) {
         if (self.controllerTransitionHandler) self.controllerTransitionHandler(self, ControllerTransitionStatusWillMoveToParent);
     }
@@ -83,6 +105,8 @@
 
 - (void)didMoveToParentViewController:(UIViewController *)parent
 {
+    self.transitionStatus = ControllerTransitionStatusDidMoveToParent;
+
     if ([self respondsToSelector:@selector(controllerTransitionHandler)]) {
         if (self.controllerTransitionHandler) self.controllerTransitionHandler(self, ControllerTransitionStatusDidMoveToParent);
     }

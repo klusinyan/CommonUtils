@@ -23,7 +23,6 @@
 @protocol CommonKeyboardDelegate <NSObject>
 
 @optional
-@optional
 - (void)keyboard:(CommonKeyboard *)keyboard willShowWithResponder:(id)responder;
 
 - (void)keyboard:(CommonKeyboard *)keyboard didShowWithResponder:(id)responder;

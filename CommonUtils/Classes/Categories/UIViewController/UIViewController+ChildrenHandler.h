@@ -23,12 +23,15 @@ static inline NSString * controllerTransitionStatus(ControllerTransitionStatus t
 
 typedef void(^ControllerTransintionHandler)(UIViewController *controller, ControllerTransitionStatus transitionStatus);
 
+//  __deprecated_msg("deprecated in 1.6.0")
 @required
 @property (readwrite, nonatomic, copy) ControllerTransintionHandler controllerTransitionHandler;
 
 @end
 
 @interface UIViewController (ChildrenHandler) <ChildControllerDelegate>
+
+@property (nonatomic) ControllerTransitionStatus transitionStatus;
 
 //add child view controller to parent
 - (void)addChildViewController:(UIViewController<ChildControllerDelegate> *)childViewController
