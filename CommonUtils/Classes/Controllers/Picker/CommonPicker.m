@@ -11,14 +11,20 @@ typedef void(^ShowCompletionHandler)(void);
 typedef void(^HideCompletionHandler)(void);
 
 @interface CommonPicker ()
+
+#if __IPHONE_OS_VERSION_MAX_ALLOWED < 90000
 <
 UIPopoverControllerDelegate
 >
+#endif
+
 
 @property (readwrite, nonatomic, assign) UIViewController *target;
 @property (readwrite, nonatomic, assign) id sender;
 @property (readwrite, nonatomic, assign) UIView *relativeSuperview;
+#if __IPHONE_OS_VERSION_MAX_ALLOWED < 90000
 @property (readwrite, nonatomic, strong) UIPopoverController *myPopoverController;
+#endif
 @property (readwrite, nonatomic, strong) UIView *overlay;
 @property (readwrite, nonatomic, strong) UIView *pickerView;
 @property (readwrite, nonatomic, strong) UIView *toolbar;
@@ -53,11 +59,11 @@ UIPopoverControllerDelegate
         if (!target) {
             @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:[NSString stringWithFormat:@"%@ Please, provide valid target of kind of class UIViewController.", NSStringFromClass([self class])] userInfo:nil];
         }
-
+        
         self.target = target;
         self.sender = sender;
         self.relativeSuperview = relativeSuperview;
-
+        
         //defaults
         self.visible = NO;
         self.tapped = NO;
@@ -315,6 +321,30 @@ UIPopoverControllerDelegate
 
 - (void)showPopover
 {
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 90000
+    CGSize size = CGSizeMake([self getPickerWidth], [self getPickerHeight]);
+    UIViewController *vc = [self contentViewControllerWithSize:size];
+    //vc.view.backgroundColor = [UIColor greenColor];
+    vc.preferredContentSize = size;
+    vc.modalPresentationStyle = UIModalPresentationPopover;
+    [self.target presentViewController:vc
+                              animated:YES
+                            completion:^{
+                                if (self.showCompetion) self.showCompetion();
+                            }];
+    UIPopoverPresentationController *popover = vc.popoverPresentationController;
+    popover.backgroundColor = [UIColor whiteColor];
+    popover.canOverlapSourceViewRect = YES;
+    popover.permittedArrowDirections = UIPopoverArrowDirectionAny;
+    if ([self.sender isKindOfClass:[UIBarButtonItem class]]) {
+        popover.barButtonItem = self.sender;
+    }
+    else if ([self.sender isKindOfClass:[UIView class]]) {
+        UIView *sender = (UIView *)self.sender;
+        popover.sourceRect = CGRectMake(0, 0, sender.frame.size.width, sender.frame.size.height);
+        popover.sourceView = self.sender;
+    }
+#else
     CGSize size = CGSizeMake([self getPickerWidth], [self getPickerHeight]);
     self.myPopoverController =
     [[UIPopoverController alloc] initWithContentViewController:[self contentViewControllerWithSize:size]];
@@ -347,15 +377,23 @@ UIPopoverControllerDelegate
     }
     
     if (self.showCompetion) self.showCompetion();
+#endif
 }
 
 - (void)dismissPopover
 {
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 90000
+    [self.target dismissViewControllerAnimated:YES
+                                    completion:^{
+                                        if (self.hideCompetion) self.hideCompetion();
+                                    }];
+#else
     if (self.myPopoverController.popoverVisible) {
         [self.myPopoverController dismissPopoverAnimated:YES];
         
         if (self.hideCompetion) self.hideCompetion();
     }
+#endif
 }
 
 - (void)addOverlay
@@ -514,6 +552,7 @@ UIPopoverControllerDelegate
     }];
 }
 
+#if __IPHONE_OS_VERSION_MAX_ALLOWED < 90000
 #pragma mark -
 #pragma mark - UIPopoverControllerDelegate
 
@@ -535,5 +574,5 @@ UIPopoverControllerDelegate
         *rect = taregtRect;
     }
 }
-
+#endif
 @end

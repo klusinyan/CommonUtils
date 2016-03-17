@@ -52,17 +52,14 @@
                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                     <textInputTraits key="textInputTraits"/>
                                 </textField>
-                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UmA-6G-y8h">
-                                    <rect key="frame" x="0.0" y="0.0" width="46" height="30"/>
-                                    <state key="normal" title="Button">
-                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                    </state>
-                                    <connections>
-                                        <action selector="buttonTest:" destination="-1" eventType="touchUpInside" id="1ad-3C-M9u"/>
-                                    </connections>
-                                </button>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label ajkdjals daksjdlaskjda skdjalskdja slkdajslkdja sd" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="s2Z-G9-JUl">
                                     <rect key="frame" x="25" y="384" width="413" height="20"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eTe-Ue-k7j">
+                                    <rect key="frame" x="136" y="97" width="42" height="21"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                     <nil key="highlightedColor"/>
@@ -70,6 +67,7 @@
                             </subviews>
                             <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                             <constraints>
+                                <constraint firstItem="eTe-Ue-k7j" firstAttribute="top" secondItem="551-Po-ipP" secondAttribute="top" constant="97" id="0rN-Bl-gAC"/>
                                 <constraint firstItem="beL-7h-Gfb" firstAttribute="top" secondItem="MwA-G0-dbl" secondAttribute="bottom" constant="101" id="1Ue-ps-Lqz"/>
                                 <constraint firstItem="R6i-eR-kwE" firstAttribute="leading" secondItem="beL-7h-Gfb" secondAttribute="trailing" constant="42" id="1sS-M2-DZv"/>
                                 <constraint firstItem="R6i-eR-kwE" firstAttribute="centerY" secondItem="beL-7h-Gfb" secondAttribute="centerY" id="2B9-S9-AQb"/>
@@ -77,6 +75,7 @@
                                 <constraint firstItem="f9R-qU-HJb" firstAttribute="top" secondItem="551-Po-ipP" secondAttribute="top" constant="191" id="E1S-Y9-LBo"/>
                                 <constraint firstAttribute="bottom" secondItem="s2Z-G9-JUl" secondAttribute="bottom" constant="8" id="Gfu-jR-iBC"/>
                                 <constraint firstItem="f9R-qU-HJb" firstAttribute="leading" secondItem="MwA-G0-dbl" secondAttribute="trailing" constant="8" id="PiV-yZ-doz"/>
+                                <constraint firstItem="eTe-Ue-k7j" firstAttribute="centerX" secondItem="551-Po-ipP" secondAttribute="centerX" id="QNO-9c-BdS"/>
                                 <constraint firstItem="MwA-G0-dbl" firstAttribute="leading" secondItem="551-Po-ipP" secondAttribute="leading" constant="25" id="RNi-5i-H9n"/>
                                 <constraint firstAttribute="bottom" secondItem="beL-7h-Gfb" secondAttribute="bottom" constant="74" id="khD-i4-3aN"/>
                                 <constraint firstItem="s2Z-G9-JUl" firstAttribute="leading" secondItem="beL-7h-Gfb" secondAttribute="leading" id="l0K-z0-4X3"/>
@@ -106,7 +105,7 @@
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <point key="canvasLocation" x="266.5" y="287"/>
+            <point key="canvasLocation" x="-149.5" y="228"/>
         </view>
     </objects>
 </document>

@@ -42,6 +42,7 @@
 		9CC719FD1A1B5FA100CC0DF2 /* SFLoginCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CC719FC1A1B5FA100CC0DF2 /* SFLoginCell.m */; };
 		9CC831D419E2805B005A10A8 /* CommonProgressViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CC831D219E2805B005A10A8 /* CommonProgressViewController.m */; };
 		9CC831D519E2805B005A10A8 /* CommonProgressViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9CC831D319E2805B005A10A8 /* CommonProgressViewController.xib */; };
+		9CC85A8F1C8F3A3D00D70246 /* TEST.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9CC85A8E1C8F3A3D00D70246 /* TEST.xib */; };
 		9CCDD9321A40462A0003EAF3 /* CommonBarcodeController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CCDD9301A40462A0003EAF3 /* CommonBarcodeController.m */; };
 		9CCDD9331A40462A0003EAF3 /* CommonBarcodeController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9CCDD9311A40462A0003EAF3 /* CommonBarcodeController.xib */; };
 		9CD9F79B196EA78500EBBD85 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9CD9F79A196EA78500EBBD85 /* Foundation.framework */; };
@@ -117,6 +118,7 @@
 		9CC831D119E2805B005A10A8 /* CommonProgressViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonProgressViewController.h; sourceTree = "<group>"; };
 		9CC831D219E2805B005A10A8 /* CommonProgressViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonProgressViewController.m; sourceTree = "<group>"; };
 		9CC831D319E2805B005A10A8 /* CommonProgressViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CommonProgressViewController.xib; sourceTree = "<group>"; };
+		9CC85A8E1C8F3A3D00D70246 /* TEST.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TEST.xib; sourceTree = "<group>"; };
 		9CCDD92F1A40462A0003EAF3 /* CommonBarcodeController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonBarcodeController.h; sourceTree = "<group>"; };
 		9CCDD9301A40462A0003EAF3 /* CommonBarcodeController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonBarcodeController.m; sourceTree = "<group>"; };
 		9CCDD9311A40462A0003EAF3 /* CommonBarcodeController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CommonBarcodeController.xib; sourceTree = "<group>"; };
@@ -246,6 +248,7 @@
 				9C8A6AF719D17EE6000062F7 /* CommonKeyboardViewController.h */,
 				9C8A6AF819D17EE6000062F7 /* CommonKeyboardViewController.m */,
 				9C8A6AFA19D17F01000062F7 /* CommonKeyboardViewController.xib */,
+				9CC85A8E1C8F3A3D00D70246 /* TEST.xib */,
 			);
 			path = CommonKeyboard;
 			sourceTree = "<group>";
@@ -542,6 +545,7 @@
 				9C72DF8A19C719AB007E67A8 /* CommonBookContentViewController.xib in Resources */,
 				9C72DF9E19C71A90007E67A8 /* iPad_2.png in Resources */,
 				9C72DFA019C71A90007E67A8 /* iPad_4.png in Resources */,
+				9CC85A8F1C8F3A3D00D70246 /* TEST.xib in Resources */,
 				9C72DFA619C71A90007E67A8 /* iPhone_3.png in Resources */,
 				9C06AD3A1ACBFD3E00B72F6C /* Main.storyboard in Resources */,
 				9C72DF9F19C71A90007E67A8 /* iPad_3.png in Resources */,
