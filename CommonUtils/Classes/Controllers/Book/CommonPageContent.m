@@ -89,7 +89,7 @@
     return self;
 }
 
-+ (instancetype)pageContent
++ (instancetype)instance
 {
     return [[self alloc] initWithNibName:NSStringFromClass([self class]) bundle:[DirectoryUtils bundleWithName:kCommonBundleName]];
 }

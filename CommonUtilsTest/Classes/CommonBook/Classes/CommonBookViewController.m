@@ -60,7 +60,9 @@
 
 - (CommonPageContent *)fabriquePageContent
 {
-    return [CommonPageContent pageContent];
+    CommonPageContent *content = [CommonPageContent instance];
+    DebugLog(@"content %@", content);
+    return content;
 }
 
 - (void)viewDidLoad

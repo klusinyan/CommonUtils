@@ -42,7 +42,7 @@ typedef NS_ENUM(NSInteger, CommonPageAnimationRule) {
 
 @property (nonatomic) id<CommonPageContentDelegate> delegate;
 
-+ (instancetype)pageContent;
++ (instancetype)instance;
 
 @end
 
