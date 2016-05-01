@@ -51,7 +51,7 @@
 - (CGFloat)heightForPicker:(CommonPicker *)picker;
 
 //implement this method to provide the custom toolbar
-- (id)toolbarForPicker:(CommonPicker *)picker;
+- (id)toolbar:(UIToolbar *)toolbar forPicker:(CommonPicker *)picker;
 
 //this value becomes mandatory when custom toolbar is proveded by at "toolbarForPicker:"
 - (CGFloat)toolbarHeightForPicker:(CommonPicker *)picker;

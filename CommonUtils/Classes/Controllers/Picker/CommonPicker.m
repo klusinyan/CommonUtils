@@ -241,23 +241,30 @@ UIPopoverControllerDelegate
     }
     
     CGFloat toolbarHeight = 0.0f;
-    if (![self.dataSource respondsToSelector:@selector(toolbarForPicker:)] ||
-        ([self.dataSource respondsToSelector:@selector(toolbarForPicker:)] && [self.dataSource toolbarForPicker:self] == nil)) {
+    UIToolbar *defaultToolbar = [self defaultToolbar];
+    if (![self.dataSource respondsToSelector:@selector(toolbar:forPicker:)] ||
+        ([self.dataSource respondsToSelector:@selector(toolbar:forPicker:)] && [self.dataSource toolbar:defaultToolbar forPicker:self] == nil)) {
         if (!self.isToolbarHidden) {
-            self.toolbar = [self defaultToolbar];
+            self.toolbar = defaultToolbar;
             toolbarHeight = 44.0f;
         }
     }
     else {
-        self.toolbar = [self.dataSource toolbarForPicker:self];
-        self.toolbar.translatesAutoresizingMaskIntoConstraints = NO;
-        if (!self.isToolbarHidden) {
-            if ([self.dataSource respondsToSelector:@selector(toolbarHeightForPicker:)]) {
-                toolbarHeight = [self.dataSource toolbarHeightForPicker:self];
-                self.customToolbarHeight = toolbarHeight;
-            }
-            else {
-                @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:[NSString stringWithFormat:@"%@ Failed to call pickerContent:, dataSource should provide a valid pickerToolbarHeight.", NSStringFromClass([self class])] userInfo:nil];
+        if (defaultToolbar == [self.dataSource toolbar:defaultToolbar forPicker:self]) {
+            self.toolbar = defaultToolbar;
+            toolbarHeight = 44.0f;
+        }
+        else {
+            self.toolbar = [self.dataSource toolbar:defaultToolbar forPicker:self];
+            self.toolbar.translatesAutoresizingMaskIntoConstraints = NO;
+            if (!self.isToolbarHidden) {
+                if ([self.dataSource respondsToSelector:@selector(toolbarHeightForPicker:)]) {
+                    toolbarHeight = [self.dataSource toolbarHeightForPicker:self];
+                    self.customToolbarHeight = toolbarHeight;
+                }
+                else {
+                    @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:[NSString stringWithFormat:@"%@ Failed to call pickerContent:, dataSource should provide a valid pickerToolbarHeight.", NSStringFromClass([self class])] userInfo:nil];
+                }
             }
         }
     }
