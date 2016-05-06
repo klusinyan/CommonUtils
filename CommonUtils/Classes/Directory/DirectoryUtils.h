@@ -15,6 +15,11 @@ static inline NSString * MD5Hash(NSString *originalString)
 			];
 }
 
+typedef NS_ENUM(NSInteger, ImageCachingPolicy) {
+    ImageCachingPolicyNone,
+    ImageCachingPolicyEnabled,
+};
+
 typedef NS_ENUM(NSInteger, UIImageRepresentation) {
     UIImageRepresentationPNG,
     UIImageRepresentationJPEG,
@@ -33,10 +38,18 @@ typedef NS_ENUM(NSInteger, UIImageRepresentation) {
 + (void)createDirectoryIfNotExistsWithPath:(NSString *)path;
 
 + (NSString *)imagePathWithName:(NSString *)imageName
-                     moduleName:(NSString *)moduleName;
+                     moduleName:(NSString *)moduleName
+             imageCachingPolicy:(ImageCachingPolicy)imageCachingPolicy;
 
 + (UIImage *)imageExistsWithName:(NSString *)imageName
-                      moduleName:(NSString *)moduleName;
+                      moduleName:(NSString *)moduleName
+              imageCachingPolicy:(ImageCachingPolicy)imageCachingPolicy;
+
++ (NSString *)imagePathWithName:(NSString *)imageName
+                     moduleName:(NSString *)moduleName __deprecated_msg("use: imagePathWithName:moduleName:imageCachingPolicy:");
+
++ (UIImage *)imageExistsWithName:(NSString *)imageName
+                      moduleName:(NSString *)moduleName __deprecated_msg("use: imageExistsWithName:moduleName:imageCachingPolicy:");
 
 + (UIImage *)saveThumbnailImage:(UIImage *)image
                        withSize:(NSUInteger)size

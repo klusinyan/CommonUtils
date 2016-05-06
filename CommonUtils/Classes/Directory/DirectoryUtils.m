@@ -46,6 +46,29 @@
 }
 
 //only here MD5Hash(imageName) applied
+
++ (NSString *)imagePathWithName:(NSString *)imageName
+                     moduleName:(NSString *)moduleName
+             imageCachingPolicy:(ImageCachingPolicy)imageCachingPolicy
+{
+    if (!imageName) return nil;
+    if (imageCachingPolicy == ImageCachingPolicyNone) {
+        return [[self moduleDocumentDirectoryPath:moduleName] stringByAppendingPathComponent:MD5Hash(imageName)];
+    }
+    else if (imageCachingPolicy == ImageCachingPolicyEnabled) {
+        return [[self moduleCacheDirectoryPath:moduleName] stringByAppendingPathComponent:MD5Hash(imageName)];
+    }
+    return nil;
+}
+
++ (UIImage *)imageExistsWithName:(NSString *)imageName
+                      moduleName:(NSString *)moduleName
+              imageCachingPolicy:(ImageCachingPolicy)imageCachingPolicy
+{
+    if (!imageName) return nil;
+    return [UIImage imageWithContentsOfFile:[self imagePathWithName:imageName moduleName:moduleName imageCachingPolicy:imageCachingPolicy]];
+}
+
 + (NSString *)imagePathWithName:(NSString *)imageName
                      moduleName:(NSString *)moduleName
 {

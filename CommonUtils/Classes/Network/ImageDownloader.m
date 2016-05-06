@@ -103,7 +103,7 @@ static BOOL IDLogging = NO;
     }
     
     //if image in file system then put it in cache and return it
-    image = [DirectoryUtils imageExistsWithName:url moduleName:moduleName];
+    image = [DirectoryUtils imageExistsWithName:url moduleName:moduleName imageCachingPolicy:ImageCachingPolicyEnabled];
     if (image) {
         if ([self logging]) DebugLog(@"Taking image [%@] from fileSystem", url);
         [[self sharedImageCache] setObject:image forKey:MD5Hash(url)];
@@ -120,7 +120,7 @@ static BOOL IDLogging = NO;
                                   success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
                                       if (image) {
                                           UIImage *savedImage = nil;
-                                          NSString *filePath = [DirectoryUtils imagePathWithName:url moduleName:moduleName];
+                                          NSString *filePath = [DirectoryUtils imagePathWithName:url moduleName:moduleName imageCachingPolicy:ImageCachingPolicyEnabled];
                                           if ([self logging]) DebugLog(@"filePath %@", filePath);
                                           if (thubnailSize != 0) {
                                               savedImage = [DirectoryUtils saveThumbnailImage:image
@@ -178,7 +178,7 @@ static BOOL IDLogging = NO;
     }
     
     //if image in file system then put it in cache and return it
-    image = [DirectoryUtils imageExistsWithName:url moduleName:moduleName];
+    image = [DirectoryUtils imageExistsWithName:url moduleName:moduleName imageCachingPolicy:ImageCachingPolicyEnabled];
     if (image) {
         if ([self logging]) DebugLog(@"Taking image [%@] from fileSystem", url);
         [[self sharedImageCache] setObject:image forKey:MD5Hash(url)];
