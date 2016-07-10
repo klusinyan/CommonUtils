@@ -119,7 +119,7 @@
     [imageData writeToFile:filePath atomically:YES];
 }
 
-+ (BOOL)deleteImageAtPath:(NSString *)filePath
++ (BOOL)deleteFileAtPath:(NSString *)filePath
                     error:(NSError *__autoreleasing *)error
 {
     if ([[NSFileManager defaultManager] fileExistsAtPath:filePath]) {

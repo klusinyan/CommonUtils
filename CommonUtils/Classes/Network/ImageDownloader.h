@@ -37,6 +37,17 @@
 + (UIImage *)offlineImageWithUrl:(NSString *)url
                       moduleName:(NSString *)moduleName
                      placeholder:(UIImage *)placeholder;
+
++ (void)downloadImageWithUrl:(NSString *)url
+                  completion:(void (^)(UIImage *image))completion;
+
++ (void)downloadImageWithUrl:(NSString *)url
+                  moduleName:(NSString *)moduleName
+         imageRepresentation:(UIImageRepresentation)imageRepresentation
+               thumbnailSize:(CGFloat)thubnailSize
+                  completion:(void (^)(UIImage *image))completion;
+
++ (void)asyncDownloadImages:(NSArray *)images; // images = array[String]
 //////////////////////////////////////////////////////
 
 @end

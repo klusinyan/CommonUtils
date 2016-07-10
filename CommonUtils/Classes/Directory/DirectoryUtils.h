@@ -63,8 +63,8 @@ typedef NS_ENUM(NSInteger, UIImageRepresentation) {
 + (void)saveImageData:(NSData *)imageData
            toFilePath:(NSString *)filePath;
 
-+ (BOOL)deleteImageAtPath:(NSString *)filePath
-                    error:(NSError *__autoreleasing *)error;
++ (BOOL)deleteFileAtPath:(NSString *)filePath
+                   error:(NSError *__autoreleasing *)error;
 
 + (UIImage *)placeholderImage;
 
