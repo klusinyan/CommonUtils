@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name         = 'CommonUtils'
-    s.version      = '1.6.0-beta5'
+    s.version      = '1.6.0-beta6'
     s.summary      = 'Common Utilities.'
     s.homepage     = 'https://bitbucket.org/mrklteam/commonutils'
     s.license      = { :type => 'MIT', :file => 'LICENSE' }
@@ -17,7 +17,7 @@ Pod::Spec.new do |s|
     s.exclude_files = non_arc_files
 
     s.subspec 'PublicHeaders' do |ss|
-        ss.source_files = 'CommonUtils/**/*.h'
+        ss.source_files = 'CommonUtils/PublicHeaders/CommonUtils.h'
     end
 
     s.subspec 'no-arc' do |sna|
