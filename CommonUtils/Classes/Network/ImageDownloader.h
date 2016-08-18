@@ -17,6 +17,32 @@
 
 + (void)cancelAllDownloads;
 
++ (void)cancelImageDownload:(UIImageView *)imageView;
+
+///////////////////////////////////////////////////////
+///////////////  simple image downloader //////////////
+///////////////////////////////////////////////////////
++ (UIImage *)imageWithUrl:(NSString *)url
+               moduleName:(NSString *)moduleName
+            downloadImage:(UIImageView *)imageView
+      imageRepresentation:(UIImageRepresentation)imageRepresentation
+              placeholder:(UIImage *)placeholder
+               completion:(void (^)(UIImage *image))completion;
+
+///////////////////////////////////////////////////////
+// simple image downloader with given thumbnail size //
+///////////////////////////////////////////////////////
++ (UIImage *)imageWithUrl:(NSString *)url
+               moduleName:(NSString *)moduleName
+            downloadImage:(UIImageView *)imageView
+      imageRepresentation:(UIImageRepresentation)imageRepresentation
+            thumbnailSize:(CGFloat)thubnailSize
+              placeholder:(UIImage *)placeholder
+               completion:(void (^)(UIImage *image))completion;
+
+///////////////////////////////////////////////////////
+//////// image downloader with given indexPath ////////
+///////////////////////////////////////////////////////
 + (UIImage *)imageWithUrl:(NSString *)url
                moduleName:(NSString *)moduleName
             downloadImage:(UIImageView *)imageView
@@ -25,6 +51,9 @@
               placeholder:(UIImage *)placeholder
                completion:(void (^)(UIImage *image, NSIndexPath *indexPath))completion;
 
+//////////////////////////////////////////////////////////////
+// image downloader with given indexPath and thumbnail size //
+//////////////////////////////////////////////////////////////
 + (UIImage *)imageWithUrl:(NSString *)url
                moduleName:(NSString *)moduleName
             downloadImage:(UIImageView *)imageView
@@ -34,20 +63,24 @@
               placeholder:(UIImage *)placeholder
                completion:(void (^)(UIImage *image, NSIndexPath *indexPath))completion;
 
++ (UIImage *)downloadImageWithUrl:(NSString *)url
+                       moduleName:(NSString *)moduleName
+              imageRepresentation:(UIImageRepresentation)imageRepresentation
+                    thumbnailSize:(CGFloat)thubnailSize
+                      placeholder:(UIImage *)placeholder
+                       completion:(void (^)(UIImage *image))completion;
+
++ (void)downloadImageWithUrl:(NSString *)url
+                  completion:(void (^)(UIImage *image))completion;
+
++ (void)startDownloads:(NSArray *)images
+            moduleName:(NSString *)moduleName; // images = array[String]
+
++ (void)stopDownloads;
+
 + (UIImage *)offlineImageWithUrl:(NSString *)url
                       moduleName:(NSString *)moduleName
                      placeholder:(UIImage *)placeholder;
-
-+ (void)downloadImageWithUrl:(NSString *)url
-                  completion:(void (^)(UIImage *image))completion;
-
-+ (void)downloadImageWithUrl:(NSString *)url
-                  moduleName:(NSString *)moduleName
-         imageRepresentation:(UIImageRepresentation)imageRepresentation
-               thumbnailSize:(CGFloat)thubnailSize
-                  completion:(void (^)(UIImage *image))completion;
-
-+ (void)asyncDownloadImages:(NSArray *)images; // images = array[String]
 //////////////////////////////////////////////////////
 
 @end

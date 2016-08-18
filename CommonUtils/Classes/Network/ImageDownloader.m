@@ -57,6 +57,27 @@ static BOOL IDLogging = NO;
     return downloadingImages;
 }
 
++ (NSOperationQueue *)downloadQueue
+{
+    static NSOperationQueue *downloadQueue = nil;
+    static dispatch_once_t oncePredicate;
+    dispatch_once(&oncePredicate, ^{
+        downloadQueue = [NSOperationQueue new];
+        downloadQueue.maxConcurrentOperationCount = 2;
+        if ([downloadQueue respondsToSelector:@selector(qualityOfService)]) {
+            downloadQueue.qualityOfService = NSQualityOfServiceBackground;
+        }
+        [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidReceiveMemoryWarningNotification
+                                                          object:nil
+                                                           queue:[NSOperationQueue mainQueue]
+                                                      usingBlock:^(NSNotification * __unused notification) {
+                                                          [downloadQueue cancelAllOperations];
+                                                      }];
+    });
+    
+    return downloadQueue;
+}
+
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
 + (void)cancelAllDownloads
@@ -76,6 +97,65 @@ static BOOL IDLogging = NO;
 }
 #pragma clang diagnostic pop
 
++ (void)cancelImageDownload:(UIImageView *)imageView
+{
+    [[self downloadingImages] enumerateObjectsUsingBlock:^(UIImageView *downloadingImage, NSUInteger idx, BOOL * _Nonnull stop) {
+        if (downloadingImage == imageView) {
+            // AFNetwroking 3.x
+            SEL cancelImageDownloadTask = NSSelectorFromString(@"cancelImageDownloadTask");
+            if ([downloadingImage respondsToSelector:cancelImageDownloadTask]) {
+                [downloadingImage performSelector:cancelImageDownloadTask];
+            }
+            // AFNetwroking 2.x
+            SEL cancelImageRequestOperation = NSSelectorFromString(@"cancelImageRequestOperation");
+            if ([downloadingImage respondsToSelector:cancelImageRequestOperation]) {
+                [downloadingImage performSelector:cancelImageRequestOperation];
+            }
+            *stop = YES;
+        }
+    }];
+}
+
++ (UIImage *)imageWithUrl:(NSString *)url
+               moduleName:(NSString *)moduleName
+            downloadImage:(UIImageView *)imageView
+      imageRepresentation:(UIImageRepresentation)imageRepresentation
+              placeholder:(UIImage *)placeholder
+               completion:(void (^)(UIImage *))completion
+{
+    return [self imageWithUrl:url
+                   moduleName:moduleName
+                downloadImage:imageView
+                 forIndexPath:nil
+          imageRepresentation:imageRepresentation
+                thumbnailSize:0
+                  placeholder:placeholder
+                   completion:^(UIImage *image, NSIndexPath *indexPath) {
+                       if (completion) completion(image);
+                   }];
+}
+
++ (UIImage *)imageWithUrl:(NSString *)url
+               moduleName:(NSString *)moduleName
+            downloadImage:(UIImageView *)imageView
+      imageRepresentation:(UIImageRepresentation)imageRepresentation
+            thumbnailSize:(CGFloat)thubnailSize
+              placeholder:(UIImage *)placeholder
+               completion:(void (^)(UIImage *image))completion
+{
+    return [self imageWithUrl:url
+                   moduleName:moduleName
+                downloadImage:imageView
+                 forIndexPath:nil
+          imageRepresentation:imageRepresentation
+                thumbnailSize:thubnailSize
+                  placeholder:placeholder
+                   completion:^(UIImage *image, NSIndexPath *indexPath) {
+                       if (completion) completion(image);
+                   }];
+}
+
+
 + (UIImage *)imageWithUrl:(NSString *)url
                moduleName:(NSString *)moduleName
             downloadImage:(UIImageView *)imageView
@@ -87,8 +167,8 @@ static BOOL IDLogging = NO;
     return [self imageWithUrl:url
                    moduleName:moduleName
                 downloadImage:imageView
-                 forIndexPath:(NSIndexPath *)indexPath
-          imageRepresentation:(UIImageRepresentation)imageRepresentation
+                 forIndexPath:indexPath
+          imageRepresentation:imageRepresentation
                 thumbnailSize:0
                   placeholder:placeholder
                    completion:completion];
@@ -104,7 +184,7 @@ static BOOL IDLogging = NO;
                completion:(void (^)(UIImage *image, NSIndexPath *indexPath))completion
 {
     BOOL downloadIfNeeded = YES;
-    if (!url) {
+    if ([url length] == 0) {
         url = @"placeholder_image";
         downloadIfNeeded = NO;
     }
@@ -177,6 +257,77 @@ static BOOL IDLogging = NO;
     return placeholder;
 }
 
++ (UIImage *)downloadImageWithUrl:(NSString *)url
+                       moduleName:(NSString *)moduleName
+              imageRepresentation:(UIImageRepresentation)imageRepresentation
+                    thumbnailSize:(CGFloat)thubnailSize
+                      placeholder:(UIImage *)placeholder
+                       completion:(void (^)(UIImage *image))completion
+{
+    if ([url length] == 0) {
+        return placeholder;
+    }
+    
+    // if immage in cache the return it
+    UIImage *image = [[self sharedImageCache] objectForKey:MD5Hash(url)];
+    if (image) {
+        if ([self logging]) DebugLog(@"Taking image [%@] from cache", url);
+        return image;
+    }
+    
+    // if image in file system then put it in cache and return it
+    image = [DirectoryUtils imageExistsWithName:url moduleName:moduleName imageCachingPolicy:ImageCachingPolicyEnabled];
+    if (image) {
+        if ([self logging]) DebugLog(@"Taking image [%@] from fileSystem", url);
+        [[self sharedImageCache] setObject:image forKey:MD5Hash(url)];
+        return image;
+    }
+    
+    if ([self logging]) DebugLog(@"Downloading image [%@]", url);
+    
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    manager.responseSerializer = [AFImageResponseSerializer serializer];
+    [manager GET:url
+      parameters:nil
+        progress:^(NSProgress * _Nonnull downloadProgress) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                //DebugLog(@"%f", downloadProgress.fractionCompleted);
+            });
+        }
+         success:^(NSURLSessionTask *task, id responseObject) {
+             if (responseObject != nil) {
+                 UIImage *savedImage = nil;
+                 NSString *filePath = [DirectoryUtils imagePathWithName:url
+                                                             moduleName:moduleName
+                                                     imageCachingPolicy:ImageCachingPolicyEnabled];
+                 if ([self logging]) DebugLog(@"filePath %@", filePath);
+                 if (thubnailSize != 0) {
+                     savedImage = [DirectoryUtils saveThumbnailImage:responseObject
+                                                            withSize:thubnailSize
+                                                          toFilePath:filePath
+                                                 imageRepresentation:imageRepresentation];
+                 }
+                 else {
+                     savedImage = [DirectoryUtils saveImage:responseObject
+                                                 toFilePath:filePath
+                                        imageRepresentation:imageRepresentation];
+                 }
+                 // put image in cache
+                 if (savedImage != nil) {
+                     [[self sharedImageCache] setObject:savedImage forKey:MD5Hash(url)];
+                 }
+                 // run completion
+                 if (completion) completion(savedImage);
+             }
+         } failure:^(NSURLSessionTask *operation, NSError *error) {
+             if ([self logging]) DebugLog(@"Error %@  occured in [%@]", error, NSStringFromSelector(_cmd));
+             // run completion
+             if (completion) completion(nil);
+         }];
+    
+    return placeholder;
+}
+
 + (void)downloadImageWithUrl:(NSString *)url
                   completion:(void (^)(UIImage *image))completion
 {
@@ -194,84 +345,26 @@ static BOOL IDLogging = NO;
          }];
 }
 
-+ (void)downloadImageWithUrl:(NSString *)url
-                  moduleName:(NSString *)moduleName
-         imageRepresentation:(UIImageRepresentation)imageRepresentation
-               thumbnailSize:(CGFloat)thubnailSize
-                  completion:(void (^)(UIImage *image))completion
+#pragma mark - public
+
++ (void)startDownloads:(NSArray *)images
+            moduleName:(NSString *)moduleName
 {
-    BOOL downloadIfNeeded = YES;
-    if (!url) {
-        url = @"placeholder_image";
-        downloadIfNeeded = NO;
+    for (int i = 0; i < [images count]; i++) {
+        [[self downloadQueue] addOperation:[self operationWithImageUrl:images[i] moduleName:moduleName]];
     }
-    
-    // if immage in cache the return it
-    UIImage *image = [[self sharedImageCache] objectForKey:MD5Hash(url)];
-    if (image) {
-        if ([self logging]) DebugLog(@"Taking image [%@] from cache", url);
-        downloadIfNeeded = NO;
-    }
-    
-    // if image in file system then put it in cache and return it
-    image = [DirectoryUtils imageExistsWithName:url moduleName:moduleName imageCachingPolicy:ImageCachingPolicyEnabled];
-    if (image) {
-        if ([self logging]) DebugLog(@"Taking image [%@] from fileSystem", url);
-        [[self sharedImageCache] setObject:image forKey:MD5Hash(url)];
-        downloadIfNeeded = NO;
-    }
-    
-    // it the url exists then download
-    if (downloadIfNeeded) {
-        if ([self logging]) DebugLog(@"Downloading image [%@]", url);
-        
-        AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-        manager.responseSerializer = [AFImageResponseSerializer serializer];
-        [manager GET:url
-          parameters:nil
-            progress:^(NSProgress * _Nonnull downloadProgress) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    DebugLog(@"%f", downloadProgress.fractionCompleted);
-                });
-            }
-             success:^(NSURLSessionTask *task, id responseObject) {
-                 if (responseObject != nil) {
-                     UIImage *savedImage = nil;
-                     NSString *filePath = [DirectoryUtils imagePathWithName:url
-                                                                 moduleName:moduleName
-                                                         imageCachingPolicy:ImageCachingPolicyEnabled];
-                     if ([self logging]) DebugLog(@"filePath %@", filePath);
-                     if (thubnailSize != 0) {
-                         savedImage = [DirectoryUtils saveThumbnailImage:responseObject
-                                                                withSize:thubnailSize
-                                                              toFilePath:filePath
-                                                     imageRepresentation:imageRepresentation];
-                     }
-                     else {
-                         savedImage = [DirectoryUtils saveImage:responseObject
-                                                     toFilePath:filePath
-                                            imageRepresentation:imageRepresentation];
-                     }
-                     // put image in cache
-                     if (savedImage != nil) {
-                         [[self sharedImageCache] setObject:savedImage forKey:MD5Hash(url)];
-                     }
-                     // run completion
-                     if (completion) completion(savedImage);
-                 }
-             } failure:^(NSURLSessionTask *operation, NSError *error) {
-                 if ([self logging]) DebugLog(@"Error %@  occured in [%@]", error, NSStringFromSelector(_cmd));
-                 // run completion
-                 if (completion) completion(nil);
-             }];
-    }
+}
+
++ (void)stopDownloads
+{
+    [[self downloadQueue] cancelAllOperations];
 }
 
 + (UIImage *)offlineImageWithUrl:(NSString *)url
                       moduleName:(NSString *)moduleName
                      placeholder:(UIImage *)placeholder
 {
-    if (!url) {
+    if ([url length] == 0) {
         url = @"placeholder_image";
     }
     
@@ -295,26 +388,17 @@ static BOOL IDLogging = NO;
     return placeholder;
 }
 
-#pragma mark - public
-
-+ (void)asyncDownloadImages:(NSArray *)images
-{
-    NSOperationQueue *queue = [NSOperationQueue new];
-    [queue setMaxConcurrentOperationCount:10];
-    for (int i = 0; i < [images count]; i++) {
-        [queue addOperation:[self operationWithImageUrl:images[i]]];
-    }
-}
-
 #pragma mark - private
 
 + (NSBlockOperation *)operationWithImageUrl:(NSString *)imageUrl
+                                 moduleName:(NSString *)moduleName
 {
     return [NSBlockOperation blockOperationWithBlock:^{
         [self downloadImageWithUrl:imageUrl
-                        moduleName:@"images"
+                        moduleName:moduleName
                imageRepresentation:UIImageRepresentationPNG
-                     thumbnailSize:1000
+                     thumbnailSize:0
+                       placeholder:nil
                         completion:nil];
     }];
 }

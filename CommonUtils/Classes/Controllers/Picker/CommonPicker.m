@@ -163,7 +163,7 @@ UIPopoverControllerDelegate
     
     // setup appearance
     label.backgroundColor = [UIColor clearColor];
-    label.textColor = [UIToolbar appearance].tintColor;
+    //label.textColor = [UIToolbar appearance].tintColor;
     
     UIBarButtonItem *title = [[UIBarButtonItem alloc] initWithCustomView:label];
     
