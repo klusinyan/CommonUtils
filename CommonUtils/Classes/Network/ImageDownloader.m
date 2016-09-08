@@ -328,6 +328,91 @@ static BOOL IDLogging = NO;
     return placeholder;
 }
 
++ (UIImage *)downloadImageWithUrl:(NSString *)url
+                       moduleName:(NSString *)moduleName
+              imageRepresentation:(UIImageRepresentation)imageRepresentation
+                     scaledFactor:(CGFloat)scaledFactor
+                      placeholder:(UIImage *)placeholder
+                       completion:(void (^)(UIImage *image))completion
+{
+    if ([url length] == 0) {
+        return placeholder;
+    }
+    
+    // if immage in cache the return it
+    UIImage *image = [[self sharedImageCache] objectForKey:MD5Hash(url)];
+    if (image) {
+        if ([self logging]) DebugLog(@"Taking image [%@] from cache", url);
+        return image;
+    }
+    
+    // if image in file system then put it in cache and return it
+    image = [DirectoryUtils imageExistsWithName:url moduleName:moduleName imageCachingPolicy:ImageCachingPolicyEnabled];
+    if (image) {
+        if ([self logging]) DebugLog(@"Taking image [%@] from fileSystem", url);
+        [[self sharedImageCache] setObject:image forKey:MD5Hash(url)];
+        return image;
+    }
+    
+    if ([self logging]) DebugLog(@"Downloading image [%@]", url);
+    
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    manager.responseSerializer = [AFImageResponseSerializer serializer];
+    [manager GET:url
+      parameters:nil
+        progress:^(NSProgress * _Nonnull downloadProgress) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                //DebugLog(@"%f", downloadProgress.fractionCompleted);
+            });
+        }
+         success:^(NSURLSessionTask *task, id responseObject) {
+             if (responseObject != nil) {
+                 UIImage *savedImage = nil;
+                 NSString *filePath = [DirectoryUtils imagePathWithName:url
+                                                             moduleName:moduleName
+                                                     imageCachingPolicy:ImageCachingPolicyEnabled];
+                 if ([self logging]) DebugLog(@"filePath %@", filePath);
+                 if (scaledFactor != 0) {
+                     savedImage = [DirectoryUtils saveImage:responseObject
+                                               scaledFactor:scaledFactor
+                                                 toFilePath:filePath
+                                        imageRepresentation:imageRepresentation];
+                 }
+                 else {
+                     savedImage = [DirectoryUtils saveImage:responseObject
+                                                 toFilePath:filePath
+                                        imageRepresentation:imageRepresentation];
+                 }
+                 // put image in cache
+                 if (savedImage != nil) {
+                     [[self sharedImageCache] setObject:savedImage forKey:MD5Hash(url)];
+                 }
+                 // run completion
+                 if (completion) completion(savedImage);
+             }
+         } failure:^(NSURLSessionTask *operation, NSError *error) {
+             if ([self logging]) DebugLog(@"Error %@  occured in [%@]", error, NSStringFromSelector(_cmd));
+             // run completion
+             if (completion) completion(nil);
+         }];
+    
+    return placeholder;
+}
+
++ (UIImage *)downloadImageWithUrl:(NSString *)url
+                       moduleName:(NSString *)moduleName
+              imageRepresentation:(UIImageRepresentation)imageRepresentation
+                      placeholder:(UIImage *)placeholder
+                       completion:(void (^)(UIImage *image))completion
+{
+    return [self downloadImageWithUrl:url
+                           moduleName:moduleName
+                  imageRepresentation:imageRepresentation
+                        thumbnailSize:0
+                          placeholder:placeholder
+                           completion:completion];
+}
+
 + (void)downloadImageWithUrl:(NSString *)url
                   completion:(void (^)(UIImage *image))completion
 {

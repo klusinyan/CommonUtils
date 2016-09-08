@@ -99,6 +99,23 @@
 }
 
 + (UIImage *)saveImage:(UIImage *)image
+          scaledFactor:(NSUInteger)scaledFactor
+            toFilePath:(NSString *)filePath
+   imageRepresentation:(UIImageRepresentation)imageRepresentation
+{
+    if (!image) return nil;
+    UIImage *resizedImage = image;
+    if (scaledFactor > 0) {
+        CGFloat width = image.size.width / scaledFactor;
+        CGFloat height = image.size.height / scaledFactor;
+        resizedImage = [image resizedImage:(CGSize){width, height} interpolationQuality:kCGInterpolationDefault];
+    }
+    return [self saveImage:resizedImage
+                toFilePath:filePath
+       imageRepresentation:imageRepresentation];
+}
+
++ (UIImage *)saveImage:(UIImage *)image
             toFilePath:(NSString *)filePath
    imageRepresentation:(UIImageRepresentation)imageRepresentation
 {

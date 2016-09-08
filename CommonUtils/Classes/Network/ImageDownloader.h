@@ -63,12 +63,29 @@
               placeholder:(UIImage *)placeholder
                completion:(void (^)(UIImage *image, NSIndexPath *indexPath))completion;
 
+// resized image not-proportional
 + (UIImage *)downloadImageWithUrl:(NSString *)url
                        moduleName:(NSString *)moduleName
               imageRepresentation:(UIImageRepresentation)imageRepresentation
                     thumbnailSize:(CGFloat)thubnailSize
                       placeholder:(UIImage *)placeholder
                        completion:(void (^)(UIImage *image))completion;
+
+// resized image proportional
++ (UIImage *)downloadImageWithUrl:(NSString *)url
+                       moduleName:(NSString *)moduleName
+              imageRepresentation:(UIImageRepresentation)imageRepresentation
+                     scaledFactor:(CGFloat)scaledFactor
+                      placeholder:(UIImage *)placeholder
+                       completion:(void (^)(UIImage *image))completion;
+
+// not-resized
++ (UIImage *)downloadImageWithUrl:(NSString *)url
+                       moduleName:(NSString *)moduleName
+              imageRepresentation:(UIImageRepresentation)imageRepresentation
+                      placeholder:(UIImage *)placeholder
+                       completion:(void (^)(UIImage *image))completion;
+
 
 + (void)downloadImageWithUrl:(NSString *)url
                   completion:(void (^)(UIImage *image))completion;

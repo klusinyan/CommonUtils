@@ -57,6 +57,11 @@ typedef NS_ENUM(NSInteger, UIImageRepresentation) {
             imageRepresentation:(UIImageRepresentation)imageRepresentation;
 
 + (UIImage *)saveImage:(UIImage *)image
+          scaledFactor:(NSUInteger)scaledFactor
+            toFilePath:(NSString *)filePath
+   imageRepresentation:(UIImageRepresentation)imageRepresentation;
+
++ (UIImage *)saveImage:(UIImage *)image
             toFilePath:(NSString *)filePath
    imageRepresentation:(UIImageRepresentation)imageRepresentation;
 
