@@ -19,13 +19,23 @@
 
 @property (readwrite, nonatomic, assign) id<CommonPickerDelegate> delegate;
 
-@property (readonly, nonatomic, getter = isVisible) BOOL visible;
+@property (readonly, nonatomic, getter=isVisible) BOOL visible;
 
-@property (readwrite, nonatomic, getter = isToolbarHidden) BOOL toolbarHidden;  //default NO
+@property (readwrite, nonatomic, getter=isToolbarHidden) BOOL toolbarHidden;    // default NO
 
-@property (readwrite, nonatomic, assign) BOOL needsOverlay;                     //default NO
+@property (readwrite, nonatomic, assign) BOOL applyBlurEffect;                  // default NO
 
-@property (readwrite, nonatomic, assign) CGFloat pickerCornerradius;            //defualt 0
+@property (readwrite, nonatomic, assign) UIBlurEffectStyle blurEffectStyle;     // default UIBlurEffectStyleLight
+
+@property (readwrite, nonatomic, assign) BOOL needsOverlay;                     // default NO
+
+@property (readwrite, nonatomic, assign) BOOL bounceEnabled;                    // default NO
+
+@property (readwrite, nonatomic, assign) NSTimeInterval bounceDuration;         // default 0.1
+
+@property (readwrite, nonatomic, assign) CGFloat bouncePosition;                // default 20.0
+
+@property (readwrite, nonatomic, assign) CGFloat pickerCornerradius;            // defualt 0
 
 //only iPhone
 @property (readwrite, nonatomic, assign) BOOL showAfterOrientationDidChange;
@@ -46,6 +56,9 @@
 @optional
 //if not specified the defualt value is: (iPhone) ? self.target.view.frame.size.width : 320.0f;
 - (CGFloat)widthForPicker:(CommonPicker *)picker;
+
+//if not specified the defualt value is: (iPhone), default is 0
+- (CGFloat)paddingForPicker:(CommonPicker *)picker;
 
 //if not specified the default value is: 260.0f
 - (CGFloat)heightForPicker:(CommonPicker *)picker;

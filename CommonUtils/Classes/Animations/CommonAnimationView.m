@@ -10,17 +10,36 @@
     [super awakeFromNib];
     
     if (self.type && self.duration && ! self.pauseAnimationOnAwake) {
-        [self startCanvasAnimationCompletion:nil];
+        [self startCommonAnimationCompletion:nil];
     }
 }
 
-- (void)startCanvasAnimationCompletion:(void (^)(BOOL))completion
+- (void)startCommonAnimationCompletion:(void (^)(BOOL))completion
 {
     Class <CommonAnimation> class = [CommonAnimation classForAnimationType:self.type];
     
     [class performAnimationOnView:self duration:self.duration delay:self.delay completion:completion];
     
-    [super startCanvasAnimationCompletion:completion];
+    [super startCommonAnimationCompletion:completion];
+}
+
+- (void)startCommonAnimationWithType:(CommonAnimationType)type completion:(void (^)(BOOL))completion
+{
+    Class <CommonAnimation> class = [CommonAnimation classForAnimationType:type];
+    
+    [class performAnimationOnView:self duration:self.duration delay:self.delay completion:completion];
+    
+    [super startCommonAnimationCompletion:completion];
+}
+
+#pragma mark - getter/setter
+
+- (NSTimeInterval)duration
+{
+    if (_duration == 0) {
+        _duration = 0.4;
+    }
+    return _duration;
 }
 
 @end
@@ -28,17 +47,17 @@
 
 @implementation UIView (CommonAnimationView)
 
-- (void)startCanvasAnimation
+- (void)startCommonAnimation
 {
     [[self subviews] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        [obj startCanvasAnimation];
+        [obj startCommonAnimationCompletion:nil];
     }];
 }
 
-- (void)startCanvasAnimationCompletion:(void (^)(BOOL))completion
+- (void)startCommonAnimationCompletion:(void (^)(BOOL))completion
 {
     [[self subviews] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        [obj startCanvasAnimationCompletion:completion];
+        [obj startCommonAnimationCompletion:completion];
     }];
 }
 

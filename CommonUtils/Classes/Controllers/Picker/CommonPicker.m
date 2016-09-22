@@ -68,10 +68,15 @@ UIPopoverControllerDelegate
         self.visible = NO;
         self.tapped = NO;
         self.needsOverlay = NO;
+        self.applyBlurEffect = NO;
+        self.blurEffectStyle = UIBlurEffectStyleLight;
         self.toolbarHidden = NO;
         self.showAfterOrientationDidChange = NO;
         self.pickerCornerradius = 0.0f;
         self.customToolbarHeight = 0.0f;
+        self.bounceEnabled = NO;
+        self.bounceDuration = 0.1;
+        self.bouncePosition = 20.0;
         
         if (iPhone) {
             [[NSNotificationCenter defaultCenter] addObserver:self
@@ -228,9 +233,41 @@ UIPopoverControllerDelegate
     return pickerHeight;
 }
 
+- (CGFloat)getPickerPadding
+{
+    CGFloat padding = 0.0;
+    if (self.dataSource && [self.dataSource respondsToSelector:@selector(paddingForPicker:)]) {
+        padding = [self.dataSource paddingForPicker:self];
+    }
+    return padding;
+}
+
+- (UIView *)blurView:(UIBlurEffectStyle)style
+{
+    if (NSFoundationVersionNumber > NSFoundationVersionNumber_iOS_7_1) {
+        // blur view
+        UIVisualEffect *blurEffect = [UIBlurEffect effectWithStyle:style];
+        UIVisualEffectView *visualEffectView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
+        visualEffectView.clipsToBounds = YES;
+        return visualEffectView;
+    }
+    else {
+        // normal view
+        BlurView *overlay = [[BlurView alloc] init];
+        overlay.blurTintColor = [UIColor whiteColor];
+        return overlay;
+    }
+}
+
 - (void)setupPicker
 {
-    self.pickerView = (iPad) ? [[UIView alloc] init] : [[BlurView alloc] init];
+    if (self.applyBlurEffect) {
+        self.pickerView = [self blurView:self.blurEffectStyle];
+    }
+    else {
+        self.pickerView = [[UIView alloc] init];
+        self.pickerView.backgroundColor = [UIColor whiteColor];
+    }
     self.pickerView.layer.cornerRadius = self.pickerCornerradius;
     
     if (self.dataSource && [self.dataSource respondsToSelector:@selector(contentForPicker:)]) {
@@ -434,6 +471,11 @@ UIPopoverControllerDelegate
     [self.overlay addGestureRecognizer:tapGesture];
 }
 
+- (void)centerPickerView
+{
+    self.pickerView.center = CGPointMake(self.pickerView.superview.center.x, self.pickerView.center.y);
+}
+
 - (void)slideUp
 {
     /*self.completionType = CompletionTypeUnknown;*/
@@ -445,28 +487,30 @@ UIPopoverControllerDelegate
         [self addOverlay];
         
         //assign size to picker
-        self.pickerView.frame = CGRectMake(0, 0, [self getPickerWidth], [self getPickerHeight]);
-        
+        self.pickerView.frame = CGRectMake(0, 0, [self getPickerWidth] - 2 * [self getPickerPadding], [self getPickerHeight]);
+
         //add to superview
         [self.target.view addSubview:self.pickerView];
         
         CGSize pickerSize = [self.pickerView sizeThatFits:CGSizeZero];
         self.pickerView.frame = CGRectMake(0, 0, pickerSize.width, pickerSize.height);
-        
+
         // size up the picker view to our screen and compute the start/end frame origin for our slide up animation
         //
         // compute the start frame
         CGSize pickerViewContainerSize = CGSizeMake(pickerSize.width, pickerSize.height);
         CGRect startRect = CGRectMake(0.0,
-                                      self.target.view.bounds.size.height,
+                                      self.target.view.bounds.size.height - [self getPickerPadding],
                                       pickerViewContainerSize.width,
                                       pickerViewContainerSize.height);
         
         self.pickerView.frame = startRect;
         
+        [self centerPickerView];
+        
         // compute the end frame
         CGRect pickerRect = CGRectMake(0.0,
-                                       self.target.view.bounds.size.height - pickerViewContainerSize.height,
+                                       self.target.view.bounds.size.height - pickerViewContainerSize.height - [self getPickerPadding],
                                        pickerViewContainerSize.width,
                                        pickerViewContainerSize.height);
         // start the slide up animation
@@ -478,6 +522,9 @@ UIPopoverControllerDelegate
         [UIView setAnimationWillStartSelector:@selector(slideUpDidStop)];
         
         self.pickerView.frame = pickerRect;
+
+        [self centerPickerView];
+        
         self.overlay.backgroundColor = [UIColor colorWithWhite:0.2f alpha:0.5f];
         
         [UIView commitAnimations];
@@ -515,6 +562,19 @@ UIPopoverControllerDelegate
 {
     //set boolean
     self.visible = YES;
+    
+    if (self.bounceEnabled) {
+        CABasicAnimation *bounceAnimation = [CABasicAnimation animationWithKeyPath:@"position.y"];
+        bounceAnimation.duration = self.bounceDuration;
+        bounceAnimation.fromValue = [NSNumber numberWithFloat:self.pickerView.center.y];
+        bounceAnimation.toValue = [NSNumber numberWithFloat:self.pickerView.center.y - self.bouncePosition];
+        bounceAnimation.repeatCount = 0;
+        bounceAnimation.autoreverses = YES;
+        bounceAnimation.fillMode = kCAFillModeBackwards;
+        bounceAnimation.removedOnCompletion = YES;
+        bounceAnimation.additive = NO;
+        [self.pickerView.layer addAnimation:bounceAnimation forKey:@"bounceAnimation"];
+    }
     
     if (self.showCompetion) self.showCompetion();
 }

@@ -113,7 +113,7 @@
         self.animationView.type = anim.type;
         self.animationView.delay = anim.delay;
         self.animationView.duration = anim.duration;
-        [self.animationView startCanvasAnimation];
+        [self.animationView startCommonAnimation];
     }
 }
 

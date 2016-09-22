@@ -7,17 +7,18 @@
 @interface CommonAnimationView : UIView
 
 @property (nonatomic) NSTimeInterval delay;
-@property (nonatomic) NSTimeInterval duration;
+@property (nonatomic) NSTimeInterval duration; // default 0.4
 @property (nonatomic, copy) CommonAnimationType type;
 @property (nonatomic) BOOL pauseAnimationOnAwake;
 
 @end
 
-
 @interface UIView (CommonAnimationView)
 
-- (void)startCanvasAnimation __deprecated_msg("user: performAnimationOnView:duration:delay:completion");
+- (void)startCommonAnimation __deprecated_msg("user: performAnimationOnView:duration:delay:completion");
 
-- (void)startCanvasAnimationCompletion:(void(^)(BOOL finished))completion;
+- (void)startCommonAnimationCompletion:(void(^)(BOOL finished))completion;
+
+- (void)startCommonAnimationWithType:(CommonAnimationType)type completion:(void (^)(BOOL))completion;
 
 @end
