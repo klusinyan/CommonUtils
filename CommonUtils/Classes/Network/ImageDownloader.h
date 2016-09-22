@@ -15,6 +15,8 @@
 //////////////////////////////////////////////////////
 + (NSCache *)sharedImageCache;
 
++ (void)clearCache:(BOOL)forced moduleName:(NSString *)moduleName;
+
 + (void)cancelAllDownloads;
 
 + (void)cancelImageDownload:(UIImageView *)imageView;
@@ -86,9 +88,18 @@
                       placeholder:(UIImage *)placeholder
                        completion:(void (^)(UIImage *image))completion;
 
+// donwload and cache not-return, not-resized
++ (void)downloadImageWithUrl:(NSString *)url
+                  moduleName:(NSString *)moduleName
+         imageRepresentation:(UIImageRepresentation)imageRepresentation
+                  completion:(void (^)(UIImage *image))completion;
 
 + (void)downloadImageWithUrl:(NSString *)url
                   completion:(void (^)(UIImage *image))completion;
+
++ (void)startDownloads:(NSArray *)images
+            moduleName:(NSString *)moduleName
+            completion:(void(^)(void))completion;
 
 + (void)startDownloads:(NSArray *)images
             moduleName:(NSString *)moduleName; // images = array[String]

@@ -6,6 +6,7 @@
 #import "ImageDownloader.h"
 #import "DirectoryUtils.h"
 #import "NetworkUtils.h"
+#import "CommonAnimationView.h"
 
 /*
 #import <AFNetworkReachabilityManager.h>
@@ -23,7 +24,7 @@
 
 @interface CommonPageContent () <UIScrollViewDelegate>
 
-@property (nonatomic, strong) IBOutlet CSAnimationView *animationView;
+@property (nonatomic, strong) IBOutlet CommonAnimationView *animationView;
 @property (nonatomic, strong) IBOutlet UIScrollView *scrollView;
 @property (nonatomic, strong) IBOutlet UIImageView *imageView;
 
@@ -97,7 +98,7 @@
 - (void)animateIfNeeded
 {
     for (int i = 0; i < [self.animations count]; i++) {
-        CommonAnimation *anim = [self.animations objectAtIndex:i];
+        CommonAnimationPrototype *anim = [self.animations objectAtIndex:i];
         if (self.animationRule == CommonPageAnimationRuleNone) {
             continue;
         }

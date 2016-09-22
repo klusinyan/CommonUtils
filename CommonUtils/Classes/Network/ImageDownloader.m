@@ -63,7 +63,7 @@ static BOOL IDLogging = NO;
     static dispatch_once_t oncePredicate;
     dispatch_once(&oncePredicate, ^{
         downloadQueue = [NSOperationQueue new];
-        downloadQueue.maxConcurrentOperationCount = 2;
+        downloadQueue.maxConcurrentOperationCount = 1;
         if ([downloadQueue respondsToSelector:@selector(qualityOfService)]) {
             downloadQueue.qualityOfService = NSQualityOfServiceBackground;
         }
@@ -76,6 +76,15 @@ static BOOL IDLogging = NO;
     });
     
     return downloadQueue;
+}
+
++ (void)clearCache:(BOOL)forced moduleName:(NSString *)moduleName
+{
+    [[self sharedImageCache] removeAllObjects];
+    
+    if (forced) {
+        [DirectoryUtils deleteFileAtPath:[DirectoryUtils moduleCacheDirectoryPath:moduleName] error:NULL];
+    }
 }
 
 #pragma clang diagnostic push
@@ -414,6 +423,59 @@ static BOOL IDLogging = NO;
 }
 
 + (void)downloadImageWithUrl:(NSString *)url
+                  moduleName:(NSString *)moduleName
+         imageRepresentation:(UIImageRepresentation)imageRepresentation
+                  completion:(void (^)(UIImage *image))completion
+{
+    // if immage in cache the return it
+    UIImage *image = [[self sharedImageCache] objectForKey:MD5Hash(url)];
+    if (image) {
+        if ([self logging]) DebugLog(@"Taking image [%@] from cache", url);
+        if (completion) completion(image);
+        return;
+    }
+    
+    // if image in file system then put it in cache and return it
+    image = [DirectoryUtils imageExistsWithName:url moduleName:moduleName imageCachingPolicy:ImageCachingPolicyEnabled];
+    if (image) {
+        if ([self logging]) DebugLog(@"Taking image [%@] from fileSystem", url);
+        [[self sharedImageCache] setObject:image forKey:MD5Hash(url)];
+        if (completion) completion(image);
+        return;
+    }
+    
+    if ([self logging]) DebugLog(@"Downloading image [%@]", url);
+    
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    manager.responseSerializer = [AFImageResponseSerializer serializer];
+    [manager GET:url
+      parameters:nil
+        progress:nil
+         success:^(NSURLSessionTask *task, id responseObject) {
+             if (responseObject != nil) {
+                 UIImage *savedImage = nil;
+                 NSString *filePath = [DirectoryUtils imagePathWithName:url
+                                                             moduleName:moduleName
+                                                     imageCachingPolicy:ImageCachingPolicyEnabled];
+                 if ([self logging]) DebugLog(@"filePath %@", filePath);
+                 savedImage = [DirectoryUtils saveImage:responseObject
+                                             toFilePath:filePath
+                                    imageRepresentation:imageRepresentation];
+                 // put image in cache
+                 if (savedImage != nil) {
+                     [[self sharedImageCache] setObject:savedImage forKey:MD5Hash(url)];
+                 }
+                 // run completion
+                 if (completion) completion(savedImage);
+             }
+         } failure:^(NSURLSessionTask *operation, NSError *error) {
+             if ([self logging]) DebugLog(@"Error %@  occured in [%@]", error, NSStringFromSelector(_cmd));
+             // run completion
+             if (completion) completion(nil);
+         }];
+}
+
++ (void)downloadImageWithUrl:(NSString *)url
                   completion:(void (^)(UIImage *image))completion
 {
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
@@ -431,6 +493,37 @@ static BOOL IDLogging = NO;
 }
 
 #pragma mark - public
+
++ (void)startDownloads:(NSArray *)images
+            moduleName:(NSString *)moduleName
+            completion:(void(^)(void))completion
+{
+    if (images == nil || [images count] == 0) {
+        if (completion) completion();
+        return;
+    }
+    
+    __block NSInteger count = 0;
+    for (int i = 0; i < [images count]; i++) {
+        [self downloadImageWithUrl:images[i]
+                        moduleName:moduleName
+               imageRepresentation:UIImageRepresentationPNG
+                        completion:^(UIImage *image) {
+                            count++;
+                            if ([self logging]) {
+                                DebugLog(@"count %@", @(count));
+                            }
+                            if (count == [images count]) {
+                                if ([self logging]) {
+                                    DebugLog(@"download queue did finish operations");
+                                }
+                                dispatch_async(dispatch_get_main_queue(), ^{
+                                    if (completion) completion();
+                                });
+                            }
+                        }];
+    }
+}
 
 + (void)startDownloads:(NSArray *)images
             moduleName:(NSString *)moduleName
@@ -482,8 +575,6 @@ static BOOL IDLogging = NO;
         [self downloadImageWithUrl:imageUrl
                         moduleName:moduleName
                imageRepresentation:UIImageRepresentationPNG
-                     thumbnailSize:0
-                       placeholder:nil
                         completion:nil];
     }];
 }

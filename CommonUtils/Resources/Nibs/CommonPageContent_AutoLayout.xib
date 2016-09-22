@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11201" systemVersion="15G1004" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
     <dependencies>
         <deployment identifier="iOS"/>
-        <development version="5000" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CommonPageContent">
@@ -22,21 +22,17 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="460"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="x3N-AC-1HD" customClass="CSAnimationView">
-                    <rect key="frame" x="0.0" y="0.0" width="320" height="460"/>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="x3N-AC-1HD" customClass="CommonAnimationView">
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gqL-JQ-y3U" userLabel="Container">
-                            <rect key="frame" x="0.0" y="0.0" width="320" height="460"/>
                             <subviews>
                                 <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" maximumZoomScale="2" translatesAutoresizingMaskIntoConstraints="NO" id="8">
-                                    <rect key="frame" x="0.0" y="0.0" width="320" height="460"/>
                                     <subviews>
                                         <imageView contentMode="scaleAspectFit" translatesAutoresizingMaskIntoConstraints="NO" id="9" userLabel="ImageView">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="460"/>
-                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                            <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                                         </imageView>
                                     </subviews>
-                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                    <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                                     <constraints>
                                         <constraint firstAttribute="bottom" secondItem="9" secondAttribute="bottom" id="3DW-kc-Hbr"/>
                                         <constraint firstAttribute="trailing" secondItem="9" secondAttribute="trailing" id="Cr1-Dw-Ch0"/>
@@ -48,7 +44,7 @@
                                     </connections>
                                 </scrollView>
                             </subviews>
-                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                             <constraints>
                                 <constraint firstAttribute="width" secondItem="9" secondAttribute="width" id="M1w-cm-gSi"/>
                                 <constraint firstItem="8" firstAttribute="top" secondItem="gqL-JQ-y3U" secondAttribute="top" id="SXL-9m-ljl"/>
@@ -59,7 +55,7 @@
                             </constraints>
                         </view>
                     </subviews>
-                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
                         <constraint firstItem="gqL-JQ-y3U" firstAttribute="top" secondItem="x3N-AC-1HD" secondAttribute="top" id="BP3-MQ-lw4"/>
                         <constraint firstAttribute="bottom" secondItem="gqL-JQ-y3U" secondAttribute="bottom" id="RR7-1Y-Usx"/>
@@ -68,15 +64,21 @@
                     </constraints>
                 </view>
             </subviews>
-            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+            <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstAttribute="centerY" secondItem="x3N-AC-1HD" secondAttribute="centerY" id="RBY-zW-Lth"/>
                 <constraint firstItem="x3N-AC-1HD" firstAttribute="top" secondItem="6" secondAttribute="top" id="nn6-d9-Hct"/>
                 <constraint firstItem="x3N-AC-1HD" firstAttribute="leading" secondItem="6" secondAttribute="leading" id="uNg-0m-UGF"/>
                 <constraint firstAttribute="centerX" secondItem="x3N-AC-1HD" secondAttribute="centerX" id="vna-Bl-UFf"/>
             </constraints>
+            <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <point key="canvasLocation" x="66" y="173"/>
         </view>
     </objects>
+    <simulatedMetricsContainer key="defaultSimulatedMetrics">
+        <simulatedStatusBarMetrics key="statusBar"/>
+        <simulatedOrientationMetrics key="orientation"/>
+        <simulatedScreenMetrics key="destination" type="retina4_7.fullscreen"/>
+    </simulatedMetricsContainer>
 </document>

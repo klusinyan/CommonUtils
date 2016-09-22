@@ -36,6 +36,10 @@
 		9C3F54971ADCFB7B0085DD03 /* CommonUtilsVersion.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C3F54951ADCFB7B0085DD03 /* CommonUtilsVersion.m */; };
 		9C42A7391AC9975600DD524F /* CommonCrash.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C42A7371AC9975600DD524F /* CommonCrash.h */; };
 		9C42A73A1AC9975600DD524F /* CommonCrash.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C42A7381AC9975600DD524F /* CommonCrash.m */; };
+		9C506ECA1D93F37E00FFE0E2 /* CommonAnimationView.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C506EC81D93F37E00FFE0E2 /* CommonAnimationView.h */; };
+		9C506ECB1D93F37E00FFE0E2 /* CommonAnimationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C506EC91D93F37E00FFE0E2 /* CommonAnimationView.m */; };
+		9C506ECE1D93F57200FFE0E2 /* CommonAnimationPrototype.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C506ECC1D93F57200FFE0E2 /* CommonAnimationPrototype.h */; };
+		9C506ECF1D93F57200FFE0E2 /* CommonAnimationPrototype.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C506ECD1D93F57200FFE0E2 /* CommonAnimationPrototype.m */; };
 		9C5ADFEE1AA4A38800CD5215 /* CommonAnimation.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C5ADFEC1AA4A38800CD5215 /* CommonAnimation.h */; };
 		9C5ADFEF1AA4A38800CD5215 /* CommonAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C5ADFED1AA4A38800CD5215 /* CommonAnimation.m */; };
 		9C6DD7D419F130670013D333 /* UIImage+Color.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C6DD7D219F130670013D333 /* UIImage+Color.h */; };
@@ -133,6 +137,10 @@
 		9C3F54951ADCFB7B0085DD03 /* CommonUtilsVersion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonUtilsVersion.m; sourceTree = "<group>"; };
 		9C42A7371AC9975600DD524F /* CommonCrash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonCrash.h; sourceTree = "<group>"; };
 		9C42A7381AC9975600DD524F /* CommonCrash.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonCrash.m; sourceTree = "<group>"; };
+		9C506EC81D93F37E00FFE0E2 /* CommonAnimationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonAnimationView.h; sourceTree = "<group>"; };
+		9C506EC91D93F37E00FFE0E2 /* CommonAnimationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonAnimationView.m; sourceTree = "<group>"; };
+		9C506ECC1D93F57200FFE0E2 /* CommonAnimationPrototype.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonAnimationPrototype.h; sourceTree = "<group>"; };
+		9C506ECD1D93F57200FFE0E2 /* CommonAnimationPrototype.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonAnimationPrototype.m; sourceTree = "<group>"; };
 		9C5ADFEC1AA4A38800CD5215 /* CommonAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonAnimation.h; sourceTree = "<group>"; };
 		9C5ADFED1AA4A38800CD5215 /* CommonAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonAnimation.m; sourceTree = "<group>"; };
 		9C6DD7D219F130670013D333 /* UIImage+Color.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Color.h"; sourceTree = "<group>"; };
@@ -338,6 +346,10 @@
 			children = (
 				9C5ADFEC1AA4A38800CD5215 /* CommonAnimation.h */,
 				9C5ADFED1AA4A38800CD5215 /* CommonAnimation.m */,
+				9C506EC81D93F37E00FFE0E2 /* CommonAnimationView.h */,
+				9C506EC91D93F37E00FFE0E2 /* CommonAnimationView.m */,
+				9C506ECC1D93F57200FFE0E2 /* CommonAnimationPrototype.h */,
+				9C506ECD1D93F57200FFE0E2 /* CommonAnimationPrototype.m */,
 			);
 			path = Animations;
 			sourceTree = "<group>";
@@ -697,6 +709,7 @@
 				9C90FF6B19377DEC004CE056 /* NSDate+Utils.h in Headers */,
 				9C94A99119EBC911003DF554 /* CommonSegmentedViewController.h in Headers */,
 				9C42A7391AC9975600DD524F /* CommonCrash.h in Headers */,
+				9C506ECA1D93F37E00FFE0E2 /* CommonAnimationView.h in Headers */,
 				9C01921619D2CBD600E8E9E3 /* CommonBook.h in Headers */,
 				9C0BC9F61AD6E3F500234AC8 /* CommonInnerShadow.h in Headers */,
 				9CA4F69D19790E7D000BCFCC /* ViewPagerController.h in Headers */,
@@ -715,6 +728,7 @@
 				9CD7022B193388150066FFC0 /* UIView+AutoLayout.h in Headers */,
 				9CA09778191133A000605020 /* TransitionManager.h in Headers */,
 				9CB1FC8C197598D00080534F /* SegmentedViewController.h in Headers */,
+				9C506ECE1D93F57200FFE0E2 /* CommonAnimationPrototype.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -778,6 +792,7 @@
 				9C90FF6C19377DEC004CE056 /* NSDate+Utils.m in Sources */,
 				9C34F7D1192CAFF9001B8D6D /* ProgressView.m in Sources */,
 				9C01921919D2CBD600E8E9E3 /* CommonKeyboard.m in Sources */,
+				9C506ECF1D93F57200FFE0E2 /* CommonAnimationPrototype.m in Sources */,
 				9C94A99219EBC911003DF554 /* CommonSegmentedViewController.m in Sources */,
 				9CB4800E19558E8400A5AC1B /* UIColor+Utils.m in Sources */,
 				9C1E3932198E42F600EA933D /* UIAlertView+Blocks.m in Sources */,
@@ -804,6 +819,7 @@
 				9CA10B621953521400DC3C5B /* NSIndexPath+Utils.m in Sources */,
 				9C5ADFEF1AA4A38800CD5215 /* CommonAnimation.m in Sources */,
 				9C01921B19D2CBD600E8E9E3 /* CommonPicker.m in Sources */,
+				9C506ECB1D93F37E00FFE0E2 /* CommonAnimationView.m in Sources */,
 				9C20BE5F1949EF830077C6E8 /* ZoomAnimationController.m in Sources */,
 				9C1192031A7BE0AB000B6090 /* CommonSpinner.m in Sources */,
 				9CB1FC9A19759B6A0080534F /* SelectedListController.m in Sources */,

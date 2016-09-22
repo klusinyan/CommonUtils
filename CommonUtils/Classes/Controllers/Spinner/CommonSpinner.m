@@ -279,7 +279,11 @@ static NSMutableDictionary *appearance = nil;
     self.titleLayer.position = (CGPoint){CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds)};
     
     /*-----SPINNER----*/
-    self.progressLayer.frame = CGRectMake(0, CGRectGetHeight(self.titleLayer.bounds), CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds));
+    CGFloat positionY = 0;
+    if ([self.titleLayer.string length] > 0) {
+        positionY = CGRectGetHeight(self.titleLayer.bounds);
+    }
+    self.progressLayer.frame = CGRectMake(0, positionY, CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds));
     
     [self updatePath];
     [self updateTitle];
