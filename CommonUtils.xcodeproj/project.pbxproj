@@ -34,6 +34,8 @@
 		9C34F7D1192CAFF9001B8D6D /* ProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C34F7CF192CAFF9001B8D6D /* ProgressView.m */; };
 		9C3F54961ADCFB7B0085DD03 /* CommonUtilsVersion.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C3F54941ADCFB7B0085DD03 /* CommonUtilsVersion.h */; };
 		9C3F54971ADCFB7B0085DD03 /* CommonUtilsVersion.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C3F54951ADCFB7B0085DD03 /* CommonUtilsVersion.m */; };
+		9C4018BE1D9BD19E0072F79A /* CommonPageContent.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C4018BC1D9BD19E0072F79A /* CommonPageContent.h */; };
+		9C4018BF1D9BD19E0072F79A /* CommonPageContent.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C4018BD1D9BD19E0072F79A /* CommonPageContent.m */; };
 		9C42A7391AC9975600DD524F /* CommonCrash.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C42A7371AC9975600DD524F /* CommonCrash.h */; };
 		9C42A73A1AC9975600DD524F /* CommonCrash.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C42A7381AC9975600DD524F /* CommonCrash.m */; };
 		9C506ECA1D93F37E00FFE0E2 /* CommonAnimationView.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C506EC81D93F37E00FFE0E2 /* CommonAnimationView.h */; };
@@ -125,7 +127,7 @@
 		9C20BE5A1949EF830077C6E8 /* ZoomAnimationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZoomAnimationController.m; sourceTree = "<group>"; };
 		9C2688361AE41CCF00C478A0 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		9C2688371AE41CD800C478A0 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		9C27EEA01AAA295A004EB522 /* CommonPageContent_AutoLayout.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CommonPageContent_AutoLayout.xib; sourceTree = "<group>"; };
+		9C27EEA01AAA295A004EB522 /* CommonPageContent.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CommonPageContent.xib; sourceTree = "<group>"; };
 		9C2A84A91C78EA7F005D9E32 /* CommonUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CommonUtils.h; sourceTree = "<group>"; };
 		9C2AC5DE19EA96F900588538 /* CommonProgress.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = CommonProgress.bundle; sourceTree = "<group>"; };
 		9C2AC5DF19EA96F900588538 /* CommonProgress.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonProgress.h; sourceTree = "<group>"; };
@@ -135,6 +137,9 @@
 		9C34F7CF192CAFF9001B8D6D /* ProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProgressView.m; sourceTree = "<group>"; };
 		9C3F54941ADCFB7B0085DD03 /* CommonUtilsVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonUtilsVersion.h; sourceTree = "<group>"; };
 		9C3F54951ADCFB7B0085DD03 /* CommonUtilsVersion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonUtilsVersion.m; sourceTree = "<group>"; };
+		9C4018BC1D9BD19E0072F79A /* CommonPageContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonPageContent.h; sourceTree = "<group>"; };
+		9C4018BD1D9BD19E0072F79A /* CommonPageContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonPageContent.m; sourceTree = "<group>"; };
+		9C4018C01D9D62870072F79A /* CommonPageContent_autoresize.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CommonPageContent_autoresize.xib; sourceTree = "<group>"; };
 		9C42A7371AC9975600DD524F /* CommonCrash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonCrash.h; sourceTree = "<group>"; };
 		9C42A7381AC9975600DD524F /* CommonCrash.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonCrash.m; sourceTree = "<group>"; };
 		9C506EC81D93F37E00FFE0E2 /* CommonAnimationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonAnimationView.h; sourceTree = "<group>"; };
@@ -145,7 +150,6 @@
 		9C5ADFED1AA4A38800CD5215 /* CommonAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonAnimation.m; sourceTree = "<group>"; };
 		9C6DD7D219F130670013D333 /* UIImage+Color.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Color.h"; sourceTree = "<group>"; };
 		9C6DD7D319F130670013D333 /* UIImage+Color.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Color.m"; sourceTree = "<group>"; };
-		9C8F99F11AA0894200F34B57 /* CommonPageContent.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CommonPageContent.xib; sourceTree = "<group>"; };
 		9C8F99F21AA0AE4800F34B57 /* CommonBook.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = CommonBook.bundle; sourceTree = "<group>"; };
 		9C90FF5F19374DD3004CE056 /* UITableView+Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableView+Utils.h"; sourceTree = "<group>"; };
 		9C90FF6019374DD3004CE056 /* UITableView+Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableView+Utils.m"; sourceTree = "<group>"; };
@@ -224,6 +228,8 @@
 				9C8F99F21AA0AE4800F34B57 /* CommonBook.bundle */,
 				9C01920E19D2CBD600E8E9E3 /* CommonBook.h */,
 				9C01920F19D2CBD600E8E9E3 /* CommonBook.m */,
+				9C4018BC1D9BD19E0072F79A /* CommonPageContent.h */,
+				9C4018BD1D9BD19E0072F79A /* CommonPageContent.m */,
 			);
 			path = Book;
 			sourceTree = "<group>";
@@ -366,8 +372,8 @@
 		9C8F99F01AA0894200F34B57 /* Nibs */ = {
 			isa = PBXGroup;
 			children = (
-				9C8F99F11AA0894200F34B57 /* CommonPageContent.xib */,
-				9C27EEA01AAA295A004EB522 /* CommonPageContent_AutoLayout.xib */,
+				9C27EEA01AAA295A004EB522 /* CommonPageContent.xib */,
+				9C4018C01D9D62870072F79A /* CommonPageContent_autoresize.xib */,
 			);
 			path = Nibs;
 			sourceTree = "<group>";
@@ -709,6 +715,7 @@
 				9C90FF6B19377DEC004CE056 /* NSDate+Utils.h in Headers */,
 				9C94A99119EBC911003DF554 /* CommonSegmentedViewController.h in Headers */,
 				9C42A7391AC9975600DD524F /* CommonCrash.h in Headers */,
+				9C4018BE1D9BD19E0072F79A /* CommonPageContent.h in Headers */,
 				9C506ECA1D93F37E00FFE0E2 /* CommonAnimationView.h in Headers */,
 				9C01921619D2CBD600E8E9E3 /* CommonBook.h in Headers */,
 				9C0BC9F61AD6E3F500234AC8 /* CommonInnerShadow.h in Headers */,
@@ -818,6 +825,7 @@
 				9C8C0AFD1934A17C0033D2A9 /* UIImage+Alpha.m in Sources */,
 				9CA10B621953521400DC3C5B /* NSIndexPath+Utils.m in Sources */,
 				9C5ADFEF1AA4A38800CD5215 /* CommonAnimation.m in Sources */,
+				9C4018BF1D9BD19E0072F79A /* CommonPageContent.m in Sources */,
 				9C01921B19D2CBD600E8E9E3 /* CommonPicker.m in Sources */,
 				9C506ECB1D93F37E00FFE0E2 /* CommonAnimationView.m in Sources */,
 				9C20BE5F1949EF830077C6E8 /* ZoomAnimationController.m in Sources */,

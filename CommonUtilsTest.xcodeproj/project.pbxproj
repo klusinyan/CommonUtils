@@ -10,6 +10,30 @@
 	<string>46</string>
 	<key>objects</key>
 	<dict>
+		<key>11FC838131D14CA2A4BB6DEF</key>
+		<dict>
+			<key>buildActionMask</key>
+			<string>2147483647</string>
+			<key>files</key>
+			<array/>
+			<key>inputPaths</key>
+			<array/>
+			<key>isa</key>
+			<string>PBXShellScriptBuildPhase</string>
+			<key>name</key>
+			<string>&#128230; Copy Pods Resources</string>
+			<key>outputPaths</key>
+			<array/>
+			<key>runOnlyForDeploymentPostprocessing</key>
+			<string>0</string>
+			<key>shellPath</key>
+			<string>/bin/sh</string>
+			<key>shellScript</key>
+			<string>"${SRCROOT}/Pods/Target Support Files/Pods-CommonUtilsTest/Pods-CommonUtilsTest-resources.sh"
+</string>
+			<key>showEnvVarsInLog</key>
+			<string>0</string>
+		</dict>
 		<key>1E22334EA4EB3CDA518B556F</key>
 		<dict>
 			<key>includeInIndex</key>
@@ -45,6 +69,30 @@
 			<string>/bin/sh</string>
 			<key>shellScript</key>
 			<string>"${SRCROOT}/Pods/Target Support Files/Pods-CommonUtilsTest/Pods-CommonUtilsTest-resources.sh"
+</string>
+			<key>showEnvVarsInLog</key>
+			<string>0</string>
+		</dict>
+		<key>3F29CE4FCC01BE88F3C496AC</key>
+		<dict>
+			<key>buildActionMask</key>
+			<string>2147483647</string>
+			<key>files</key>
+			<array/>
+			<key>inputPaths</key>
+			<array/>
+			<key>isa</key>
+			<string>PBXShellScriptBuildPhase</string>
+			<key>name</key>
+			<string>&#128230; Embed Pods Frameworks</string>
+			<key>outputPaths</key>
+			<array/>
+			<key>runOnlyForDeploymentPostprocessing</key>
+			<string>0</string>
+			<key>shellPath</key>
+			<string>/bin/sh</string>
+			<key>shellScript</key>
+			<string>"${SRCROOT}/Pods/Target Support Files/Pods-CommonUtilsTest/Pods-CommonUtilsTest-frameworks.sh"
 </string>
 			<key>showEnvVarsInLog</key>
 			<string>0</string>
@@ -112,6 +160,36 @@ fi
 			<string>Pods</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
+		</dict>
+		<key>998D24FA665B093CB1D850EC</key>
+		<dict>
+			<key>buildActionMask</key>
+			<string>2147483647</string>
+			<key>files</key>
+			<array/>
+			<key>inputPaths</key>
+			<array/>
+			<key>isa</key>
+			<string>PBXShellScriptBuildPhase</string>
+			<key>name</key>
+			<string>&#128230; Check Pods Manifest.lock</string>
+			<key>outputPaths</key>
+			<array/>
+			<key>runOnlyForDeploymentPostprocessing</key>
+			<string>0</string>
+			<key>shellPath</key>
+			<string>/bin/sh</string>
+			<key>shellScript</key>
+			<string>diff "${PODS_ROOT}/../Podfile.lock" "${PODS_ROOT}/Manifest.lock" &gt; /dev/null
+if [[ $? != 0 ]] ; then
+    cat &lt;&lt; EOM
+error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.
+EOM
+    exit 1
+fi
+</string>
+			<key>showEnvVarsInLog</key>
+			<string>0</string>
 		</dict>
 		<key>99A6CDA5D64C21998DD7A5DE</key>
 		<dict>
@@ -1504,12 +1582,15 @@ fi
 			<string>9CD9F7CC196EA78500EBBD85</string>
 			<key>buildPhases</key>
 			<array>
+				<string>998D24FA665B093CB1D850EC</string>
 				<string>5A91DF2CF6BFBAA6A4A5A457</string>
 				<string>9CD9F793196EA78500EBBD85</string>
 				<string>9CD9F794196EA78500EBBD85</string>
 				<string>9CD9F795196EA78500EBBD85</string>
 				<string>99A6CDA5D64C21998DD7A5DE</string>
 				<string>39F763689F1701DF2FE3BFD6</string>
+				<string>3F29CE4FCC01BE88F3C496AC</string>
+				<string>11FC838131D14CA2A4BB6DEF</string>
 			</array>
 			<key>buildRules</key>
 			<array/>

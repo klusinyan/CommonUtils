@@ -7,6 +7,8 @@
 
 + (void)saveObject:(id)object forKey:(NSString *)key;
 
++ (void)removeObjectForKey:(id)key;
+
 + (NSDictionary *)dictionaryFromObject:(NSObject *)object;
 
 @end

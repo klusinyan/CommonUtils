@@ -75,8 +75,8 @@ UIPopoverControllerDelegate
         self.pickerCornerradius = 0.0f;
         self.customToolbarHeight = 0.0f;
         self.bounceEnabled = NO;
-        self.bounceDuration = 0.1;
-        self.bouncePosition = 20.0;
+        self.bounceDuration = 0.15;
+        self.bouncePosition = 5.0;
         
         if (iPhone) {
             [[NSNotificationCenter defaultCenter] addObserver:self
@@ -515,7 +515,7 @@ UIPopoverControllerDelegate
                                        pickerViewContainerSize.height);
         // start the slide up animation
         [UIView beginAnimations:nil context:NULL];
-        [UIView setAnimationDuration:0.3];
+        [UIView setAnimationDuration:0.15];
         
         // we need to perform some post operations after the animation is complete
         [UIView setAnimationDelegate:self];
@@ -545,7 +545,7 @@ UIPopoverControllerDelegate
         
         // start the slide down animation
         [UIView beginAnimations:nil context:NULL];
-        [UIView setAnimationDuration:0.3];
+        [UIView setAnimationDuration:0.15];
         
         // we need to perform some post operations after the animation is complete
         [UIView setAnimationDelegate:self];
@@ -560,9 +560,6 @@ UIPopoverControllerDelegate
 
 - (void)slideUpDidStop
 {
-    //set boolean
-    self.visible = YES;
-    
     if (self.bounceEnabled) {
         CABasicAnimation *bounceAnimation = [CABasicAnimation animationWithKeyPath:@"position.y"];
         bounceAnimation.duration = self.bounceDuration;
@@ -573,7 +570,14 @@ UIPopoverControllerDelegate
         bounceAnimation.fillMode = kCAFillModeBackwards;
         bounceAnimation.removedOnCompletion = YES;
         bounceAnimation.additive = NO;
+        [CATransaction setCompletionBlock:^{
+            self.visible = YES;
+        }];
         [self.pickerView.layer addAnimation:bounceAnimation forKey:@"bounceAnimation"];
+        [CATransaction commit];
+    }
+    else {
+        self.visible = YES;
     }
     
     if (self.showCompetion) self.showCompetion();
@@ -592,6 +596,11 @@ UIPopoverControllerDelegate
     
     if (!self.isTapped) {
         if (self.hideCompetion) self.hideCompetion();
+    }
+    else {
+        if (self.delegate && [self.delegate respondsToSelector:@selector(pickerOverkayDidTap:)]) {
+            [self.delegate pickerOverkayDidTap:self];
+        }
     }
     
     //set tapped to default

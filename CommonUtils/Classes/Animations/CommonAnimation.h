@@ -30,6 +30,7 @@ static CommonAnimationType CommonAnimationTypeFadeInSemi        = @"fadeInSemi";
 static CommonAnimationType CommonAnimationTypeFadeOutSemi       = @"fadeOutSemi";
 static CommonAnimationType CommonAnimationTypeFadeOutRight      = @"fadeOutRight";
 static CommonAnimationType CommonAnimationTypeFadeOutLeft       = @"fadeOutLeft";
+static CommonAnimationType CommonAnimationTypePopUp             = @"popUp";
 static CommonAnimationType CommonAnimationTypePopDown           = @"popDown";
 static CommonAnimationType CommonAnimationTypePopAlpha          = @"popAlpha";
 static CommonAnimationType CommonAnimationTypePopAlphaUp        = @"popAlphaUp";

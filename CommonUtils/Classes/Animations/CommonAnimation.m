@@ -859,6 +859,29 @@ static NSMutableDictionary *_animationClasses;
 }
 @end
 
+@interface CommonPopUp : CommonAnimation
+@end
+@implementation CommonPopUp
++ (void)load
+{
+    [self registerClass:self forAnimationType:CommonAnimationTypePopUp];
+}
++ (void)performAnimationOnView:(UIView *)view
+                      duration:(NSTimeInterval)duration
+                         delay:(NSTimeInterval)delay
+                    completion:(void (^)(BOOL finished))completion
+{
+    // Start
+    view.transform = CGAffineTransformMakeScale(0.9, 0.9);
+    [UIView animateKeyframesWithDuration:duration/3 delay:delay options:0 animations:^{
+        // End
+        view.transform = CGAffineTransformMakeScale(1, 1);
+    } completion:^(BOOL finished) {
+        if (completion) completion(finished);
+    }];
+}
+@end
+
 @interface CommonPopAlphaUp : CommonAnimation
 @end
 @implementation CommonPopAlphaUp

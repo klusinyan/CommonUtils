@@ -222,14 +222,14 @@
     pageContent.backgroundColor = kPageBackgroundColor;
     pageContent.delegate = self;
 
-    //create animations
-    CommonAnimation *anim = [CommonAnimation animation];
+    /*
+    CommonAnimationPrototype *anim = [CommonAnimationPrototype animation];
     anim.type = CSAnimationTypeFadeIn;
     anim.delay = 0.4;
     anim.duration = 0.4;
-
     pageContent.animationRule = CommonPageAnimationRuleShowOnce;
     pageContent.animations = @[anim];
+    */
     
     return pageContent;
     //*/

@@ -14,7 +14,7 @@
     }
 }
 
-- (void)startCommonAnimationCompletion:(void (^)(BOOL))completion
+- (void)startCommonAnimationCompletion:(void (^)(BOOL finished))completion
 {
     Class <CommonAnimation> class = [CommonAnimation classForAnimationType:self.type];
     
@@ -23,7 +23,7 @@
     [super startCommonAnimationCompletion:completion];
 }
 
-- (void)startCommonAnimationWithType:(CommonAnimationType)type completion:(void (^)(BOOL))completion
+- (void)startCommonAnimationWithType:(CommonAnimationType)type completion:(void (^)(BOOL finished))completion
 {
     Class <CommonAnimation> class = [CommonAnimation classForAnimationType:type];
     

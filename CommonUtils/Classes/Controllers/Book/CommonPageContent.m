@@ -7,6 +7,7 @@
 #import "DirectoryUtils.h"
 #import "NetworkUtils.h"
 #import "CommonAnimationView.h"
+#import "CommonAnimationPrototype.h"
 
 /*
 #import <AFNetworkReachabilityManager.h>

@@ -19,6 +19,6 @@
 
 - (void)startCommonAnimationCompletion:(void(^)(BOOL finished))completion;
 
-- (void)startCommonAnimationWithType:(CommonAnimationType)type completion:(void (^)(BOOL))completion;
+- (void)startCommonAnimationWithType:(CommonAnimationType)type completion:(void (^)(BOOL finished))completion;
 
 @end

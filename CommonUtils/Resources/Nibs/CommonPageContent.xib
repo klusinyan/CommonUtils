@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11201" systemVersion="15G1004" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11201" systemVersion="15G1004" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
@@ -8,43 +8,72 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CommonPageContent">
             <connections>
-                <outlet property="animationView" destination="fKI-za-TC9" id="Br8-e4-NGf"/>
-                <outlet property="imageView" destination="jwL-SS-KI9" id="zdI-ph-HeX"/>
-                <outlet property="scrollView" destination="JqR-Uw-RJ6" id="KX2-78-lle"/>
-                <outlet property="view" destination="C5A-p2-CVD" id="aax-0c-gwK"/>
+                <outlet property="animationView" destination="x3N-AC-1HD" id="hQj-g9-Go6"/>
+                <outlet property="container" destination="gqL-JQ-y3U" id="aXi-p7-Vcm"/>
+                <outlet property="imageView" destination="9" id="11"/>
+                <outlet property="leadingSpace" destination="uNg-0m-UGF" id="pPt-8q-XIO"/>
+                <outlet property="scrollView" destination="8" id="zT9-es-rkZ"/>
+                <outlet property="topSpace" destination="nn6-d9-Hct" id="TPz-qM-1jd"/>
+                <outlet property="view" destination="6" id="7"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="C5A-p2-CVD">
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="6">
             <rect key="frame" x="0.0" y="0.0" width="320" height="460"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <view contentMode="scaleToFill" id="fKI-za-TC9" customClass="CommonAnimationView">
-                    <frame key="frameInset" minX="0.0%" minY="0.0%" width="100.00%" height="100.00%"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="x3N-AC-1HD" customClass="CommonAnimationView">
                     <subviews>
-                        <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" maximumZoomScale="2" id="JqR-Uw-RJ6">
-                            <frame key="frameInset" minX="0.0%" minY="0.0%" width="100.00%" height="100.00%"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gqL-JQ-y3U" userLabel="Container">
                             <subviews>
-                                <imageView contentMode="scaleAspectFit" id="jwL-SS-KI9">
-                                    <rect key="frame" x="0.0" y="0.0" width="320" height="460"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
+                                <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" maximumZoomScale="2" translatesAutoresizingMaskIntoConstraints="NO" id="8">
+                                    <subviews>
+                                        <imageView contentMode="scaleAspectFit" translatesAutoresizingMaskIntoConstraints="NO" id="9" userLabel="ImageView">
+                                            <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                                        </imageView>
+                                    </subviews>
                                     <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
-                                </imageView>
+                                    <constraints>
+                                        <constraint firstAttribute="bottom" secondItem="9" secondAttribute="bottom" id="3DW-kc-Hbr"/>
+                                        <constraint firstAttribute="trailing" secondItem="9" secondAttribute="trailing" id="Cr1-Dw-Ch0"/>
+                                        <constraint firstItem="9" firstAttribute="top" secondItem="8" secondAttribute="top" id="X8s-i9-BtG"/>
+                                        <constraint firstItem="9" firstAttribute="leading" secondItem="8" secondAttribute="leading" id="vCI-nb-PaA"/>
+                                    </constraints>
+                                    <connections>
+                                        <outlet property="delegate" destination="-1" id="10"/>
+                                    </connections>
+                                </scrollView>
                             </subviews>
                             <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
-                            <connections>
-                                <outlet property="delegate" destination="-1" id="6EI-yl-Io7"/>
-                            </connections>
-                        </scrollView>
+                            <constraints>
+                                <constraint firstAttribute="width" secondItem="9" secondAttribute="width" id="M1w-cm-gSi"/>
+                                <constraint firstItem="8" firstAttribute="top" secondItem="gqL-JQ-y3U" secondAttribute="top" id="SXL-9m-ljl"/>
+                                <constraint firstItem="8" firstAttribute="leading" secondItem="gqL-JQ-y3U" secondAttribute="leading" id="Uex-4I-VK2"/>
+                                <constraint firstAttribute="trailing" secondItem="8" secondAttribute="trailing" id="g4C-HE-STQ"/>
+                                <constraint firstAttribute="height" secondItem="9" secondAttribute="height" id="grT-kG-97R"/>
+                                <constraint firstAttribute="bottom" secondItem="8" secondAttribute="bottom" id="yZJ-5Z-d5i"/>
+                            </constraints>
+                        </view>
                     </subviews>
                     <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstItem="gqL-JQ-y3U" firstAttribute="top" secondItem="x3N-AC-1HD" secondAttribute="top" id="BP3-MQ-lw4"/>
+                        <constraint firstAttribute="bottom" secondItem="gqL-JQ-y3U" secondAttribute="bottom" id="RR7-1Y-Usx"/>
+                        <constraint firstAttribute="trailing" secondItem="gqL-JQ-y3U" secondAttribute="trailing" id="YRk-1w-2qy"/>
+                        <constraint firstItem="gqL-JQ-y3U" firstAttribute="leading" secondItem="x3N-AC-1HD" secondAttribute="leading" id="bXv-9M-zVm"/>
+                    </constraints>
                 </view>
             </subviews>
             <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstAttribute="centerY" secondItem="x3N-AC-1HD" secondAttribute="centerY" id="RBY-zW-Lth"/>
+                <constraint firstItem="x3N-AC-1HD" firstAttribute="top" secondItem="6" secondAttribute="top" id="nn6-d9-Hct"/>
+                <constraint firstItem="x3N-AC-1HD" firstAttribute="leading" secondItem="6" secondAttribute="leading" id="uNg-0m-UGF"/>
+                <constraint firstAttribute="centerX" secondItem="x3N-AC-1HD" secondAttribute="centerX" id="vna-Bl-UFf"/>
+            </constraints>
+            <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <point key="canvasLocation" x="9" y="228"/>
+            <point key="canvasLocation" x="66" y="173"/>
         </view>
     </objects>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">

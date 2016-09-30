@@ -10,15 +10,22 @@
 {
     NSData *decodedObject = [[NSUserDefaults standardUserDefaults] objectForKey:key];
     
-    if (!decodedObject) return nil;
+    if (decodedObject == nil) return nil;
     return [NSKeyedUnarchiver unarchiveObjectWithData:decodedObject];
 }
 
 + (void)saveObject:(id)object forKey:(NSString *)key
 {
     NSData *encodedObject = [NSKeyedArchiver archivedDataWithRootObject:object];
-
+    if (encodedObject == nil) return;
+    
     [[NSUserDefaults standardUserDefaults] setObject:encodedObject forKey:key];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
++ (void)removeObjectForKey:(id)key
+{
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:key];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 

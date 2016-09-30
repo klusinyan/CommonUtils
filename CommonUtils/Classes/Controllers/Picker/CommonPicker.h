@@ -90,4 +90,6 @@
 
 - (void)picker:(CommonPicker *)picker doneActionCallback:(id)sender;
 
+- (void)pickerOverkayDidTap:(CommonPicker *)picker;
+
 @end
