@@ -544,7 +544,7 @@ UIPopoverControllerDelegate
         /////////////////// ANIMATION ///////////////////
 
         self.pickerView.frame = startFrame;
-        [UIView animateWithDuration:0.2
+        [UIView animateWithDuration:0.15
                          animations:^{
                              self.pickerView.frame = endFrame;
                              self.overlay.backgroundColor = [UIColor colorWithWhite:0.2 alpha:0.5];
@@ -577,7 +577,7 @@ UIPopoverControllerDelegate
         /////////////////////////////////////////////////
         /////////////////// ANIMATION ///////////////////
 
-        [UIView animateWithDuration:0.2
+        [UIView animateWithDuration:0.15
                          animations:^{
                              self.pickerView.frame = endFrame;
                              self.overlay.alpha = 0.0f;
