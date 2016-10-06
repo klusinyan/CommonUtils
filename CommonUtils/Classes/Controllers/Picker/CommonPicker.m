@@ -79,17 +79,18 @@ UIPopoverControllerDelegate
         self.bounceDuration = 0.15;
         self.bouncePosition = 5.0;
         
+        // FIXME:: fix orientaiton change and dismiss with slow animations
         if (iPhone) {
             [[NSNotificationCenter defaultCenter] addObserver:self
-                                                     selector:@selector(statusBarOrientationWillChange:)
-                                                         name:UIApplicationWillChangeStatusBarOrientationNotification
+                                                     selector:@selector(statusBarOrientationDidChange:)
+                                                         name:UIApplicationDidChangeStatusBarOrientationNotification
                                                        object:nil];
         }
     }
     return self;
 }
 
-- (void)statusBarOrientationWillChange:(NSNotification *)notificaion
+- (void)statusBarOrientationDidChange:(NSNotification *)notificaion
 {
     if (iPhone && self.isVisible) {
         [self dismissPickerWithCompletion:^{
@@ -449,7 +450,6 @@ UIPopoverControllerDelegate
     
     self.overlay = [[UIView alloc] init];
     self.overlay.translatesAutoresizingMaskIntoConstraints = NO;
-    self.overlay.backgroundColor = [UIColor colorWithWhite:0.2f alpha:0.0f];
     [self.target.view addSubview:self.overlay];
     
     NSDictionary *bindings = @{@"overlay" : self.overlay};
@@ -542,7 +542,7 @@ UIPopoverControllerDelegate
         [UIView animateWithDuration:0.15
                          animations:^{
                              self.pickerView.frame = endFrame;
-                             self.overlay.backgroundColor = [UIColor colorWithWhite:0.2 alpha:0.5];
+                             self.overlay.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.5];
                          } completion:^(BOOL finished) {
                              [self slideUpDidStart];
                          }];
