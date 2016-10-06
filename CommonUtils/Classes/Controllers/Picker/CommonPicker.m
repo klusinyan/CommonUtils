@@ -67,6 +67,7 @@ UIPopoverControllerDelegate
         //defaults
         self.visible = NO;
         self.tapped = NO;
+        self.presentFromTop = NO;
         self.needsOverlay = NO;
         self.applyBlurEffect = NO;
         self.blurEffectStyle = UIBlurEffectStyleLight;
@@ -80,15 +81,15 @@ UIPopoverControllerDelegate
         
         if (iPhone) {
             [[NSNotificationCenter defaultCenter] addObserver:self
-                                                     selector:@selector(statusBarOrientationDidChange:)
-                                                         name:UIApplicationDidChangeStatusBarOrientationNotification
+                                                     selector:@selector(statusBarOrientationWillChange:)
+                                                         name:UIApplicationWillChangeStatusBarOrientationNotification
                                                        object:nil];
         }
     }
     return self;
 }
 
-- (void)statusBarOrientationDidChange:(NSNotification *)notificaion
+- (void)statusBarOrientationWillChange:(NSNotification *)notificaion
 {
     if (iPhone && self.isVisible) {
         [self dismissPickerWithCompletion:^{
@@ -487,47 +488,72 @@ UIPopoverControllerDelegate
         [self addOverlay];
         
         //assign size to picker
-        self.pickerView.frame = CGRectMake(0, 0, [self getPickerWidth] - 2 * [self getPickerPadding], [self getPickerHeight]);
+        CGFloat positionY;
+        if (self.presentFromTop) {
+            positionY = 0.0;
+        }
+        else {
+            positionY = self.target.view.bounds.size.height;
+        }
+        self.pickerView.frame = CGRectMake(0, positionY, [self getPickerWidth]-2 * [self getPickerPadding], [self getPickerHeight]);
 
         //add to superview
         [self.target.view addSubview:self.pickerView];
         
         CGSize pickerSize = [self.pickerView sizeThatFits:CGSizeZero];
-        self.pickerView.frame = CGRectMake(0, 0, pickerSize.width, pickerSize.height);
+        self.pickerView.frame = CGRectMake(0, positionY, pickerSize.width, pickerSize.height);
 
         // size up the picker view to our screen and compute the start/end frame origin for our slide up animation
-        //
-        // compute the start frame
+        
+        /////////////////////////////////////////////////
+        ////////////////// START FRAME //////////////////
+
+        if (self.presentFromTop) {
+            positionY = 0.0;
+        }
+        else {
+            positionY = self.target.view.bounds.size.height;
+        }
         CGSize pickerViewContainerSize = CGSizeMake(pickerSize.width, pickerSize.height);
-        CGRect startRect = CGRectMake(0.0,
-                                      self.target.view.bounds.size.height - [self getPickerPadding],
-                                      pickerViewContainerSize.width,
-                                      pickerViewContainerSize.height);
-        
-        self.pickerView.frame = startRect;
-        
-        [self centerPickerView];
-        
-        // compute the end frame
-        CGRect pickerRect = CGRectMake(0.0,
-                                       self.target.view.bounds.size.height - pickerViewContainerSize.height - [self getPickerPadding],
+        CGRect startFrame = CGRectMake(0.0 + [self getPickerPadding],
+                                       positionY + [self getPickerPadding],
                                        pickerViewContainerSize.width,
                                        pickerViewContainerSize.height);
-        // start the slide up animation
-        [UIView beginAnimations:nil context:NULL];
-        [UIView setAnimationDuration:0.15];
         
-        // we need to perform some post operations after the animation is complete
-        [UIView setAnimationDelegate:self];
-        [UIView setAnimationWillStartSelector:@selector(slideUpDidStop)];
-        
-        self.pickerView.frame = pickerRect;
+        ////////////////// START FRAME //////////////////
+        /////////////////////////////////////////////////
 
-        [self centerPickerView];
+        /////////////////////////////////////////////////
+        /////////////////// END FRAME ///////////////////
+
+        if (self.presentFromTop) {
+            positionY = 0.0;
+        }
+        else {
+            positionY = self.target.view.bounds.size.height - pickerViewContainerSize.height;
+        }
+        __block CGRect endFrame = CGRectMake(0.0 + [self getPickerPadding],
+                                             positionY - [self getPickerPadding],
+                                             pickerViewContainerSize.width,
+                                             pickerViewContainerSize.height);
         
-        self.overlay.backgroundColor = [UIColor colorWithWhite:0.2f alpha:0.5f];
+        /////////////////// END FRAME ///////////////////
+        /////////////////////////////////////////////////
         
-        [UIView commitAnimations];
+        /////////////////////////////////////////////////
+        /////////////////// ANIMATION ///////////////////
+
+        self.pickerView.frame = startFrame;
+        [UIView animateWithDuration:0.15
+                         animations:^{
+                             self.pickerView.frame = endFrame;
+                             self.overlay.backgroundColor = [UIColor colorWithWhite:0.2 alpha:0.5];
+                         } completion:^(BOOL finished) {
+                             [self slideUpDidStart];
+                         }];
+        
+        /////////////////// ANIMATION ///////////////////
+        /////////////////////////////////////////////////
     }
 }
 
@@ -539,26 +565,32 @@ UIPopoverControllerDelegate
             self.tapped = YES;
         }
         
-        CGRect screenRect = [[UIScreen mainScreen] applicationFrame];
+        CGRect targetFrame = self.target.view.frame;
         CGRect endFrame = self.pickerView.frame;
-        endFrame.origin.y = screenRect.origin.y + screenRect.size.height;
+        if (self.presentFromTop) {
+            endFrame.origin.y = -endFrame.size.height;
+        }
+        else {
+            endFrame.origin.y = targetFrame.origin.y + targetFrame.size.height;
+        }
+
+        /////////////////////////////////////////////////
+        /////////////////// ANIMATION ///////////////////
+
+        [UIView animateWithDuration:0.15
+                         animations:^{
+                             self.pickerView.frame = endFrame;
+                             self.overlay.alpha = 0.0f;
+                         } completion:^(BOOL finished) {
+                             [self slideDownDidStop];
+                         }];
         
-        // start the slide down animation
-        [UIView beginAnimations:nil context:NULL];
-        [UIView setAnimationDuration:0.15];
-        
-        // we need to perform some post operations after the animation is complete
-        [UIView setAnimationDelegate:self];
-        [UIView setAnimationDidStopSelector:@selector(slideDownDidStop)];
-        
-        self.pickerView.frame = endFrame;
-        self.overlay.alpha = 0.0f;
-        
-        [UIView commitAnimations];
+        /////////////////// ANIMATION ///////////////////
+        /////////////////////////////////////////////////
     }
 }
 
-- (void)slideUpDidStop
+- (void)slideUpDidStart
 {
     if (self.bounceEnabled) {
         CABasicAnimation *bounceAnimation = [CABasicAnimation animationWithKeyPath:@"position.y"];

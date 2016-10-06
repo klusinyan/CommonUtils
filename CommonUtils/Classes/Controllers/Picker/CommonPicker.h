@@ -15,6 +15,8 @@
                         sender:(id)sender
              relativeSuperview:(UIView *)relativeSuperview;
 
+@property (readonly, nonatomic, assign) UIViewController *target;
+
 @property (readwrite, nonatomic, assign) id<CommonPickerDataSource> dataSource;
 
 @property (readwrite, nonatomic, assign) id<CommonPickerDelegate> delegate;
@@ -23,13 +25,15 @@
 
 @property (readwrite, nonatomic, getter=isToolbarHidden) BOOL toolbarHidden;    // default NO
 
-@property (readwrite, nonatomic, assign) BOOL applyBlurEffect;                  // default NO
-
-@property (readwrite, nonatomic, assign) UIBlurEffectStyle blurEffectStyle;     // default UIBlurEffectStyleLight
+@property (readwrite, nonatomic, assign) BOOL presentFromTop;                   // defualt NO
 
 @property (readwrite, nonatomic, assign) BOOL needsOverlay;                     // default NO
 
 @property (readwrite, nonatomic, assign) BOOL bounceEnabled;                    // default NO
+
+@property (readwrite, nonatomic, assign) BOOL applyBlurEffect;                  // default NO
+
+@property (readwrite, nonatomic, assign) UIBlurEffectStyle blurEffectStyle;     // default UIBlurEffectStyleLight
 
 @property (readwrite, nonatomic, assign) NSTimeInterval bounceDuration;         // default 0.1
 
