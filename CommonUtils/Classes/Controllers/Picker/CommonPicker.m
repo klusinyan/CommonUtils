@@ -490,7 +490,7 @@ UIPopoverControllerDelegate
         //assign size to picker
         CGFloat positionY;
         if (self.presentFromTop) {
-            positionY = 0.0;
+            positionY = -[self getPickerHeight];
         }
         else {
             positionY = self.target.view.bounds.size.height;
@@ -509,7 +509,7 @@ UIPopoverControllerDelegate
         ////////////////// START FRAME //////////////////
 
         if (self.presentFromTop) {
-            positionY = 0.0;
+            positionY = -[self getPickerHeight];
         }
         else {
             positionY = self.target.view.bounds.size.height;
@@ -527,13 +527,13 @@ UIPopoverControllerDelegate
         /////////////////// END FRAME ///////////////////
 
         if (self.presentFromTop) {
-            positionY = 0.0;
+            positionY = [self getPickerPadding];
         }
         else {
-            positionY = self.target.view.bounds.size.height - pickerViewContainerSize.height;
+            positionY = self.target.view.bounds.size.height - pickerViewContainerSize.height - [self getPickerPadding];
         }
         __block CGRect endFrame = CGRectMake(0.0 + [self getPickerPadding],
-                                             positionY - [self getPickerPadding],
+                                             positionY,
                                              pickerViewContainerSize.width,
                                              pickerViewContainerSize.height);
         
@@ -544,7 +544,7 @@ UIPopoverControllerDelegate
         /////////////////// ANIMATION ///////////////////
 
         self.pickerView.frame = startFrame;
-        [UIView animateWithDuration:0.15
+        [UIView animateWithDuration:0.2
                          animations:^{
                              self.pickerView.frame = endFrame;
                              self.overlay.backgroundColor = [UIColor colorWithWhite:0.2 alpha:0.5];
@@ -577,7 +577,7 @@ UIPopoverControllerDelegate
         /////////////////////////////////////////////////
         /////////////////// ANIMATION ///////////////////
 
-        [UIView animateWithDuration:0.15
+        [UIView animateWithDuration:0.2
                          animations:^{
                              self.pickerView.frame = endFrame;
                              self.overlay.alpha = 0.0f;
