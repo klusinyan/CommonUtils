@@ -472,11 +472,6 @@ UIPopoverControllerDelegate
     [self.overlay addGestureRecognizer:tapGesture];
 }
 
-- (void)centerPickerView
-{
-    self.pickerView.center = CGPointMake(self.pickerView.superview.center.x, self.pickerView.center.y);
-}
-
 - (void)slideUp
 {
     /*self.completionType = CompletionTypeUnknown;*/
