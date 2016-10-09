@@ -4,7 +4,7 @@
 #import "CommonPicker.h"
 #import "BlurView.h"
 
-#define kPickerWidth (iPhone) ? self.target.view.frame.size.width : 320.0f;
+#define kPickerWidth (iPhone) ? self.window.frame.size.width : 320.0f;
 #define kPickerHeight 260.0f
 
 typedef void(^ShowCompletionHandler)(void);
@@ -18,13 +18,10 @@ UIPopoverControllerDelegate
 >
 #endif
 
-
-@property (readwrite, nonatomic, assign) UIViewController *target;
-@property (readwrite, nonatomic, assign) id sender;
-@property (readwrite, nonatomic, assign) UIView *relativeSuperview;
 #if __IPHONE_OS_VERSION_MAX_ALLOWED < 90000
 @property (readwrite, nonatomic, strong) UIPopoverController *myPopoverController;
 #endif
+@property (readwrite, nonatomic, strong) UIWindow *window;
 @property (readwrite, nonatomic, strong) UIView *overlay;
 @property (readwrite, nonatomic, strong) UIView *pickerView;
 @property (readwrite, nonatomic, strong) UIView *toolbar;
@@ -50,9 +47,37 @@ UIPopoverControllerDelegate
     }
 }
 
-- (instancetype)initWithTarget:(UIViewController *)target
-                        sender:(id)sender
-             relativeSuperview:(UIView *)relativeSuperview
+- (id)init
+{
+    self = [super init];
+    if (self) {
+        //defaults
+        self.visible = NO;
+        self.tapped = NO;
+        self.presentFromTop = NO;
+        self.needsOverlay = NO;
+        self.applyBlurEffect = NO;
+        self.blurEffectStyle = UIBlurEffectStyleLight;
+        self.toolbarHidden = NO;
+        self.pickerCornerradius = 0.0f;
+        self.customToolbarHeight = 0.0f;
+        self.bounceEnabled = NO;
+        self.bounceDuration = 0.15;
+        self.bouncePosition = 5.0;
+        
+        if (iPhone) {
+            [[NSNotificationCenter defaultCenter] addObserver:self
+                                                     selector:@selector(statusBarOrientationDidChange:)
+                                                         name:UIApplicationDidChangeStatusBarOrientationNotification
+                                                       object:nil];
+        }
+    }
+    return self;
+}
+
+- (id)initWithTarget:(UIViewController *)target
+              sender:(id)sender
+   relativeSuperview:(UIView *)relativeSuperview
 {
     self = [super init];
     if (self) {
@@ -72,14 +97,12 @@ UIPopoverControllerDelegate
         self.applyBlurEffect = NO;
         self.blurEffectStyle = UIBlurEffectStyleLight;
         self.toolbarHidden = NO;
-        self.showAfterOrientationDidChange = NO;
         self.pickerCornerradius = 0.0f;
         self.customToolbarHeight = 0.0f;
         self.bounceEnabled = NO;
         self.bounceDuration = 0.15;
         self.bouncePosition = 5.0;
         
-        // FIXME:: fix orientaiton change and dismiss with slow animations
         if (iPhone) {
             [[NSNotificationCenter defaultCenter] addObserver:self
                                                      selector:@selector(statusBarOrientationDidChange:)
@@ -93,13 +116,17 @@ UIPopoverControllerDelegate
 - (void)statusBarOrientationDidChange:(NSNotification *)notificaion
 {
     if (iPhone && self.isVisible) {
-        [self dismissPickerWithCompletion:^{
-            if (self.showAfterOrientationDidChange) {
-                [self showPickerWithCompletion:^{
-                    DebugLog(@"Picker is shown after orientation did change");
-                }];
-            }
-        }];
+        CGRect frame = self.pickerView.frame;
+        frame.size.width = CGRectGetWidth(self.window.frame) - 2 * [self getPickerPadding];
+        self.pickerView.frame = frame;
+        CGFloat positionY;
+        if (self.presentFromTop) {
+            positionY = [self getPickerPadding];
+        }
+        else {
+            positionY = frame.origin.y = self.window.bounds.size.height - [self getPickerHeight] - [self getPickerPadding];
+        }
+        self.pickerView.frame = frame;
     }
 }
 
@@ -131,6 +158,14 @@ UIPopoverControllerDelegate
 
 #pragma mark -
 #pragma mark private methods
+
+- (UIWindow *)window
+{
+    if (_window == nil) {
+        _window = [UIApplication sharedApplication].keyWindow;
+    }
+    return _window;
+}
 
 - (UIToolbar *)defaultToolbar
 {
@@ -450,19 +485,19 @@ UIPopoverControllerDelegate
     
     self.overlay = [[UIView alloc] init];
     self.overlay.translatesAutoresizingMaskIntoConstraints = NO;
-    [self.target.view addSubview:self.overlay];
+    [self.window addSubview:self.overlay];
     
     NSDictionary *bindings = @{@"overlay" : self.overlay};
     
-    [self.target.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[overlay]|"
-                                                                             options:0
-                                                                             metrics:nil
-                                                                               views:bindings]];
+    [self.window addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[overlay]|"
+                                                                          options:0
+                                                                          metrics:nil
+                                                                            views:bindings]];
     
-    [self.target.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[overlay]|"
-                                                                             options:0
-                                                                             metrics:nil
-                                                                               views:bindings]];
+    [self.window addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[overlay]|"
+                                                                          options:0
+                                                                          metrics:nil
+                                                                            views:bindings]];
     
     UITapGestureRecognizer* tapGesture =
     [[UITapGestureRecognizer alloc] initWithTarget:self
@@ -470,6 +505,7 @@ UIPopoverControllerDelegate
     tapGesture.numberOfTapsRequired = 1;
     tapGesture.numberOfTouchesRequired = 1;
     [self.overlay addGestureRecognizer:tapGesture];
+    
 }
 
 - (void)slideUp
@@ -488,12 +524,12 @@ UIPopoverControllerDelegate
             positionY = -[self getPickerHeight];
         }
         else {
-            positionY = self.target.view.bounds.size.height;
+            positionY = self.window.bounds.size.height;
         }
         self.pickerView.frame = CGRectMake(0, positionY, [self getPickerWidth]-2 * [self getPickerPadding], [self getPickerHeight]);
 
         //add to superview
-        [self.target.view addSubview:self.pickerView];
+        [self.window addSubview:self.pickerView];
         
         CGSize pickerSize = [self.pickerView sizeThatFits:CGSizeZero];
         self.pickerView.frame = CGRectMake(0, positionY, pickerSize.width, pickerSize.height);
@@ -507,7 +543,7 @@ UIPopoverControllerDelegate
             positionY = -[self getPickerHeight];
         }
         else {
-            positionY = self.target.view.bounds.size.height;
+            positionY = self.window.bounds.size.height;
         }
         CGSize pickerViewContainerSize = CGSizeMake(pickerSize.width, pickerSize.height);
         CGRect startFrame = CGRectMake(0.0 + [self getPickerPadding],
@@ -525,7 +561,7 @@ UIPopoverControllerDelegate
             positionY = [self getPickerPadding];
         }
         else {
-            positionY = self.target.view.bounds.size.height - pickerViewContainerSize.height - [self getPickerPadding];
+            positionY = self.window.bounds.size.height - pickerViewContainerSize.height - [self getPickerPadding];
         }
         __block CGRect endFrame = CGRectMake(0.0 + [self getPickerPadding],
                                              positionY,
@@ -560,7 +596,7 @@ UIPopoverControllerDelegate
             self.tapped = YES;
         }
         
-        CGRect targetFrame = self.target.view.frame;
+        CGRect targetFrame = self.window.frame;
         CGRect endFrame = self.pickerView.frame;
         if (self.presentFromTop) {
             endFrame.origin.y = -endFrame.size.height;

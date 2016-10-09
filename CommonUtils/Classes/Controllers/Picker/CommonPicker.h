@@ -7,15 +7,28 @@
 @interface CommonPicker : NSObject
 
 /*----------------------------------------------------------------------*/
-//target: viewcontoller that present the picker
-//sender: should not be nil, supported types are UIBarButtonItem, UIView
-//relativeSuperview: the relative superview of sender: could be nil
+// generic initializer
 /*----------------------------------------------------------------------*/
-- (instancetype)initWithTarget:(UIViewController *)target
-                        sender:(id)sender
-             relativeSuperview:(UIView *)relativeSuperview;
+- (id)init;
 
-@property (readonly, nonatomic, assign) UIViewController *target;
+/*----------------------------------------------------------------------*/
+// desicred initializer
+/*----------------------------------------------------------------------*/
+// target: viewcontoller that present the picker
+// sender: should not be nil, supported types are UIBarButtonItem, UIView
+// relativeSuperview: the relative superview of sender: could be nil
+/*----------------------------------------------------------------------*/
+- (id)initWithTarget:(UIViewController *)target
+              sender:(id)sender
+   relativeSuperview:(UIView *)relativeSuperview;
+
+@property (readwrite, nonatomic, assign) UIViewController *target;
+
+@property (readwrite, nonatomic, assign) id sender;
+
+@property (readwrite, nonatomic, assign) UIView *relativeSuperview;
+
+@property (readwrite, nonatomic, strong) UIView *contentView;
 
 @property (readwrite, nonatomic, assign) id<CommonPickerDataSource> dataSource;
 
@@ -40,9 +53,6 @@
 @property (readwrite, nonatomic, assign) CGFloat bouncePosition;                // default 20.0
 
 @property (readwrite, nonatomic, assign) CGFloat pickerCornerradius;            // defualt 0
-
-//only iPhone
-@property (readwrite, nonatomic, assign) BOOL showAfterOrientationDidChange;
 
 //indepenedly from iDevice call this method to show picker
 - (void)showPickerWithCompletion:(void (^)(void))completion;
