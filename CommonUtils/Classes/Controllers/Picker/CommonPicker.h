@@ -22,37 +22,39 @@
               sender:(id)sender
    relativeSuperview:(UIView *)relativeSuperview;
 
-@property (readwrite, nonatomic, assign) UIViewController *target;
+@property (nonatomic, strong) UIViewController *target;
 
-@property (readwrite, nonatomic, assign) id sender;
+@property (nonatomic, strong) id sender;
 
-@property (readwrite, nonatomic, assign) UIView *relativeSuperview;
+@property (nonatomic, strong) UIView *relativeSuperview;
 
-@property (readwrite, nonatomic, strong) UIView *contentView;
+@property (nonatomic, strong) UIView *contentView;
 
-@property (readwrite, nonatomic, assign) id<CommonPickerDataSource> dataSource;
+@property (nonatomic, assign) id<CommonPickerDataSource> dataSource;
 
-@property (readwrite, nonatomic, assign) id<CommonPickerDelegate> delegate;
+@property (nonatomic, assign) id<CommonPickerDelegate> delegate;
 
 @property (readonly, nonatomic, getter=isVisible) BOOL visible;
 
-@property (readwrite, nonatomic, getter=isToolbarHidden) BOOL toolbarHidden;    // default NO
+@property (nonatomic, getter=isToolbarHidden) BOOL toolbarHidden;   // default NO
 
-@property (readwrite, nonatomic, assign) BOOL presentFromTop;                   // defualt NO
+@property (nonatomic) BOOL presentFromTop;                          // defualt NO
 
-@property (readwrite, nonatomic, assign) BOOL needsOverlay;                     // default NO
+@property (nonatomic) BOOL notificationMode;                        // default NO
 
-@property (readwrite, nonatomic, assign) BOOL bounceEnabled;                    // default NO
+@property (nonatomic) BOOL needsOverlay;                            // default NO
 
-@property (readwrite, nonatomic, assign) BOOL applyBlurEffect;                  // default NO
+@property (nonatomic) BOOL bounceEnabled;                           // default NO
 
-@property (readwrite, nonatomic, assign) UIBlurEffectStyle blurEffectStyle;     // default UIBlurEffectStyleLight
+@property (nonatomic) BOOL applyBlurEffect;                         // default NO
 
-@property (readwrite, nonatomic, assign) NSTimeInterval bounceDuration;         // default 0.1
+@property (nonatomic) UIBlurEffectStyle blurEffectStyle;            // default UIBlurEffectStyleLight
 
-@property (readwrite, nonatomic, assign) CGFloat bouncePosition;                // default 20.0
+@property (nonatomic) NSTimeInterval bounceDuration;                // default 0.1
 
-@property (readwrite, nonatomic, assign) CGFloat pickerCornerradius;            // defualt 0
+@property (nonatomic) CGFloat bouncePosition;                       // default 20.0
+
+@property (nonatomic) CGFloat pickerCornerradius;                   // defualt 0
 
 //indepenedly from iDevice call this method to show picker
 - (void)showPickerWithCompletion:(void (^)(void))completion;

@@ -4,7 +4,43 @@
 #import "CommonPicker.h"
 #import "BlurView.h"
 
-#define kPickerWidth (iPhone) ? self.window.frame.size.width : 320.0f;
+@interface UIView (Frame)
+
+- (void)centerX;
+
+- (void)centerY;
+
+@end
+
+@implementation UIView (Frame)
+
+- (void)centerX
+{
+    self.frame = [self centeredFrameX];
+}
+
+- (void)centerY
+{
+    self.frame = [self centeredFrameY];
+}
+
+- (CGRect)centeredFrameX
+{
+    CGRect frame = self.frame;
+    frame.origin.x = CGRectGetMidX([self superview].frame) - CGRectGetWidth(self.frame) / 2;
+    return frame;
+}
+
+- (CGRect)centeredFrameY
+{
+    CGRect frame = self.frame;
+    frame.origin.y = CGRectGetMidY([self superview].frame) - CGRectGetWidth(self.frame) / 2;
+    return frame;
+}
+
+@end
+
+#define kPickerWidth self.window.frame.size.width
 #define kPickerHeight 260.0f
 
 typedef void(^ShowCompletionHandler)(void);
@@ -16,10 +52,17 @@ typedef void(^HideCompletionHandler)(void);
 <
 UIPopoverControllerDelegate
 >
+#else
+<
+UIPopoverPresentationControllerDelegate
+>
 #endif
 
 #if __IPHONE_OS_VERSION_MAX_ALLOWED < 90000
 @property (readwrite, nonatomic, strong) UIPopoverController *myPopoverController;
+#else 
+@property (readwrite, nonatomic, strong) UIViewController *controller;
+@property (readwrite, nonatomic, strong) UIPopoverPresentationController *popoverPresentationController;
 #endif
 @property (readwrite, nonatomic, strong) UIWindow *window;
 @property (readwrite, nonatomic, strong) UIView *overlay;
@@ -42,9 +85,7 @@ UIPopoverControllerDelegate
 
 - (void)dealloc
 {
-    if (iPhone) {
-        [[NSNotificationCenter defaultCenter] removeObserver:self];
-    }
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (id)init
@@ -55,6 +96,7 @@ UIPopoverControllerDelegate
         self.visible = NO;
         self.tapped = NO;
         self.presentFromTop = NO;
+        self.notificationMode = NO;
         self.needsOverlay = NO;
         self.applyBlurEffect = NO;
         self.blurEffectStyle = UIBlurEffectStyleLight;
@@ -65,12 +107,10 @@ UIPopoverControllerDelegate
         self.bounceDuration = 0.15;
         self.bouncePosition = 5.0;
         
-        if (iPhone) {
-            [[NSNotificationCenter defaultCenter] addObserver:self
-                                                     selector:@selector(statusBarOrientationDidChange:)
-                                                         name:UIApplicationDidChangeStatusBarOrientationNotification
-                                                       object:nil];
-        }
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(statusBarOrientationDidChange:)
+                                                     name:UIApplicationDidChangeStatusBarOrientationNotification
+                                                   object:nil];
     }
     return self;
 }
@@ -93,6 +133,7 @@ UIPopoverControllerDelegate
         self.visible = NO;
         self.tapped = NO;
         self.presentFromTop = NO;
+        self.notificationMode = NO;
         self.needsOverlay = NO;
         self.applyBlurEffect = NO;
         self.blurEffectStyle = UIBlurEffectStyleLight;
@@ -103,30 +144,31 @@ UIPopoverControllerDelegate
         self.bounceDuration = 0.15;
         self.bouncePosition = 5.0;
         
-        if (iPhone) {
-            [[NSNotificationCenter defaultCenter] addObserver:self
-                                                     selector:@selector(statusBarOrientationDidChange:)
-                                                         name:UIApplicationDidChangeStatusBarOrientationNotification
-                                                       object:nil];
-        }
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(statusBarOrientationDidChange:)
+                                                     name:UIApplicationDidChangeStatusBarOrientationNotification
+                                                   object:nil];
     }
     return self;
 }
 
 - (void)statusBarOrientationDidChange:(NSNotification *)notificaion
 {
-    if (iPhone && self.isVisible) {
-        CGRect frame = self.pickerView.frame;
-        frame.size.width = CGRectGetWidth(self.window.frame) - 2 * [self getPickerPadding];
-        self.pickerView.frame = frame;
-        CGFloat positionY;
-        if (self.presentFromTop) {
-            positionY = [self getPickerPadding];
+    if (iPhone || self.notificationMode) {
+        if (self.isVisible) {
+            CGRect frame = self.pickerView.frame;
+            frame.size.width = [self getPickerWidth] - 2 * [self getPickerPadding];
+            self.pickerView.frame = frame;
+            CGFloat positionY;
+            if (self.presentFromTop) {
+                positionY = [self getPickerPadding];
+            }
+            else {
+                positionY = frame.origin.y = self.window.bounds.size.height - [self getPickerHeight] - [self getPickerPadding];
+            }
+            self.pickerView.frame = frame;
+            [self.pickerView centerX];
         }
-        else {
-            positionY = frame.origin.y = self.window.bounds.size.height - [self getPickerHeight] - [self getPickerPadding];
-        }
-        self.pickerView.frame = frame;
     }
 }
 
@@ -136,7 +178,7 @@ UIPopoverControllerDelegate
     
     self.showCompetion = completion;
     
-    if (iPhone) {
+    if (iPhone || self.notificationMode) {
         [self slideUp];
     }
     else {
@@ -148,7 +190,7 @@ UIPopoverControllerDelegate
 {
     self.hideCompetion = completion;
     
-    if (iPhone) {
+    if (iPhone || self.notificationMode) {
         [self slideDown:nil];
     }
     else {
@@ -381,22 +423,9 @@ UIPopoverControllerDelegate
 - (UIViewController *)contentViewControllerWithSize:(CGSize)size
 {
     UIViewController *contentController = [[UIViewController alloc] init];
-    //contentController.view.translatesAutoresizingMaskIntoConstraints = NO;
-    //contentController.view.backgroundColor = [UIColor redColor];
     contentController.view.frame = CGRectMake(0, 0, size.width, size.height);
-    
-    self.pickerView.translatesAutoresizingMaskIntoConstraints = NO;
+    self.pickerView.frame = contentController.view.frame;
     [contentController.view addSubview:self.pickerView];
-    
-    [contentController.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[_pickerView]|"
-                                                                                   options:0
-                                                                                   metrics:nil
-                                                                                     views:NSDictionaryOfVariableBindings(_pickerView)]];
-    
-    [contentController.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[_pickerView]|"
-                                                                                   options:0
-                                                                                   metrics:nil
-                                                                                     views:NSDictionaryOfVariableBindings(_pickerView)]];
     return contentController;
 }
 
@@ -404,26 +433,28 @@ UIPopoverControllerDelegate
 {
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 90000
     CGSize size = CGSizeMake([self getPickerWidth], [self getPickerHeight]);
-    UIViewController *vc = [self contentViewControllerWithSize:size];
-    //vc.view.backgroundColor = [UIColor greenColor];
-    vc.preferredContentSize = size;
-    vc.modalPresentationStyle = UIModalPresentationPopover;
-    [self.target presentViewController:vc
+    self.controller = [self contentViewControllerWithSize:size];
+    self.controller.preferredContentSize = size;
+    self.controller.modalPresentationStyle = UIModalPresentationPopover;
+    [self.target presentViewController:self.controller
                               animated:YES
                             completion:^{
                                 if (self.showCompetion) self.showCompetion();
                             }];
-    UIPopoverPresentationController *popover = vc.popoverPresentationController;
-    popover.backgroundColor = [UIColor whiteColor];
-    popover.canOverlapSourceViewRect = YES;
-    popover.permittedArrowDirections = UIPopoverArrowDirectionAny;
+    
+    // setup popover controller
+    self.popoverPresentationController = self.controller.popoverPresentationController;
+    self.popoverPresentationController.backgroundColor = [UIColor clearColor];
+    self.popoverPresentationController.canOverlapSourceViewRect = YES;
+    self.popoverPresentationController.permittedArrowDirections = UIPopoverArrowDirectionAny;
+    self.popoverPresentationController.delegate = self;
     if ([self.sender isKindOfClass:[UIBarButtonItem class]]) {
-        popover.barButtonItem = self.sender;
+        self.popoverPresentationController.barButtonItem = self.sender;
     }
     else if ([self.sender isKindOfClass:[UIView class]]) {
         UIView *sender = (UIView *)self.sender;
-        popover.sourceRect = CGRectMake(0, 0, sender.frame.size.width, sender.frame.size.height);
-        popover.sourceView = self.sender;
+        self.popoverPresentationController.sourceRect = CGRectMake(0, 0, sender.frame.size.width, sender.frame.size.height);
+        self.popoverPresentationController.sourceView = self.sender;
     }
 #else
     CGSize size = CGSizeMake([self getPickerWidth], [self getPickerHeight]);
@@ -464,10 +495,10 @@ UIPopoverControllerDelegate
 - (void)dismissPopover
 {
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 90000
-    [self.target dismissViewControllerAnimated:YES
-                                    completion:^{
-                                        if (self.hideCompetion) self.hideCompetion();
-                                    }];
+    [self.controller dismissViewControllerAnimated:YES
+                                        completion:^{
+                                            if (self.hideCompetion) self.hideCompetion();
+                                        }];
 #else
     if (self.myPopoverController.popoverVisible) {
         [self.myPopoverController dismissPopoverAnimated:YES];
@@ -567,7 +598,7 @@ UIPopoverControllerDelegate
                                              positionY,
                                              pickerViewContainerSize.width,
                                              pickerViewContainerSize.height);
-        
+
         /////////////////// END FRAME ///////////////////
         /////////////////////////////////////////////////
         
@@ -575,9 +606,11 @@ UIPopoverControllerDelegate
         /////////////////// ANIMATION ///////////////////
 
         self.pickerView.frame = startFrame;
+        [self.pickerView centerX];
         [UIView animateWithDuration:0.15
                          animations:^{
                              self.pickerView.frame = endFrame;
+                             [self.pickerView centerX];
                              self.overlay.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.5];
                          } completion:^(BOOL finished) {
                              [self slideUpDidStart];
@@ -709,6 +742,24 @@ UIPopoverControllerDelegate
 - (void)popoverController:(UIPopoverController *)popoverController willRepositionPopoverToRect:(inout CGRect *)rect inView:(inout UIView *__autoreleasing *)view
 {
     if (self.myPopoverController == popoverController) {
+        CGRect taregtRect = [self.target.view convertRect:((UIView *)self.sender).frame fromView:(UIView *)self.relativeSuperview];
+        *rect = taregtRect;
+    }
+}
+#else 
+- (void)popoverPresentationControllerDidDismissPopover:(UIPopoverPresentationController *)popoverPresentationController
+{
+    // called when a Popover is dismissed
+}
+
+- (BOOL)popoverPresentationControllerShouldDismissPopover:(UIPopoverPresentationController *)popoverPresentationController
+{
+    return YES;
+}
+
+- (void)popoverPresentationController:(UIPopoverPresentationController *)popoverPresentationController willRepositionPopoverToRect:(inout CGRect *)rect inView:(inout UIView *__autoreleasing  _Nonnull *)view {
+    
+    if (self.popoverPresentationController == popoverPresentationController) {
         CGRect taregtRect = [self.target.view convertRect:((UIView *)self.sender).frame fromView:(UIView *)self.relativeSuperview];
         *rect = taregtRect;
     }
