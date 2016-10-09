@@ -4,6 +4,9 @@
 #import "CommonPicker.h"
 #import "BlurView.h"
 
+#define kAutoLayout 1
+
+#if !kAutoLayout
 @interface UIView (Frame)
 
 - (void)centerX;
@@ -39,6 +42,7 @@
 }
 
 @end
+#endif
 
 #define kPickerWidth self.window.frame.size.width
 #define kPickerHeight 260.0f
@@ -59,22 +63,23 @@ UIPopoverPresentationControllerDelegate
 #endif
 
 #if __IPHONE_OS_VERSION_MAX_ALLOWED < 90000
-@property (readwrite, nonatomic, strong) UIPopoverController *myPopoverController;
+@property (nonatomic, strong) UIPopoverController *myPopoverController;
 #else 
-@property (readwrite, nonatomic, strong) UIViewController *controller;
-@property (readwrite, nonatomic, strong) UIPopoverPresentationController *popoverPresentationController;
+@property (nonatomic, strong) UIViewController *controller;
+@property (nonatomic, strong) UIPopoverPresentationController *popoverPresentationController;
 #endif
-@property (readwrite, nonatomic, strong) UIWindow *window;
-@property (readwrite, nonatomic, strong) UIView *overlay;
-@property (readwrite, nonatomic, strong) UIView *pickerView;
-@property (readwrite, nonatomic, strong) UIView *toolbar;
-@property (readwrite, nonatomic, strong) UIView *picker;
-@property (readwrite, nonatomic, assign) CGFloat customToolbarHeight;
-@property (readwrite, nonatomic, getter = isVisible) BOOL visible;
-@property (readwrite, nonatomic, getter = isTapped) BOOL tapped;
+@property (nonatomic, strong) UIWindow *window;
+@property (nonatomic, strong) UIView *overlay;
+@property (nonatomic, strong) UIView *pickerView;
+@property (nonatomic, strong) UIView *toolbar;
+@property (nonatomic, strong) UIView *picker;
+@property (nonatomic, strong) NSLayoutConstraint *positionY;
+@property (nonatomic, assign) CGFloat customToolbarHeight;
+@property (nonatomic, getter = isVisible) BOOL visible;
+@property (nonatomic, getter = isTapped) BOOL tapped;
 
-@property (readwrite, nonatomic, copy) ShowCompletionHandler showCompetion;
-@property (readwrite, nonatomic, copy) HideCompletionHandler hideCompetion;
+@property (nonatomic, copy) ShowCompletionHandler showCompetion;
+@property (nonatomic, copy) HideCompletionHandler hideCompetion;
 
 @end
 
@@ -106,11 +111,13 @@ UIPopoverPresentationControllerDelegate
         self.bounceEnabled = NO;
         self.bounceDuration = 0.15;
         self.bouncePosition = 5.0;
-        
+   
+#if !kAutoLayout
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(statusBarOrientationDidChange:)
-                                                     name:UIApplicationDidChangeStatusBarOrientationNotification
+                                                     name:UIApplicationDidChangeStatusBarFrameNotification
                                                    object:nil];
+#endif
     }
     return self;
 }
@@ -144,33 +151,39 @@ UIPopoverPresentationControllerDelegate
         self.bounceDuration = 0.15;
         self.bouncePosition = 5.0;
         
+#if !kAutoLayout
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(statusBarOrientationDidChange:)
-                                                     name:UIApplicationDidChangeStatusBarOrientationNotification
+                                                     name:UIApplicationDidChangeStatusBarFrameNotification
                                                    object:nil];
+#endif
     }
     return self;
 }
 
+#if !kAutoLayout
 - (void)statusBarOrientationDidChange:(NSNotification *)notificaion
 {
     if (iPhone || self.notificationMode) {
         if (self.isVisible) {
             CGRect frame = self.pickerView.frame;
             frame.size.width = [self getPickerWidth] - 2 * [self getPickerPadding];
-            self.pickerView.frame = frame;
             CGFloat positionY;
             if (self.presentFromTop) {
                 positionY = [self getPickerPadding];
             }
             else {
-                positionY = frame.origin.y = self.window.bounds.size.height - [self getPickerHeight] - [self getPickerPadding];
+                positionY = self.window.bounds.size.height - [self getPickerHeight] - [self getPickerPadding];
             }
+            frame.origin.y = positionY;
             self.pickerView.frame = frame;
-            [self.pickerView centerX];
+            if (iPad) {
+                [self.pickerView centerX];
+            }
         }
     }
 }
+#endif
 
 - (void)showPickerWithCompletion:(void (^)(void))completion
 {
@@ -541,14 +554,87 @@ UIPopoverPresentationControllerDelegate
 
 - (void)slideUp
 {
-    /*self.completionType = CompletionTypeUnknown;*/
-    
     // check if our date picker is already on screen
     if (!self.isVisible && self.pickerView.superview == nil) {
         
         //add background overlay
         [self addOverlay];
         
+#if kAutoLayout
+        self.pickerView.translatesAutoresizingMaskIntoConstraints = NO;
+        [self.window addSubview:self.pickerView];
+
+        if (!self.presentFromTop) {
+            self.positionY = [NSLayoutConstraint constraintWithItem:self.pickerView
+                                                          attribute:NSLayoutAttributeBottom
+                                                          relatedBy:NSLayoutRelationEqual
+                                                             toItem:[self.pickerView superview]
+                                                          attribute:NSLayoutAttributeBottom
+                                                         multiplier:1
+                                                           constant:[self getPickerHeight]];
+        }
+        else {
+            self.positionY = [NSLayoutConstraint constraintWithItem:self.pickerView
+                                                          attribute:NSLayoutAttributeTop
+                                                          relatedBy:NSLayoutRelationEqual
+                                                             toItem:[self.pickerView superview]
+                                                          attribute:NSLayoutAttributeTop
+                                                         multiplier:1
+                                                           constant:-([self getPickerHeight] + [self getPickerPadding])];
+        }
+
+        NSLayoutConstraint *c1 = [NSLayoutConstraint constraintWithItem:self.pickerView
+                                                              attribute:NSLayoutAttributeWidth
+                                                              relatedBy:NSLayoutRelationEqual
+                                                                 toItem:[self.pickerView superview]
+                                                              attribute:NSLayoutAttributeWidth
+                                                             multiplier:(iPhone) ? 1 : 0.5
+                                                               constant:-(2*[self getPickerPadding])];
+        
+        NSLayoutConstraint *c2 = [NSLayoutConstraint constraintWithItem:self.pickerView
+                                                              attribute:NSLayoutAttributeHeight
+                                                              relatedBy:NSLayoutRelationEqual
+                                                                 toItem:nil
+                                                              attribute:NSLayoutAttributeNotAnAttribute
+                                                             multiplier:1
+                                                               constant:[self getPickerHeight]];
+        
+        NSLayoutConstraint *c4 = [NSLayoutConstraint constraintWithItem:self.pickerView
+                                                              attribute:NSLayoutAttributeLeading
+                                                              relatedBy:NSLayoutRelationGreaterThanOrEqual
+                                                                 toItem:[self.pickerView superview]
+                                                              attribute:NSLayoutAttributeLeading
+                                                             multiplier:1
+                                                               constant:[self getPickerPadding]];
+        
+        NSLayoutConstraint *c5 = [NSLayoutConstraint constraintWithItem:self.pickerView
+                                                              attribute:NSLayoutAttributeCenterX
+                                                              relatedBy:NSLayoutRelationEqual
+                                                                 toItem:[self.pickerView superview]
+                                                              attribute:NSLayoutAttributeCenterX
+                                                             multiplier:1
+                                                               constant:0];
+        
+        [self.window addConstraints:@[self.positionY, c1, c2, c4, c5]];
+        [self.window layoutIfNeeded];
+        
+        [UIView animateWithDuration:0.15
+                              delay:0.0
+                            options:UIViewAnimationOptionCurveEaseOut
+                         animations:^{
+                             self.overlay.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.5];
+                             CGFloat positionY = [self getPickerPadding];
+                             if (!self.presentFromTop) {
+                                 self.positionY.constant = -positionY;
+                             }
+                             else {
+                                 self.positionY.constant = positionY;
+                             }
+                             [self.window layoutIfNeeded];
+                         } completion:^(BOOL finished) {
+                             [self slideUpDidStart];
+                         }];
+#else
         //assign size to picker
         CGFloat positionY;
         if (self.presentFromTop) {
@@ -557,60 +643,58 @@ UIPopoverPresentationControllerDelegate
         else {
             positionY = self.window.bounds.size.height;
         }
-        self.pickerView.frame = CGRectMake(0, positionY, [self getPickerWidth]-2 * [self getPickerPadding], [self getPickerHeight]);
 
-        //add to superview
+        self.pickerView.frame = CGRectMake([self getPickerPadding],
+                                           positionY,
+                                           [self getPickerWidth] - 2 * [self getPickerPadding],
+                                           [self getPickerHeight]);
         [self.window addSubview:self.pickerView];
         
-        CGSize pickerSize = [self.pickerView sizeThatFits:CGSizeZero];
-        self.pickerView.frame = CGRectMake(0, positionY, pickerSize.width, pickerSize.height);
-
         // size up the picker view to our screen and compute the start/end frame origin for our slide up animation
         
         /////////////////////////////////////////////////
         ////////////////// START FRAME //////////////////
-
+        
         if (self.presentFromTop) {
             positionY = -[self getPickerHeight];
         }
         else {
             positionY = self.window.bounds.size.height;
         }
-        CGSize pickerViewContainerSize = CGSizeMake(pickerSize.width, pickerSize.height);
-        CGRect startFrame = CGRectMake(0.0 + [self getPickerPadding],
-                                       positionY + [self getPickerPadding],
-                                       pickerViewContainerSize.width,
-                                       pickerViewContainerSize.height);
+        CGRect startFrame = self.pickerView.frame;
+        startFrame.origin.y = positionY + [self getPickerPadding];
         
         ////////////////// START FRAME //////////////////
         /////////////////////////////////////////////////
-
+        
         /////////////////////////////////////////////////
         /////////////////// END FRAME ///////////////////
-
+        
         if (self.presentFromTop) {
             positionY = [self getPickerPadding];
         }
         else {
-            positionY = self.window.bounds.size.height - pickerViewContainerSize.height - [self getPickerPadding];
+            positionY = self.window.bounds.size.height - [self getPickerHeight] - [self getPickerPadding];
         }
-        __block CGRect endFrame = CGRectMake(0.0 + [self getPickerPadding],
-                                             positionY,
-                                             pickerViewContainerSize.width,
-                                             pickerViewContainerSize.height);
-
+        __block CGRect endFrame = self.pickerView.frame;
+        endFrame.origin.y = positionY;
+        
         /////////////////// END FRAME ///////////////////
         /////////////////////////////////////////////////
         
         /////////////////////////////////////////////////
         /////////////////// ANIMATION ///////////////////
-
+        
         self.pickerView.frame = startFrame;
-        [self.pickerView centerX];
+        if (iPad) {
+            [self.pickerView centerX];
+        }
         [UIView animateWithDuration:0.15
                          animations:^{
                              self.pickerView.frame = endFrame;
-                             [self.pickerView centerX];
+                             if (iPad) {
+                                 [self.pickerView centerX];
+                             }
                              self.overlay.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.5];
                          } completion:^(BOOL finished) {
                              [self slideUpDidStart];
@@ -618,6 +702,7 @@ UIPopoverPresentationControllerDelegate
         
         /////////////////// ANIMATION ///////////////////
         /////////////////////////////////////////////////
+#endif
     }
 }
 
@@ -629,6 +714,25 @@ UIPopoverPresentationControllerDelegate
             self.tapped = YES;
         }
         
+#if kAutoLayout
+        [UIView animateWithDuration:0.15
+                              delay:0.0
+                            options:UIViewAnimationOptionCurveEaseOut
+                         animations:^{
+                             self.overlay.alpha = 0.0f;
+                             CGFloat positionY = [self getPickerPadding] + [self getPickerHeight];
+                             if (!self.presentFromTop) {
+                                 self.positionY.constant = positionY;
+                             }
+                             else {
+                                 self.positionY.constant = -positionY;
+                             }
+                             [self.window layoutIfNeeded];
+                         } completion:^(BOOL finished) {
+                             [self slideDownDidStop];
+                         }];
+
+#else
         CGRect targetFrame = self.window.frame;
         CGRect endFrame = self.pickerView.frame;
         if (self.presentFromTop) {
@@ -651,6 +755,7 @@ UIPopoverPresentationControllerDelegate
         
         /////////////////// ANIMATION ///////////////////
         /////////////////////////////////////////////////
+#endif
     }
 }
 
