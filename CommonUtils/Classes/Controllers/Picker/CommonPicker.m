@@ -5,6 +5,9 @@
 #import "BlurView.h"
 
 #define kAutoLayout 1
+#define kDoubleOverlayPermitted 1
+
+static BOOL VISIBLE = NO;
 
 #if !kAutoLayout
 @interface UIView (Frame)
@@ -235,7 +238,7 @@ UIPopoverPresentationControllerDelegate
     UIBarButtonItem *fixed = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
                                                                            target:nil
                                                                            action:NULL];
-    fixed.width = 5;
+    fixed.width = 8;
 
     UIBarButtonItem *cancel = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
                                                                             target:self
@@ -628,7 +631,15 @@ UIPopoverPresentationControllerDelegate
                               delay:0.0
                             options:UIViewAnimationOptionCurveEaseOut
                          animations:^{
+#if kDoubleOverlayPermitted
                              self.overlay.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.5];
+#else
+                             if (!VISIBLE) {
+                                 VISIBLE = YES;
+                                 self.overlay.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.5];
+                             }
+#endif
+                             
                              CGFloat positionY = [self getPickerPadding];
                              if (!self.presentFromTop) {
                                  self.positionY.constant = -positionY;
@@ -725,7 +736,14 @@ UIPopoverPresentationControllerDelegate
                               delay:0.0
                             options:UIViewAnimationOptionCurveEaseOut
                          animations:^{
+#if kDoubleOverlayPermitted
                              self.overlay.alpha = 0.0f;
+#else
+                             if (VISIBLE) {
+                                 VISIBLE = NO;
+                                 self.overlay.alpha = 0.0f;
+                             }
+#endif
                              CGFloat positionY = [self getPickerPadding] + [self getPickerHeight];
                              if (!self.presentFromTop) {
                                  self.positionY.constant = positionY;
