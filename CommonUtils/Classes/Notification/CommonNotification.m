@@ -175,10 +175,7 @@ CommonPickerDelegate
     return _notificationQueue;
 }
 
-- (CommonPicker *)createNotificationView:(NSString *)alertBody
-                            alertMessage:(NSString *)alertMessage
-                                priority:(CommonNotificationPriority)priority
-                             alertAction:(void(^)(void))alertAction
+- (CommonPicker *)createNotification:(CommonNotificationObject *)obj
 {
     CommonPicker *commonPicker = [CommonPicker new];
     commonPicker.dataSource = self;
@@ -194,9 +191,9 @@ CommonPickerDelegate
     
     CommonNotificationView *contentView = [self loadNibForClass:NSClassFromString(@"CommonNotificationView") atIndex:0];
     contentView.imageIcon = self.imageIcon;
-    contentView.alertBody = alertBody;
-    contentView.alertMessage = alertMessage;
-    contentView.alertAction = alertAction;
+    contentView.alertBody = obj.alertBody;
+    contentView.alertMessage = obj.alertMessage;
+    contentView.alertAction = obj.alertAction;
     commonPicker.contentView = contentView;
     
     return commonPicker;
@@ -225,10 +222,7 @@ CommonPickerDelegate
             if ([self.notificationQueue count] > 0) {
                 rootViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
                 __block CommonNotificationObject *notification = self.notificationQueue[0];
-                CommonPicker *commonPicker = [self createNotificationView:notification.alertBody
-                                                             alertMessage:notification.alertMessage
-                                                                 priority:notification.priority
-                                                              alertAction:notification.alertAction];
+                CommonPicker *commonPicker = [self createNotification:notification];
                 commonPicker.target = rootViewController;
                 commonPicker.sender = rootViewController.view;
                 commonPicker.relativeSuperview = nil;
