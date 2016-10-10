@@ -6,6 +6,8 @@
 #import "CommonSerilizer.h"
 #import "DirectoryUtils.h"
 
+#define keyCommonNotificationQueue @"keyCommonNotificationQueue"
+
 NSString * const CommonNotificationDidShown = @"CommonNotificationDidShown";
 NSString * const CommonNotificationDidHide  = @"CommonNotificationDidHide";
 
@@ -70,14 +72,14 @@ CommonPickerDelegate
 {
     self = [super init];
     if (self){
-        self.notificationQueue = [decoder decodeObjectForKey:@"notificationQueue"];
+        self.notificationQueue = [decoder decodeObjectForKey:keyCommonNotificationQueue];
     }
     return self;
 }
 
 - (void)encodeWithCoder:(NSCoder *)encoder
 {
-    [encoder encodeObject:self.notificationQueue forKey:@"notificationQueue"];
+    [encoder encodeObject:self.notificationQueue forKey:keyCommonNotificationQueue];
 }
 
 #pragma mark - public methods
@@ -123,7 +125,7 @@ CommonPickerDelegate
             [self.notificationQueue addObject:notification];
         }
         
-        [CommonSerilizer saveObject:self.notificationQueue forKey:@"notificationQueue"];
+        [CommonSerilizer saveObject:self.notificationQueue forKey:keyCommonNotificationQueue];
         
         [self dispatchNotifications:self.notificationDispatcher];
     }
@@ -133,7 +135,7 @@ CommonPickerDelegate
 {
     [self.notificationQueue removeAllObjects];
     
-    [CommonSerilizer saveObject:self.notificationQueue forKey:@"notificationQueue"];
+    [CommonSerilizer saveObject:self.notificationQueue forKey:keyCommonNotificationQueue];
 }
 
 #pragma mark - private methods
@@ -165,7 +167,7 @@ CommonPickerDelegate
 - (NSMutableArray *)notificationQueue
 {
     if (_notificationQueue == nil) {
-        _notificationQueue = [CommonSerilizer loadObjectForKey:@"notificationQueue"];
+        _notificationQueue = [CommonSerilizer loadObjectForKey:keyCommonNotificationQueue];
         if (_notificationQueue == nil) {
             _notificationQueue = [NSMutableArray array];
         }
