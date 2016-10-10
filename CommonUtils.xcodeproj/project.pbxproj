@@ -46,6 +46,10 @@
 		9C5ADFEF1AA4A38800CD5215 /* CommonAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C5ADFED1AA4A38800CD5215 /* CommonAnimation.m */; };
 		9C6DD7D419F130670013D333 /* UIImage+Color.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C6DD7D219F130670013D333 /* UIImage+Color.h */; };
 		9C6DD7D519F130670013D333 /* UIImage+Color.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C6DD7D319F130670013D333 /* UIImage+Color.m */; };
+		9C887A571DABE0BA003E091C /* CommonNotification.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C887A531DABE0BA003E091C /* CommonNotification.h */; };
+		9C887A581DABE0BA003E091C /* CommonNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C887A541DABE0BA003E091C /* CommonNotification.m */; };
+		9C887A591DABE0BA003E091C /* CommonNotificationView.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C887A551DABE0BA003E091C /* CommonNotificationView.h */; };
+		9C887A5A1DABE0BA003E091C /* CommonNotificationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C887A561DABE0BA003E091C /* CommonNotificationView.m */; };
 		9C8C0AFC1934A1780033D2A9 /* UIImage+Resize.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD70236193388600066FFC0 /* UIImage+Resize.m */; };
 		9C8C0AFD1934A17C0033D2A9 /* UIImage+Alpha.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD70230193388600066FFC0 /* UIImage+Alpha.m */; };
 		9C8C0AFE1934A1800033D2A9 /* UIImage+RoundedCorner.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD70238193388600066FFC0 /* UIImage+RoundedCorner.m */; };
@@ -150,6 +154,10 @@
 		9C5ADFED1AA4A38800CD5215 /* CommonAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonAnimation.m; sourceTree = "<group>"; };
 		9C6DD7D219F130670013D333 /* UIImage+Color.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Color.h"; sourceTree = "<group>"; };
 		9C6DD7D319F130670013D333 /* UIImage+Color.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Color.m"; sourceTree = "<group>"; };
+		9C887A531DABE0BA003E091C /* CommonNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonNotification.h; sourceTree = "<group>"; };
+		9C887A541DABE0BA003E091C /* CommonNotification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonNotification.m; sourceTree = "<group>"; };
+		9C887A551DABE0BA003E091C /* CommonNotificationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonNotificationView.h; sourceTree = "<group>"; };
+		9C887A561DABE0BA003E091C /* CommonNotificationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonNotificationView.m; sourceTree = "<group>"; };
 		9C8F99F21AA0AE4800F34B57 /* CommonBook.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = CommonBook.bundle; sourceTree = "<group>"; };
 		9C90FF5F19374DD3004CE056 /* UITableView+Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableView+Utils.h"; sourceTree = "<group>"; };
 		9C90FF6019374DD3004CE056 /* UITableView+Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableView+Utils.m"; sourceTree = "<group>"; };
@@ -360,6 +368,17 @@
 			path = Animations;
 			sourceTree = "<group>";
 		};
+		9C887A521DABE0BA003E091C /* Notification */ = {
+			isa = PBXGroup;
+			children = (
+				9C887A531DABE0BA003E091C /* CommonNotification.h */,
+				9C887A541DABE0BA003E091C /* CommonNotification.m */,
+				9C887A551DABE0BA003E091C /* CommonNotificationView.h */,
+				9C887A561DABE0BA003E091C /* CommonNotificationView.m */,
+			);
+			path = Notification;
+			sourceTree = "<group>";
+		};
 		9C8F99EF1AA0894200F34B57 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -563,6 +582,7 @@
 				9CD9F75C196E876000EBBD85 /* Lib-Prefix.pch */,
 				9C3F54941ADCFB7B0085DD03 /* CommonUtilsVersion.h */,
 				9C3F54951ADCFB7B0085DD03 /* CommonUtilsVersion.m */,
+				9C887A521DABE0BA003E091C /* Notification */,
 				9CAC8F3C1AD6C69B004C5A75 /* Task */,
 				9CFDEC7E1ACD31DF001D1E62 /* Serilizer */,
 				9C42A7361AC9975600DD524F /* Crash */,
@@ -701,6 +721,7 @@
 				9CBCB4591A079EBC00E6BC7C /* NetworkUtils.h in Headers */,
 				9CD70241193388790066FFC0 /* UIImage+Resize.h in Headers */,
 				9C20BE5C1949EF830077C6E8 /* DropAnimationController.h in Headers */,
+				9C887A571DABE0BA003E091C /* CommonNotification.h in Headers */,
 				9CD70242193388790066FFC0 /* UIImage+RoundedCorner.h in Headers */,
 				9C96B096193F089B0014AC23 /* SplitViewController.h in Headers */,
 				9CB1FC8F197598D00080534F /* SelectedListController.h in Headers */,
@@ -712,6 +733,7 @@
 				9C20BE5B1949EF830077C6E8 /* ADVAnimationController.h in Headers */,
 				9C2AC5E119EA96F900588538 /* CommonProgress.h in Headers */,
 				9CFDEC811ACD31DF001D1E62 /* CommonSerilizer.h in Headers */,
+				9C887A591DABE0BA003E091C /* CommonNotificationView.h in Headers */,
 				9C90FF6B19377DEC004CE056 /* NSDate+Utils.h in Headers */,
 				9C94A99119EBC911003DF554 /* CommonSegmentedViewController.h in Headers */,
 				9C42A7391AC9975600DD524F /* CommonCrash.h in Headers */,
@@ -814,10 +836,12 @@
 				9CB1FC9C19759B960080534F /* SegmentedViewController.m in Sources */,
 				9CE7A8A819542CCF00E699E4 /* DirectoryUtils.m in Sources */,
 				9C20BE5D1949EF830077C6E8 /* DropAnimationController.m in Sources */,
+				9C887A581DABE0BA003E091C /* CommonNotification.m in Sources */,
 				9CD9F771196E907900EBBD85 /* GTMNSString+HTML.m in Sources */,
 				9CA2B4BF19584AFA00E29A8B /* UICollectionView+Utils.m in Sources */,
 				9CD7022C193388150066FFC0 /* UIView+AutoLayout.m in Sources */,
 				9CBCB45A1A079EBC00E6BC7C /* NetworkUtils.m in Sources */,
+				9C887A5A1DABE0BA003E091C /* CommonNotificationView.m in Sources */,
 				9C3F54971ADCFB7B0085DD03 /* CommonUtilsVersion.m in Sources */,
 				9C01922019D2CC0300E8E9E3 /* BlurView.m in Sources */,
 				9C2AC5E219EA96F900588538 /* CommonProgress.m in Sources */,

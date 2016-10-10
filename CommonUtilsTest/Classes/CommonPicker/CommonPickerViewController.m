@@ -94,7 +94,6 @@ CommonPickerDataSource
     
     if (iPhone) {
         self.commonPicker.needsOverlay = YES;
-        self.commonPicker.showAfterOrientationDidChange = YES;
         //self.commonPicker.pickerHeight = self.view.bounds.size.height;
         //self.commonPicker.pickerCornerradius = 10.0f;
     }
