@@ -24,4 +24,6 @@ typedef NS_ENUM(NSInteger, CommonNotificationPriority) {
                             priority:(CommonNotificationPriority)priority
                          alertAction:(void(^)(void))alertAction;
 
+- (void)cancelAllNotification;
+
 @end

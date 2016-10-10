@@ -3,10 +3,52 @@
 #import "CommonNotification.h"
 #import "CommonNotificationView.h"
 #import "CommonPicker.h"
+#import "CommonSerilizer.h"
 #import "DirectoryUtils.h"
 
 NSString * const CommonNotificationDidShown = @"CommonNotificationDidShown";
 NSString * const CommonNotificationDidHide  = @"CommonNotificationDidHide";
+
+typedef void(^AlertAction)(void);
+
+@interface CommonNotificationObject : NSObject <NSCoding>
+
+@property (nonatomic, copy) NSString *identifier;
+@property (nonatomic, strong) NSDate *creationDate;
+@property (nonatomic, copy) NSString *alertBody;
+@property (nonatomic, copy) NSString *alertMessage;
+@property (nonatomic, copy) AlertAction alertAction;
+@property (nonatomic) CommonNotificationPriority priority;
+
+@end
+
+@implementation CommonNotificationObject
+
+- (id)initWithCoder:(NSCoder *)decoder
+{
+    self = [super init];
+    if (self){
+        self.identifier = [decoder decodeObjectForKey:@"identifier"];
+        self.creationDate = [decoder decodeObjectForKey:@"creationDate"];
+        self.alertBody = [decoder decodeObjectForKey:@"alertBody"];
+        self.alertMessage = [decoder decodeObjectForKey:@"alertMessage"];
+        self.alertAction = [decoder decodeObjectForKey:@"alertAction"];
+        self.priority = [decoder decodeIntegerForKey:@"priority"];
+    }
+    return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)encoder
+{
+    [encoder encodeObject:self.identifier forKey:@"identifier"];
+    [encoder encodeObject:self.creationDate forKey:@"creationDate"];
+    [encoder encodeObject:self.alertBody forKey:@"alertBody"];
+    [encoder encodeObject:self.alertMessage forKey:@"alertMessage"];
+    [encoder encodeObject:self.alertAction forKey:@"alertAction"];
+    [encoder encodeInteger:self.priority forKey:@"priority"];
+}
+
+@end
 
 @interface CommonNotification ()
 <
@@ -24,9 +66,18 @@ CommonPickerDelegate
 
 #pragma mark - utils
 
-+ (UIView *)loadNibForClass:(Class)aClass atIndex:(NSInteger)index
+- (id)initWithCoder:(NSCoder *)decoder
 {
-    return [[[DirectoryUtils bundleWithName:kCommonBundleName] loadNibNamed:NSStringFromClass(aClass) owner:self options:nil] objectAtIndex:index];
+    self = [super init];
+    if (self){
+        self.notificationQueue = [decoder decodeObjectForKey:@"notificationQueue"];
+    }
+    return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)encoder
+{
+    [encoder encodeObject:self.notificationQueue forKey:@"notificationQueue"];
 }
 
 #pragma mark - public methods
@@ -57,59 +108,96 @@ CommonPickerDelegate
                          alertAction:(void(^)(void))alertAction
 {
     @synchronized (self) {
-        CommonPicker *notification = [CommonPicker new];
-        notification.dataSource = self;
-        notification.delegate = self;
-        notification.toolbarHidden = YES;
-        notification.needsOverlay = YES;
-        notification.bounceEnabled = YES;
-        notification.presentFromTop = self.presentOnTop;
-        notification.applyBlurEffect = YES;
-        notification.notificationMode = YES;
-        notification.blurEffectStyle = UIBlurEffectStyleDark;
-        notification.pickerCornerradius = 10.0;
+        CommonNotificationObject *notification = [CommonNotificationObject new];
+        notification.identifier = [self progressiveID];
+        notification.creationDate = [NSDate date];
+        notification.alertBody = alertBody;
+        notification.alertMessage = alertMessage;
+        notification.alertAction = alertAction;
+        notification.priority = priority;
         
-        CommonNotificationView *contentView = (CommonNotificationView *)[CommonNotification loadNibForClass:NSClassFromString(@"CommonNotificationView") atIndex:0];
-        contentView.alertBody = alertBody;
-        contentView.alertMessage = alertMessage;
-        contentView.imageIcon = self.imageIcon;
-        notification.contentView = contentView;
-        
-        __weak __typeof(self) weakSelf = self;
-        contentView.alertAction = ^(void){
-            [notification dismissPickerWithCompletion:^{
-                weakSelf.notificationShown = NO;
-                if ([weakSelf.notificationQueue count] > 0) {
-                    [weakSelf.notificationQueue removeObjectAtIndex:0];
-                }
-                if (notification.presentFromTop) {
-                    [UIApplication sharedApplication].keyWindow.windowLevel = UIWindowLevelNormal;
-                }
-                [[NSNotificationCenter defaultCenter] postNotificationName:CommonNotificationDidHide object:nil];
-                if (alertAction) alertAction();
-            }];
-        };
-        
-        if (priority == CommonNotificationPriorityHigh && [self.notificationQueue count] > 1) {
+        if (notification.priority == CommonNotificationPriorityHigh && [self.notificationQueue count] > 1) {
             [self.notificationQueue insertObject:notification atIndex:1];
         }
         else {
             [self.notificationQueue addObject:notification];
         }
         
+        [CommonSerilizer saveObject:self.notificationQueue forKey:@"notificationQueue"];
+        
         [self dispatchNotifications:self.notificationDispatcher];
     }
 }
+
+- (void)cancelAllNotification
+{
+    [self.notificationQueue removeAllObjects];
+    
+    [CommonSerilizer saveObject:self.notificationQueue forKey:@"notificationQueue"];
+}
+
 #pragma mark - private methods
+
+#pragma mark - utils
+
+// get progressive identifier
+// start from 1 if buffer is empty
+- (NSNumber *)progressiveID
+{
+    if ([self.notificationQueue count] == 0) {
+        return @(1);
+    }
+    else {
+        CommonNotificationObject *notificationObject = [self.notificationQueue lastObject];
+        return @([notificationObject.identifier integerValue] + 1);
+    }
+}
+
+- (UIView *)loadNibForClass:(Class)aClass atIndex:(NSInteger)index
+{
+    return [[[DirectoryUtils bundleWithName:kCommonBundleName] loadNibNamed:NSStringFromClass(aClass)
+                                                                      owner:self
+                                                                    options:nil] objectAtIndex:index];
+}
 
 #pragma mark - getter/setter
 
 - (NSMutableArray *)notificationQueue
 {
     if (_notificationQueue == nil) {
-        _notificationQueue = [NSMutableArray array];
+        _notificationQueue = [CommonSerilizer loadObjectForKey:@"notificationQueue"];
+        if (_notificationQueue == nil) {
+            _notificationQueue = [NSMutableArray array];
+        }
     }
     return _notificationQueue;
+}
+
+- (CommonPicker *)createNotificationView:(NSString *)alertBody
+                            alertMessage:(NSString *)alertMessage
+                                priority:(CommonNotificationPriority)priority
+                             alertAction:(void(^)(void))alertAction
+{
+    CommonPicker *commonPicker = [CommonPicker new];
+    commonPicker.dataSource = self;
+    commonPicker.delegate = self;
+    commonPicker.toolbarHidden = YES;
+    commonPicker.needsOverlay = YES;
+    commonPicker.bounceEnabled = YES;
+    commonPicker.presentFromTop = self.presentOnTop;
+    commonPicker.applyBlurEffect = YES;
+    commonPicker.notificationMode = YES;
+    commonPicker.blurEffectStyle = UIBlurEffectStyleDark;
+    commonPicker.pickerCornerradius = 10.0;
+    
+    CommonNotificationView *contentView = [self loadNibForClass:NSClassFromString(@"CommonNotificationView") atIndex:0];
+    contentView.imageIcon = self.imageIcon;
+    contentView.alertBody = alertBody;
+    contentView.alertMessage = alertMessage;
+    contentView.alertAction = alertAction;
+    commonPicker.contentView = contentView;
+    
+    return commonPicker;
 }
 
 - (void)startNotificationDispatcher
@@ -134,19 +222,51 @@ CommonPickerDelegate
             }
             if ([self.notificationQueue count] > 0) {
                 rootViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
-                CommonPicker *notification = self.notificationQueue[0];
-                notification.target = rootViewController;
-                notification.sender = rootViewController.view;
-                notification.relativeSuperview = nil;
+                __block CommonNotificationObject *notification = self.notificationQueue[0];
+                CommonPicker *commonPicker = [self createNotificationView:notification.alertBody
+                                                             alertMessage:notification.alertMessage
+                                                                 priority:notification.priority
+                                                              alertAction:notification.alertAction];
+                commonPicker.target = rootViewController;
+                commonPicker.sender = rootViewController.view;
+                commonPicker.relativeSuperview = nil;
+                
+                ///////////////////////////////////////////////////////////////
+                ///////////////////// SHOW NOTIFICATION ///////////////////////
+                
                 if ([self.notificationQueue count] > 0) {
                     self.notificationShown = YES;
-                    if (notification.presentFromTop) {
+                    if (commonPicker.presentFromTop) {
                         [UIApplication sharedApplication].keyWindow.windowLevel = UIWindowLevelAlert;
                     }
-                    [notification showPickerWithCompletion:^{
+                    [commonPicker showPickerWithCompletion:^{
                         [[NSNotificationCenter defaultCenter] postNotificationName:CommonNotificationDidShown object:nil];
+                        
+                        ///////////////////////////////////////////////////////////////
+                        /////////////////// NOTIFICATION TAP ACTION ///////////////////
+                        
+                        CommonNotificationView *contentView = commonPicker.contentView;
+                        contentView.alertAction = ^(void){
+                            [commonPicker dismissPickerWithCompletion:^{
+                                self.notificationShown = NO;
+                                if ([self.notificationQueue count] > 0) {
+                                    [self.notificationQueue removeObjectAtIndex:0];
+                                }
+                                if (commonPicker.presentFromTop) {
+                                    [UIApplication sharedApplication].keyWindow.windowLevel = UIWindowLevelNormal;
+                                }
+                                [[NSNotificationCenter defaultCenter] postNotificationName:CommonNotificationDidHide object:nil];
+                                if (notification.alertAction) notification.alertAction();
+                            }];
+                        };
+                        
+                        /////////////////// NOTIFICATION TAP ACTION ///////////////////
+                        ///////////////////////////////////////////////////////////////
                     }];
                 }
+                
+                ///////////////////// SHOW NOTIFICATION ///////////////////////
+                ///////////////////////////////////////////////////////////////
             }
         }
     }
