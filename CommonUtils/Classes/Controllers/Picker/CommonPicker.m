@@ -231,6 +231,12 @@ UIPopoverPresentationControllerDelegate
     toolbar.barTintColor = [UIToolbar appearance].barTintColor;
     toolbar.tintColor = [UIToolbar appearance].tintColor;
     
+    // fixed leading and trailing spaces
+    UIBarButtonItem *fixed = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
+                                                                           target:nil
+                                                                           action:NULL];
+    fixed.width = 5;
+
     UIBarButtonItem *cancel = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
                                                                             target:self
                                                                             action:@selector(cancelAction:)];
@@ -261,7 +267,7 @@ UIPopoverPresentationControllerDelegate
     // setup appearance
     label.backgroundColor = [UIColor clearColor];
     //label.textColor = [UIToolbar appearance].tintColor;
-    
+
     UIBarButtonItem *title = [[UIBarButtonItem alloc] initWithCustomView:label];
     
     UIBarButtonItem *flex_right = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
@@ -272,7 +278,7 @@ UIPopoverPresentationControllerDelegate
                                                                           target:self
                                                                           action:@selector(doneAction:)];
     
-    toolbar.items = @[cancel, flex_left, title, flex_right, done];
+    toolbar.items = @[fixed, cancel, flex_left, title, flex_right, done, fixed];
     
     [[label superview] addConstraint:[NSLayoutConstraint constraintWithItem:label
                                                                   attribute:NSLayoutAttributeHeight
@@ -399,6 +405,7 @@ UIPopoverPresentationControllerDelegate
     }
     
     if (!self.isToolbarHidden) {
+        self.pickerView.clipsToBounds = YES;
         [self.pickerView addSubview:self.toolbar];
     }
     
@@ -549,7 +556,6 @@ UIPopoverPresentationControllerDelegate
     tapGesture.numberOfTapsRequired = 1;
     tapGesture.numberOfTouchesRequired = 1;
     [self.overlay addGestureRecognizer:tapGesture];
-    
 }
 
 - (void)slideUp
