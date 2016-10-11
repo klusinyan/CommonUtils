@@ -46,8 +46,8 @@
 		9C5ADFEF1AA4A38800CD5215 /* CommonAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C5ADFED1AA4A38800CD5215 /* CommonAnimation.m */; };
 		9C6DD7D419F130670013D333 /* UIImage+Color.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C6DD7D219F130670013D333 /* UIImage+Color.h */; };
 		9C6DD7D519F130670013D333 /* UIImage+Color.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C6DD7D319F130670013D333 /* UIImage+Color.m */; };
-		9C887A571DABE0BA003E091C /* CommonNotification.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C887A531DABE0BA003E091C /* CommonNotification.h */; };
-		9C887A581DABE0BA003E091C /* CommonNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C887A541DABE0BA003E091C /* CommonNotification.m */; };
+		9C887A571DABE0BA003E091C /* CommonNotificationManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C887A531DABE0BA003E091C /* CommonNotificationManager.h */; };
+		9C887A581DABE0BA003E091C /* CommonNotificationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C887A541DABE0BA003E091C /* CommonNotificationManager.m */; };
 		9C887A591DABE0BA003E091C /* CommonNotificationView.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C887A551DABE0BA003E091C /* CommonNotificationView.h */; };
 		9C887A5A1DABE0BA003E091C /* CommonNotificationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C887A561DABE0BA003E091C /* CommonNotificationView.m */; };
 		9C8C0AFC1934A1780033D2A9 /* UIImage+Resize.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD70236193388600066FFC0 /* UIImage+Resize.m */; };
@@ -154,8 +154,8 @@
 		9C5ADFED1AA4A38800CD5215 /* CommonAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonAnimation.m; sourceTree = "<group>"; };
 		9C6DD7D219F130670013D333 /* UIImage+Color.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Color.h"; sourceTree = "<group>"; };
 		9C6DD7D319F130670013D333 /* UIImage+Color.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Color.m"; sourceTree = "<group>"; };
-		9C887A531DABE0BA003E091C /* CommonNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonNotification.h; sourceTree = "<group>"; };
-		9C887A541DABE0BA003E091C /* CommonNotification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonNotification.m; sourceTree = "<group>"; };
+		9C887A531DABE0BA003E091C /* CommonNotificationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonNotificationManager.h; sourceTree = "<group>"; };
+		9C887A541DABE0BA003E091C /* CommonNotificationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonNotificationManager.m; sourceTree = "<group>"; };
 		9C887A551DABE0BA003E091C /* CommonNotificationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonNotificationView.h; sourceTree = "<group>"; };
 		9C887A561DABE0BA003E091C /* CommonNotificationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonNotificationView.m; sourceTree = "<group>"; };
 		9C8F99F21AA0AE4800F34B57 /* CommonBook.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = CommonBook.bundle; sourceTree = "<group>"; };
@@ -371,8 +371,8 @@
 		9C887A521DABE0BA003E091C /* Notification */ = {
 			isa = PBXGroup;
 			children = (
-				9C887A531DABE0BA003E091C /* CommonNotification.h */,
-				9C887A541DABE0BA003E091C /* CommonNotification.m */,
+				9C887A531DABE0BA003E091C /* CommonNotificationManager.h */,
+				9C887A541DABE0BA003E091C /* CommonNotificationManager.m */,
 				9C887A551DABE0BA003E091C /* CommonNotificationView.h */,
 				9C887A561DABE0BA003E091C /* CommonNotificationView.m */,
 			);
@@ -721,7 +721,7 @@
 				9CBCB4591A079EBC00E6BC7C /* NetworkUtils.h in Headers */,
 				9CD70241193388790066FFC0 /* UIImage+Resize.h in Headers */,
 				9C20BE5C1949EF830077C6E8 /* DropAnimationController.h in Headers */,
-				9C887A571DABE0BA003E091C /* CommonNotification.h in Headers */,
+				9C887A571DABE0BA003E091C /* CommonNotificationManager.h in Headers */,
 				9CD70242193388790066FFC0 /* UIImage+RoundedCorner.h in Headers */,
 				9C96B096193F089B0014AC23 /* SplitViewController.h in Headers */,
 				9CB1FC8F197598D00080534F /* SelectedListController.h in Headers */,
@@ -836,7 +836,7 @@
 				9CB1FC9C19759B960080534F /* SegmentedViewController.m in Sources */,
 				9CE7A8A819542CCF00E699E4 /* DirectoryUtils.m in Sources */,
 				9C20BE5D1949EF830077C6E8 /* DropAnimationController.m in Sources */,
-				9C887A581DABE0BA003E091C /* CommonNotification.m in Sources */,
+				9C887A581DABE0BA003E091C /* CommonNotificationManager.m in Sources */,
 				9CD9F771196E907900EBBD85 /* GTMNSString+HTML.m in Sources */,
 				9CA2B4BF19584AFA00E29A8B /* UICollectionView+Utils.m in Sources */,
 				9CD7022C193388150066FFC0 /* UIView+AutoLayout.m in Sources */,

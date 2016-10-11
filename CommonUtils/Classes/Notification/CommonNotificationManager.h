@@ -12,17 +12,30 @@ typedef NS_ENUM(NSInteger, CommonNotificationPriority) {
 
 @interface CommonNotification : NSObject <NSCoding>
 
+@property (readonly, nonatomic, strong) NSString *identifier;
+@property (readonly, nonatomic, strong) NSDate *creationDate;
+@property (readonly, nonatomic, strong) NSString *alertBody;
+@property (readonly, nonatomic, strong) NSString *alertMessage;
+@property (readonly, nonatomic, strong) NSString *alertAction;
+@property (readonly, nonatomic, strong) NSDate *fireDate;
+@property (readonly, nonatomic) CommonNotificationPriority priority;
+
+@end
+
+@interface CommonNotificationManager : NSObject <NSCoding>
+
 // notification configuration
 @property (nonatomic) BOOL presentOnTop;                                // default YES
 @property (nonatomic, strong) NSString *rootViewControllerClassName;    // defualt nil
 @property (nonatomic, strong) UIImage *imageIcon;                       // defualt nil
 
-+ (CommonNotification *)sharedInstance;
++ (CommonNotificationManager *)sharedInstance;
 
 - (void)addNotificationWithAlertBody:(NSString *)alertBody
                         alertMessage:(NSString *)alertMessage
-                            priority:(CommonNotificationPriority)priority
-                         alertAction:(void(^)(void))alertAction;
+                         alertAction:(NSString *)alertAction
+                            fireDate:(NSDate *)fireDate
+                            priority:(CommonNotificationPriority)priority;
 
 - (void)cancelAllNotification;
 
