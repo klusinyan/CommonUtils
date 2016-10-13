@@ -90,6 +90,7 @@ CommonPickerDelegate
     self = [super init];
     if (self) {
         self.presentOnTop = YES;
+        self.checkNotificationsTimeInterval = 1.0;
         self.notificationHeight = 120.0;
     }
     return self;
@@ -193,7 +194,7 @@ CommonPickerDelegate
 - (void)startNotificationDispatcher
 {
     if (self.notificationDispatcher == nil) {
-        self.notificationDispatcher = [NSTimer scheduledTimerWithTimeInterval:0.1
+        self.notificationDispatcher = [NSTimer scheduledTimerWithTimeInterval:self.checkNotificationsTimeInterval
                                                                        target:self
                                                                      selector:@selector(dispatchNotifications:)
                                                                      userInfo:nil
