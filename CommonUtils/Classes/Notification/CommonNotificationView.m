@@ -62,12 +62,24 @@ UIGestureRecognizerDelegate
     if (!self.isDragging) {
         CGPoint velocity = [gesture velocityInView:self];
         if(velocity.y > 0) {
-            self.message.adjustsFontSizeToFitWidth = YES;
-            if (self.dragDown) self.dragDown();
+            if (self.presentOnTop) {
+                self.message.adjustsFontSizeToFitWidth = YES;
+                if (self.dragDown) self.dragDown();
+            }
+            else {
+                self.message.adjustsFontSizeToFitWidth = NO;
+                if (self.dragUp) self.dragUp();
+            }
         }
         else {
-            self.message.adjustsFontSizeToFitWidth = NO;
-            if (self.dragUp) self.dragUp();
+            if (self.presentOnTop) {
+                self.message.adjustsFontSizeToFitWidth = NO;
+                if (self.dragUp) self.dragUp();
+            }
+            else {
+                self.message.adjustsFontSizeToFitWidth = YES;
+                if (self.dragDown) self.dragDown();
+            }
         }
     }
     if (gesture.state == UIGestureRecognizerStateBegan) {

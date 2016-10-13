@@ -8,6 +8,7 @@ typedef void(^CommonNotificationViewDragUp)(void);
 
 @interface CommonNotificationView : UIView
 
+@property (nonatomic) BOOL presentOnTop;
 @property (nonatomic, strong) NSString *alertBody;
 @property (nonatomic, strong) NSString *alertMessage;
 @property (nonatomic, copy) CommonNotificationViewAlertAction alertAction;
