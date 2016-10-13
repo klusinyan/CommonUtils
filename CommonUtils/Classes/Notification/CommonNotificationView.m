@@ -62,8 +62,8 @@ UIGestureRecognizerDelegate
     if (!self.isDragging) {
         CGPoint velocity = [gesture velocityInView:self];
         if(velocity.y > 0) {
+            self.message.adjustsFontSizeToFitWidth = YES;
             if (self.presentOnTop) {
-                self.message.adjustsFontSizeToFitWidth = YES;
                 if (self.dragDown) self.dragDown();
             }
             else {

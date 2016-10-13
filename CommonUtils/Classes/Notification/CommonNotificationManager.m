@@ -231,6 +231,7 @@ CommonPickerDelegate
     //commonPicker.dynamicContentHeight = YES;
     
     CommonNotificationView *contentView = [self loadNibForClass:NSClassFromString(@"CommonNotificationView") atIndex:0];
+    contentView.presentOnTop = self.presentOnTop;
     contentView.imageIcon = self.imageIcon;
     contentView.alertBody = notification.alertBody;
     contentView.alertMessage = notification.alertMessage;
