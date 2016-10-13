@@ -54,13 +54,21 @@
 
 @property (nonatomic) CGFloat bouncePosition;                       // default 20.0
 
-@property (nonatomic) CGFloat pickerCornerradius;                   // defualt 0
+@property (nonatomic) CGFloat pickerCornerradius;                   // defualt 0.0
+
+@property (nonatomic) CGFloat expectedHeight;                       // defualt 0.0
+
+@property (nonatomic) BOOL dynamicContentHeight;                    // default NO
+
 
 //indepenedly from iDevice call this method to show picker
 - (void)showPickerWithCompletion:(void (^)(void))completion;
 
 //indepenedly from iDevice call this method to hide picker
 - (void)dismissPickerWithCompletion:(void (^)(void))completion;
+
+- (void)dragDown:(void(^)(void))completion;
+- (void)dragUp:(void(^)(void))completion;
 
 @end
 

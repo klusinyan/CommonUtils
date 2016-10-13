@@ -28,6 +28,7 @@ typedef NS_ENUM(NSInteger, CommonNotificationPriority) {
 @property (nonatomic) BOOL presentOnTop;                                // default YES
 @property (nonatomic, strong) NSString *rootViewControllerClassName;    // defualt nil
 @property (nonatomic, strong) UIImage *imageIcon;                       // defualt nil
+@property (nonatomic) CGFloat notificationHeight;                       // default 120.0
 
 + (CommonNotificationManager *)sharedInstance;
 

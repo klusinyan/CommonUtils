@@ -90,6 +90,7 @@ CommonPickerDelegate
     self = [super init];
     if (self) {
         self.presentOnTop = YES;
+        self.notificationHeight = 120.0;
     }
     return self;
 }
@@ -183,10 +184,16 @@ CommonPickerDelegate
                                                                     options:nil] objectAtIndex:index];
 }
 
+- (CGFloat)viewHeight:(UIView *)view
+{
+    [view layoutIfNeeded];
+    return [view systemLayoutSizeFittingSize:UILayoutFittingCompressedSize].height;
+}
+
 - (void)startNotificationDispatcher
 {
     if (self.notificationDispatcher == nil) {
-        self.notificationDispatcher = [NSTimer scheduledTimerWithTimeInterval:1
+        self.notificationDispatcher = [NSTimer scheduledTimerWithTimeInterval:0.1
                                                                        target:self
                                                                      selector:@selector(dispatchNotifications:)
                                                                      userInfo:nil
@@ -220,6 +227,7 @@ CommonPickerDelegate
     commonPicker.notificationMode = YES;
     commonPicker.blurEffectStyle = UIBlurEffectStyleDark;
     commonPicker.pickerCornerradius = 10.0;
+    //commonPicker.dynamicContentHeight = YES;
     
     CommonNotificationView *contentView = [self loadNibForClass:NSClassFromString(@"CommonNotificationView") atIndex:0];
     contentView.imageIcon = self.imageIcon;
@@ -227,6 +235,10 @@ CommonPickerDelegate
     contentView.alertMessage = notification.alertMessage;
     commonPicker.contentView = contentView;
     
+    // unusual case: notification.alertMessage
+    //contentView.alertMessage = @"Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate vel";
+    //contentView.alertMessage = @"Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, ";
+
     return commonPicker;
 }
 
@@ -254,7 +266,30 @@ CommonPickerDelegate
                 commonPicker.target = rootViewController;
                 commonPicker.sender = rootViewController.view;
                 commonPicker.relativeSuperview = nil;
-                
+
+                ///////////////////////////////////////////////////////////////
+                ////////////////// CALCULATE PICKER HEIGHT ////////////////////
+
+                CommonNotificationView *contentView = commonPicker.contentView;
+                commonPicker.expectedHeight = [self viewHeight:contentView];
+                if (commonPicker.expectedHeight > self.notificationHeight) {
+                    [contentView setContentDraggable];
+                    commonPicker.expectedHeight = [self viewHeight:contentView];
+                    contentView.dragDown = ^(void) {
+                        [commonPicker dragDown:^{
+                            //DebugLog(@"dragged down");
+                        }];
+                    };
+                    contentView.dragUp = ^(void) {
+                        [commonPicker dragUp:^{
+                            //DebugLog(@"dragged up");
+                        }];
+                    };
+                }
+
+                ////////////////// CALCULATE PICKER HEIGHT ////////////////////
+                ///////////////////////////////////////////////////////////////
+
                 ///////////////////////////////////////////////////////////////
                 ///////////////////// SHOW NOTIFICATION ///////////////////////
                 
@@ -269,7 +304,6 @@ CommonPickerDelegate
                         ///////////////////////////////////////////////////////////////
                         /////////////////// NOTIFICATION TAP ACTION ///////////////////
                         
-                        CommonNotificationView *contentView = commonPicker.contentView;
                         contentView.alertAction = ^(void){
                             [commonPicker dismissPickerWithCompletion:^{
                                 self.notificationShown = NO;
@@ -305,7 +339,7 @@ CommonPickerDelegate
 
 - (CGFloat)heightForPicker:(CommonPicker *)picker
 {
-    return 175.0;
+    return self.notificationHeight;
 }
 
 - (CGFloat)widthForPicker:(CommonPicker *)picker

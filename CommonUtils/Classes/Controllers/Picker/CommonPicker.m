@@ -76,13 +76,15 @@ UIPopoverPresentationControllerDelegate
 @property (nonatomic, strong) UIView *pickerView;
 @property (nonatomic, strong) UIView *toolbar;
 @property (nonatomic, strong) UIView *picker;
-@property (nonatomic, strong) NSLayoutConstraint *positionY;
 @property (nonatomic, assign) CGFloat customToolbarHeight;
 @property (nonatomic, getter = isVisible) BOOL visible;
 @property (nonatomic, getter = isTapped) BOOL tapped;
 
 @property (nonatomic, copy) ShowCompletionHandler showCompetion;
 @property (nonatomic, copy) HideCompletionHandler hideCompetion;
+
+@property (nonatomic, strong) NSLayoutConstraint *constraintOriginY;
+@property (nonatomic, strong) NSLayoutConstraint *constraintSizeHeight;
 
 @end
 
@@ -114,6 +116,8 @@ UIPopoverPresentationControllerDelegate
         self.bounceEnabled = NO;
         self.bounceDuration = 0.15;
         self.bouncePosition = 5.0;
+        self.expectedHeight = 0.0;
+        self.dynamicContentHeight = NO;
    
 #if !kAutoLayout
         [[NSNotificationCenter defaultCenter] addObserver:self
@@ -153,6 +157,8 @@ UIPopoverPresentationControllerDelegate
         self.bounceEnabled = NO;
         self.bounceDuration = 0.15;
         self.bouncePosition = 5.0;
+        self.expectedHeight = 0.0;
+        self.dynamicContentHeight = NO;
         
 #if !kAutoLayout
         [[NSNotificationCenter defaultCenter] addObserver:self
@@ -328,10 +334,12 @@ UIPopoverPresentationControllerDelegate
         //sum custom toolbar height (if a custom toolbar provided)
         pickerHeight += self.customToolbarHeight;
     }
-    if (self.isToolbarHidden) {
-        pickerHeight -= 44.0f;
+    if (self.dynamicContentHeight) {
+        return MAX(pickerHeight, self.expectedHeight);
     }
-    return pickerHeight;
+    else {
+        return pickerHeight;
+    }
 }
 
 - (CGFloat)getPickerPadding
@@ -414,7 +422,6 @@ UIPopoverPresentationControllerDelegate
     
     self.picker.translatesAutoresizingMaskIntoConstraints = NO;
     [self.pickerView addSubview:self.picker];
-    //self.picker.backgroundColor = [UIColor redColor];
     
     if (!self.isToolbarHidden) {
         [self.pickerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[_toolbar]|"
@@ -574,22 +581,22 @@ UIPopoverPresentationControllerDelegate
         [self.window addSubview:self.pickerView];
 
         if (!self.presentFromTop) {
-            self.positionY = [NSLayoutConstraint constraintWithItem:self.pickerView
-                                                          attribute:NSLayoutAttributeBottom
-                                                          relatedBy:NSLayoutRelationEqual
-                                                             toItem:[self.pickerView superview]
-                                                          attribute:NSLayoutAttributeBottom
-                                                         multiplier:1
-                                                           constant:[self getPickerHeight]];
+            self.constraintOriginY = [NSLayoutConstraint constraintWithItem:self.pickerView
+                                                                  attribute:NSLayoutAttributeBottom
+                                                                  relatedBy:NSLayoutRelationEqual
+                                                                     toItem:[self.pickerView superview]
+                                                                  attribute:NSLayoutAttributeBottom
+                                                                 multiplier:1
+                                                                   constant:[self getPickerHeight]];
         }
         else {
-            self.positionY = [NSLayoutConstraint constraintWithItem:self.pickerView
-                                                          attribute:NSLayoutAttributeTop
-                                                          relatedBy:NSLayoutRelationEqual
-                                                             toItem:[self.pickerView superview]
-                                                          attribute:NSLayoutAttributeTop
-                                                         multiplier:1
-                                                           constant:-([self getPickerHeight] + [self getPickerPadding])];
+            self.constraintOriginY = [NSLayoutConstraint constraintWithItem:self.pickerView
+                                                                  attribute:NSLayoutAttributeTop
+                                                                  relatedBy:NSLayoutRelationEqual
+                                                                     toItem:[self.pickerView superview]
+                                                                  attribute:NSLayoutAttributeTop
+                                                                 multiplier:1
+                                                                   constant:-([self getPickerHeight] + [self getPickerPadding])];
         }
 
         NSLayoutConstraint *c1 = [NSLayoutConstraint constraintWithItem:self.pickerView
@@ -600,13 +607,13 @@ UIPopoverPresentationControllerDelegate
                                                              multiplier:(iPhone) ? 1 : 0.5
                                                                constant:-(2*[self getPickerPadding])];
         
-        NSLayoutConstraint *c2 = [NSLayoutConstraint constraintWithItem:self.pickerView
-                                                              attribute:NSLayoutAttributeHeight
-                                                              relatedBy:NSLayoutRelationEqual
-                                                                 toItem:nil
-                                                              attribute:NSLayoutAttributeNotAnAttribute
-                                                             multiplier:1
-                                                               constant:[self getPickerHeight]];
+        self.constraintSizeHeight = [NSLayoutConstraint constraintWithItem:self.pickerView
+                                                                 attribute:NSLayoutAttributeHeight
+                                                                 relatedBy:NSLayoutRelationEqual
+                                                                    toItem:nil
+                                                                 attribute:NSLayoutAttributeNotAnAttribute
+                                                                multiplier:1
+                                                                  constant:[self getPickerHeight]];
         
         NSLayoutConstraint *c4 = [NSLayoutConstraint constraintWithItem:self.pickerView
                                                               attribute:NSLayoutAttributeLeading
@@ -624,7 +631,7 @@ UIPopoverPresentationControllerDelegate
                                                              multiplier:1
                                                                constant:0];
         
-        [self.window addConstraints:@[self.positionY, c1, c2, c4, c5]];
+        [self.window addConstraints:@[self.constraintOriginY, c1, self.constraintSizeHeight, c4, c5]];
         [self.window layoutIfNeeded];
         
         [UIView animateWithDuration:0.15
@@ -642,10 +649,10 @@ UIPopoverPresentationControllerDelegate
                              
                              CGFloat positionY = [self getPickerPadding];
                              if (!self.presentFromTop) {
-                                 self.positionY.constant = -positionY;
+                                 self.constraintOriginY.constant = -positionY;
                              }
                              else {
-                                 self.positionY.constant = positionY;
+                                 self.constraintOriginY.constant = positionY;
                              }
                              [self.window layoutIfNeeded];
                          } completion:^(BOOL finished) {
@@ -744,12 +751,12 @@ UIPopoverPresentationControllerDelegate
                                  self.overlay.alpha = 0.0f;
                              }
 #endif
-                             CGFloat positionY = [self getPickerPadding] + [self getPickerHeight];
+                             CGFloat positionY = [self getPickerPadding] + self.constraintSizeHeight.constant;
                              if (!self.presentFromTop) {
-                                 self.positionY.constant = positionY;
+                                 self.constraintOriginY.constant = positionY;
                              }
                              else {
-                                 self.positionY.constant = -positionY;
+                                 self.constraintOriginY.constant = -positionY;
                              }
                              [self.window layoutIfNeeded];
                          } completion:^(BOOL finished) {
@@ -830,6 +837,36 @@ UIPopoverPresentationControllerDelegate
     
     //set tapped to default
     self.tapped = NO;
+}
+
+- (void)dragDown:(void(^)(void))completion
+{
+    if (!self.dynamicContentHeight) {
+        [UIView animateWithDuration:0.25
+                              delay:0.0
+                            options:UIViewAnimationOptionCurveEaseOut
+                         animations:^{
+                             self.constraintSizeHeight.constant = self.expectedHeight;
+                             [self.window layoutIfNeeded];
+                         } completion:^(BOOL finished) {
+                             if (completion) completion();
+                         }];
+    }
+}
+
+- (void)dragUp:(void(^)(void))completion
+{
+    if (!self.dynamicContentHeight) {
+        [UIView animateWithDuration:0.25
+                              delay:0.0
+                            options:UIViewAnimationOptionCurveEaseOut
+                         animations:^{
+                             self.constraintSizeHeight.constant = [self getPickerHeight];
+                             [self.window layoutIfNeeded];
+                         } completion:^(BOOL finished) {
+                             if (completion) completion();
+                         }];
+    }
 }
 
 #pragma mark -
