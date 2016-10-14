@@ -20,6 +20,7 @@ NSString * const CommonNotificationDidHide  = @"CommonNotificationDidHide";
 @property (readwrite, nonatomic, strong) NSString *alertAction;
 @property (readwrite, nonatomic, strong) NSDate *fireDate;
 @property (readwrite, nonatomic) CommonNotificationPriority priority;
+@property (nonatomic) UIWindowLevel currentWindowLevel;
 
 @end
 
@@ -278,6 +279,7 @@ CommonPickerDelegate
             rootViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
             if ([self.notificationQueue count] > 0) {
                 __block CommonNotification *notification = self.notificationQueue[0];
+                notification.currentWindowLevel = [UIApplication sharedApplication].keyWindow.windowLevel;
                 if (notification.fireDate != nil && [[NSDate date] timeIntervalSinceDate:notification.fireDate] > 0) {
                     [self.notificationQueue removeObjectAtIndex:0];
                     [CommonSerilizer saveObject:self.notificationQueue forKey:keyCommonNotificationQueue];
@@ -334,7 +336,7 @@ CommonPickerDelegate
                                     [CommonSerilizer saveObject:self.notificationQueue forKey:keyCommonNotificationQueue];
                                 }
                                 if (commonPicker.presentFromTop) {
-                                    [UIApplication sharedApplication].keyWindow.windowLevel = UIWindowLevelNormal;
+                                    [UIApplication sharedApplication].keyWindow.windowLevel = notification.currentWindowLevel;
                                 }
                                 [[NSNotificationCenter defaultCenter] postNotificationName:CommonNotificationDidHide object:notification];
                             }];
@@ -390,10 +392,10 @@ CommonPickerDelegate
     @synchronized (self) {
         self.notificationShown = NO;
         if ([self.notificationQueue count] > 0) {
+            if (picker.presentFromTop) {
+                [UIApplication sharedApplication].keyWindow.windowLevel = [self.notificationQueue[0] currentWindowLevel];
+            }
             [self.notificationQueue removeObjectAtIndex:0];
-        }
-        if (picker.presentFromTop) {
-            [UIApplication sharedApplication].keyWindow.windowLevel = UIWindowLevelNormal;
         }
         [[NSNotificationCenter defaultCenter] postNotificationName:CommonNotificationDidHide object:nil];
     }
