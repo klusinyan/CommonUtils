@@ -96,6 +96,15 @@ CommonPickerDelegate
     return self;
 }
 
+- (void)cleanFiredNotifications
+{
+    NSMutableArray *notifications = [[CommonSerilizer loadObjectForKey:keyCommonNotificationQueue] mutableCopy];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.fireDate <= %@", [NSDate date]];
+    NSArray *firedNotifications = [notifications filteredArrayUsingPredicate:predicate];
+    [notifications removeObjectsInArray:firedNotifications];
+    [CommonSerilizer saveObject:notifications forKey:keyCommonNotificationQueue];
+}
+
 - (void)manageLifeCycle
 {
     [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillEnterForegroundNotification
@@ -113,12 +122,24 @@ CommonPickerDelegate
                                                   }];
 }
 
+- (void)startNotificationDispatcher
+{
+    if (self.notificationDispatcher == nil) {
+        self.notificationDispatcher = [NSTimer scheduledTimerWithTimeInterval:self.checkNotificationsTimeInterval
+                                                                       target:self
+                                                                     selector:@selector(dispatchNotifications:)
+                                                                     userInfo:nil
+                                                                      repeats:YES];
+    }
+}
+
 + (CommonNotificationManager *)sharedInstance
 {
     static dispatch_once_t pred = 0;
     __strong static id _sharedObject = nil;
     dispatch_once(&pred, ^{
         _sharedObject = [[self alloc] initOnce];
+        [_sharedObject cleanFiredNotifications];
         [_sharedObject manageLifeCycle];
         [_sharedObject startNotificationDispatcher];
     });
@@ -191,18 +212,17 @@ CommonPickerDelegate
     return [view systemLayoutSizeFittingSize:UILayoutFittingCompressedSize].height;
 }
 
-- (void)startNotificationDispatcher
+#pragma mark - getter/setter
+
+- (void)setCheckNotificationsTimeInterval:(NSTimeInterval)checkNotificationsTimeInterval
 {
-    if (self.notificationDispatcher == nil) {
-        self.notificationDispatcher = [NSTimer scheduledTimerWithTimeInterval:self.checkNotificationsTimeInterval
-                                                                       target:self
-                                                                     selector:@selector(dispatchNotifications:)
-                                                                     userInfo:nil
-                                                                      repeats:YES];
+    _checkNotificationsTimeInterval = checkNotificationsTimeInterval;
+
+    if (checkNotificationsTimeInterval > 0) {
+        [self.notificationDispatcher invalidate], self.notificationDispatcher = nil;
+        [self startNotificationDispatcher];
     }
 }
-
-#pragma mark - getter/setter
 
 - (NSMutableArray *)notificationQueue
 {
