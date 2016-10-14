@@ -4,6 +4,7 @@
 
 extern NSString * const CommonNotificationDidShown;
 extern NSString * const CommonNotificationDidHide;
+extern NSString * const CommonNotificationDidTap;
 
 typedef NS_ENUM(NSInteger, CommonNotificationPriority) {
     CommonNotificationPriorityDefault=0,

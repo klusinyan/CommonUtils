@@ -10,6 +10,7 @@
 
 NSString * const CommonNotificationDidShown = @"CommonNotificationDidShown";
 NSString * const CommonNotificationDidHide  = @"CommonNotificationDidHide";
+NSString * const CommonNotificationDidTap   = @"CommonNotificationDidTap";
 
 @interface CommonNotification ()
 
@@ -328,13 +329,13 @@ CommonPickerDelegate
                             [commonPicker dismissPickerWithCompletion:^{
                                 self.notificationShown = NO;
                                 if ([self.notificationQueue count] > 0) {
+                                    if (commonPicker.presentFromTop) {
+                                        [UIApplication sharedApplication].keyWindow.windowLevel = notification.currentWindowLevel;
+                                    }
+                                    [[NSNotificationCenter defaultCenter] postNotificationName:CommonNotificationDidTap object:notification];
                                     [self.notificationQueue removeObjectAtIndex:0];
                                     [CommonSerilizer saveObject:self.notificationQueue forKey:keyCommonNotificationQueue];
                                 }
-                                if (commonPicker.presentFromTop) {
-                                    [UIApplication sharedApplication].keyWindow.windowLevel = notification.currentWindowLevel;
-                                }
-                                [[NSNotificationCenter defaultCenter] postNotificationName:CommonNotificationDidHide object:notification];
                             }];
                         };
                         
@@ -388,12 +389,14 @@ CommonPickerDelegate
     @synchronized (self) {
         self.notificationShown = NO;
         if ([self.notificationQueue count] > 0) {
+            CommonNotification *notification = self.notificationQueue[0];
             if (picker.presentFromTop) {
-                [UIApplication sharedApplication].keyWindow.windowLevel = [self.notificationQueue[0] currentWindowLevel];
+                [UIApplication sharedApplication].keyWindow.windowLevel = notification.currentWindowLevel;
             }
+            [[NSNotificationCenter defaultCenter] postNotificationName:CommonNotificationDidHide object:notification];
             [self.notificationQueue removeObjectAtIndex:0];
+            [CommonSerilizer saveObject:self.notificationQueue forKey:keyCommonNotificationQueue];
         }
-        [[NSNotificationCenter defaultCenter] postNotificationName:CommonNotificationDidHide object:nil];
     }
 }
 
