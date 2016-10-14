@@ -9,7 +9,6 @@
 #import "MainViewController.h"
 #import "CommonBarcodeController.h"
 #import "ProgressViewController.h"
-#import "CustomSplitController.h"
 #import "CommonBookViewController.h"
 #import "CommonPickerViewController.h"
 #import "CommonKeyboardViewController.h"
@@ -23,8 +22,7 @@
 typedef NS_ENUM(NSInteger, RowType) {
     RowTypeSegementController,
     RowTypeBarcodeReader,
-    RowTypeProgressView,
-    RowTypeSplitController,
+    //RowTypeProgressView,
     RowTypeCommonBook,
     RowTypeCommonPicker,
     RowTypeCommonKeyboard,
@@ -162,12 +160,11 @@ typedef NS_ENUM(NSInteger, RowType) {
         case RowTypeBarcodeReader:
             cell.textLabel.text = @"BarcodeReader";
             break;
+            /*
         case RowTypeProgressView:
             cell.textLabel.text = @"ProgressView";
             break;
-        case RowTypeSplitController:
-            cell.textLabel.text = @"SplitController";
-            break;
+             //*/
         case RowTypeCommonBook:
             cell.textLabel.text = @"CommonBook";
             break;
@@ -285,6 +282,7 @@ typedef NS_ENUM(NSInteger, RowType) {
             
             break;
         }
+            /*
         case RowTypeProgressView: {
             ProgressViewController *vc = [[ProgressViewController alloc] init];
             UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:vc];
@@ -293,14 +291,7 @@ typedef NS_ENUM(NSInteger, RowType) {
             
             break;
         }
-        case RowTypeSplitController: {
-            CustomSplitController *vc = [[CustomSplitController alloc] init];
-            vc.modalPresentationStyle = UIModalPresentationOverCurrentContext;
-            [self presentViewController:vc animated:YES completion:nil];
-            //[self.navigationController pushViewController:vc animated:YES];
-            
-            break;
-        }
+             //*/
         case RowTypeCommonBook: {
             CommonBookViewController *vc = [[CommonBookViewController alloc] initWithNibName:NSStringFromClass([CommonBookViewController class]) bundle:nil];
             [self.navigationController pushViewController:vc animated:YES];

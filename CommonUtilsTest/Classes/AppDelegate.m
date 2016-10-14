@@ -11,6 +11,8 @@
 #import "CUImage.h"
 #import "AFNetworking.h"
 #import "AFNetworkActivityIndicatorManager.h"
+#import "CommonNotificationManager.h"
+#import "NSDate+DateTools.h"
 
 @interface AppDelegate () <FICImageCacheDelegate>
 
@@ -19,6 +21,67 @@
 @end
 
 @implementation AppDelegate
+
+// TESTING NOTIFICATIONS
++ (NSString *)loremIpsum
+{
+    return @"Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.";
+}
+
++ (NSString *)loremIpsumMedium
+{
+    return @"Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
+}
+
++ (NSString *)loremIpsumShort
+{
+    return @"Lorem ipsum dolor sit er elit lamet";
+}
+
++ (NSString *)rndLoremIpsum
+{
+    int rnd = arc4random_uniform((u_int32_t)[self loremIpsum].length);
+    return [[self loremIpsum] substringWithRange:NSMakeRange(0, rnd)];
+}
+
++ (NSString *)rndLoremIpsumShort
+{
+    int rnd = arc4random_uniform((u_int32_t)[self loremIpsumShort].length);
+    return [[self loremIpsumShort] substringWithRange:NSMakeRange(0, rnd)];
+}
+
+- (void)configureCommonNotifications
+{
+    [CommonNotificationManager sharedInstance].presentOnTop = YES;
+    [CommonNotificationManager sharedInstance].checkNotificationsTimeInterval = 10.0;
+    [CommonNotificationManager sharedInstance].imageIcon = [UIImage imageNamed:@"apple"];
+    [CommonNotificationManager sharedInstance].notificationHeight = 120.0;
+}
+
+- (void)generateNotifications
+{
+    [NSTimer scheduledTimerWithTimeInterval:5
+                                     target:self
+                                   selector:@selector(runGenerateNotifications:)
+                                   userInfo:nil
+                                    repeats:YES];
+}
+
+- (void)runGenerateNotifications:(NSTimer *)timer
+{
+    NSDate *date = [NSDate date];
+    NSDateFormatter *dateFormatter = [NSDateFormatter new];
+    [dateFormatter setDateStyle:NSDateFormatterShortStyle];
+    [dateFormatter setTimeStyle:NSDateFormatterMediumStyle];
+    
+    NSDate *fireDate = (arc4random_uniform(2)) ? [date dateByAddingMinutes:1] : nil;
+    [[CommonNotificationManager sharedInstance] addNotificationWithAlertBody:[dateFormatter stringFromDate:date]
+                                                                alertMessage:[[self class] rndLoremIpsum]
+                                                                 alertAction:nil
+                                                                    fireDate:fireDate
+                                                                    priority:CommonNotificationPriorityDefault];
+}
+// TESTING NOTIFICATIONS
 
 - (void)setupAFNetworking
 {
@@ -102,6 +165,19 @@ errorDidOccurWithMessage:(NSString *)errorMessage {
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    [self configureCommonNotifications];
+    [self generateNotifications];
+    
+    [[NSNotificationCenter defaultCenter] addObserverForName:CommonNotificationDidHide
+                                                      object:nil
+                                                       queue:[NSOperationQueue currentQueue]
+                                                  usingBlock:^(NSNotification * _Nonnull note) {
+                                                      if ([[note object] isMemberOfClass:[CommonNotification class]]) {
+                                                          CommonNotification *notification = (CommonNotification *)[note object];
+                                                          DebugLog(@"notification %@", notification);
+                                                      }
+                                                  }];
+
     application.idleTimerDisabled = YES;
     
     /*

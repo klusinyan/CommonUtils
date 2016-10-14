@@ -119,10 +119,10 @@
         //setup and position page control
         //not used only test
         //only when finished presneting book the customize page control
+        /*
         [self.commonBook setupCustomPageControlWithCompletion:^(UIPageControl *pageControl) {
             pageControl.hidden = [self.items count] == 1;
-        }];
-        /*
+        }];         
         [self.commonBook setupCustomPageControlWithCompletion:^(UIPageControl *pageControl) {
                                                           
                                                           NSLayoutConstraint *bottom =

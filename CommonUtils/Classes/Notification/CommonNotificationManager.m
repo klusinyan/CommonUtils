@@ -272,11 +272,6 @@ CommonPickerDelegate
             if (self.notificationShown) {
                 return;
             }
-            UIViewController *rootViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
-            if (![rootViewController isMemberOfClass:NSClassFromString(self.rootViewControllerClassName)]) {
-                return;
-            }
-            rootViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
             if ([self.notificationQueue count] > 0) {
                 __block CommonNotification *notification = self.notificationQueue[0];
                 notification.currentWindowLevel = [UIApplication sharedApplication].keyWindow.windowLevel;
@@ -286,6 +281,7 @@ CommonPickerDelegate
                     DebugLog(@"notificationQueue.count %@", @([self.notificationQueue count]));
                     return;
                 }
+                UIViewController *rootViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
                 CommonPicker *commonPicker = [self createNotification:notification];
                 commonPicker.target = rootViewController;
                 commonPicker.sender = rootViewController.view;

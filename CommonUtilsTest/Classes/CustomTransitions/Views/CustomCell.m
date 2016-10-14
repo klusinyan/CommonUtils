@@ -149,6 +149,8 @@
 //only nib
 - (void)awakeFromNib
 {
+    [super awakeFromNib];
+    
     self.imageView.clipsToBounds = YES;
     self.imageView.contentMode = UIViewContentModeScaleAspectFill;
 }
