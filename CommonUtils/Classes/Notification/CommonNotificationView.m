@@ -18,6 +18,7 @@ UIGestureRecognizerDelegate
 @property (nonatomic, weak) IBOutlet NSLayoutConstraint *viewGestureHeight;
 @property (nonatomic, weak) IBOutlet UIPanGestureRecognizer *panGesture;
 @property (nonatomic, getter=isDragging) BOOL dragging;
+@property (nonatomic) BOOL extended;
 
 - (IBAction)buttonAction:(UIButton *)sender;
 
@@ -63,22 +64,40 @@ UIGestureRecognizerDelegate
         CGPoint velocity = [gesture velocityInView:self];
         if(velocity.y > 0) {
             self.message.adjustsFontSizeToFitWidth = YES;
-            if (self.presentOnTop) {
-                if (self.dragDown) self.dragDown();
+            if (self.presentFromTop) {
+                if (!self.extended) {
+                    self.extended = YES;
+                    if (self.dragDown) self.dragDown();
+                }
             }
             else {
                 self.message.adjustsFontSizeToFitWidth = NO;
-                if (self.dragUp) self.dragUp();
+                if (self.extended) {
+                    self.extended = NO;
+                    if (self.dragUp) self.dragUp();
+                }
+                else {
+                    if (self.dragToDimiss) self.dragToDimiss();
+                }
             }
         }
         else {
-            if (self.presentOnTop) {
+            if (self.presentFromTop) {
                 self.message.adjustsFontSizeToFitWidth = NO;
-                if (self.dragUp) self.dragUp();
+                if (self.extended) {
+                    self.extended = NO;
+                    if (self.dragUp) self.dragUp();
+                }
+                else {
+                    if (self.dragToDimiss) self.dragToDimiss();
+                }
             }
             else {
                 self.message.adjustsFontSizeToFitWidth = YES;
-                if (self.dragDown) self.dragDown();
+                if (!self.extended) {
+                    self.extended = YES;
+                    if (self.dragDown) self.dragDown();
+                }
             }
         }
     }

@@ -26,7 +26,7 @@ typedef NS_ENUM(NSInteger, CommonNotificationPriority) {
 @interface CommonNotificationManager : NSObject <NSCoding>
 
 // notification configuration
-@property (nonatomic) BOOL presentOnTop;                                // default YES
+@property (nonatomic) BOOL presentFromTop;                              // default YES
 @property (nonatomic) NSTimeInterval checkNotificationsTimeInterval;    // default 1 sec
 @property (nonatomic, strong) UIImage *imageIcon;                       // defualt nil
 @property (nonatomic) CGFloat notificationHeight;                       // default 120.0

@@ -91,7 +91,7 @@ CommonPickerDelegate
 {
     self = [super init];
     if (self) {
-        self.presentOnTop = YES;
+        self.presentFromTop = YES;
         self.checkNotificationsTimeInterval = 1.0;
         self.notificationHeight = 120.0;
     }
@@ -245,7 +245,7 @@ CommonPickerDelegate
     commonPicker.toolbarHidden = YES;
     commonPicker.needsOverlay = YES;
     commonPicker.bounceEnabled = YES;
-    commonPicker.presentFromTop = self.presentOnTop;
+    commonPicker.presentFromTop = self.presentFromTop;
     commonPicker.applyBlurEffect = YES;
     commonPicker.notificationMode = YES;
     commonPicker.blurEffectStyle = UIBlurEffectStyleDark;
@@ -253,7 +253,7 @@ CommonPickerDelegate
     //commonPicker.dynamicContentHeight = YES;
     
     CommonNotificationView *contentView = [self loadNibForClass:NSClassFromString(@"CommonNotificationView") atIndex:0];
-    contentView.presentOnTop = self.presentOnTop;
+    contentView.presentFromTop = self.presentFromTop;
     contentView.imageIcon = self.imageIcon;
     contentView.alertBody = notification.alertBody;
     contentView.alertMessage = notification.alertMessage;
@@ -298,12 +298,30 @@ CommonPickerDelegate
                     commonPicker.expectedHeight = [self viewHeight:contentView];
                     contentView.dragDown = ^(void) {
                         [commonPicker dragDown:^{
-                            //DebugLog(@"dragged down");
+                            if (self.presentFromTop) {
+                                DebugLog(@"dragged down");
+                            }
+                            else {
+                                DebugLog(@"dragged up");
+                            }
                         }];
                     };
                     contentView.dragUp = ^(void) {
                         [commonPicker dragUp:^{
-                            //DebugLog(@"dragged up");
+                            if (self.presentFromTop) {
+                                DebugLog(@"dragged up");
+                            }
+                            else {
+                                DebugLog(@"dragged down");
+                            }
+                        }];
+                    };
+                    contentView.dragToDimiss = ^(void) {
+                        [commonPicker dismissPickerWithCompletion:^{
+                            if ([self.notificationQueue count] > 0) {
+                                [self postNotificationName:CommonNotificationDidHide object:self.notificationQueue[0]];
+                                [self removePresentedNotification];
+                            }
                         }];
                     };
                 }
@@ -320,21 +338,16 @@ CommonPickerDelegate
                         [UIApplication sharedApplication].keyWindow.windowLevel = UIWindowLevelAlert;
                     }
                     [commonPicker showPickerWithCompletion:^{
-                        [[NSNotificationCenter defaultCenter] postNotificationName:CommonNotificationDidShown object:notification];
+                        [self postNotificationName:CommonNotificationDidShown object:self.notificationQueue[0]];
                         
                         ///////////////////////////////////////////////////////////////
                         /////////////////// NOTIFICATION TAP ACTION ///////////////////
                         
                         contentView.alertAction = ^(void){
                             [commonPicker dismissPickerWithCompletion:^{
-                                self.notificationShown = NO;
                                 if ([self.notificationQueue count] > 0) {
-                                    if (commonPicker.presentFromTop) {
-                                        [UIApplication sharedApplication].keyWindow.windowLevel = notification.currentWindowLevel;
-                                    }
-                                    [[NSNotificationCenter defaultCenter] postNotificationName:CommonNotificationDidTap object:notification];
-                                    [self.notificationQueue removeObjectAtIndex:0];
-                                    [CommonSerilizer saveObject:self.notificationQueue forKey:keyCommonNotificationQueue];
+                                    [self postNotificationName:CommonNotificationDidTap object:self.notificationQueue[0]];
+                                    [self removePresentedNotification];
                                 }
                             }];
                         };
@@ -347,6 +360,25 @@ CommonPickerDelegate
                 ///////////////////// SHOW NOTIFICATION ///////////////////////
                 ///////////////////////////////////////////////////////////////
             }
+        }
+    }
+}
+
+- (void)postNotificationName:(NSString *)name object:(id)anObject
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:name object:anObject];
+}
+
+- (void)removePresentedNotification
+{
+    @synchronized (self) {
+        self.notificationShown = NO;
+        if ([self.notificationQueue count] > 0) {
+            if (self.presentFromTop) {
+                [UIApplication sharedApplication].keyWindow.windowLevel = [self.notificationQueue[0] currentWindowLevel];
+            }
+            [self.notificationQueue removeObjectAtIndex:0];
+            [CommonSerilizer saveObject:self.notificationQueue forKey:keyCommonNotificationQueue];
         }
     }
 }
@@ -386,18 +418,18 @@ CommonPickerDelegate
 
 - (void)pickerOverkayDidTap:(CommonPicker *)picker
 {
+    ///////////////////////////////////////////////////////////////
+    ///////////////////// HIDE NOTIFICATION ///////////////////////
+
     @synchronized (self) {
-        self.notificationShown = NO;
         if ([self.notificationQueue count] > 0) {
-            CommonNotification *notification = self.notificationQueue[0];
-            if (picker.presentFromTop) {
-                [UIApplication sharedApplication].keyWindow.windowLevel = notification.currentWindowLevel;
-            }
-            [[NSNotificationCenter defaultCenter] postNotificationName:CommonNotificationDidHide object:notification];
-            [self.notificationQueue removeObjectAtIndex:0];
-            [CommonSerilizer saveObject:self.notificationQueue forKey:keyCommonNotificationQueue];
+            [self postNotificationName:CommonNotificationDidHide object:self.notificationQueue[0]];
+            [self removePresentedNotification];
         }
     }
+    
+    ///////////////////// HIDE NOTIFICATION ///////////////////////
+    ///////////////////////////////////////////////////////////////
 }
 
 @end
