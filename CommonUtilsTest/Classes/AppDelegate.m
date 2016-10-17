@@ -52,8 +52,8 @@
 
 - (void)configureCommonNotifications
 {
-    [CommonNotificationManager sharedInstance].presentOnTop = YES;
-    [CommonNotificationManager sharedInstance].checkNotificationsTimeInterval = 10.0;
+    [CommonNotificationManager sharedInstance].presentFromTop = YES;
+    [CommonNotificationManager sharedInstance].checkNotificationsTimeInterval = 1.0;
     [CommonNotificationManager sharedInstance].imageIcon = [UIImage imageNamed:@"apple"];
     [CommonNotificationManager sharedInstance].notificationHeight = 120.0;
 }

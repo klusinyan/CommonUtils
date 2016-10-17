@@ -61,6 +61,7 @@ CommonPickerDataSource,
 CommonPickerDelegate
 >
 
+@property (nonatomic, strong) UIViewController *rootViewController;
 @property (nonatomic, strong) NSMutableArray *notificationQueue;
 @property (nonatomic, assign) NSTimer *notificationDispatcher;
 @property (nonatomic) BOOL notificationShown;
@@ -109,6 +110,13 @@ CommonPickerDelegate
 
 - (void)manageLifeCycle
 {
+    [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidFinishLaunchingNotification
+                                                      object:nil
+                                                       queue:[NSOperationQueue currentQueue]
+                                                  usingBlock:^(NSNotification * _Nonnull note) {
+                                                      self.rootViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
+                                                  }];
+    
     [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillEnterForegroundNotification
                                                       object:nil
                                                        queue:[NSOperationQueue currentQueue]
@@ -284,11 +292,14 @@ CommonPickerDelegate
                     return;
                 }
                 UIViewController *rootViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
+                if (self.rootViewController != rootViewController) {
+                    return;
+                }
                 CommonPicker *commonPicker = [self createNotification:notification];
-                commonPicker.target = rootViewController;
-                commonPicker.sender = rootViewController.view;
+                commonPicker.target = self.rootViewController;
+                commonPicker.sender = self.rootViewController.view;
                 commonPicker.relativeSuperview = nil;
-                
+                                
                 ///////////////////////////////////////////////////////////////
                 ///////////////////// SHOW NOTIFICATION ///////////////////////
                 
