@@ -244,6 +244,7 @@ CommonPickerDelegate
     commonPicker.delegate = self;
     commonPicker.toolbarHidden = YES;
     commonPicker.needsOverlay = YES;
+    commonPicker.tappableOverlay = NO;
     commonPicker.bounceEnabled = YES;
     commonPicker.presentFromTop = self.presentFromTop;
     commonPicker.applyBlurEffect = YES;
@@ -287,51 +288,11 @@ CommonPickerDelegate
                 commonPicker.target = rootViewController;
                 commonPicker.sender = rootViewController.view;
                 commonPicker.relativeSuperview = nil;
-
-                ///////////////////////////////////////////////////////////////
-                ////////////////// CALCULATE PICKER HEIGHT ////////////////////
-
-                CommonNotificationView *contentView = commonPicker.contentView;
-                commonPicker.expectedHeight = [self viewHeight:contentView];
-                if (commonPicker.expectedHeight > self.notificationHeight) {
-                    [contentView setContentDraggable];
-                    commonPicker.expectedHeight = [self viewHeight:contentView];
-                    contentView.dragDown = ^(void) {
-                        [commonPicker dragDown:^{
-                            if (self.presentFromTop) {
-                                DebugLog(@"dragged down");
-                            }
-                            else {
-                                DebugLog(@"dragged up");
-                            }
-                        }];
-                    };
-                    contentView.dragUp = ^(void) {
-                        [commonPicker dragUp:^{
-                            if (self.presentFromTop) {
-                                DebugLog(@"dragged up");
-                            }
-                            else {
-                                DebugLog(@"dragged down");
-                            }
-                        }];
-                    };
-                    contentView.dragToDimiss = ^(void) {
-                        [commonPicker dismissPickerWithCompletion:^{
-                            if ([self.notificationQueue count] > 0) {
-                                [self postNotificationName:CommonNotificationDidHide object:self.notificationQueue[0]];
-                                [self removePresentedNotification];
-                            }
-                        }];
-                    };
-                }
-
-                ////////////////// CALCULATE PICKER HEIGHT ////////////////////
-                ///////////////////////////////////////////////////////////////
-
+                
                 ///////////////////////////////////////////////////////////////
                 ///////////////////// SHOW NOTIFICATION ///////////////////////
                 
+                CommonNotificationView *contentView = commonPicker.contentView;
                 if ([self.notificationQueue count] > 0) {
                     self.notificationShown = YES;
                     if (commonPicker.presentFromTop) {
@@ -348,6 +309,7 @@ CommonPickerDelegate
                                 if ([self.notificationQueue count] > 0) {
                                     [self postNotificationName:CommonNotificationDidTap object:self.notificationQueue[0]];
                                     [self removePresentedNotification];
+                                    DebugLog(@"notificaton tapped");
                                 }
                             }];
                         };
@@ -358,6 +320,54 @@ CommonPickerDelegate
                 }
                 
                 ///////////////////// SHOW NOTIFICATION ///////////////////////
+                ///////////////////////////////////////////////////////////////
+                
+                ///////////////////////////////////////////////////////////////
+                ///////////////// DRAG DOWN/UP NOTIFICATION ///////////////////
+                
+                commonPicker.expectedHeight = [self viewHeight:contentView];
+                if (commonPicker.expectedHeight > self.notificationHeight) {
+                    commonPicker.expectedHeight = [self viewHeight:contentView];
+                    contentView.setExtandable = YES;
+                    contentView.dragDown = ^(void) {
+                        [commonPicker dragDown:^{
+                            if (self.presentFromTop) {
+                                DebugLog(@"notification dragged down");
+                            }
+                            else {
+                                DebugLog(@"notification dragged up");
+                            }
+                        }];
+                    };
+                    contentView.dragUp = ^(void) {
+                        [commonPicker dragUp:^{
+                            if (self.presentFromTop) {
+                                DebugLog(@"notification dragged up");
+                            }
+                            else {
+                                DebugLog(@"notification dragged down");
+                            }
+                        }];
+                    };
+                }
+                
+                ///////////////// DRAG DOWN/UP NOTIFICATION ///////////////////
+                ///////////////////////////////////////////////////////////////
+                
+                ///////////////////////////////////////////////////////////////
+                //////////////// DRAG TO DISMISS NOTIFICATION /////////////////
+                
+                contentView.dragToDimiss = ^(void) {
+                    [commonPicker dismissPickerWithCompletion:^{
+                        if ([self.notificationQueue count] > 0) {
+                            [self postNotificationName:CommonNotificationDidHide object:self.notificationQueue[0]];
+                            [self removePresentedNotification];
+                            DebugLog(@"notification dragged to dismiss");
+                        }
+                    }];
+                };
+                
+                //////////////// DRAG TO DISMISS NOTIFICATION /////////////////
                 ///////////////////////////////////////////////////////////////
             }
         }
@@ -425,6 +435,7 @@ CommonPickerDelegate
         if ([self.notificationQueue count] > 0) {
             [self postNotificationName:CommonNotificationDidHide object:self.notificationQueue[0]];
             [self removePresentedNotification];
+            DebugLog(@"notification overlay tapped");
         }
     }
     

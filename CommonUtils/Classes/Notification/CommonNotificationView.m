@@ -51,6 +51,18 @@ UIGestureRecognizerDelegate
     _alertMessage = alertMessage;
 }
 
+- (void)setSetExtandable:(BOOL)setExtandable
+{
+    if (setExtandable) {
+        self.viewGesture.layer.cornerRadius = 2;
+        self.viewGestureHeight.constant = 5;
+    }
+    
+    _setExtandable = setExtandable;
+}
+
+#pragma mark - bottons
+
 - (IBAction)buttonAction:(UIButton *)sender
 {
     if (!self.isDragging) {
@@ -65,14 +77,14 @@ UIGestureRecognizerDelegate
         if(velocity.y > 0) {
             self.message.adjustsFontSizeToFitWidth = YES;
             if (self.presentFromTop) {
-                if (!self.extended) {
+                if (!self.extended && self.isExtandable) {
                     self.extended = YES;
                     if (self.dragDown) self.dragDown();
                 }
             }
             else {
                 self.message.adjustsFontSizeToFitWidth = NO;
-                if (self.extended) {
+                if (self.extended && self.isExtandable) {
                     self.extended = NO;
                     if (self.dragUp) self.dragUp();
                 }
@@ -84,7 +96,7 @@ UIGestureRecognizerDelegate
         else {
             if (self.presentFromTop) {
                 self.message.adjustsFontSizeToFitWidth = NO;
-                if (self.extended) {
+                if (self.extended && self.isExtandable) {
                     self.extended = NO;
                     if (self.dragUp) self.dragUp();
                 }
@@ -94,7 +106,7 @@ UIGestureRecognizerDelegate
             }
             else {
                 self.message.adjustsFontSizeToFitWidth = YES;
-                if (!self.extended) {
+                if (!self.extended && self.isExtandable) {
                     self.extended = YES;
                     if (self.dragDown) self.dragDown();
                 }
@@ -118,13 +130,5 @@ UIGestureRecognizerDelegate
     
     _imageIcon = imageIcon;
 }
-
-- (void)setContentDraggable
-{
-    self.container.gestureRecognizers = @[self.panGesture];
-    self.viewGesture.layer.cornerRadius = 2;
-    self.viewGestureHeight.constant = 5;
-}
-
 
 @end

@@ -108,6 +108,7 @@ UIPopoverPresentationControllerDelegate
         self.presentFromTop = NO;
         self.notificationMode = NO;
         self.needsOverlay = NO;
+        self.tappableOverlay = YES;
         self.applyBlurEffect = NO;
         self.blurEffectStyle = UIBlurEffectStyleLight;
         self.toolbarHidden = NO;
@@ -149,6 +150,7 @@ UIPopoverPresentationControllerDelegate
         self.presentFromTop = NO;
         self.notificationMode = NO;
         self.needsOverlay = NO;
+        self.tappableOverlay = YES;
         self.applyBlurEffect = NO;
         self.blurEffectStyle = UIBlurEffectStyleLight;
         self.toolbarHidden = NO;
@@ -213,7 +215,7 @@ UIPopoverPresentationControllerDelegate
     self.hideCompetion = completion;
     
     if (iPhone || self.notificationMode) {
-        [self slideDown:nil];
+        [self slideDown];
     }
     else {
         [self dismissPopover];
@@ -562,7 +564,7 @@ UIPopoverPresentationControllerDelegate
     
     UITapGestureRecognizer* tapGesture =
     [[UITapGestureRecognizer alloc] initWithTarget:self
-                                            action:@selector(slideDown:)];
+                                            action:@selector(overlayTapped:)];
     tapGesture.numberOfTapsRequired = 1;
     tapGesture.numberOfTouchesRequired = 1;
     [self.overlay addGestureRecognizer:tapGesture];
@@ -730,13 +732,9 @@ UIPopoverPresentationControllerDelegate
     }
 }
 
-- (void)slideDown:(UIGestureRecognizer *)tapGesture
+- (void)slideDown
 {
     if (self.isVisible && self.pickerView.superview != nil) {
-        
-        if (tapGesture) {
-            self.tapped = YES;
-        }
         
 #if kAutoLayout
         [UIView animateWithDuration:0.15
@@ -790,6 +788,15 @@ UIPopoverPresentationControllerDelegate
     }
 }
 
+- (void)overlayTapped:(UIGestureRecognizer *)tapGesture
+{
+    self.tapped = YES;
+
+    if (self.tappableOverlay) {
+        [self slideDown];
+    }
+}
+
 - (void)slideUpDidStart
 {
     if (self.bounceEnabled) {
@@ -835,7 +842,6 @@ UIPopoverPresentationControllerDelegate
         }
     }
     
-    //set tapped to default
     self.tapped = NO;
 }
 

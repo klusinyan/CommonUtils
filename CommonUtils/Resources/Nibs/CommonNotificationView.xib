@@ -86,6 +86,9 @@
                         <constraint firstItem="yBB-ao-ZMJ" firstAttribute="centerX" secondItem="cd4-Qe-Qsq" secondAttribute="centerX" id="xZd-zw-exO"/>
                         <constraint firstItem="ge0-Zk-wA4" firstAttribute="top" secondItem="Fww-RP-n5y" secondAttribute="bottom" constant="5" id="xpj-hf-qpp"/>
                     </constraints>
+                    <connections>
+                        <outletCollection property="gestureRecognizers" destination="5W7-pt-ay9" appends="YES" id="gXq-Qu-pMG"/>
+                    </connections>
                 </view>
             </subviews>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -110,7 +113,7 @@
                 <outlet property="viewHeader" destination="Fww-RP-n5y" id="PtF-3y-7N0"/>
                 <outlet property="viewMessage" destination="ge0-Zk-wA4" id="N48-aN-TBm"/>
             </connections>
-            <point key="canvasLocation" x="-2068" y="-1527"/>
+            <point key="canvasLocation" x="-2168" y="-1641"/>
         </view>
         <panGestureRecognizer minimumNumberOfTouches="1" id="5W7-pt-ay9">
             <connections>
@@ -125,6 +128,6 @@
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>
-        <simulatedScreenMetrics key="destination" type="retina4_0.fullscreen"/>
+        <simulatedScreenMetrics key="destination" type="retina4_7.fullscreen"/>
     </simulatedMetricsContainer>
 </document>

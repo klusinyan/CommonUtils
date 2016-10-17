@@ -17,7 +17,6 @@ typedef void(^CommonNotificationViewDragToDismiss)(void);
 @property (nonatomic, copy) CommonNotificationViewDragUp dragUp;
 @property (nonatomic, copy) CommonNotificationViewDragToDismiss dragToDimiss;
 @property (nonatomic, strong) UIImage *imageIcon;
-
-- (void)setContentDraggable;
+@property (nonatomic, getter=isExtandable) BOOL setExtandable;
 
 @end

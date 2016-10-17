@@ -44,6 +44,8 @@
 
 @property (nonatomic) BOOL needsOverlay;                            // default NO
 
+@property (nonatomic) BOOL tappableOverlay;                         // default YES
+
 @property (nonatomic) BOOL bounceEnabled;                           // default NO
 
 @property (nonatomic) BOOL applyBlurEffect;                         // default NO
