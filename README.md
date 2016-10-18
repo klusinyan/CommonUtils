@@ -43,7 +43,7 @@ AppDelegate.m
 
 ```
 
-## Step 3: How to perform action when the notification is tapped
+## Step 3: How to perform the notification action when tapped
 
 ```
     [[NSNotificationCenter defaultCenter] addObserverForName:CommonNotificationDidTap
