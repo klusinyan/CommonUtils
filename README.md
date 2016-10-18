@@ -15,6 +15,8 @@ To run the example project, clone the repo, and run `pod install` from the Examp
 
 AppDelegate.m
 ```
+#import "CommonNotificationManager.h"
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // in-app notification's basic configuration
