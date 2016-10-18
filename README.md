@@ -20,6 +20,7 @@ AppDelegate.m
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // in-app notification's basic configuration
+    
     [CommonNotificationManager sharedInstance].checkNotificationsTimeInterval = 1.0;
     [CommonNotificationManager sharedInstance].imageIcon = [UIImage imageNamed:@"apple"];
     [CommonNotificationManager sharedInstance].notificationHeight = 120.0;
@@ -35,6 +36,7 @@ AppDelegate.m
     // alertAction: noticiation action that will be executed when notificaiton did tap
     // fireDate: notification valid date, if [NSDate date] > fireDate the notification will be removed, nil means it will be allive until presented
     // priority: if it's High, then the notification will be presented immediately
+    
     [[CommonNotificationManager sharedInstance] addNotificationWithAlertBody:@"Message"
                                                                 alertMessage:@"Lorem ipsum..."
                                                                  alertAction:@"actionName"
