@@ -158,7 +158,7 @@ CommonPickerDelegate
 
 - (void)addNotificationWithAlertBody:(NSString *)alertBody
                         alertMessage:(NSString *)alertMessage
-                        alertAction:(NSString *)alertAction
+                         alertAction:(NSString *)alertAction
                             fireDate:(NSDate *)fireDate
                             priority:(CommonNotificationPriority)priority
 {
