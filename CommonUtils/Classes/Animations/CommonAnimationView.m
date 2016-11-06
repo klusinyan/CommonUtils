@@ -9,6 +9,8 @@
 {
     [super awakeFromNib];
     
+    self.duration = 0.4;
+    
     if (self.type && self.duration && ! self.pauseAnimationOnAwake) {
         [self startCommonAnimationCompletion:nil];
     }
@@ -30,16 +32,6 @@
     [class performAnimationOnView:self duration:self.duration delay:self.delay completion:completion];
     
     [super startCommonAnimationCompletion:completion];
-}
-
-#pragma mark - getter/setter
-
-- (NSTimeInterval)duration
-{
-    if (_duration == 0) {
-        _duration = 0.4;
-    }
-    return _duration;
 }
 
 @end
