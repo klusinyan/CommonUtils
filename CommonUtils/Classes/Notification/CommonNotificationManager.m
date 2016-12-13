@@ -61,7 +61,6 @@ CommonPickerDataSource,
 CommonPickerDelegate
 >
 
-@property (nonatomic, strong) UIViewController *rootViewController;
 @property (nonatomic, strong) NSMutableArray *notificationQueue;
 @property (nonatomic, assign) NSTimer *notificationDispatcher;
 @property (nonatomic) BOOL notificationShown;
@@ -95,6 +94,8 @@ CommonPickerDelegate
         self.presentFromTop = YES;
         self.checkNotificationsTimeInterval = 1.0;
         self.notificationHeight = 120.0;
+        self.blurEffectStlye = UIBlurEffectStyleExtraLight;
+        self.tappableOverlay = NO;
     }
     return self;
 }
@@ -185,7 +186,7 @@ CommonPickerDelegate
     }
 }
 
-- (void)cancelAllNotification
+- (void)cancelAllNotifications
 {
     [self.notificationQueue removeAllObjects];
     
@@ -252,12 +253,12 @@ CommonPickerDelegate
     commonPicker.delegate = self;
     commonPicker.toolbarHidden = YES;
     commonPicker.needsOverlay = YES;
-    commonPicker.tappableOverlay = NO;
+    commonPicker.tappableOverlay = self.tappableOverlay;
     commonPicker.bounceEnabled = YES;
     commonPicker.presentFromTop = self.presentFromTop;
     commonPicker.applyBlurEffect = YES;
     commonPicker.notificationMode = YES;
-    commonPicker.blurEffectStyle = UIBlurEffectStyleDark;
+    commonPicker.blurEffectStyle = self.blurEffectStlye;
     commonPicker.pickerCornerradius = 10.0;
     //commonPicker.dynamicContentHeight = YES;
     

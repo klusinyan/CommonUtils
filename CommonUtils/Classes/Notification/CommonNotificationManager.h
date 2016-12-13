@@ -30,6 +30,9 @@ typedef NS_ENUM(NSInteger, CommonNotificationPriority) {
 @property (nonatomic) NSTimeInterval checkNotificationsTimeInterval;    // default 1 sec
 @property (nonatomic, strong) UIImage *imageIcon;                       // defualt nil
 @property (nonatomic) CGFloat notificationHeight;                       // default 120.0
+@property (nonatomic) UIBlurEffectStyle blurEffectStlye;                // default UIBlurEffectStyleExtraLight
+@property (nonatomic) BOOL tappableOverlay;                             // default NO
+@property (nonatomic) UIViewController *rootViewController;             // default is window.rootViewController
 
 + (CommonNotificationManager *)sharedInstance;
 
@@ -39,6 +42,6 @@ typedef NS_ENUM(NSInteger, CommonNotificationPriority) {
                             fireDate:(NSDate *)fireDate
                             priority:(CommonNotificationPriority)priority;
 
-- (void)cancelAllNotification;
+- (void)cancelAllNotifications;
 
 @end
