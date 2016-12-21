@@ -147,15 +147,15 @@ UIGestureRecognizerDelegate
 
 - (void)keyboardWillShow:(NSNotification *)aNotification
 {
-    if (self.delegate && [self.delegate respondsToSelector:@selector(keyboard:willShowWithResponder:)]) {
-        [self.delegate keyboard:self willShowWithResponder:[self firstResponder]];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(commonKeyboard:willShowWithResponder:)]) {
+        [self.delegate commonKeyboard:self willShowWithResponder:[self firstResponder]];
     }
 }
 
 - (void)keyboardDidHide:(NSNotification *)aNotification
 {
-    if (self.delegate && [self.delegate respondsToSelector:@selector(keyboard:didHideWithResponder:)]) {
-        [self.delegate keyboard:self didHideWithResponder:[self firstResponder]];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(commonKeyboard:didHideWithResponder:)]) {
+        [self.delegate commonKeyboard:self didHideWithResponder:[self firstResponder]];
     }
 }
 
@@ -164,8 +164,8 @@ UIGestureRecognizerDelegate
 {
     self.visible = YES;
     
-    if (self.delegate && [self.delegate respondsToSelector:@selector(keyboard:didShowWithResponder:)]) {
-        [self.delegate keyboard:self didShowWithResponder:[self firstResponder]];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(commonKeyboard:didShowWithResponder:)]) {
+        [self.delegate commonKeyboard:self didShowWithResponder:[self firstResponder]];
     }
     
     CGFloat offest = 0;
@@ -213,8 +213,8 @@ UIGestureRecognizerDelegate
 // Called when the UIKeyboardWillHideNotification is sent
 - (void)keyboardWillHide:(NSNotification*)aNotification
 {
-    if (self.delegate && [self.delegate respondsToSelector:@selector(keyboard:willHideWithResponder:)]) {
-        [self.delegate keyboard:self willHideWithResponder:[self firstResponder]];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(commonKeyboard:willHideWithResponder:)]) {
+        [self.delegate commonKeyboard:self willHideWithResponder:[self firstResponder]];
     }
     
     UIEdgeInsets contentInsets = UIEdgeInsetsZero;
