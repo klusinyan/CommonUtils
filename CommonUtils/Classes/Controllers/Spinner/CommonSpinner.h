@@ -42,13 +42,13 @@ typedef void(^CommonSpinnerHideCompletionHandler)(void);
 
 + (void)hideWithCompletion:(CommonSpinnerHideCompletionHandler)completion;
 
-@property (nonatomic, copy) NSString *title;                            //default nil
-@property (nonatomic) BOOL hidesWhenStopped;                            //defualt NO
-@property (nonatomic) BOOL runInBackgroud;                              //defualt NO
-@property (nonatomic) BOOL networkActivityIndicatorVisible;             //default YES
-@property (nonatomic, strong) CAMediaTimingFunction *timingFunction;    //default kCAMediaTimingFunctionLinear
-@property (nonatomic) CGSize size;                                      //default {40, 40}
-@property (nonatomic) CGFloat lineWidth;                                //default 1.5
+@property (nonatomic, copy) NSString *title;                            // default nil
+@property (nonatomic) BOOL hidesWhenStopped;                            // defualt NO
+@property (nonatomic) BOOL runInBackgroud;                              // defualt NO
+@property (nonatomic) BOOL networkActivityIndicatorVisible;             // default YES
+@property (nonatomic, strong) CAMediaTimingFunction *timingFunction;    // default kCAMediaTimingFunctionLinear
+@property (nonatomic) CGSize size;                                      // default {40, 40}
+@property (nonatomic) CGFloat lineWidth;                                // default 1.5
 @property (nonatomic, readonly) BOOL isAnimating;
 
 + (instancetype)instance;

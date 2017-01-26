@@ -14,21 +14,21 @@ PODS:
   - AFNetworking/Serialization (3.1.0)
   - AFNetworking/UIKit (3.1.0):
     - AFNetworking/NSURLSession
-  - Appirater (2.0.5)
+  - Appirater (2.1.2)
   - Canvas (0.1.2)
-  - CommonUtils (1.6.0-beta12):
+  - CommonUtils (1.6.0-beta17):
     - AFNetworking
     - Canvas
-    - CommonUtils/no-arc (= 1.6.0-beta12)
-    - CommonUtils/PublicHeaders (= 1.6.0-beta12)
+    - CommonUtils/no-arc (= 1.6.0-beta17)
+    - CommonUtils/PublicHeaders (= 1.6.0-beta17)
     - DateTools
     - FastImageCache
-  - CommonUtils/no-arc (1.6.0-beta12):
+  - CommonUtils/no-arc (1.6.0-beta17):
     - AFNetworking
     - Canvas
     - DateTools
     - FastImageCache
-  - CommonUtils/PublicHeaders (1.6.0-beta12):
+  - CommonUtils/PublicHeaders (1.6.0-beta17):
     - AFNetworking
     - Canvas
     - DateTools
@@ -46,9 +46,9 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   AFNetworking: 5e0e199f73d8626b11e79750991f5d173d1f8b67
-  Appirater: e7c0a47fb67ee5041ce8479e6ba960927fb40264
+  Appirater: f1c9e53e8b612193e6256144f6a0fd2e31f4340d
   Canvas: eb861e3b555d032648146c8ffda1a5dea40059ca
-  CommonUtils: 6479cdba0134481474ddd9ee6185d04670d7e8bb
+  CommonUtils: d0a719c334d4d7d82295e3ba71aaf04cc09951e9
   DateTools: 53288ee8b905fdc75897a1e6b5cc0144b14cba60
   FastImageCache: 2e7a6f677b15336eb3d1a4092a494676256c891d
 
