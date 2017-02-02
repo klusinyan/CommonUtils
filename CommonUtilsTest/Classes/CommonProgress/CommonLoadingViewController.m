@@ -45,6 +45,7 @@
 {
     [super viewDidLoad];
     self.view.backgroundColor = self.backgroundColor;
+    self.view.backgroundColor = [UIColor whiteColor];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -53,6 +54,7 @@
     
     [CommonSpinner setHidesWhenStopped:YES];
     [CommonSpinner setTitle:@"App name"];
+    [CommonSpinner setImage:[UIImage imageNamed:@"apple.png"]];
     //[CommonSpinner sharedSpinner].timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [CommonSpinner showInView:self.view completion:^{

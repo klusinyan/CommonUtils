@@ -21,6 +21,7 @@ static NSMutableDictionary *appearance = nil;
 @property (readwrite, nonatomic, strong) NSString *titleFont;
 @property (readwrite, nonatomic, assign) CGFloat  titleFontSize;
 @property (readwrite, nonatomic, strong) CATextLayer *titleLayer;
+@property (readwrite, nonatomic, strong) CALayer *imageLayer;
 @property (readwrite, nonatomic, strong) CAShapeLayer *progressLayer;
 @property (readwrite, nonatomic, assign) BOOL isAnimating;
 @property (readwrite, nonatomic, assign) UIView *view;
@@ -91,11 +92,12 @@ static NSMutableDictionary *appearance = nil;
     _runInBackgroud = YES;
     _networkActivityIndicatorVisible = YES;
     _timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
-    _size = (CGSize){20.0f, 20.0f};
-    _lineWidth = 1.5f;
+    _spinnerSize = (CGSize){20.0, 20.0};
+    _imageSize = (CGSize){40.0, 40.0};
+    _lineWidth = 1.5;
     
     _titleFont = @"HelveticaNeue-Light";
-    _titleFontSize = 20.0f;
+    _titleFontSize = 20.0;
     _title = nil;
 
     //tint color setups separately
@@ -103,6 +105,7 @@ static NSMutableDictionary *appearance = nil;
     
     [self.layer addSublayer:self.progressLayer];
     [self.layer addSublayer:self.titleLayer];
+    [self.layer addSublayer:self.imageLayer];
 }
 
 + (instancetype)instance
@@ -133,6 +136,11 @@ static NSMutableDictionary *appearance = nil;
     [[CommonSpinner sharedSpinner] setTitle:title];
 }
 
++ (void)setImage:(UIImage *)image
+{
+    [[CommonSpinner sharedSpinner] setImage:image];
+}
+
 + (void)setTitleOnly:(NSString *)title activityIndicatorVisible:(BOOL)activityIndicatorVisible
 {
     [[CommonSpinner sharedSpinner] setTitleOnly:title activityIndicatorVisible:activityIndicatorVisible];
@@ -158,9 +166,14 @@ static NSMutableDictionary *appearance = nil;
     [CommonSpinner sharedSpinner].timingFunction = timingFunction;
 }
 
-+ (void)setSize:(CGSize)size
++ (void)setSpinnerSize:(CGSize)size
 {
-    [CommonSpinner sharedSpinner].size = size;
+    [CommonSpinner sharedSpinner].spinnerSize = size;
+}
+
++ (void)setImageSize:(CGSize)size
+{
+    [CommonSpinner sharedSpinner].imageSize = size;
 }
 
 + (void)setLineWidth:(CGFloat)lineWidth
@@ -186,6 +199,13 @@ static NSMutableDictionary *appearance = nil;
 - (void)setTitle:(NSString *)title
 {
     _title = title;
+    self.progressLayer.hidden = NO;
+    [self setNeedsLayout];
+}
+
+- (void)setImage:(UIImage *)image
+{
+    _image = image;
     self.progressLayer.hidden = NO;
     [self setNeedsLayout];
 }
@@ -222,14 +242,14 @@ static NSMutableDictionary *appearance = nil;
                                                             toItem:nil
                                                          attribute:NSLayoutAttributeNotAnAttribute
                                                         multiplier:1
-                                                          constant:self.size.width]];
+                                                          constant:self.spinnerSize.width]];
         [view addConstraint:[NSLayoutConstraint constraintWithItem:self
                                                          attribute:NSLayoutAttributeHeight
                                                          relatedBy:NSLayoutRelationEqual
                                                             toItem:nil
                                                          attribute:NSLayoutAttributeNotAnAttribute
                                                         multiplier:1
-                                                          constant:self.size.height]];
+                                                          constant:self.spinnerSize.height]];
         [view addConstraint:[NSLayoutConstraint constraintWithItem:self
                                                          attribute:NSLayoutAttributeCenterX
                                                          relatedBy:NSLayoutRelationEqual
@@ -273,20 +293,31 @@ static NSMutableDictionary *appearance = nil;
 - (void)layoutSubviews
 {
     /*-----LABEL----*/
-    UIFont *font = [UIFont fontWithName:self.titleFont size:self.titleFontSize];
-    CGSize size = [self.titleLayer.string sizeWithAttributes:@{NSFontAttributeName : font}];
-    self.titleLayer.frame = CGRectMake(0, 0, MIN(size.width+kOffset, kMaxWidth), size.height+kOffset);
-    self.titleLayer.position = (CGPoint){CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds)};
+    if ([self.titleLayer.string length] > 0) {
+        UIFont *font = [UIFont fontWithName:self.titleFont size:self.titleFontSize];
+        CGSize size = [self.titleLayer.string sizeWithAttributes:@{NSFontAttributeName : font}];
+        self.titleLayer.frame = CGRectMake(0, 0, MIN(size.width+kOffset, kMaxWidth), size.height+kOffset);
+        self.titleLayer.position = (CGPoint){CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds) - self.imageSize.height/2};
+    }
+    /*-----UIIMAGE----*/
+    else if (self.imageLayer.contents != nil) {
+        self.imageLayer.frame = CGRectMake(0, 0, self.imageSize.width, self.imageSize.height);
+        self.imageLayer.position = (CGPoint){CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds) - self.imageSize.height/2};
+    }
     
     /*-----SPINNER----*/
     CGFloat positionY = 0;
     if ([self.titleLayer.string length] > 0) {
-        positionY = CGRectGetHeight(self.titleLayer.bounds);
+        positionY = self.titleLayer.position.y + CGRectGetHeight(self.titleLayer.frame)/1.5;
+    }
+    else if (self.imageLayer.contents != nil) {
+        positionY = self.imageLayer.position.y + CGRectGetHeight(self.imageLayer.frame)/1.5;
     }
     self.progressLayer.frame = CGRectMake(0, positionY, CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds));
     
     [self updatePath];
     [self updateTitle];
+    [self updateImage];
 }
 
 - (void)tintColorDidChange
@@ -367,11 +398,17 @@ static NSMutableDictionary *appearance = nil;
     self.titleLayer.string = self.title;
 }
 
+- (void)updateImage
+{
+    self.imageLayer.contents = (__bridge id _Nullable)(self.image.CGImage);
+    self.imageLayer.contentsGravity = kCAGravityResizeAspect;
+}
+
 #pragma mark - Properties
 
 - (CATextLayer *)titleLayer
 {
-    if (!_titleLayer) {
+    if (_titleLayer == nil) {
         _titleLayer = [CATextLayer layer];
         _titleLayer.font = (__bridge CFTypeRef)(self.titleFont);
         _titleLayer.fontSize = self.titleFontSize;
@@ -382,10 +419,17 @@ static NSMutableDictionary *appearance = nil;
     return _titleLayer;
 }
 
+- (CALayer *)imageLayer
+{
+    if (_imageLayer == nil) {
+        _imageLayer = [CALayer layer];
+    }
+    return _imageLayer;
+}
 
 - (CAShapeLayer *)progressLayer
 {
-    if (!_progressLayer) {
+    if (_progressLayer == nil) {
         _progressLayer = [CAShapeLayer layer];
         _progressLayer.strokeColor = self.tintColor.CGColor;
         _progressLayer.fillColor = nil;

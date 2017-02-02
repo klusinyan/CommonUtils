@@ -165,8 +165,8 @@ errorDidOccurWithMessage:(NSString *)errorMessage {
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    [self configureCommonNotifications];
-    [self generateNotifications];
+    //[self configureCommonNotifications];
+    //[self generateNotifications];
     
     [[NSNotificationCenter defaultCenter] addObserverForName:CommonNotificationDidHide
                                                       object:nil
