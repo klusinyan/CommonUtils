@@ -24,7 +24,7 @@
 
 - (void)dealloc
 {
-    self.delegate = nil;
+    self.myDelegate = nil;
 }
 
 - (void)didReceiveMemoryWarning
@@ -130,8 +130,8 @@
 
 - (void)barcode:(CommonBarcode *)barcode didFailCapturingWithError:(NSError *)error
 {
-    if (self.delegate && [self.delegate respondsToSelector:@selector(barcode:didFailCapturingWithError:)]) {
-        [self.delegate barcode:barcode didFailCapturingWithError:error];
+    if (self.myDelegate && [self.myDelegate respondsToSelector:@selector(barcode:didFailCapturingWithError:)]) {
+        [self.myDelegate barcode:barcode didFailCapturingWithError:error];
     }
 }
 
@@ -139,8 +139,8 @@
 
 - (IBAction)actionDone:(id)sender
 {
-    if (self.delegate && [self.delegate respondsToSelector:@selector(barcode:didFinishCapturingWithCode:)]) {
-        [self.delegate barcode:self didFinishCapturingWithCode:self.code];
+    if (self.myDelegate && [self.myDelegate respondsToSelector:@selector(barcode:didFinishCapturingWithCode:)]) {
+        [self.myDelegate barcode:self didFinishCapturingWithCode:self.code];
     }
 }
 

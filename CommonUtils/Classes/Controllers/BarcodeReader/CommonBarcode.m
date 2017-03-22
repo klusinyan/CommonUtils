@@ -40,6 +40,7 @@ NSString * const CBErrorPermissionDenied    = @"CBLocalizedStringPermissionDenie
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [self stopCapturingWithCompletion:nil];
+    self.delegate = nil;
 }
 
 - (id)init
@@ -92,28 +93,27 @@ NSString * const CBErrorPermissionDenied    = @"CBLocalizedStringPermissionDenie
                                                                                  target:self
                                                                                  action:@selector(flash:)];
     }
+}
+
+- (void)viewDidLayoutSubviews
+{
+    [self adjustFrames];
+    [self adjustOrientationWithInterfaceOrientation:[[UIApplication sharedApplication] statusBarOrientation]];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
     
-    [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidChangeStatusBarOrientationNotification
-                                                      object:nil
-                                                       queue:[NSOperationQueue mainQueue]
-                                                  usingBlock:^(NSNotification * __unused notification) {
-                                                      //TODO
-                                                      //[self adjustFrames];
-                                                      //[self adjustOrientationWithInterfaceOrientation:self.interfaceOrientation];
-                                                  }];
-    
-    [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillEnterForegroundNotification
-                                                      object:nil
-                                                       queue:[NSOperationQueue mainQueue]
-                                                  usingBlock:^(NSNotification * __unused notification) {
-                                                      DebugLog(@"applicationWillEnterForeground");
-                                                  }];
-    [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidEnterBackgroundNotification
-                                                      object:nil
-                                                       queue:[NSOperationQueue mainQueue]
-                                                  usingBlock:^(NSNotification * __unused notification) {
-                                                      DebugLog(@"applicationDidEnterBackground");
-                                                  }];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(stopSession)
+                                                 name:UIApplicationDidEnterBackgroundNotification
+                                               object:nil];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(startSession)
+                                                 name:UIApplicationWillEnterForegroundNotification
+                                               object:nil];
     
     if (!self.manualStart) {
         self.previewContainer.backgroundColor = [UIColor blackColor];
@@ -145,8 +145,8 @@ NSString * const CBErrorPermissionDenied    = @"CBLocalizedStringPermissionDenie
                     }
                     NSString *localizedString = [DirectoryUtils localizedStringForKey:errMessage bundleName:kBundleName];
                     [self.commonSpinner setTitleOnly:localizedString activityIndicatorVisible:NO];
-                    if ([self respondsToSelector:@selector(barcode:didFailCapturingWithError:)]) {
-                        [self barcode:self didFailCapturingWithError:error];
+                    if (self.delegate && [self.delegate respondsToSelector:@selector(barcode:didFailCapturingWithError:)]) {
+                        [self.delegate barcode:self didFailCapturingWithError:error];
                     }
                 }
                 else {
@@ -157,29 +157,31 @@ NSString * const CBErrorPermissionDenied    = @"CBLocalizedStringPermissionDenie
     }
 }
 
-- (void)viewDidLayoutSubviews
-{
-    [self adjustFrames];
-    [self adjustOrientationWithInterfaceOrientation:[[UIApplication sharedApplication] statusBarOrientation]];
-}
-
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
     
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:UIApplicationDidEnterBackgroundNotification
+                                                  object:nil];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:UIApplicationWillEnterForegroundNotification
+                                                  object:nil];
+    
     //switch-off torch if it's on
     if (self.captureDevice.isTorchAvailable) {
-        [self swithOffTorch:YES];
+        [self switchOffTorch:YES];
     }
 }
 
 //handle flash
 - (void)flash:(id)sender
 {
-    [self swithOffTorch:self.captureDevice.isTorchActive];
+    [self switchOffTorch:self.captureDevice.isTorchActive];
 }
 
-- (void)swithOffTorch:(BOOL)off
+- (void)switchOffTorch:(BOOL)off
 {
     [self.captureDevice lockForConfiguration:nil];
     if (off)
@@ -251,6 +253,22 @@ NSString * const CBErrorPermissionDenied    = @"CBLocalizedStringPermissionDenie
     }
 }
 
+- (void)setFlashOn:(BOOL)on
+{
+    if ([self.captureDevice hasFlash] && [self.captureDevice hasTorch]) {
+        [self.captureDevice lockForConfiguration:NULL];
+        if (on) {
+            self.captureDevice.flashMode = AVCaptureFlashModeOn;
+            self.captureDevice.torchMode = AVCaptureTorchModeOn;
+        }
+        else {
+            self.captureDevice.flashMode = AVCaptureFlashModeOff;
+            self.captureDevice.torchMode = AVCaptureTorchModeOff;
+        }
+        [self.captureDevice unlockForConfiguration];
+    }
+}
+
 - (void)startCapturing
 {
     [self startCapturingWithCompletion:nil];
@@ -258,6 +276,8 @@ NSString * const CBErrorPermissionDenied    = @"CBLocalizedStringPermissionDenie
 
 - (void)startCapturingWithCompletion:(void (^)(NSError *error))completion
 {
+    [self addAnimations];
+
     __block NSError *error = nil;
     if (TARGET_IPHONE_SIMULATOR) {
         error = [[NSError alloc] initWithDomain:CBErrorDomain
@@ -290,6 +310,8 @@ NSString * const CBErrorPermissionDenied    = @"CBLocalizedStringPermissionDenie
 
 - (void)stopCapturingWithCompletion:(void (^)(NSError *error))completion
 {
+    [self removeAnimations];
+
     __block NSError *error = nil;
     if (TARGET_IPHONE_SIMULATOR) {
         error = [[NSError alloc] initWithDomain:CBErrorDomain
@@ -360,6 +382,45 @@ NSString * const CBErrorPermissionDenied    = @"CBLocalizedStringPermissionDenie
     
     [self adjustFrames];
     [self adjustOrientationWithInterfaceOrientation:[[UIApplication sharedApplication] statusBarOrientation]];
+    
+    [self addAnimations];
+}
+
+- (void)addAnimations
+{
+    CABasicAnimation *cropScaleX = [CABasicAnimation animationWithKeyPath:@"transform.scale.x"];
+    cropScaleX.fromValue = @(1);
+    cropScaleX.toValue = @(1.2);
+    cropScaleX.duration = 2;
+    cropScaleX.beginTime = 0.0;
+    
+    CABasicAnimation *cropScaleY = [CABasicAnimation animationWithKeyPath:@"transform.scale.y"];
+    cropScaleY.fromValue = @(1);
+    cropScaleY.toValue = @(1.3);
+    cropScaleY.duration = 2;
+    cropScaleY.beginTime = 1.0;
+    
+    CAAnimationGroup *group = [CAAnimationGroup animation];
+    group.duration = 2;
+    group.autoreverses = YES;
+    group.repeatCount = INFINITY;
+    [group setAnimations:@[cropScaleX, cropScaleY]];
+    [self.cropLayer addAnimation:group forKey:@"cropScaleXY"];
+    
+    CABasicAnimation *lineScaleX = [CABasicAnimation animationWithKeyPath:@"transform.scale.x"];
+    lineScaleX.fromValue = @(1);
+    lineScaleX.toValue = @(1.2);
+    lineScaleX.duration = 2;
+    lineScaleX.beginTime = 0.0;
+    lineScaleX.autoreverses = YES;
+    lineScaleX.repeatCount = INFINITY;
+    [self.line addAnimation:lineScaleX forKey:@"lineScaleX"];
+}
+
+- (void)removeAnimations
+{
+    [self.cropLayer removeAllAnimations];
+    [self.line removeAllAnimations];
 }
 
 //exact execution order
@@ -472,79 +533,13 @@ NSString * const CBErrorPermissionDenied    = @"CBLocalizedStringPermissionDenie
                         object = @"0";
                         object = [object stringByAppendingFormat:@"%@", readableObject.stringValue];
                     }
-                    if ([self respondsToSelector:@selector(barcode:didFinishCapturingWithCode:)]) {
-                        [self barcode:self didFinishCapturingWithCode:object];
+                    if (self.delegate && [self.delegate respondsToSelector:@selector(barcode:didFinishCapturingWithCode:)]) {
+                        [self.delegate barcode:self didFinishCapturingWithCode:object];
                     }
                 }
             }
         }
     }
 }
-
-/* // not used for iOS 8 deperected issues: ex: willAnimateRotationToInterfaceOrientation:, didRotateFromInterfaceOrientation:, self.interfaceOrientation
-#pragma mark
-#pragma mark - Handle orientation changes
-
-- (BOOL)shouldAutorotate
-{
-    return YES;
-}
-
-- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
-{
-    [self adjustFrames];
-}
-
-- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
-{
-    [self adjustOrientationWithInterfaceOrientation:self.interfaceOrientation];
-}
-//*/
-
-#pragma mark
-#pragma mark - BarcodeReaderDelegate protocol
-
-- (void)barcode:(CommonBarcode *)barcode didFinishCapturingWithCode:(NSString *)code
-{
-    //override
-}
-
-- (void)barcode:(CommonBarcode *)barcode didFailCapturingWithError:(NSError *)error
-{
-    //override
-}
-
-/*
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
-{
-    if ([keyPath isEqualToString:@"running"]) {
-        if (!object) {
-            [self.navigationController popViewControllerAnimated:YES];
-        }
-    }
-}
- //*/
-
-/*
-- (void)runInBackground
-{
-    UIApplication *application = [UIApplication sharedApplication];
-    __block UIBackgroundTaskIdentifier bgTask = [application beginBackgroundTaskWithExpirationHandler:^{
-        //Clean up any task
-        [application endBackgroundTask:bgTask];
-        bgTask = UIBackgroundTaskInvalid;
-    }];
-    
-    // Start the long-running task and return immediately.
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [self.captureSession addObserver:self
-                              forKeyPath:@"running"
-                                 options:NSKeyValueObservingOptionNew
-                                 context:nil];
-        [application endBackgroundTask:bgTask];
-        bgTask = UIBackgroundTaskInvalid;
-    });
-}
- //*/
 
 @end

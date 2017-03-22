@@ -20,7 +20,9 @@ typedef NS_ENUM(NSInteger, CBErrorCode) {
 
 @end
 
-@interface CommonBarcode : UIViewController <CommonBarcodeDelegate> {
+@protocol CommonBarcodeDelegate;
+
+@interface CommonBarcode : UIViewController {
     UIView *_previewContainer;
 }
 
@@ -30,12 +32,13 @@ typedef NS_ENUM(NSInteger, CBErrorCode) {
 @property (readwrite, nonatomic, assign) CGFloat cropFactorY;           //defautl 0.5 respect to cropLayer's width
 @property (readwrite, nonatomic, assign) CGFloat cornerRadius;          //default 0.0f
 @property (readwrite, nonatomic, assign) BOOL soundOn;                  //default YES
-@property (readwrite, nonatomic, assign) BOOL flashEnabled;             //defualt NO
 @property (readwrite, nonatomic, assign) BOOL manualStart;              //defualt NO
 @property (readwrite, nonatomic, assign) unsigned int sound;            //default 1109
 @property (readonly,  nonatomic, strong) NSString *capturedCode;        //defualt nil
 @property (readwrite, nonatomic, assign) BOOL EAN13ZeroPadding;         //default NO
+@property (readwrite, nonatomic, assign) BOOL flashEnabled __deprecated_msg("use custom button");
 
+@property (readwrite, nonatomic, assign) id<CommonBarcodeDelegate> delegate;
 
 //add more configurations...
 @property (readonly, nonatomic, strong) AVCaptureDevice *captureDevice;
@@ -52,6 +55,8 @@ typedef NS_ENUM(NSInteger, CBErrorCode) {
 
 //with xib
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil;
+
+- (void)setFlashOn:(BOOL)on;
 
 - (void)startCapturing __deprecated_msg("use: startCapturingWithCompletion:");
 

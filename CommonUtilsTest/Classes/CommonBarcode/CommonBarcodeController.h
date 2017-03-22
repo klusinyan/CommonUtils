@@ -9,7 +9,7 @@ typedef NS_ENUM(NSInteger, UIInterfaceType) {
 
 @interface CommonBarcodeController : CommonBarcode
 
-@property (readwrite, nonatomic, assign) id <CommonBarcodeDelegate> delegate;
+@property (readwrite, nonatomic, assign) id <CommonBarcodeDelegate> myDelegate;
 
 @property (readwrite, nonatomic, assign) UIInterfaceType UIInterfaceType;   //defualt UIInterfaceTypeSimple
 
