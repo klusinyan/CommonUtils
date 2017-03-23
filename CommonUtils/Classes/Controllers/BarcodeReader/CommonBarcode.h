@@ -56,6 +56,8 @@ typedef NS_ENUM(NSInteger, CBErrorCode) {
 //with xib
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil;
 
+- (BOOL)hasFlash;
+
 - (void)setFlashOn:(BOOL)on;
 
 - (void)startCapturing __deprecated_msg("use: startCapturingWithCompletion:");

@@ -380,6 +380,7 @@ UIPopoverPresentationControllerDelegate
         self.pickerView.backgroundColor = [UIColor whiteColor];
     }
     self.pickerView.layer.cornerRadius = self.pickerCornerradius;
+    self.pickerView.clipsToBounds = YES;
     
     if (self.dataSource && [self.dataSource respondsToSelector:@selector(contentForPicker:)]) {
         self.picker = [self.dataSource contentForPicker:self];
@@ -418,7 +419,6 @@ UIPopoverPresentationControllerDelegate
     }
     
     if (!self.isToolbarHidden) {
-        self.pickerView.clipsToBounds = YES;
         [self.pickerView addSubview:self.toolbar];
     }
     

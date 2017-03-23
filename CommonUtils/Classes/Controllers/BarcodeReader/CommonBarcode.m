@@ -253,6 +253,11 @@ NSString * const CBErrorPermissionDenied    = @"CBLocalizedStringPermissionDenie
     }
 }
 
+- (BOOL)hasFlash
+{
+    return ([self.captureDevice hasFlash] && [self.captureDevice hasTorch]);
+}
+
 - (void)setFlashOn:(BOOL)on
 {
     if ([self.captureDevice hasFlash] && [self.captureDevice hasTorch]) {
@@ -510,31 +515,33 @@ NSString * const CBErrorPermissionDenied    = @"CBLocalizedStringPermissionDenie
 
 - (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputMetadataObjects:(NSArray *)metadataObjects fromConnection:(AVCaptureConnection *)connection
 {
-    for (AVMetadataObject *metadata in metadataObjects) {
-        for (NSString *type in self.supportedBarcodes) {
-            if ([metadata.type isEqualToString:type]) {
-                
-                if (!self.alreadyScanned) {
-                    self.alreadyScanned = YES;
+    @synchronized (self) {
+        for (AVMetadataObject *metadata in metadataObjects) {
+            for (NSString *type in self.supportedBarcodes) {
+                if ([metadata.type isEqualToString:type]) {
                     
-                    //stop running scanner
-                    [self stopCapturingWithCompletion:nil];
-                    
-                    //sound if needed
-                    if (self.soundOn) {
-                        AudioServicesPlaySystemSound(self.sound);
-                    }
-                    
-                    AVMetadataMachineReadableCodeObject *readableObject = (AVMetadataMachineReadableCodeObject *)metadata;
-                    NSString *object = readableObject.stringValue;
-                    if (self.EAN13ZeroPadding &&
-                        [metadata.type isEqualToString:AVMetadataObjectTypeEAN13Code] &&
-                        [readableObject.stringValue length] == 12) {
-                        object = @"0";
-                        object = [object stringByAppendingFormat:@"%@", readableObject.stringValue];
-                    }
-                    if (self.delegate && [self.delegate respondsToSelector:@selector(barcode:didFinishCapturingWithCode:)]) {
-                        [self.delegate barcode:self didFinishCapturingWithCode:object];
+                    if (!self.alreadyScanned) {
+                        self.alreadyScanned = YES;
+                        
+                        // stop running scanner
+                        [self stopCapturingWithCompletion:nil];
+                        
+                        // sound if needed
+                        if (self.soundOn) {
+                            AudioServicesPlaySystemSound(self.sound);
+                        }
+                        
+                        AVMetadataMachineReadableCodeObject *readableObject = (AVMetadataMachineReadableCodeObject *)metadata;
+                        NSString *object = readableObject.stringValue;
+                        if (self.EAN13ZeroPadding &&
+                            [metadata.type isEqualToString:AVMetadataObjectTypeEAN13Code] &&
+                            [readableObject.stringValue length] == 12) {
+                            object = @"0";
+                            object = [object stringByAppendingFormat:@"%@", readableObject.stringValue];
+                        }
+                        if (self.delegate && [self.delegate respondsToSelector:@selector(barcode:didFinishCapturingWithCode:)]) {
+                            [self.delegate barcode:self didFinishCapturingWithCode:object];
+                        }
                     }
                 }
             }
