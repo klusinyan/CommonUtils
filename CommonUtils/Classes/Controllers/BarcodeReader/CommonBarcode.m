@@ -173,6 +173,8 @@ NSString * const CBErrorPermissionDenied    = @"CBLocalizedStringPermissionDenie
     if (self.captureDevice.isTorchAvailable) {
         [self switchOffTorch:YES];
     }
+    
+    self.delegate = nil;
 }
 
 //handle flash
