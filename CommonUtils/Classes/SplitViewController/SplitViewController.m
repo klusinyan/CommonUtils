@@ -11,7 +11,12 @@ NSString * const NotificationMenuDidFinishClosing = @"NotificationMenuDidFinishC
 
 #define SAFE_DEL(x) { [x release]; x = nil; }
 
-@interface SplitViewController () {
+@interface SplitViewController ()
+<
+CAAnimationDelegate
+>
+
+{
     UIBarButtonItem *open;
     UIBarButtonItem *close;
     UIViewController *masterController;

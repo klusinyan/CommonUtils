@@ -17,6 +17,9 @@ static NSString *kLLARingSpinnerAnimationKey = @"llaringspinnerview.rotation";
 static NSMutableDictionary *appearance = nil;
 
 @interface CommonSpinner ()
+<
+CAAnimationDelegate
+>
 
 @property (readwrite, nonatomic, strong) NSString *titleFont;
 @property (readwrite, nonatomic, assign) CGFloat  titleFontSize;

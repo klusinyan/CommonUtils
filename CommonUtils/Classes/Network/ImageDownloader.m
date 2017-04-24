@@ -113,12 +113,12 @@ static BOOL IDLogging = NO;
             // AFNetwroking 3.x
             SEL cancelImageDownloadTask = NSSelectorFromString(@"cancelImageDownloadTask");
             if ([downloadingImage respondsToSelector:cancelImageDownloadTask]) {
-                [downloadingImage performSelector:cancelImageDownloadTask];
+                [downloadingImage performSelector:cancelImageDownloadTask withObject:nil afterDelay:0];
             }
             // AFNetwroking 2.x
             SEL cancelImageRequestOperation = NSSelectorFromString(@"cancelImageRequestOperation");
             if ([downloadingImage respondsToSelector:cancelImageRequestOperation]) {
-                [downloadingImage performSelector:cancelImageRequestOperation];
+                [downloadingImage performSelector:cancelImageRequestOperation withObject:nil afterDelay:0];
             }
             *stop = YES;
         }

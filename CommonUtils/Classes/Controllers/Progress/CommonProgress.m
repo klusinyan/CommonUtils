@@ -8,6 +8,9 @@
 #define kBundleName @"CommonUtils.bundle/CommonProgress.bundle"
 
 @interface CommonProgress ()
+<
+CAAnimationDelegate
+>
 
 @property (nonatomic, assign) BOOL animating;
 @property (nonatomic, strong) UIImageView *indicatorImageView;

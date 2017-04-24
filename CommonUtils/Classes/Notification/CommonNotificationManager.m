@@ -165,7 +165,7 @@ CommonPickerDelegate
 {
     @synchronized (self) {
         CommonNotification *notification = [CommonNotification new];
-        notification.identifier = [self progressiveID];
+        notification.identifier = [NSString stringWithFormat:@"%@", [self progressiveID]];
         notification.creationDate = [NSDate date];
         notification.alertBody = alertBody;
         notification.alertMessage = alertMessage;
@@ -262,7 +262,8 @@ CommonPickerDelegate
     commonPicker.pickerCornerradius = 10.0;
     //commonPicker.dynamicContentHeight = YES;
     
-    CommonNotificationView *contentView = [self loadNibForClass:NSClassFromString(@"CommonNotificationView") atIndex:0];
+    CommonNotificationView *contentView = (CommonNotificationView *)[self loadNibForClass:NSClassFromString(@"CommonNotificationView")
+                                                                                  atIndex:0];
     contentView.presentFromTop = self.presentFromTop;
     contentView.imageIcon = self.imageIcon;
     contentView.alertBody = notification.alertBody;
@@ -304,7 +305,7 @@ CommonPickerDelegate
                 ///////////////////////////////////////////////////////////////
                 ///////////////////// SHOW NOTIFICATION ///////////////////////
                 
-                CommonNotificationView *contentView = commonPicker.contentView;
+                CommonNotificationView *contentView = (CommonNotificationView *)commonPicker.contentView;
                 if ([self.notificationQueue count] > 0) {
                     self.notificationShown = YES;
                     if (commonPicker.presentFromTop) {

@@ -46,11 +46,17 @@
     }];
 }
 
-- (void)startCommonAnimationCompletion:(void (^)(BOOL))completion
+- (void)startCommonAnimationCompletion:(void(^)(BOOL))completion
 {
     [[self subviews] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         [obj startCommonAnimationCompletion:completion];
     }];
 }
+
+- (void)startCommonAnimationWithType:(CommonAnimationType)type completion:(void (^)(BOOL finished))completion
+{
+    // do nothing
+}
+
 
 @end
