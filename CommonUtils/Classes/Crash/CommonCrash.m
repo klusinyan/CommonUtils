@@ -34,7 +34,7 @@ static void handleException(NSException *exception);
  * Sets up an appropriate environment and then calls CrashManager to
  * deal with the signal.
  *
- * @param exception The exception that was raised.
+ * @param signal The exception that was raised.
  */
 static void handleSignal(int signal);
 

@@ -1,11 +1,11 @@
 //  Created by Karen Lusinyan on 16/07/14.
 
 #import "CommonBookContentViewController.h"
-#import "Canvas.h"
+#import <CommonAnimationView.h>
 
 @interface CommonBookContentViewController ()
 
-@property (readwrite, nonatomic, strong)  IBOutlet CSAnimationView *animationView;
+@property (readwrite, nonatomic, strong)  IBOutlet CommonAnimationView *animationView;
 @property (readwrite, nonatomic, strong) IBOutlet UIImageView *imageView;
 @property (readwrite, nonatomic, getter=isAnimated) BOOL animated;
 
@@ -58,10 +58,10 @@
 
 - (void)animate
 {
-    self.animationView.type = CSAnimationTypeZoomOut;
+    self.animationView.type = CommonAnimationTypeZoomOut;
     self.animationView.delay = 0.4;
     self.animationView.duration = 0.4;
-    [self.animationView startCanvasAnimation];
+    [self.animationView startCommonAnimationCompletion:nil];
     
     /*
     self.animationView.type = CSAnimationTypeSlideDown;

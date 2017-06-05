@@ -15,25 +15,21 @@ PODS:
   - AFNetworking/UIKit (3.1.0):
     - AFNetworking/NSURLSession
   - Appirater (2.1.2)
-  - Canvas (0.1.2)
-  - CommonUtils (1.6.0-beta17):
+  - CommonUtils (1.6.0-beta22):
     - AFNetworking
-    - Canvas
-    - CommonUtils/no-arc (= 1.6.0-beta17)
-    - CommonUtils/PublicHeaders (= 1.6.0-beta17)
+    - CommonUtils/no-arc (= 1.6.0-beta22)
+    - CommonUtils/PublicHeaders (= 1.6.0-beta22)
     - DateTools
     - FastImageCache
-  - CommonUtils/no-arc (1.6.0-beta17):
+  - CommonUtils/no-arc (1.6.0-beta22):
     - AFNetworking
-    - Canvas
     - DateTools
     - FastImageCache
-  - CommonUtils/PublicHeaders (1.6.0-beta17):
+  - CommonUtils/PublicHeaders (1.6.0-beta22):
     - AFNetworking
-    - Canvas
     - DateTools
     - FastImageCache
-  - DateTools (1.7.0)
+  - DateTools (2.0.0)
   - FastImageCache (1.5.1)
 
 DEPENDENCIES:
@@ -42,16 +38,15 @@ DEPENDENCIES:
 
 EXTERNAL SOURCES:
   CommonUtils:
-    :path: .
+    :path: "."
 
 SPEC CHECKSUMS:
   AFNetworking: 5e0e199f73d8626b11e79750991f5d173d1f8b67
   Appirater: f1c9e53e8b612193e6256144f6a0fd2e31f4340d
-  Canvas: eb861e3b555d032648146c8ffda1a5dea40059ca
-  CommonUtils: d0a719c334d4d7d82295e3ba71aaf04cc09951e9
-  DateTools: 53288ee8b905fdc75897a1e6b5cc0144b14cba60
+  CommonUtils: 52490d66233bd65772c136d90da6fc05ea9b4869
+  DateTools: 933ac9c490f21f92127cf690ccd8c397e0126caf
   FastImageCache: 2e7a6f677b15336eb3d1a4092a494676256c891d
 
 PODFILE CHECKSUM: f9f9d6baad31f4a3b99969b76c637831e49a793f
 
-COCOAPODS: 1.0.1
+COCOAPODS: 1.2.1

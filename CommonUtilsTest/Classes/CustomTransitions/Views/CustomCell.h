@@ -1,10 +1,10 @@
 //  Created by Karen Lusinyan on 16/04/14.
 
-#import "Canvas.h"
+@class CommonAnimationView;
 
 @interface CustomCell : UICollectionViewCell
 
-@property (nonatomic, strong) CSAnimationView *imageViewCanvas;
+@property (nonatomic, strong) CommonAnimationView *imageViewCanvas;
 @property (nonatomic, strong) UIImageView *imageView;
 @property (nonatomic, strong) UILabel *lblNome;
 @property (nonatomic, strong) UILabel *lblDescr;

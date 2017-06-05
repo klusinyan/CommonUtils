@@ -187,7 +187,7 @@ typedef NS_ENUM(NSUInteger, ViewPagerComponent) {
  * The controller when tab is selected.
  *
  * @param viewPager The viewPager that's subject to
- * @param view Content view of tabView
+ * @param controller Content view of tabView
  * @param index The index of the content whose view is asked
  *
  */

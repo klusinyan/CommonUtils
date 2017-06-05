@@ -7,7 +7,9 @@
 #define kAutoLayout 1
 #define kDoubleOverlayPermitted 1
 
-static BOOL VISIBLE = NO;
+#if !kDoubleOverlayPermitted
+    static BOOL VISIBLE = NO;
+#endif
 
 #if !kAutoLayout
 @interface UIView (Frame)

@@ -1,6 +1,7 @@
 //  Created by Karen Lusinyan on 11/04/14.
 
 #import "CustomCell.h"
+#import <CommonAnimationView.h>
 
 @interface CustomCell ()
 
@@ -19,7 +20,7 @@
         self.contentView.layer.borderWidth = 1;
         self.contentView.layer.borderColor = [UIColor lightGrayColor].CGColor;
         
-        self.imageViewCanvas = [[CSAnimationView alloc] init];
+        self.imageViewCanvas = [[CommonAnimationView alloc] init];
         self.imageViewCanvas.translatesAutoresizingMaskIntoConstraints = NO;
         self.imageViewCanvas.layer.cornerRadius = 20;
         self.imageViewCanvas.contentMode = UIViewContentModeCenter;
@@ -28,7 +29,7 @@
         //personilze canvas
         self.imageViewCanvas.duration = 0.5;
         self.imageViewCanvas.delay    = 0;
-        self.imageViewCanvas.type     = CSAnimationTypeMorph;
+        self.imageViewCanvas.type     = CommonAnimationTypeMorph;
         
         [self.contentView addSubview:self.imageViewCanvas];
         

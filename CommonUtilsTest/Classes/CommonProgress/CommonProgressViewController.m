@@ -4,15 +4,15 @@
 #import "CommonProgressViewController.h"
 #import "CommonProgress.h"
 #import "CommonSpinner.h"
-#import "Canvas.h"
+#import "CommonAnimationView.h"
 
 #import "ChildViewController.h"
 #import "UIViewController+ChildrenHandler.h"
 #import "CommonLoadingViewController.h"
 
 @interface CommonProgressViewController ()
-@property (weak, nonatomic) IBOutlet CSAnimationView *titleAnimationView;
-@property (weak, nonatomic) IBOutlet CSAnimationView *descrAnimationView;
+@property (weak, nonatomic) IBOutlet CommonAnimationView *titleAnimationView;
+@property (weak, nonatomic) IBOutlet CommonAnimationView *descrAnimationView;
 
 @property (nonatomic, strong) IBOutlet UIView *container;
 
@@ -198,16 +198,16 @@
 
 - (void)animate:(BOOL)show
 {
-    self.titleAnimationView.type = show ? CSAnimationTypeFadeInLeft : CSAnimationTypeFadeOutLeft;
+    self.titleAnimationView.type = show ? CommonAnimationTypeFadeInLeft : CommonAnimationTypeFadeOutLeft;
     self.titleAnimationView.delay = 0.4;
     self.titleAnimationView.duration = 0.5;
     
-    self.descrAnimationView.type = show ? CSAnimationTypeFadeInLeft : CSAnimationTypeFadeOutLeft;
+    self.descrAnimationView.type = show ? CommonAnimationTypeFadeInLeft : CommonAnimationTypeFadeOutLeft;
     self.descrAnimationView.delay = 0.5;
     self.descrAnimationView.duration = 0.5;
     
-    [self.titleAnimationView startCanvasAnimation];
-    [self.descrAnimationView startCanvasAnimation];
+    [self.titleAnimationView startCommonAnimationCompletion:nil];
+    [self.descrAnimationView startCommonAnimationCompletion:nil];
 }
 
 @end
