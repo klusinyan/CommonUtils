@@ -54,7 +54,6 @@ NSString * const CBErrorPermissionDenied    = @"CBLocalizedStringPermissionDenie
         self.cropFactorY = 0.5;
         self.cornerRadius = 0.0f;
         self.soundOn = YES;
-        self.flashEnabled = NO;
         self.sound = 1109;
         self.EAN13ZeroPadding = NO;
     }
@@ -74,7 +73,6 @@ NSString * const CBErrorPermissionDenied    = @"CBLocalizedStringPermissionDenie
         self.cropFactorY = 0.5;
         self.cornerRadius = 0.0f;
         self.soundOn = YES;
-        self.flashEnabled = NO;
         self.sound = 1109;
         self.EAN13ZeroPadding = NO;
     }
@@ -87,12 +85,6 @@ NSString * const CBErrorPermissionDenied    = @"CBLocalizedStringPermissionDenie
     [super viewDidLoad];
     
     [self setupDevice];
-    if (self.captureDevice.isTorchAvailable && self.flashEnabled) {
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Flash"
-                                                                                  style:UIBarButtonItemStylePlain
-                                                                                 target:self
-                                                                                 action:@selector(flash:)];
-    }
 }
 
 - (void)viewDidLayoutSubviews

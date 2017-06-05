@@ -36,7 +36,6 @@ typedef NS_ENUM(NSInteger, CBErrorCode) {
 @property (readwrite, nonatomic, assign) unsigned int sound;            //default 1109
 @property (readonly,  nonatomic, strong) NSString *capturedCode;        //defualt nil
 @property (readwrite, nonatomic, assign) BOOL EAN13ZeroPadding;         //default NO
-@property (readwrite, nonatomic, assign) BOOL flashEnabled __deprecated_msg("use custom button");
 
 @property (readwrite, nonatomic, assign) id<CommonBarcodeDelegate> delegate;
 
