@@ -269,7 +269,6 @@ typedef NS_ENUM(NSInteger, RowType) {
             _barcodeReader.buttonRetryTitle = @"Riprova";
 
             _barcodeReader.cornerRadius = 8.0f;
-            _barcodeReader.flashEnabled = YES;
             _barcodeReader.soundOn = NO;
             
             //if (iPhone) {

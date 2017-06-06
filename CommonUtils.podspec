@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name         = 'CommonUtils'
-    s.version      = '1.6.0-beta24'
+    s.version      = '1.6.0-beta25'
     s.summary      = 'Common Utilities.'
     s.homepage     = 'https://bitbucket.org/mrklteam/commonutils'
     s.license      = { :type => 'MIT', :file => 'LICENSE' }
@@ -26,9 +26,9 @@ Pod::Spec.new do |s|
     end
 
     s.dependency 'AFNetworking'
-    #s.dependency 'Canvas'
     s.dependency 'DateTools'
-    s.dependency 'FastImageCache'
+    #s.dependency 'Canvas'
+    #s.dependency 'FastImageCache'
 
     #s.resource_bundles = {
     #  'Nibs'   => ['CommonUtils/Resources/Nibs/**/*.*'],
