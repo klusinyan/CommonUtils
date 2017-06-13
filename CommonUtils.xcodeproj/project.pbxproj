@@ -46,6 +46,8 @@
 		9C5ADFEF1AA4A38800CD5215 /* CommonAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C5ADFED1AA4A38800CD5215 /* CommonAnimation.m */; };
 		9C6DD7D419F130670013D333 /* UIImage+Color.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C6DD7D219F130670013D333 /* UIImage+Color.h */; };
 		9C6DD7D519F130670013D333 /* UIImage+Color.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C6DD7D319F130670013D333 /* UIImage+Color.m */; };
+		9C7880911EF006FA00ADC71E /* ImageDownloader.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C78808F1EF006FA00ADC71E /* ImageDownloader.h */; };
+		9C7880921EF006FA00ADC71E /* ImageDownloader.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C7880901EF006FA00ADC71E /* ImageDownloader.m */; };
 		9C887A571DABE0BA003E091C /* CommonNotificationManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C887A531DABE0BA003E091C /* CommonNotificationManager.h */; };
 		9C887A581DABE0BA003E091C /* CommonNotificationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C887A541DABE0BA003E091C /* CommonNotificationManager.m */; };
 		9C887A591DABE0BA003E091C /* CommonNotificationView.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C887A551DABE0BA003E091C /* CommonNotificationView.h */; };
@@ -154,6 +156,8 @@
 		9C5ADFED1AA4A38800CD5215 /* CommonAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonAnimation.m; sourceTree = "<group>"; };
 		9C6DD7D219F130670013D333 /* UIImage+Color.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Color.h"; sourceTree = "<group>"; };
 		9C6DD7D319F130670013D333 /* UIImage+Color.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Color.m"; sourceTree = "<group>"; };
+		9C78808F1EF006FA00ADC71E /* ImageDownloader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageDownloader.h; sourceTree = "<group>"; };
+		9C7880901EF006FA00ADC71E /* ImageDownloader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageDownloader.m; sourceTree = "<group>"; };
 		9C887A531DABE0BA003E091C /* CommonNotificationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonNotificationManager.h; sourceTree = "<group>"; };
 		9C887A541DABE0BA003E091C /* CommonNotificationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonNotificationManager.m; sourceTree = "<group>"; };
 		9C887A551DABE0BA003E091C /* CommonNotificationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonNotificationView.h; sourceTree = "<group>"; };
@@ -342,6 +346,8 @@
 				9CBCB4581A079EBC00E6BC7C /* NetworkUtils.m */,
 				9C34F7CE192CAFF9001B8D6D /* ProgressView.h */,
 				9C34F7CF192CAFF9001B8D6D /* ProgressView.m */,
+				9C78808F1EF006FA00ADC71E /* ImageDownloader.h */,
+				9C7880901EF006FA00ADC71E /* ImageDownloader.m */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -716,6 +722,7 @@
 				9CA10B611953521400DC3C5B /* NSIndexPath+Utils.h in Headers */,
 				9CD7023F193388790066FFC0 /* UIImage+FixOrientation.h in Headers */,
 				9C5ADFEE1AA4A38800CD5215 /* CommonAnimation.h in Headers */,
+				9C7880911EF006FA00ADC71E /* ImageDownloader.h in Headers */,
 				9C6DD7D419F130670013D333 /* UIImage+Color.h in Headers */,
 				9C90FF8219377F7F004CE056 /* NSMutableArray+Utils.h in Headers */,
 				9CBCB4591A079EBC00E6BC7C /* NetworkUtils.h in Headers */,
@@ -843,6 +850,7 @@
 				9CBCB45A1A079EBC00E6BC7C /* NetworkUtils.m in Sources */,
 				9C887A5A1DABE0BA003E091C /* CommonNotificationView.m in Sources */,
 				9C3F54971ADCFB7B0085DD03 /* CommonUtilsVersion.m in Sources */,
+				9C7880921EF006FA00ADC71E /* ImageDownloader.m in Sources */,
 				9C01922019D2CC0300E8E9E3 /* BlurView.m in Sources */,
 				9C2AC5E219EA96F900588538 /* CommonProgress.m in Sources */,
 				9C90FF6219374DD3004CE056 /* UITableView+Utils.m in Sources */,
