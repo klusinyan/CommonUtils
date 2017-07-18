@@ -4,51 +4,74 @@
 
 @implementation UITableView (Utils)
 
-- (NSIndexPath *)indexPathForEditingCell
+// register cell
+- (void)registerNib:(Class)aclass
+         identifier:(NSString *)identifier
 {
-    NSUInteger index = [self.indexPathsForVisibleRows indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
-        UITableViewCell *cell = [self cellForRowAtIndexPath:obj];
-        return cell.isEditing;
-    }];
+    UINib *nib = [UINib nibWithNibName:NSStringFromClass(aclass) bundle:nil];
+    [self registerNib:nib forCellReuseIdentifier:identifier];
+}
+
+// inline cells
+- (void)insertObjects:(NSArray *)objects
+          atIndexPath:(NSIndexPath *)indexPath
+       withDataSource:(NSMutableArray *)dataSource
+{
+    if (objects == nil || dataSource == nil) {
+        return;
+    }
     
-    if (index == NSNotFound)
-        return nil;
+    NSMutableArray *indexPaths = [NSMutableArray array];
+    for (int i = 0; i < [objects count]; i++) {
+        [indexPaths addObject:[NSIndexPath indexPathForRow:indexPath.row+(i+1) inSection:0]];
+    }
     
-    return self.indexPathsForVisibleRows[index];
+    // wrap begin updates
+    [self beginUpdates];
+    
+    // add objects to data source
+    [dataSource insertObjects:objects atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(indexPath.row+1, [objects count])]];
+    
+    // insert in tableview animated
+    [self insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationBottom];
+    
+    // wrap end updates
+    [self endUpdates];
+    
+    [self scrollToRowAtIndexPath:[indexPaths lastObject] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
 }
 
-- (NSIndexPath *)indexPathForEditingSubview:(UIView *)subview
+- (void)removeObjects:(NSArray *)objects
+          atIndexPath:(NSIndexPath *)indexPath
+       withDataSource:(NSMutableArray *)dataSource
 {
-    CGPoint pointInTable = [subview convertPoint:subview.bounds.origin toView:self];
-    return [self indexPathForRowAtPoint:pointInTable];
-}
-
-- (UITableViewCell *)cellForEditingSubview:(UIView *)subview
-{
-    NSIndexPath *indexPath = [self indexPathForEditingSubview:subview];
-    return [self cellForRowAtIndexPath:indexPath];
-}
-
-- (NSIndexPath *)indexPathForSelectedSubview:(UIView *)selectedSubview __deprecated
-{
-    // if found
-    if ([[selectedSubview superview] isKindOfClass:[UITableViewCell class]]) {
-        return [self indexPathForCell:(UITableViewCell *)[selectedSubview superview]];
+    if (objects == nil || dataSource == nil) {
+        return;
     }
-    // if it should continue searching
-    else if ([selectedSubview superview] != nil) {
-        return [self indexPathForSelectedSubview:[selectedSubview superview]];
+    
+    NSMutableArray *indexPaths = [NSMutableArray array];
+    for (int i = 0; i < [objects count]; i++) {
+        [indexPaths addObject:[NSIndexPath indexPathForRow:indexPath.row+(i+1) inSection:0]];
     }
-    // if there is no superview
-    else {
-        return nil;
-    }
+    
+    // wrap begin updates
+    [self beginUpdates];
+    
+    // add objects to data source
+    [dataSource removeObjectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(indexPath.row+1, [objects count])]];
+    
+    // insert in tableview animated
+    [self deleteRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationTop];
+    
+    // wrap end updates
+    [self endUpdates];
+    
+    [self scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
 }
 
-- (UITableViewCell *)cellForForSelectedSubview:(UIView *)selectedSubview __deprecated
+- (void)emptyLinesHidden
 {
-    NSIndexPath *indexPath = [self indexPathForSelectedSubview:selectedSubview];
-    return [self cellForRowAtIndexPath:indexPath];
+    self.tableFooterView = [UIView new];
 }
 
 @end

@@ -4,15 +4,14 @@
 #import "CommonCrash.h"
 #import "DirectoryUtils.h"
 
-/** The default file to store error reports to. */
-#define kDefaultReportFilename @"error_report.txt"
-
 /** The exception name to use for raised signals. */
 #define kSignalRaisedExceptionName @"SignalRaisedException"
 
 @interface CommonCrash ()
 
-@property(readwrite, nonatomic, assign) id <CommonCrashDelegate> delegate;
+@property (nonatomic, assign) id <CommonCrashDelegate> delegate;
+
+@property (nonatomic, copy) NSString *errorReportPath;
 
 - (void)handleException:(NSException *)exception;
 
@@ -111,18 +110,7 @@ static void handleSignal(int signal)
 }
 
 
-@implementation CommonCrash {
-    NSString *errorReportPath;
-}
-
-- (id)init
-{
-    if(nil != (self = [super init])) {
-        self.errorReportPath = kDefaultReportFilename;
-    }
-    
-    return self;
-}
+@implementation CommonCrash
 
 // start managing crashes always
 + (void)load
@@ -158,24 +146,19 @@ static void handleSignal(int signal)
     removeHandlers();
 }
 
-- (NSString *)errorReportPath
+- (NSString *)defaultPath
 {
-    return errorReportPath;
+    return [[[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject] path];
 }
 
-- (void)setErrorReportPath:(NSString *)path
+#pragma mark - getter/setter
+
+- (NSString *)errorReportPath
 {
-    errorReportPath = nil;
-    
-    if (path != nil) {
-        if (![path hasPrefix:@"/"]) {
-            errorReportPath = [DirectoryUtils moduleDocumentDirectoryPath:path];
-            if ([errorReportPath hasSuffix:@"/"]) errorReportPath = [errorReportPath substringToIndex:[errorReportPath length] - 1];
-        }
-        else {
-            errorReportPath = path;
-        }
+    if (_errorReportPath == nil) {
+        _errorReportPath = [[self defaultPath] stringByAppendingPathComponent:@"crash_log.txt"];
     }
+    return _errorReportPath;
 }
 
 + (NSString *)lastErrorReport
@@ -195,21 +178,31 @@ static void handleSignal(int signal)
     return errorReport;
 }
 
++ (void)setErrorReportPath:(NSString *)path
+{
+    [[self sharedInstance] setErrorReportPath:path];
+}
+
 - (void)handleException:(NSException *)exception
 {
-    NSString *crashInfo = [NSString stringWithFormat:@"Date:%@\nApp: %@\nVersion: %@\n%@: %@\%@",
-                           [NSDate date],
+    NSDateFormatter *df = [[NSDateFormatter alloc] init];
+    df.dateFormat = @"yyyy-MM-dd HH:mm:ss";
+    NSString *timestamp = [df stringFromDate:[NSDate date]];
+    NSString *crashInfo = [NSString stringWithFormat:@"Date: %@\nApp: %@\nVersion: %@\n%@: %@\%@",
+                           timestamp,
                            [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleName"],
                            [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"],
                            [exception name],
                            [exception reason],
                            [exception callStackSymbols]];
     
-    if (errorReportPath != nil) {
-        [crashInfo writeToFile:errorReportPath atomically:YES encoding:NSUTF8StringEncoding error:nil];
+    if (![crashInfo writeToFile:self.errorReportPath atomically:YES encoding:NSUTF8StringEncoding error:nil]) {
+        NSLog(@"error writing to file=[%@]", self.errorReportPath);
     }
-    
-    [self.delegate crashWithExceptionInfo:crashInfo];
+
+    if (self.delegate && [self.delegate respondsToSelector:@selector(crashWithExceptionInfo:)]) {
+        [self.delegate crashWithExceptionInfo:crashInfo];
+    }
     
     // log crash info always
     NSLog(@"%@", crashInfo);

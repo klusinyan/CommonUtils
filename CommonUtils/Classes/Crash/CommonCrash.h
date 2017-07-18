@@ -17,8 +17,7 @@
 
 @interface CommonCrash : NSObject
 
-/// If you set this to a value that doesn't start with "/", it will be expanded to a full path relative to the Documents directory; default: Documents/error_report.txt
-@property(readwrite, nonatomic, retain) NSString *errorReportPath;
++ (void)setErrorReportPath:(NSString *)path; // defualt path is $DocumentDirectory/crash_log.txt
 
 + (void)setCommonCrashDelegate:(id<CommonCrashDelegate>)delegate;
 

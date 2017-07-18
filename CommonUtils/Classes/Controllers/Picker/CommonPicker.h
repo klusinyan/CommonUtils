@@ -72,6 +72,9 @@
 - (void)dragDown:(void(^)(void))completion;
 - (void)dragUp:(void(^)(void))completion;
 
+- (void)shrinkUp:(CGFloat)offset animated:(BOOL)animated completion:(void(^)(BOOL finished))completion;
+- (void)shrinkDown:(BOOL)animated completion:(void(^)(BOOL finished))completion;
+
 @end
 
 @protocol CommonPickerDataSource <NSObject>

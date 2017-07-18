@@ -877,6 +877,30 @@ UIPopoverPresentationControllerDelegate
     }
 }
 
+- (void)shrinkUp:(CGFloat)offset animated:(BOOL)animated completion:(void (^)(BOOL))completion
+{
+    [[self.pickerView superview] layoutIfNeeded];                                               // call parent to layout
+    [UIView animateWithDuration:animated ? 0.5 : 0.0
+                     animations:^{
+                         self.constraintSizeHeight.constant = [self getPickerHeight] + offset;  // adjust constraints
+                         [[self.pickerView superview] layoutIfNeeded];                          // call parent to layout
+                     } completion:^(BOOL finished) {
+                         if (completion) completion(finished);
+                     }];
+}
+
+- (void)shrinkDown:(BOOL)animated completion:(void (^)(BOOL))completion
+{
+    [[self.pickerView superview] layoutIfNeeded];                                               // call parent to layout
+    [UIView animateWithDuration:animated ? 0.5 : 0.0
+                     animations:^{
+                         self.constraintSizeHeight.constant = [self getPickerHeight];           // adjust constraints
+                         [[self.pickerView superview] layoutIfNeeded];                          // call parent to layout
+                     } completion:^(BOOL finished) {
+                         if (completion) completion(finished);
+                     }];
+}
+
 #pragma mark -
 #pragma mark IBAction
 

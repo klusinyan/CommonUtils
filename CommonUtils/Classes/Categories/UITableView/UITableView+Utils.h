@@ -2,10 +2,19 @@
 
 @interface UITableView (Utils)
 
-- (NSIndexPath *)indexPathForEditingCell;
+// register cell
+- (void)registerNib:(Class)aclass
+         identifier:(NSString *)identifier;
 
-- (NSIndexPath *)indexPathForEditingSubview:(UIView *)subview;
+// inlince cells
+- (void)insertObjects:(NSArray *)objects
+          atIndexPath:(NSIndexPath *)indexPath
+       withDataSource:(NSMutableArray *)dataSource;
 
-- (UITableViewCell *)cellForEditingSubview:(UIView *)subview;
+- (void)removeObjects:(NSArray *)objects
+          atIndexPath:(NSIndexPath *)indexPath
+       withDataSource:(NSMutableArray *)dataSource;
+
+- (void)emptyLinesHidden;
 
 @end
