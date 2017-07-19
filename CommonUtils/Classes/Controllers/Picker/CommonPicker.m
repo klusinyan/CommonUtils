@@ -329,6 +329,15 @@ UIPopoverPresentationControllerDelegate
     return pickerWidth;
 }
 
+- (CGFloat)getPickerWidthMultiplier
+{
+    CGFloat multiplier = (iPhone) ? 1.0 : 0.75;
+    if (self.dataSource && [self.dataSource respondsToSelector:@selector(widthMultiplierForPicker:)]) {
+        multiplier = [self.dataSource widthMultiplierForPicker:self];
+    }
+    return multiplier;
+}
+
 - (CGFloat)getPickerHeight
 {
     CGFloat pickerHeight = kPickerHeight;
@@ -608,7 +617,7 @@ UIPopoverPresentationControllerDelegate
                                                               relatedBy:NSLayoutRelationEqual
                                                                  toItem:[self.pickerView superview]
                                                               attribute:NSLayoutAttributeWidth
-                                                             multiplier:(iPhone) ? 1 : 0.5
+                                                             multiplier:[self getPickerWidthMultiplier]
                                                                constant:-(2*[self getPickerPadding])];
         
         self.constraintSizeHeight = [NSLayoutConstraint constraintWithItem:self.pickerView

@@ -86,6 +86,9 @@
 //if not specified the defualt value is: (iPhone) ? self.target.view.frame.size.width : 320.0f;
 - (CGFloat)widthForPicker:(CommonPicker *)picker;
 
+// if specified the width is equal to superview's width * multiplier
+- (CGFloat)widthMultiplierForPicker:(CommonPicker *)picker;
+
 //if not specified the defualt value is: (iPhone), default is 0
 - (CGFloat)paddingForPicker:(CommonPicker *)picker;
 
