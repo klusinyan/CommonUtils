@@ -186,7 +186,9 @@ UIGestureRecognizerDelegate
     
     UIView *activeView = [self firstResponder];
     if (!activeView) {
-        NSLog(@"Warning: \"no active view is detected, please provide a valid one by implementing activeView of dataSource or register responders by calling registerResponders: or registerResponder:.\"");
+        /*
+        DebugLog(@"Warning: \"no active view is detected, please provide a valid one by implementing activeView of dataSource or register responders by calling registerResponders: or registerResponder:.\"");
+         //*/
         return;
     }
     
