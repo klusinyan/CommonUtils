@@ -9,7 +9,7 @@
 {
     static dispatch_once_t pred = 0;
     dispatch_once(&pred, ^{
-        NSLog(@"[CommonUtils] Version %@", kLibVersion);
+        //NSLog(@"[CommonUtils] Version %@", kLibVersion);
     });
 }
 
