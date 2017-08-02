@@ -112,12 +112,6 @@ static void handleSignal(int signal)
 
 @implementation CommonCrash
 
-// start managing crashes always
-+ (void)load
-{
-    [self startManagingCrashes];
-}
-
 + (CommonCrash *)sharedInstance
 {
     static CommonCrash *instance = nil;
