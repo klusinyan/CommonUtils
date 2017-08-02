@@ -136,13 +136,13 @@ static void handleSignal(int signal)
 
 + (void)startManagingCrashes
 {
-    DebugLog(@"start managing crashes");
+    //DebugLog(@"start managing crashes");
     installHandlers();
 }
 
 + (void)stopManagingCrashes
 {
-    DebugLog(@"stop managing crashes");
+    //DebugLog(@"stop managing crashes");
     removeHandlers();
 }
 
