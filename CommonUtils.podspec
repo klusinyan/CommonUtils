@@ -16,9 +16,9 @@ Pod::Spec.new do |s|
     s.source_files = 'CommonUtils/Classes/**/*.{h,m}'
     s.exclude_files = non_arc_files
 
-    s.subspec 'PublicHeaders' do |ss|
-        ss.source_files = 'CommonUtils/PublicHeaders/CommonUtils.h'
-    end
+#s.subspec 'PublicHeaders' do |ss|
+#       ss.source_files = 'CommonUtils/PublicHeaders/CommonUtils.h'
+#   end
 
     s.subspec 'no-arc' do |sna|
         sna.requires_arc = false
