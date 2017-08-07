@@ -594,7 +594,6 @@
 				9C42A7361AC9975600DD524F /* Crash */,
 				9C5ADFEB1AA4A37C00CD5215 /* Animations */,
 				9CB1FC81197598D00080534F /* Controllers */,
-				9CCB62DB19ED156F0061D0C1 /* System */,
 				9CE7A89819541A5000E699E4 /* Directory */,
 				9C34F7CD192CAFF9001B8D6D /* Network */,
 				9C96B093193F089B0014AC23 /* SplitViewController */,
@@ -606,13 +605,6 @@
 			name = Classes;
 			path = CommonUtils/Classes;
 			sourceTree = SOURCE_ROOT;
-		};
-		9CCB62DB19ED156F0061D0C1 /* System */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = System;
-			sourceTree = "<group>";
 		};
 		9CCDD9181A4040130003EAF3 /* BarcodeReader */ = {
 			isa = PBXGroup;
