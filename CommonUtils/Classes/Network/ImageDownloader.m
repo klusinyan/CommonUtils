@@ -199,7 +199,7 @@ static BOOL IDLogging = NO;
     }
     
     //if immage in cache the return it
-    UIImage *image = [[self sharedImageCache] objectForKey:MD5Hash(url)];
+    UIImage *image = [[self sharedImageCache] objectForKey:[DirectoryUtils MD5Hash:url]];
     if (image) {
         if ([self logging]) DebugLog(@"Taking image [%@] from cache", url);
         return image;
@@ -209,7 +209,7 @@ static BOOL IDLogging = NO;
     image = [DirectoryUtils imageExistsWithName:url moduleName:moduleName imageCachingPolicy:ImageCachingPolicyEnabled];
     if (image) {
         if ([self logging]) DebugLog(@"Taking image [%@] from fileSystem", url);
-        [[self sharedImageCache] setObject:image forKey:MD5Hash(url)];
+        [[self sharedImageCache] setObject:image forKey:[DirectoryUtils MD5Hash:url]];
         return image;
     }
     
@@ -238,12 +238,12 @@ static BOOL IDLogging = NO;
                                           }
                                           // put image in cache
                                           if (savedImage != nil) {
-                                              [[self sharedImageCache] setObject:savedImage forKey:MD5Hash(url)];
+                                              [[self sharedImageCache] setObject:savedImage forKey:[DirectoryUtils MD5Hash:url]];
                                           }
                                           // remove from downalods
                                           [[self downloadingImages] removeObject:blockImageView];
                                           //return saved image to invocker
-                                          if (completion) completion([[self sharedImageCache] objectForKey:MD5Hash(url)], indexPath);
+                                          if (completion) completion([[self sharedImageCache] objectForKey:[DirectoryUtils MD5Hash:url]], indexPath);
                                       }
                                       //if there is no image then send completion(nil)
                                       //else if (completion) completion(nil);
@@ -259,7 +259,7 @@ static BOOL IDLogging = NO;
     }
     else {
         if (placeholder) {
-            [[self sharedImageCache] setObject:placeholder forKey:MD5Hash(url)];
+            [[self sharedImageCache] setObject:placeholder forKey:[DirectoryUtils MD5Hash:url]];
         }
     }
     
@@ -278,7 +278,7 @@ static BOOL IDLogging = NO;
     }
     
     // if immage in cache the return it
-    UIImage *image = [[self sharedImageCache] objectForKey:MD5Hash(url)];
+    UIImage *image = [[self sharedImageCache] objectForKey:[DirectoryUtils MD5Hash:url]];
     if (image) {
         if ([self logging]) DebugLog(@"Taking image [%@] from cache", url);
         return image;
@@ -288,7 +288,7 @@ static BOOL IDLogging = NO;
     image = [DirectoryUtils imageExistsWithName:url moduleName:moduleName imageCachingPolicy:ImageCachingPolicyEnabled];
     if (image) {
         if ([self logging]) DebugLog(@"Taking image [%@] from fileSystem", url);
-        [[self sharedImageCache] setObject:image forKey:MD5Hash(url)];
+        [[self sharedImageCache] setObject:image forKey:[DirectoryUtils MD5Hash:url]];
         return image;
     }
     
@@ -323,7 +323,7 @@ static BOOL IDLogging = NO;
                  }
                  // put image in cache
                  if (savedImage != nil) {
-                     [[self sharedImageCache] setObject:savedImage forKey:MD5Hash(url)];
+                     [[self sharedImageCache] setObject:savedImage forKey:[DirectoryUtils MD5Hash:url]];
                  }
                  // run completion
                  if (completion) completion(savedImage);
@@ -349,7 +349,7 @@ static BOOL IDLogging = NO;
     }
     
     // if immage in cache the return it
-    UIImage *image = [[self sharedImageCache] objectForKey:MD5Hash(url)];
+    UIImage *image = [[self sharedImageCache] objectForKey:[DirectoryUtils MD5Hash:url]];
     if (image) {
         if ([self logging]) DebugLog(@"Taking image [%@] from cache", url);
         return image;
@@ -359,7 +359,7 @@ static BOOL IDLogging = NO;
     image = [DirectoryUtils imageExistsWithName:url moduleName:moduleName imageCachingPolicy:ImageCachingPolicyEnabled];
     if (image) {
         if ([self logging]) DebugLog(@"Taking image [%@] from fileSystem", url);
-        [[self sharedImageCache] setObject:image forKey:MD5Hash(url)];
+        [[self sharedImageCache] setObject:image forKey:[DirectoryUtils MD5Hash:url]];
         return image;
     }
     
@@ -394,7 +394,7 @@ static BOOL IDLogging = NO;
                  }
                  // put image in cache
                  if (savedImage != nil) {
-                     [[self sharedImageCache] setObject:savedImage forKey:MD5Hash(url)];
+                     [[self sharedImageCache] setObject:savedImage forKey:[DirectoryUtils MD5Hash:url]];
                  }
                  // run completion
                  if (completion) completion(savedImage);
@@ -428,7 +428,7 @@ static BOOL IDLogging = NO;
                   completion:(void (^)(UIImage *image))completion
 {
     // if immage in cache the return it
-    UIImage *image = [[self sharedImageCache] objectForKey:MD5Hash(url)];
+    UIImage *image = [[self sharedImageCache] objectForKey:[DirectoryUtils MD5Hash:url]];
     if (image) {
         if ([self logging]) DebugLog(@"Taking image [%@] from cache", url);
         if (completion) completion(image);
@@ -439,7 +439,7 @@ static BOOL IDLogging = NO;
     image = [DirectoryUtils imageExistsWithName:url moduleName:moduleName imageCachingPolicy:ImageCachingPolicyEnabled];
     if (image) {
         if ([self logging]) DebugLog(@"Taking image [%@] from fileSystem", url);
-        [[self sharedImageCache] setObject:image forKey:MD5Hash(url)];
+        [[self sharedImageCache] setObject:image forKey:[DirectoryUtils MD5Hash:url]];
         if (completion) completion(image);
         return;
     }
@@ -463,7 +463,7 @@ static BOOL IDLogging = NO;
                                     imageRepresentation:imageRepresentation];
                  // put image in cache
                  if (savedImage != nil) {
-                     [[self sharedImageCache] setObject:savedImage forKey:MD5Hash(url)];
+                     [[self sharedImageCache] setObject:savedImage forKey:[DirectoryUtils MD5Hash:url]];
                  }
                  // run completion
                  if (completion) completion(savedImage);
@@ -547,7 +547,7 @@ static BOOL IDLogging = NO;
     }
     
     //if immage in cache the return it
-    UIImage *image = [[self sharedImageCache] objectForKey:MD5Hash(url)];
+    UIImage *image = [[self sharedImageCache] objectForKey:[DirectoryUtils MD5Hash:url]];
     if (image) {
         if ([self logging]) DebugLog(@"Taking image [%@] from cache", url);
         return image;
@@ -557,7 +557,7 @@ static BOOL IDLogging = NO;
     image = [DirectoryUtils imageExistsWithName:url moduleName:moduleName imageCachingPolicy:ImageCachingPolicyEnabled];
     if (image) {
         if ([self logging]) DebugLog(@"Taking image [%@] from fileSystem", url);
-        [[self sharedImageCache] setObject:image forKey:MD5Hash(url)];
+        [[self sharedImageCache] setObject:image forKey:[DirectoryUtils MD5Hash:url]];
         return image;
     }
     

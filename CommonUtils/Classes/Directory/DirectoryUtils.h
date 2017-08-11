@@ -1,20 +1,5 @@
 //  Created by Karen Lusinyan on 07/05/14.
 
-#import <CommonCrypto/CommonDigest.h>
-#import <CommonCrypto/CommonHMAC.h>
-
-static inline NSString * MD5Hash(NSString *originalString)
-{
-    const char *cStr = [originalString UTF8String];
-	unsigned char result[CC_MD5_DIGEST_LENGTH];
-	CC_MD5(cStr, (unsigned int)strlen(cStr), result);
-	
-	return [NSString stringWithFormat: @"%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X",
-			result[0], result[1], result[2], result[3], result[4], result[5], result[6], result[7],
-			result[8], result[9], result[10], result[11], result[12], result[13], result[14], result[15]
-			];
-}
-
 typedef NS_ENUM(NSInteger, ImageCachingPolicy) {
     ImageCachingPolicyNone,
     ImageCachingPolicyEnabled,
@@ -28,6 +13,8 @@ typedef NS_ENUM(NSInteger, UIImageRepresentation) {
 @interface DirectoryUtils : NSObject
 
 #pragma image
+
++ (NSString *)MD5Hash:(NSString *)originalString;
 
 + (NSString *)moduleCacheDirectoryPath:(NSString *)moduleName;
 
@@ -76,14 +63,25 @@ typedef NS_ENUM(NSInteger, UIImageRepresentation) {
 
 #pragma bundle
 
-// image from given bundle
+// image from given bundleName: it looks up in main bundle
+// ex: with    bundle: [UIImage imageNamed:@"CommonUtils.bundle/subbundle_name.bundle/image_name"]
+// ex: without bundle: [UIImage imageNamed:@"CommonUtils.bundle/image_name"]
+// important: the resources from subbundle work only with images not xibs or localized string
++ (UIImage *)imageWithName:(NSString *)imageName
+                bundleName:(NSString *)bundleName
+                  inBundle:(NSBundle *)bundle;
+
+// image from given bundleName: it looks up in givec bundle
 // ex: with    bundle: [UIImage imageNamed:@"CommonUtils.bundle/subbundle_name.bundle/image_name"]
 // ex: without bundle: [UIImage imageNamed:@"CommonUtils.bundle/image_name"]
 // important: the resources from subbundle work only with images not xibs or localized string
 + (UIImage *)imageWithName:(NSString *)imageName
                 bundleName:(NSString *)bundleName;
 
-// bundle with given bundle
+// bundle witth give bundle: it looks up in given bundle
++ (NSBundle *)bundleWithName:(NSString *)bundleName inBundle:(NSBundle *)bundle;
+
+// bundle with given bundleName: it looks up in main bundle
 + (NSBundle *)bundleWithName:(NSString *)bundleName;
 
 // file path with from given bundle

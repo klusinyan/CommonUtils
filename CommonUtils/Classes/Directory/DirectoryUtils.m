@@ -3,9 +3,29 @@
 #import "DirectoryUtils.h"
 #import "UIImage+Resize.h"
 
+#import <CommonCrypto/CommonDigest.h>
+#import <CommonCrypto/CommonHMAC.h>
+
+static inline NSString * MD5Hash(NSString *originalString)
+{
+    const char *cStr = [originalString UTF8String];
+    unsigned char result[CC_MD5_DIGEST_LENGTH];
+    CC_MD5(cStr, (unsigned int)strlen(cStr), result);
+    
+    return [NSString stringWithFormat: @"%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X",
+            result[0], result[1], result[2], result[3], result[4], result[5], result[6], result[7],
+            result[8], result[9], result[10], result[11], result[12], result[13], result[14], result[15]
+            ];
+}
+
 @implementation DirectoryUtils
 
 #pragma image
+
++ (NSString *)MD5Hash:(NSString *)originalString
+{
+    return MD5Hash(originalString);
+}
 
 + (NSString *)moduleDirectory:(NSSearchPathDirectory)searchPathDirectory moduleName:(NSString *)moduleName
 {
@@ -156,13 +176,26 @@
 
 + (UIImage *)imageWithName:(NSString *)imageName
                 bundleName:(NSString *)bundleName
+                  inBundle:(NSBundle *)bundle
 {
-    return [UIImage imageNamed:[bundleName stringByAppendingPathComponent:imageName]];
+    if (bundle == nil) {
+        bundle = [NSBundle mainBundle];
+    }
+    
+    return [UIImage imageNamed:[[bundle bundlePath] stringByAppendingPathComponent:imageName]];
 }
 
-+ (NSBundle *)bundleWithName:(NSString *)bundleName
++ (UIImage *)imageWithName:(NSString *)imageName
+                bundleName:(NSString *)bundleName
 {
-    NSBundle *bundle = [NSBundle mainBundle];
+    return [self imageWithName:imageName bundleName:bundleName inBundle:nil];
+}
+
++ (NSBundle *)bundleWithName:(NSString *)bundleName inBundle:(NSBundle *)bundle
+{
+    if (bundle == nil) {
+        bundle = [NSBundle mainBundle];
+    }
     
     if (bundleName != nil) {
         NSString *bundlePath = [[bundle resourcePath] stringByAppendingPathComponent:bundleName];
@@ -170,6 +203,11 @@
     }
     
     return bundle;
+}
+
++ (NSBundle *)bundleWithName:(NSString *)bundleName
+{
+    return [self bundleWithName:bundleName inBundle:nil];
 }
 
 + (NSString *)filePathWithName:(NSString *)fileName
