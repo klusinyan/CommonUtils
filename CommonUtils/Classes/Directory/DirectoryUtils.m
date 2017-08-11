@@ -174,34 +174,15 @@ static inline NSString * MD5Hash(NSString *originalString)
 
 #pragma public methods
 
-+ (UIImage *)imageWithName:(NSString *)imageName
-                bundleName:(NSString *)bundleName
-                  inBundle:(NSBundle *)bundle
-{
-    if (bundle == nil) {
-        bundle = [NSBundle mainBundle];
-    }
-    
-    return [UIImage imageNamed:[[bundle bundlePath] stringByAppendingPathComponent:imageName]];
-}
-
-+ (UIImage *)imageWithName:(NSString *)imageName
-                bundleName:(NSString *)bundleName
-{
-    return [self imageWithName:imageName bundleName:bundleName inBundle:nil];
-}
-
 + (NSBundle *)bundleWithName:(NSString *)bundleName inBundle:(NSBundle *)bundle
 {
     if (bundle == nil) {
         bundle = [NSBundle mainBundle];
     }
-    
     if (bundleName != nil) {
         NSString *bundlePath = [[bundle resourcePath] stringByAppendingPathComponent:bundleName];
         bundle = [NSBundle bundleWithPath:bundlePath];
     }
-    
     return bundle;
 }
 
@@ -210,41 +191,49 @@ static inline NSString * MD5Hash(NSString *originalString)
     return [self bundleWithName:bundleName inBundle:nil];
 }
 
-+ (NSString *)filePathWithName:(NSString *)fileName
-                    bundleName:(NSString *)bundleName
-                      inBundle:(NSBundle *)bundle
++ (UIImage *)imageWithName:(NSString *)imageName
+                  inBundle:(NSBundle *)bundle
 {
     if (bundle == nil) {
         bundle = [NSBundle mainBundle];
     }
-
-    NSBundle *bundle = [self bundleWithName:bundleName];
-    return [[bundle resourcePath] stringByAppendingPathComponent:fileName];
+    return [UIImage imageNamed:[[bundle bundlePath] stringByAppendingPathComponent:imageName]];
 }
 
++ (UIImage *)imageWithName:(NSString *)imageName
+                bundleName:(NSString *)bundleName
+{
+    NSBundle *bundle = [self bundleWithName:bundleName];
+    return [UIImage imageNamed:[[bundle bundlePath] stringByAppendingPathComponent:imageName]];
+}
+
++ (NSString *)filePathWithName:(NSString *)fileName
+                      inBundle:(NSBundle *)bundle
+{
+    return [[bundle resourcePath] stringByAppendingPathComponent:fileName];
+}
 
 + (NSString *)filePathWithName:(NSString *)fileName
                     bundleName:(NSString *)bundleName
 {
-    return [self filePathWithName:fileName bundleName:bundleName inBundle:nil];
+    NSBundle *bundle = [self bundleWithName:bundleName];
+    return [[bundle resourcePath] stringByAppendingPathComponent:fileName];
 }
 
 + (NSString *)localizedStringForKey:(NSString *)key
-                         bundleName:(NSString *)bundleName
                            inBundle:(NSBundle *)bundle
 {
     if (bundle == nil) {
         bundle = [NSBundle mainBundle];
     }
-    
-    NSBundle *bundle = [self bundleWithName:bundleName];
     return [bundle localizedStringForKey:key value:nil table:nil];
 }
 
 + (NSString *)localizedStringForKey:(NSString *)key
                          bundleName:(NSString *)bundleName
 {
-    return [self localizedStringForKey:key bundleName:bundleName inBundle:nil];
+    NSBundle *bundle = [self bundleWithName:bundleName];
+    return [bundle localizedStringForKey:key value:nil table:nil];
 }
 
 @end

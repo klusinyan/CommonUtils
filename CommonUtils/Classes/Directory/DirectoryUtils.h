@@ -63,42 +63,26 @@ typedef NS_ENUM(NSInteger, UIImageRepresentation) {
 
 #pragma bundle
 
-// image from given bundleName: it looks up in main bundle
-// ex: with    bundle: [UIImage imageNamed:@"CommonUtils.bundle/subbundle_name.bundle/image_name"]
-// ex: without bundle: [UIImage imageNamed:@"CommonUtils.bundle/image_name"]
-// important: the resources from subbundle work only with images not xibs or localized string
++ (NSBundle *)bundleWithName:(NSString *)bundleName
+                    inBundle:(NSBundle *)bundle;
+
++ (NSBundle *)bundleWithName:(NSString *)bundleName;
+
 + (UIImage *)imageWithName:(NSString *)imageName
-                bundleName:(NSString *)bundleName
                   inBundle:(NSBundle *)bundle;
 
-// image from given bundleName: it looks up in givec bundle
-// ex: with    bundle: [UIImage imageNamed:@"CommonUtils.bundle/subbundle_name.bundle/image_name"]
-// ex: without bundle: [UIImage imageNamed:@"CommonUtils.bundle/image_name"]
-// important: the resources from subbundle work only with images not xibs or localized string
 + (UIImage *)imageWithName:(NSString *)imageName
                 bundleName:(NSString *)bundleName;
 
-// bundle witth give bundle: it looks up in given bundle
-+ (NSBundle *)bundleWithName:(NSString *)bundleName inBundle:(NSBundle *)bundle;
-
-// bundle with given bundleName: it looks up in main bundle
-+ (NSBundle *)bundleWithName:(NSString *)bundleName;
-
-// file path with from given bundleName: it looks up in given bundle
 + (NSString *)filePathWithName:(NSString *)fileName
-                    bundleName:(NSString *)bundleName
-                      inBundle:(NSBundle *)bundle
+                      inBundle:(NSBundle *)bundle;
 
-// file path with from given bundleName: it looks up in main bundle
 + (NSString *)filePathWithName:(NSString *)fileName
                     bundleName:(NSString *)bundleName;
 
-// localizable string from given bundleName: it looks up in given bundle
 + (NSString *)localizedStringForKey:(NSString *)key
-                         bundleName:(NSString *)bundleName
                            inBundle:(NSBundle *)bundle;
 
-// localizable string from given bundleName: it looks up in main bundle
 + (NSString *)localizedStringForKey:(NSString *)key
                          bundleName:(NSString *)bundleName;
 
