@@ -84,11 +84,21 @@ typedef NS_ENUM(NSInteger, UIImageRepresentation) {
 // bundle with given bundleName: it looks up in main bundle
 + (NSBundle *)bundleWithName:(NSString *)bundleName;
 
-// file path with from given bundle
+// file path with from given bundleName: it looks up in given bundle
++ (NSString *)filePathWithName:(NSString *)fileName
+                    bundleName:(NSString *)bundleName
+                      inBundle:(NSBundle *)bundle
+
+// file path with from given bundleName: it looks up in main bundle
 + (NSString *)filePathWithName:(NSString *)fileName
                     bundleName:(NSString *)bundleName;
 
-// localizable string from given bundle
+// localizable string from given bundleName: it looks up in given bundle
++ (NSString *)localizedStringForKey:(NSString *)key
+                         bundleName:(NSString *)bundleName
+                           inBundle:(NSBundle *)bundle;
+
+// localizable string from given bundleName: it looks up in main bundle
 + (NSString *)localizedStringForKey:(NSString *)key
                          bundleName:(NSString *)bundleName;
 

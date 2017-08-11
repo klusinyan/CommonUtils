@@ -212,16 +212,39 @@ static inline NSString * MD5Hash(NSString *originalString)
 
 + (NSString *)filePathWithName:(NSString *)fileName
                     bundleName:(NSString *)bundleName
+                      inBundle:(NSBundle *)bundle
 {
+    if (bundle == nil) {
+        bundle = [NSBundle mainBundle];
+    }
+
     NSBundle *bundle = [self bundleWithName:bundleName];
     return [[bundle resourcePath] stringByAppendingPathComponent:fileName];
+}
+
+
++ (NSString *)filePathWithName:(NSString *)fileName
+                    bundleName:(NSString *)bundleName
+{
+    return [self filePathWithName:fileName bundleName:bundleName inBundle:nil];
+}
+
++ (NSString *)localizedStringForKey:(NSString *)key
+                         bundleName:(NSString *)bundleName
+                           inBundle:(NSBundle *)bundle
+{
+    if (bundle == nil) {
+        bundle = [NSBundle mainBundle];
+    }
+    
+    NSBundle *bundle = [self bundleWithName:bundleName];
+    return [bundle localizedStringForKey:key value:nil table:nil];
 }
 
 + (NSString *)localizedStringForKey:(NSString *)key
                          bundleName:(NSString *)bundleName
 {
-    NSBundle *bundle = [self bundleWithName:bundleName];
-    return [bundle localizedStringForKey:key value:nil table:nil];
+    return [self localizedStringForKey:key bundleName:bundleName inBundle:nil];
 }
 
 @end
