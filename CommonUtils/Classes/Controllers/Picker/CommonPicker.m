@@ -73,7 +73,6 @@ UIPopoverPresentationControllerDelegate
 @property (nonatomic, strong) UIViewController *controller;
 @property (nonatomic, strong) UIPopoverPresentationController *popoverPresentationController;
 #endif
-@property (nonatomic, strong) UIWindow *window;
 @property (nonatomic, strong) UIView *overlay;
 @property (nonatomic, strong) UIView *pickerView;
 @property (nonatomic, strong) UIView *toolbar;
@@ -227,7 +226,7 @@ UIPopoverPresentationControllerDelegate
 #pragma mark -
 #pragma mark private methods
 
-- (UIWindow *)window
+- (UIView *)window
 {
     if (_window == nil) {
         _window = [UIApplication sharedApplication].keyWindow;

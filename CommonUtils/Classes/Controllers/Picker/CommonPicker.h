@@ -22,19 +22,17 @@
               sender:(id)sender
    relativeSuperview:(UIView *)relativeSuperview;
 
-@property (nonatomic, strong) UIViewController *target;
+@property (nonatomic, strong) UIView *window;                       // main window where the picker will be presented, default is keyWindow
+    
+@property (nonatomic, strong) UIViewController *target;             // invocker: such that controller class
+    
+@property (nonatomic, strong) id sender;                            // sender: such that button where to present
 
-@property (nonatomic, strong) id sender;
+@property (nonatomic, strong) UIView *relativeSuperview;            // sender's superView
 
-@property (nonatomic, strong) UIView *relativeSuperview;
+@property (nonatomic, strong) UIView *contentView;                  // used for common notifications
 
-@property (nonatomic, strong) UIView *contentView;
-
-@property (nonatomic, assign) id<CommonPickerDataSource> dataSource;
-
-@property (nonatomic, assign) id<CommonPickerDelegate> delegate;
-
-@property (readonly, nonatomic, getter=isVisible) BOOL visible;
+@property (readonly, nonatomic, getter=isVisible) BOOL visible;     // call to check is picker is visibile
 
 @property (nonatomic, getter=isToolbarHidden) BOOL toolbarHidden;   // default NO
 
@@ -61,6 +59,10 @@
 @property (nonatomic) CGFloat expectedHeight;                       // defualt 0.0
 
 @property (nonatomic) BOOL dynamicContentHeight;                    // default NO
+
+@property (nonatomic, assign) id<CommonPickerDataSource> dataSource;
+    
+@property (nonatomic, assign) id<CommonPickerDelegate> delegate;
 
 
 //indepenedly from iDevice call this method to show picker
