@@ -6,9 +6,9 @@ source 'https://github.com/CocoaPods/Specs.git'
 xcodeproj 'CommonUtilsTest.xcodeproj'
  
 target 'CommonUtilsTest' do
-    pod 'CommonUtils', '1.6.0'
+    #pod 'CommonUtils', '1.6.0'
     #pod 'AFNetworkActivityLogger'
-    #pod 'CommonUtils', :path =>  '.'
+    pod 'CommonUtils', :path =>  '.'
     #pod 'CommonUtilsAds', :path =>  '../CommonUtilsAds'
     pod 'Appirater'
     pod 'FastImageCache'

@@ -112,6 +112,11 @@ CommonPickerDataSource
     return self.pickerview;
 }
 
+- (NSString *)toolbarTitleForPicker:(CommonPicker *)picker
+{
+    return @"My title";
+}
+
 /*
 - (id)toolbarForPicker:(CommonPicker *)toolbar
 {

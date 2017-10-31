@@ -238,12 +238,9 @@ UIPopoverPresentationControllerDelegate
 {
     UIToolbar *toolbar = [[UIToolbar alloc] init];
     toolbar.translatesAutoresizingMaskIntoConstraints = NO;
-    
-    // setup appearance
     toolbar.barTintColor = [UIToolbar appearance].barTintColor;
     toolbar.tintColor = [UIToolbar appearance].tintColor;
     
-    // fixed leading and trailing spaces
     UIBarButtonItem *fixed = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
                                                                            target:nil
                                                                            action:NULL];
@@ -258,14 +255,12 @@ UIPopoverPresentationControllerDelegate
                                                                                action:NULL];
     
     UILabel *label = [[UILabel alloc] init];
+    label.translatesAutoresizingMaskIntoConstraints = NO;
+    
     if (self.dataSource && [self.dataSource respondsToSelector:@selector(toolbarTitleLabelForPicker:)]) {
         label = [self.dataSource toolbarTitleLabelForPicker:self];
     }
     else {
-        label.font = [UIFont fontWithName:@"Helvetica-Neue" size:15.0f];
-        label.textAlignment = NSTextAlignmentCenter;
-        label.textColor = [UIColor whiteColor];
-        
         if (self.dataSource && [self.dataSource respondsToSelector:@selector(toolbarTitleForPicker:)]) {
             label.text = [self.dataSource toolbarTitleForPicker:self];
         }
@@ -274,12 +269,6 @@ UIPopoverPresentationControllerDelegate
         }
     }
     
-    label.translatesAutoresizingMaskIntoConstraints = NO;
-    
-    // setup appearance
-    label.backgroundColor = [UIColor clearColor];
-    //label.textColor = [UIToolbar appearance].tintColor;
-
     UIBarButtonItem *title = [[UIBarButtonItem alloc] initWithCustomView:label];
     
     UIBarButtonItem *flex_right = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
@@ -291,30 +280,6 @@ UIPopoverPresentationControllerDelegate
                                                                           action:@selector(doneAction:)];
     
     toolbar.items = @[fixed, cancel, flex_left, title, flex_right, done, fixed];
-    
-    [[label superview] addConstraint:[NSLayoutConstraint constraintWithItem:label
-                                                                  attribute:NSLayoutAttributeHeight
-                                                                  relatedBy:NSLayoutRelationEqual
-                                                                     toItem:nil
-                                                                  attribute:NSLayoutAttributeNotAnAttribute
-                                                                 multiplier:1
-                                                                   constant:44.0f]];
-    
-    [[label superview] addConstraint:[NSLayoutConstraint constraintWithItem:label
-                                                                  attribute:NSLayoutAttributeCenterX
-                                                                  relatedBy:NSLayoutRelationEqual
-                                                                     toItem:[label superview]
-                                                                  attribute:NSLayoutAttributeCenterX
-                                                                 multiplier:1
-                                                                   constant:0]];
-    
-    [[label superview] addConstraint:[NSLayoutConstraint constraintWithItem:label
-                                                                  attribute:NSLayoutAttributeCenterY
-                                                                  relatedBy:NSLayoutRelationEqual
-                                                                     toItem:[label superview]
-                                                                  attribute:NSLayoutAttributeCenterY
-                                                                 multiplier:1
-                                                                   constant:0]];
     
     return toolbar;
 }
