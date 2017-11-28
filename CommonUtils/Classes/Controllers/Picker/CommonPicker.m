@@ -335,7 +335,7 @@ UIPopoverPresentationControllerDelegate
         UIVisualEffect *blurEffect = [UIBlurEffect effectWithStyle:style];
         UIVisualEffectView *visualEffectView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
         visualEffectView.clipsToBounds = YES;
-        return visualEffectView;
+        return visualEffectView.contentView;
     }
     else {
         // normal view
