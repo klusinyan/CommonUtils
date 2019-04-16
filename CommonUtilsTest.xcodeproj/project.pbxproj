@@ -385,7 +385,6 @@
 				9CD9F794196EA78500EBBD85 /* Frameworks */,
 				9CD9F795196EA78500EBBD85 /* Resources */,
 				39F763689F1701DF2FE3BFD6 /* [CP] Copy Pods Resources */,
-				3F29CE4FCC01BE88F3C496AC /* 📦 Embed Pods Frameworks */,
 				11FC838131D14CA2A4BB6DEF /* 📦 Copy Pods Resources */,
 			);
 			buildRules = (
@@ -481,7 +480,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-CommonUtilsTest/Pods-CommonUtilsTest-resources.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-CommonUtilsTest/Pods-CommonUtilsTest-resources.sh",
 				"${PODS_CONFIGURATION_BUILD_DIR}/Appirater/Appirater.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/CommonUtils/CommonUtils.bundle",
 				"${PODS_ROOT}/DateTools/DateTools/DateTools/DateTools.bundle",
@@ -494,22 +493,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-CommonUtilsTest/Pods-CommonUtilsTest-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		3F29CE4FCC01BE88F3C496AC /* 📦 Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "📦 Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-CommonUtilsTest/Pods-CommonUtilsTest-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-CommonUtilsTest/Pods-CommonUtilsTest-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		5A91DF2CF6BFBAA6A4A5A457 /* [CP] Check Pods Manifest.lock */ = {

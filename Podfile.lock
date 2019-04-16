@@ -15,11 +15,11 @@ PODS:
   - AFNetworking/UIKit (3.2.1):
     - AFNetworking/NSURLSession
   - Appirater (2.3.1)
-  - CommonUtils (1.6.2.1):
+  - CommonUtils (1.6.2.2):
     - AFNetworking
-    - CommonUtils/no-arc (= 1.6.2.1)
+    - CommonUtils/no-arc (= 1.6.2.2)
     - DateTools
-  - CommonUtils/no-arc (1.6.2.1):
+  - CommonUtils/no-arc (1.6.2.2):
     - AFNetworking
     - DateTools
   - DateTools (2.0.0)
@@ -44,10 +44,10 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   AFNetworking: b6f891fdfaed196b46c7a83cf209e09697b94057
   Appirater: 44a4651f7912a17dc906b655f0c215d5bb768b84
-  CommonUtils: 28ba67965cd7cb84956a091b2976c0d7bc3e9d3e
+  CommonUtils: aae0bccfaec027b5f34922940a123366c74bddb0
   DateTools: 933ac9c490f21f92127cf690ccd8c397e0126caf
   FastImageCache: 2e7a6f677b15336eb3d1a4092a494676256c891d
 
 PODFILE CHECKSUM: b4826858a70efce7ae224971043739896a3097ec
 
-COCOAPODS: 1.5.3
+COCOAPODS: 1.6.1
