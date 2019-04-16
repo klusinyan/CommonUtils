@@ -1,0 +1,15 @@
+/* 
+  Localize.strings
+  CommonUtils
+
+  Created by Karen Lusinyan on 25/02/15.
+  Copyright (c) 2015 Karen Lusinyan. All rights reserved.
+*/
+
+//error msg
+"CBLocalizedStringTargetSimulator" = "Die Kamera ist im Simulator nicht verfügbar";
+"CBLocalizedStringPermissionDenied" = "Kamera ist nicht verfügbar";
+"CBLocalizedStringUnknownError" = "Unbekannter Fehler";
+
+//localized msg
+"CBLocalizedStringInitializingMsg" = "Initialisierung, bitte warten Sie";

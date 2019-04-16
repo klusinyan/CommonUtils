@@ -384,7 +384,6 @@
 				9CD9F793196EA78500EBBD85 /* Sources */,
 				9CD9F794196EA78500EBBD85 /* Frameworks */,
 				9CD9F795196EA78500EBBD85 /* Resources */,
-				99A6CDA5D64C21998DD7A5DE /* [CP] Embed Pods Frameworks */,
 				39F763689F1701DF2FE3BFD6 /* [CP] Copy Pods Resources */,
 				3F29CE4FCC01BE88F3C496AC /* 📦 Embed Pods Frameworks */,
 				11FC838131D14CA2A4BB6DEF /* 📦 Copy Pods Resources */,
@@ -408,7 +407,7 @@
 				ORGANIZATIONNAME = "Karen Lusinyan";
 				TargetAttributes = {
 					9CD9F796196EA78500EBBD85 = {
-						DevelopmentTeam = 6QAZDAW6QU;
+						DevelopmentTeam = ZV4A929776;
 					};
 				};
 			};
@@ -417,6 +416,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 				it,
@@ -482,13 +482,15 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-CommonUtilsTest/Pods-CommonUtilsTest-resources.sh",
-				"$PODS_CONFIGURATION_BUILD_DIR/Appirater/Appirater.bundle",
-				"$PODS_CONFIGURATION_BUILD_DIR/CommonUtils/CommonUtils.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/Appirater/Appirater.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/CommonUtils/CommonUtils.bundle",
 				"${PODS_ROOT}/DateTools/DateTools/DateTools/DateTools.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Appirater.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/CommonUtils.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/DateTools.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -541,21 +543,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		99A6CDA5D64C21998DD7A5DE /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-CommonUtilsTest/Pods-CommonUtilsTest-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -657,6 +644,7 @@
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = ZV4A929776;
 				ENABLE_BITCODE = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "CommonUtilsTest/CommonUtilsTest-Prefix.pch";
@@ -730,6 +718,7 @@
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = ZV4A929776;
 				ENABLE_BITCODE = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "CommonUtilsTest/CommonUtilsTest-Prefix.pch";

@@ -9,7 +9,7 @@
 //error msg
 "CBLocalizedStringTargetSimulator" = "Camera is unavailable on simulator";
 "CBLocalizedStringPermissionDenied" = "Camera is unavailable";
-"CBLocalizedStringUnknownError" = "Unknwon error";
+"CBLocalizedStringUnknownError" = "Unknown error";
 
 //localized msg
 "CBLocalizedStringInitializingMsg" = "Initializing, please wait";
